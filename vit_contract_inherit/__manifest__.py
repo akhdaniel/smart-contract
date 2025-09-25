@@ -34,6 +34,8 @@
 		"view/syarat_termin.xml",
         "view/termin.xml",
         "view/droping.xml",
+        "view/kanwil_kancab_provinsi.xml",
+        
 	],
 	"installable": True,
 	"auto_install": False,
