@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- report qweb view -->
+        <record id="action_report_vit_budget_rkap" model="ir.actions.report">
+            <field name="name">Budget Rkap</field>
+            <field name="model">vit.budget_rkap</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">vit_contract.vit_budget_rkap_report</field>
+            <field name="report_file">vit_contract.vit_budget_rkap_report</field>
+            <field name="print_report_name">object.name</field>
+            <field name="binding_model_id" ref="vit_contract.model_vit_budget_rkap"/>
+            <field name="binding_type">report</field>
+        </record>
+        <!-- document template -->
+        <template id="vit_contract.vit_budget_rkap_report_document" >
+            <t t-call="web.external_layout">
+                <t t-set="doc" t-value="doc.with_context({'lang': lang})"/>
+                <div class="page">
+                    <h2>
+                        Budget Rkap: <span t-field="doc.name"/>
+                    </h2>
+                    <div class="row mt32 mb32">
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Amount</strong>
+                            <p class="m-0" t-field="doc.amount" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Remaining</strong>
+                            <p class="m-0" t-field="doc.remaining" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Total Pagu Izin Prinsip</strong>
+                            <p class="m-0" t-field="doc.total_pagu_izin_prinsip" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Total Amount Kontrak</strong>
+                            <p class="m-0" t-field="doc.total_amount_kontrak" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Total Amount Payment</strong>
+                            <p class="m-0" t-field="doc.total_amount_payment" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Total Qty Izin Prinsip</strong>
+                            <p class="m-0" t-field="doc.total_qty_izin_prinsip" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Total Qty Kontrak</strong>
+                            <p class="m-0" t-field="doc.total_qty_kontrak" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Total Amount Droping</strong>
+                            <p class="m-0" t-field="doc.total_amount_droping" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Master Budget</strong>
+                            <p class="m-0" t-field="doc.master_budget_id"/>
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Kanwil Kancab</strong>
+                            <p class="m-0" t-field="doc.kanwil_kancab_id"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="oe_structure"/>
+                <h2>Izin Prinsip</h2>
+                <table class="table table-sm o_main_table" name="izin_prinsip_ids_table">
+                    <thead>
+                        <tr>
+                            <td>Name</td>
+                            <td>Total Pagu</td>
+                            <td>Stage Is Draft</td>
+                            <td>Stage Is Done</td>
+                            <td>Allow Confirm</td>
+                            <td>Allow Cancel</td>
+                            <td>Stage Name</td>
+                            <td>Budget</td>
+                            <td>Stage</td>
+                            <td>Master Budget</td>
+                            <td>Kanwil Kancab</td>
+                            <td>Droping</td>
+                        </tr>
+                    </thead>
+                    <tbody class="izin_prinsip_ids_tbody">
+                        <tr t-foreach="doc.izin_prinsip_ids" t-as="line">
+                            <td><span t-field="line.name" /></td>
+                            <td><span t-field="line.total_pagu" /></td>
+                            <td><span t-field="line.stage_is_draft" /></td>
+                            <td><span t-field="line.stage_is_done" /></td>
+                            <td><span t-field="line.allow_confirm" /></td>
+                            <td><span t-field="line.allow_cancel" /></td>
+                            <td><span t-field="line.stage_name" /></td>
+                            <td><span t-field="line.budget_id" /></td>
+                            <td><span t-field="line.stage_id" /></td>
+                            <td><span t-field="line.master_budget_id" /></td>
+                            <td><span t-field="line.kanwil_kancab_id" /></td>
+                            <td><span t-field="line.droping_id" /></td>
+                        </tr> <!-- foreach-->
+                    </tbody>
+                </table>
+                <div class="oe_structure"/>
+                <h2>Kontrak</h2>
+                <table class="table table-sm o_main_table" name="kontrak_ids_table">
+                    <thead>
+                        <tr>
+                            <td>Name</td>
+                            <td>Start Date</td>
+                            <td>End Date</td>
+                            <td>Stage Is Draft</td>
+                            <td>Stage Is Done</td>
+                            <td>Allow Confirm</td>
+                            <td>Allow Cancel</td>
+                            <td>Stage Name</td>
+                            <td>Amount Izin Prinsip</td>
+                            <td>Amount Kontrak</td>
+                            <td>Izin Prinsip</td>
+                            <td>Partner</td>
+                            <td>Budget Rkap</td>
+                            <td>Kanwil Kancab</td>
+                            <td>Stage</td>
+                            <td>Jenis Kontrak</td>
+                            <td>Master Budget</td>
+                        </tr>
+                    </thead>
+                    <tbody class="kontrak_ids_tbody">
+                        <tr t-foreach="doc.kontrak_ids" t-as="line">
+                            <td><span t-field="line.name" /></td>
+                            <td><span t-field="line.start_date" /></td>
+                            <td><span t-field="line.end_date" /></td>
+                            <td><span t-field="line.stage_is_draft" /></td>
+                            <td><span t-field="line.stage_is_done" /></td>
+                            <td><span t-field="line.allow_confirm" /></td>
+                            <td><span t-field="line.allow_cancel" /></td>
+                            <td><span t-field="line.stage_name" /></td>
+                            <td><span t-field="line.amount_izin_prinsip" /></td>
+                            <td><span t-field="line.amount_kontrak" /></td>
+                            <td><span t-field="line.izin_prinsip_id" /></td>
+                            <td><span t-field="line.partner_id" /></td>
+                            <td><span t-field="line.budget_rkap_id" /></td>
+                            <td><span t-field="line.kanwil_kancab_id" /></td>
+                            <td><span t-field="line.stage_id" /></td>
+                            <td><span t-field="line.jenis_kontrak_id" /></td>
+                            <td><span t-field="line.master_budget_id" /></td>
+                        </tr> <!-- foreach-->
+                    </tbody>
+                </table>
+                <div class="oe_structure"/>
+                <h2>Payment</h2>
+                <table class="table table-sm o_main_table" name="payment_ids_table">
+                    <thead>
+                        <tr>
+                            <td>Name</td>
+                            <td>Amount</td>
+                            <td>Stage Is Draft</td>
+                            <td>Stage Is Done</td>
+                            <td>Allow Confirm</td>
+                            <td>Allow Cancel</td>
+                            <td>Stage Name</td>
+                            <td>Partner</td>
+                            <td>Budget Rkap</td>
+                            <td>Stage</td>
+                            <td>Termin</td>
+                            <td>Master Budget</td>
+                            <td>Kanwil Kancab</td>
+                        </tr>
+                    </thead>
+                    <tbody class="payment_ids_tbody">
+                        <tr t-foreach="doc.payment_ids" t-as="line">
+                            <td><span t-field="line.name" /></td>
+                            <td><span t-field="line.amount" /></td>
+                            <td><span t-field="line.stage_is_draft" /></td>
+                            <td><span t-field="line.stage_is_done" /></td>
+                            <td><span t-field="line.allow_confirm" /></td>
+                            <td><span t-field="line.allow_cancel" /></td>
+                            <td><span t-field="line.stage_name" /></td>
+                            <td><span t-field="line.partner_id" /></td>
+                            <td><span t-field="line.budget_rkap_id" /></td>
+                            <td><span t-field="line.stage_id" /></td>
+                            <td><span t-field="line.termin_id" /></td>
+                            <td><span t-field="line.master_budget_id" /></td>
+                            <td><span t-field="line.kanwil_kancab_id" /></td>
+                        </tr> <!-- foreach-->
+                    </tbody>
+                </table>
+                <div class="oe_structure"/>
+            </t>
+        </template>
+
+        <!-- main template -->
+        <template id="vit_contract.vit_budget_rkap_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-set="lang" t-value="doc.create_uid.lang"/>
+                    <t t-call="vit_contract.vit_budget_rkap_report_document" />
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

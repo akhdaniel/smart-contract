@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- report qweb view -->
+        <record id="action_report_vit_master_syarat_termin" model="ir.actions.report">
+            <field name="name">Master Syarat Termin</field>
+            <field name="model">vit.master_syarat_termin</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">vit_contract.vit_master_syarat_termin_report</field>
+            <field name="report_file">vit_contract.vit_master_syarat_termin_report</field>
+            <field name="print_report_name">object.name</field>
+            <field name="binding_model_id" ref="vit_contract.model_vit_master_syarat_termin"/>
+            <field name="binding_type">report</field>
+        </record>
+        <!-- document template -->
+        <template id="vit_contract.vit_master_syarat_termin_report_document" >
+            <t t-call="web.external_layout">
+                <t t-set="doc" t-value="doc.with_context({'lang': lang})"/>
+                <div class="page">
+                    <h2>
+                        Master Syarat Termin: <span t-field="doc.name"/>
+                    </h2>
+                    <div class="row mt32 mb32">
+                    </div>
+                </div>
+                <div class="oe_structure"/>
+            </t>
+        </template>
+
+        <!-- main template -->
+        <template id="vit_contract.vit_master_syarat_termin_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-set="lang" t-value="doc.create_uid.lang"/>
+                    <t t-call="vit_contract.vit_master_syarat_termin_report_document" />
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

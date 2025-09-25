@@ -1,0 +1,7 @@
+<odoo>
+	<data>
+		<menuitem id="vit_contract_top_menu" name="Vit Contract" sequence="20" web_icon="vit_contract,static/description/icon.png" />
+		<menuitem id="vit_contract_sub_menu" name="Operations" sequence="40" parent="vit_contract_top_menu" />
+		<menuitem id="vit_contract_config_menu" name="Configurations" sequence="1000" parent="vit_contract_top_menu" />
+	</data>
+</odoo>

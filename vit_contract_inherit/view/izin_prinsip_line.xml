@@ -1,0 +1,52 @@
+<odoo>
+    <data>
+        <record id="view_vit_izin_prinsip_line_tree_inherit" model="ir.ui.view">
+            <field name="name">view.vit.izin.prinsip.line.tree.inherit</field>
+            <field name="model">vit.izin_prinsip_line</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_izin_prinsip_line_tree"/>
+            <field name="arch" type="xml">
+
+     
+                <xpath expr="//tree/field[@name='name']" position="attributes">
+                    <attribute name="column_invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//tree/field[@name='jenis_kontrak_id']" position="replace"/>
+               
+                <xpath expr="//tree/field[@name='izin_prinsip_id']" position="before">
+                    <field name="jenis_kontrak_id"/>
+                </xpath>
+
+
+                <xpath expr="//tree/field[@name='pagu']" position="replace"/>
+
+
+                <xpath expr="//tree/field[@name='kanwil_kancab_id']" position="after">
+                    <field name="pagu"/>
+                </xpath>
+
+            </field>
+        </record>
+
+
+        <record id="view_vit_izin_prinsip_line_form_inherit" model="ir.ui.view">
+            <field name="name">view.vit.izin.prinsip.line.form.inherit</field>
+            <field name="model">vit.izin_prinsip_line</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_izin_prinsip_line_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//form//field[@name='jenis_kontrak_id']" position="replace"/>
+
+                <xpath expr="//form//field[@name='name']" position="before">
+                    <field name="jenis_kontrak_id"/>
+                </xpath>
+
+                <xpath expr="//form//field[@name='name']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,5 @@
+<odoo>
+    <data>
+        <menuitem id="vit_contract.vit_contract_config_menu" name="Configurations" sequence="1000" parent="vit_contract.vit_contract_top_menu" groups="vit_contract.group_vit_contract_manager"/>
+    </data>
+</odoo>

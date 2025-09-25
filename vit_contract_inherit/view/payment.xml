@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_vit_payment_tree_inherit" model="ir.ui.view">
+            <field name="name">view.vit.payment.tree.inherit</field>
+            <field name="model">vit.payment</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_payment_tree"/>
+            <field name="arch" type="xml">
+
+
+                <xpath expr="//tree/field[@name='kanwil_kancab_id']" position="replace"/>
+                <xpath expr="//tree/field[@name='master_budget_id']" position="replace"/>
+                <xpath expr="//tree/field[@name='budget_rkap_id']" position="after">
+                    <field name="kanwil_kancab_id"/>
+                    <field name="master_budget_id"/>
+                </xpath>
+
+                <xpath expr="//tree/field[@name='amount']" position="replace"/>
+
+                <xpath expr="//tree/field[@name='termin_id']" position="after">
+                    <field name="amount"/>
+                </xpath>
+
+            </field>
+        </record>
+
+
+        <record id="view_vit_payment_form_inherit" model="ir.ui.view">
+            <field name="name">view.vit.payment.form.inherit</field>
+            <field name="model">vit.payment</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_payment_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='partner_id']" position="replace"/>
+                <xpath expr="//field[@name='termin_id']" position="replace"/>
+                <xpath expr="//field[@name='amount']" position="after">
+                    <field name="partner_id"/>
+                    <field name="termin_id"/>
+                </xpath>
+
+                <xpath expr="//field[@name='amount']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='budget_rkap_id']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='termin_id']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='kanwil_kancab_id']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='master_budget_id']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+
+            </field>
+        </record>
+        <!-- tree view -->
+        <!--record id="view_payment_tree" model="ir.ui.view">
+            <field name="name">payment_tree</field>
+            <field name="model">vit.payment</field>
+            <field name="type">tree</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_payment_tree"/>
+            <field name="arch" type="xml">
+            </field>
+        </record-->
+        <!-- form view -->
+        <!-- record id="view_payment_form" model="ir.ui.view">
+            <field name="name">payment_form</field>
+            <field name="model">vit.payment</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_payment_form"/>
+            <field name="arch" type="xml">
+            </field>
+        </record-->
+        <!-- search -->
+        <!--record id="view_payment_search" model="ir.ui.view">
+            <field name="name">payment</field>
+            <field name="model">vit.payment</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_payment_search"/>
+            <field name="arch" type="xml">
+            </field>
+        </record-->
+        <!-- action window -->
+        <!--record id="vit_contract.action_payment" model="ir.actions.act_window">
+            <field name="name">Payment</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vit.payment</field>
+            <field name="view_mode">tree,form,kanban,pivot</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a new Payment
+                </p><p>
+
+                </p>
+            </field>
+        </record-->
+
+        <!-- <menuitem id="menu_payment" name="Payment" parent="vit_contract_config_menu" action="action_payment" sequence="70"/> -->
+    </data>
+</odoo>

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- tree view -->
+        <record id="view_vit_budget_rkap_tree" model="ir.ui.view">
+            <field name="name">vit_budget_rkap_tree</field>
+            <field name="model">vit.budget_rkap</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="Budget Rkap">
+                    <field name="name" /> <!-- 100-->
+                    <field name="amount" /> <!-- 101-->
+                    <field name="master_budget_id" /> <!-- 101-->
+                    <field name="remaining" /> <!-- 102-->
+                    <field name="kanwil_kancab_id" /> <!-- 102-->
+                    <field name="total_pagu_izin_prinsip" /> <!-- 103-->
+                    <field name="total_amount_kontrak" /> <!-- 104-->
+                    <field name="total_amount_payment" /> <!-- 105-->
+                    <field name="total_qty_izin_prinsip" /> <!-- 106-->
+                    <field name="total_qty_kontrak" /> <!-- 107-->
+                    <field name="total_amount_droping" /> <!-- 108-->
+                </tree>
+            </field>
+        </record>
+        <!-- pivot view -->
+        <record id="view_vit_budget_rkap_pivot" model="ir.ui.view">
+            <field name="name">vit_budget_rkap_tree</field>
+            <field name="model">vit.budget_rkap</field>
+            <field name="type">pivot</field>
+            <field name="arch" type="xml">
+                <pivot string="Budget Rkap">
+                    <field name="master_budget_id" type="row"/>
+                    <field name="kanwil_kancab_id" type="row"/>
+                </pivot>
+            </field>
+        </record>
+        <!-- form view -->
+        <record id="view_vit_budget_rkap_form" model="ir.ui.view">
+            <field name="name">vit_budget_rkap_form</field>
+            <field name="model">vit.budget_rkap</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Budget Rkap">
+                    <header>
+                        <button string="Reload" type="object" name="action_reload_view" icon="fa-refresh"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <!--button type="object" name="action_view_detail" class="oe_stat_button" icon="fa-pencil-square-o"-->
+                                <!--field name="detail_count" widget="statinfo" string="Detail(s)"/-->
+                                <!--field name="detail_ids" invisible="1"/-->
+                            <!--/button-->
+                        </div>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" string="Budget Rkap Name"/>
+                            <h1><field name="name" /></h1>
+                        </div>
+                        <group>
+                            <group> <!-- left -->
+                                <field name="amount"  />
+                                <field name="remaining"  />
+                                <field name="total_pagu_izin_prinsip"  />
+                                <field name="total_amount_kontrak"  />
+                                <field name="total_amount_payment"  />
+                                <field name="total_qty_izin_prinsip"  />
+                                <field name="total_qty_kontrak"  />
+                                <field name="total_amount_droping"  />
+                            </group>
+                            <group> <!-- right -->
+                                <field name="master_budget_id"  />
+                                <field name="kanwil_kancab_id"  />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="izin_prinsip_ids" string="Izin Prinsip">
+                                <field name="izin_prinsip_ids" >
+                                    <tree >
+                                        <field name="name" /> <!-- 100-->
+                                        <field name="total_pagu" /> <!-- 101-->
+                                        <field name="stage_id" /> <!-- 101-->
+                                        <field name="master_budget_id" /> <!-- 102-->
+                                        <field name="kanwil_kancab_id" /> <!-- 103-->
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="kontrak_ids" string="Kontrak">
+                                <field name="kontrak_ids" >
+                                    <tree >
+                                        <field name="name" /> <!-- 100-->
+                                        <field name="start_date" /> <!-- 101-->
+                                        <field name="end_date" /> <!-- 102-->
+                                        <field name="amount_izin_prinsip" /> <!-- 103-->
+                                        <field name="amount_kontrak" /> <!-- 104-->
+                                        <field name="stage_id" /> <!-- 104-->
+                                        <field name="jenis_kontrak_id" /> <!-- 105-->
+                                        <field name="master_budget_id" /> <!-- 106-->
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="payment_ids" string="Payment">
+                                <field name="payment_ids" >
+                                    <tree >
+                                        <field name="name" /> <!-- 100-->
+                                        <field name="amount" /> <!-- 101-->
+                                        <field name="stage_id" /> <!-- 102-->
+                                        <field name="termin_id" /> <!-- 103-->
+                                        <field name="master_budget_id" /> <!-- 104-->
+                                        <field name="kanwil_kancab_id" /> <!-- 105-->
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                        <group name="note_group" col="6" class="mt-2 mt-md-0">
+                            <group colspan="4">
+                            </group>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                            </group>
+                            <div class="clearfix"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- search -->
+        <record id="view_vit_budget_rkap_search" model="ir.ui.view">
+            <field name="name">vit_budget_rkap</field>
+            <field name="model">vit.budget_rkap</field>
+            <field name="arch" type="xml">
+                <search string="Budget Rkap">
+
+                    <filter string="Name" name="filter_by_name" domain="[('name','=','')]" />
+                    <filter string="Amount" name="filter_by_amount" domain="[('amount','=','')]" />
+                    <filter string="Remaining" name="filter_by_remaining" domain="[('remaining','=','')]" />
+                    <filter string="Total Pagu Izin Prinsip" name="filter_by_total_pagu_izin_prinsip" domain="[('total_pagu_izin_prinsip','=','')]" />
+                    <filter string="Total Amount Kontrak" name="filter_by_total_amount_kontrak" domain="[('total_amount_kontrak','=','')]" />
+                    <filter string="Total Amount Payment" name="filter_by_total_amount_payment" domain="[('total_amount_payment','=','')]" />
+                    <filter string="Total Qty Izin Prinsip" name="filter_by_total_qty_izin_prinsip" domain="[('total_qty_izin_prinsip','=','')]" />
+                    <filter string="Total Qty Kontrak" name="filter_by_total_qty_kontrak" domain="[('total_qty_kontrak','=','')]" />
+                    <filter string="Total Amount Droping" name="filter_by_total_amount_droping" domain="[('total_amount_droping','=','')]" />
+                    <field name="name" select="True"/>
+                    <field name="amount" select="True"/>
+                    <field name="remaining" select="True"/>
+                    <field name="total_pagu_izin_prinsip" select="True"/>
+                    <field name="total_amount_kontrak" select="True"/>
+                    <field name="total_amount_payment" select="True"/>
+                    <field name="total_qty_izin_prinsip" select="True"/>
+                    <field name="total_qty_kontrak" select="True"/>
+                    <field name="total_amount_droping" select="True"/>
+                    <field name="master_budget_id" select="True"/>
+                    <field name="kanwil_kancab_id" select="True"/>
+                    <group string="Group By..">
+                        <filter string="Master Budget" domain="[]" name="group_by_master_budget_id" context="{'group_by':'master_budget_id'}"/>
+                        <filter string="Kanwil Kancab" domain="[]" name="group_by_kanwil_kancab_id" context="{'group_by':'kanwil_kancab_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <!-- kanban , to show image, please add image, image_512, image_1920, or image_small in the model -->
+        <record id="view_vit_budget_rkap_kanban" model="ir.ui.view" >
+            <field name="name">vit_budget_rkap</field>
+            <field name="model">vit.budget_rkap</field>
+            <field name="arch" type="xml">
+                <kanban version="7.0">
+                    <field name="id" />
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_details">
+                                <h4>
+                                    <a type="open"><field name="name"/></a>
+                                </h4>
+                            </div> <!--oe_kanban_details-->
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <!-- graph -->
+        <record id="view_vit_budget_rkap_graph" model="ir.ui.view">
+            <field name="name">vit_budget_rkap</field>
+            <field name="model">vit.budget_rkap</field>
+            <field name="arch" type="xml">
+                <graph string="Budget Rkap" type="bar">
+                    <field name="master_budget_id"/>
+                </graph>
+            </field>
+        </record>
+        <!-- action window -->
+        <record id="action_budget_rkap" model="ir.actions.act_window">
+            <field name="name">Budget Rkap</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vit.budget_rkap</field>
+            <field name="view_mode">tree,form,kanban,pivot,graph</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a new Budget Rkap
+                </p><p>
+
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_budget_rkap" name="Budget Rkap" parent="vit_contract_config_menu" action="action_budget_rkap" sequence="30"/>
+    </data>
+</odoo>

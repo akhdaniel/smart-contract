@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_vit_kontrak_form_inherit" model="ir.ui.view">
+            <field name="name">vit.kontrak.form.inherit</field>
+            <field name="model">vit.kontrak</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_kontrak_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='izin_prinsip_id']" position="attributes">
+                    <attribute name="force_save">1</attribute>
+                    <attribute name="required">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='amount_izin_prinsip']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                    <attribute name="force_save">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='budget_rkap_id']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='kanwil_kancab_id']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='master_budget_id']" position="replace"/>
+                <xpath expr="//field[@name='kanwil_kancab_id']" position="after">
+                    <field name="master_budget_id"/>
+                </xpath>
+
+                <xpath expr="//field[@name='master_budget_id']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='jenis_kontrak_id']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+
+                <xpath expr="//page[@name='termin_ids']//tree/field[@name='master_nama_termin_id']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+
+                <xpath expr="//page[@name='termin_ids']//tree/field[@name='deskripsi']" position="replace"/>
+                <xpath expr="//page[@name='termin_ids']//tree/field[@name='master_nama_termin_id']" position="after">
+                    <field name="deskripsi"/>
+                </xpath>
+
+                <xpath expr="//page[@name='termin_ids']//tree/field[@name='partner_id']" position="replace"/>
+
+                <xpath expr="//page[@name='termin_ids']//tree/field[@name='persentase']" position="replace"/>
+                <xpath expr="//page[@name='termin_ids']//tree/field[@name='nilai']" position="replace"/>
+                <xpath expr="//page[@name='termin_ids']//tree/field[@name='stage_id']" position="after">
+                    <field name="persentase"/>
+                    <field name="nilai"/>
+                </xpath>
+
+
+                <xpath expr="//field[@name='termin_ids']" position="attributes">
+                    <attribute name="readonly">stage_is_draft==True or stage_is_done==True</attribute>
+                    <attribute name="force_save">1</attribute>
+                </xpath>
+
+
+            </field>
+        </record>
+
+
+
+        <record id="view_vit_kontrak_tree_inherit" model="ir.ui.view">
+            <field name="name">view.vit.kontrak.tree.inherit</field>
+            <field name="model">vit.kontrak</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_kontrak_tree"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='partner_id']" position="replace"/>
+
+                <xpath expr="//field[@name='end_date']" position="after">
+                    <field name="partner_id"/>
+                </xpath>
+
+            </field>
+        </record>
+
+
+
+
+
+
+
+
+        <!-- tree view -->
+        <!--record id="view_kontrak_tree" model="ir.ui.view">
+            <field name="name">kontrak_tree</field>
+            <field name="model">vit.kontrak</field>
+            <field name="type">tree</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_kontrak_tree"/>
+            <field name="arch" type="xml">
+            </field>
+        </record-->
+        <!-- form view -->
+        <!-- record id="view_kontrak_form" model="ir.ui.view">
+            <field name="name">kontrak_form</field>
+            <field name="model">vit.kontrak</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_kontrak_form"/>
+            <field name="arch" type="xml">
+            </field>
+        </record-->
+        <!-- search -->
+        <!--record id="view_kontrak_search" model="ir.ui.view">
+            <field name="name">kontrak</field>
+            <field name="model">vit.kontrak</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_kontrak_search"/>
+            <field name="arch" type="xml">
+            </field>
+        </record-->
+        <!-- action window -->
+        <!--record id="vit_contract.action_kontrak" model="ir.actions.act_window">
+            <field name="name">Kontrak</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vit.kontrak</field>
+            <field name="view_mode">tree,form,kanban,pivot,calendar</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a new Kontrak
+                </p><p>
+
+                </p>
+            </field>
+        </record-->
+
+        <!-- <menuitem id="menu_kontrak" name="Kontrak" parent="vit_contract_config_menu" action="action_kontrak" sequence="50"/> -->
+    </data>
+</odoo>

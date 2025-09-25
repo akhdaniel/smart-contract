@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- tree view -->
+        <record id="view_vit_izin_prinsip_line_tree" model="ir.ui.view">
+            <field name="name">vit_izin_prinsip_line_tree</field>
+            <field name="model">vit.izin_prinsip_line</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="Izin Prinsip Line">
+                    <field name="name" /> <!-- 100-->
+                    <field name="izin_prinsip_id" /> <!-- 100-->
+                    <field name="pagu" /> <!-- 101-->
+                    <field name="jenis_kontrak_id" /> <!-- 101-->
+                    <field name="kanwil_kancab_id" /> <!-- 102-->
+                </tree>
+            </field>
+        </record>
+        <!-- pivot view -->
+        <record id="view_vit_izin_prinsip_line_pivot" model="ir.ui.view">
+            <field name="name">vit_izin_prinsip_line_tree</field>
+            <field name="model">vit.izin_prinsip_line</field>
+            <field name="type">pivot</field>
+            <field name="arch" type="xml">
+                <pivot string="Izin Prinsip Line">
+                    <field name="izin_prinsip_id" type="row"/>
+                    <field name="jenis_kontrak_id" type="row"/>
+                    <field name="kanwil_kancab_id" type="row"/>
+                </pivot>
+            </field>
+        </record>
+        <!-- form view -->
+        <record id="view_vit_izin_prinsip_line_form" model="ir.ui.view">
+            <field name="name">vit_izin_prinsip_line_form</field>
+            <field name="model">vit.izin_prinsip_line</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Izin Prinsip Line">
+                    <header>
+                        <button string="Reload" type="object" name="action_reload_view" icon="fa-refresh"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <!--button type="object" name="action_view_detail" class="oe_stat_button" icon="fa-pencil-square-o"-->
+                                <!--field name="detail_count" widget="statinfo" string="Detail(s)"/-->
+                                <!--field name="detail_ids" invisible="1"/-->
+                            <!--/button-->
+                        </div>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" string="Izin Prinsip Line Name"/>
+                            <h1><field name="name" /></h1>
+                        </div>
+                        <group>
+                            <group> <!-- left -->
+                                <field name="pagu"  />
+                            </group>
+                            <group> <!-- right -->
+                                <field name="izin_prinsip_id"  />
+                                <field name="jenis_kontrak_id"  />
+                                <field name="kanwil_kancab_id"  />
+                            </group>
+                        </group>
+                        <notebook>
+                        </notebook>
+                        <group name="note_group" col="6" class="mt-2 mt-md-0">
+                            <group colspan="4">
+                            </group>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                            </group>
+                            <div class="clearfix"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- search -->
+        <record id="view_vit_izin_prinsip_line_search" model="ir.ui.view">
+            <field name="name">vit_izin_prinsip_line</field>
+            <field name="model">vit.izin_prinsip_line</field>
+            <field name="arch" type="xml">
+                <search string="Izin Prinsip Line">
+
+                    <filter string="Name" name="filter_by_name" domain="[('name','=','')]" />
+                    <filter string="Pagu" name="filter_by_pagu" domain="[('pagu','=','')]" />
+                    <field name="name" select="True"/>
+                    <field name="pagu" select="True"/>
+                    <field name="izin_prinsip_id" select="True"/>
+                    <field name="jenis_kontrak_id" select="True"/>
+                    <field name="kanwil_kancab_id" select="True"/>
+                    <group string="Group By..">
+                        <filter string="Izin Prinsip" domain="[]" name="group_by_izin_prinsip_id" context="{'group_by':'izin_prinsip_id'}"/>
+                        <filter string="Jenis Kontrak" domain="[]" name="group_by_jenis_kontrak_id" context="{'group_by':'jenis_kontrak_id'}"/>
+                        <filter string="Kanwil Kancab" domain="[]" name="group_by_kanwil_kancab_id" context="{'group_by':'kanwil_kancab_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <!-- kanban , to show image, please add image, image_512, image_1920, or image_small in the model -->
+        <record id="view_vit_izin_prinsip_line_kanban" model="ir.ui.view" >
+            <field name="name">vit_izin_prinsip_line</field>
+            <field name="model">vit.izin_prinsip_line</field>
+            <field name="arch" type="xml">
+                <kanban version="7.0">
+                    <field name="id" />
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_details">
+                                <h4>
+                                    <a type="open"><field name="name"/></a>
+                                </h4>
+                            </div> <!--oe_kanban_details-->
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <!-- graph -->
+        <record id="view_vit_izin_prinsip_line_graph" model="ir.ui.view">
+            <field name="name">vit_izin_prinsip_line</field>
+            <field name="model">vit.izin_prinsip_line</field>
+            <field name="arch" type="xml">
+                <graph string="Izin Prinsip Line" type="bar">
+                    <field name="izin_prinsip_id"/>
+                </graph>
+            </field>
+        </record>
+        <!-- action window -->
+        <record id="action_izin_prinsip_line" model="ir.actions.act_window">
+            <field name="name">Izin Prinsip Line</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vit.izin_prinsip_line</field>
+            <field name="view_mode">tree,form,kanban,pivot,graph</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a new Izin Prinsip Line
+                </p><p>
+
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_izin_prinsip_line" name="Izin Prinsip Line" parent="vit_contract_config_menu" action="action_izin_prinsip_line" sequence="110"/>
+    </data>
+</odoo>

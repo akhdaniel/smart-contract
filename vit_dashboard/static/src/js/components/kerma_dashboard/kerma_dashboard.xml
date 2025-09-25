@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+    <t t-name="vit_dashboard.KermaDashboard" owl="1">
+        <Layout display="display" className="'o_dashboard h-100'">
+
+            <!-- filter-->
+            <div class="row px-3 py-2">
+                <div class="col-12 col-md-3">
+                    <h1>Dashboard
+                        <t t-if="state.selectedUnit">
+                            <t t-esc="state.selectedUnit.name"/>
+                        </t>
+                    </h1>
+                    <h3>
+                        <t t-if="state.selectedMitra">
+                            Mitra: <t t-esc="state.selectedMitra.name"/>
+                        </t>
+                    </h3>
+                </div>
+                <div class="col-12 col-md-3">
+                    <div class="form-control px-1 m-0">
+                        <UnitSelector
+                            id="'unit_selector'"
+                            value="state.selectedUnit?.name || ''"
+                            onUnitSelected.bind="onUnitChange"
+                        />
+                    </div>
+                </div>
+                <div class="col-12 col-md-3">
+                    <LocationSearch
+                        value="state.location || ''"
+                        onLocationSearchEnter.bind="onLocationSearchEnter"/>
+                </div>
+                <div class="col-12 col-md-3">
+                    <KeywordSearch
+                        value="state.keyword || ''"
+                        onKeywordSearchEnter.bind="onKeywordSearchEnter"/>
+                </div>
+                <div class="col-12 col-md-1">
+                    <button class="btn btn-secondary" t-on-click="clearSavedState">
+                        Reset
+                    </button>
+                </div>
+            </div>
+
+            <!-- content scrollable-->
+            <div class="row mx-3 scrollable-row">
+
+                <!-- numer cards -->
+                <div class="row">
+                    <div class="col-3">
+                        <NumberCard 
+                            title="'Kanwil'" 
+                            bgColor="'bg-itb-light-blue'" 
+                            field="'total_budget_realisasi'"
+                            model="'vit.budget_rkap'"
+                            domain="[]"
+                            context="{'search_default_group_by_name': 1}"
+                            icon="'fa fa-users'"
+                            onReload.bind="onMitraNumberCardReload"
+                        />
+                    </div>
+                    <div class="col-3">
+                        <NumberCard 
+                            title="'RR Gudang'" 
+                            bgColor="'bg-itb-light-blue'" 
+                            field="'master_budget_summary'"
+                            model="'vit.budget_rkap'"
+                            domain="[]"
+                            context="{'search_default_group_by_name': 1}"
+                            icon="'fa fa-users'"
+                            onReload.bind="onMitraNumberCardReload"
+                        />
+                    </div>
+                    <div class="col-3">
+                        <NumberCard 
+                            title="'Pembangunan Gudang'" 
+                            bgColor="'bg-itb-light-blue'" 
+                            field="'master_budget_summary'"
+                            model="'vit.budget_rkap'"
+                            domain="[]"
+                            context="{'search_default_group_by_name': 1}"
+                            icon="'fa fa-users'"
+                            onReload.bind="onMitraNumberCardReload"
+                        />
+                    </div>
+                    <div class="col-3">
+                        <NumberCard 
+                            title="'Renov Gudang'" 
+                            bgColor="'bg-itb-light-blue'" 
+                            field="'master_budget_summary'"
+                            model="'vit.budget_rkap'"
+                            domain="[]"
+                            context="{'search_default_group_by_name': 1}"
+                            icon="'fa fa-users'"
+                            onReload.bind="onMitraNumberCardReload"
+                        />
+                    </div>
+                    <div class="col-3">
+                        <NumberCard 
+                            title="'Sapra Gudang'" 
+                            bgColor="'bg-itb-light-blue'" 
+                            field="'master_budget_summary'"
+                            model="'vit.budget_rkap'"
+                            domain="[]"
+                            context="{'search_default_group_by_name': 1}"
+                            icon="'fa fa-users'"
+                            onReload.bind="onMitraNumberCardReload"
+                        />
+                    </div>
+                    <div class="col-3">
+                        <NumberCard 
+                            title="'Sapra Investasi'" 
+                            bgColor="'bg-itb-light-blue'" 
+                            field="'master_budget_summary'"
+                            model="'vit.budget_rkap'"
+                            domain="[]"
+                            context="{'search_default_group_by_name': 1}"
+                            icon="'fa fa-users'"
+                            onReload.bind="onMitraNumberCardReload"
+                        />
+                    </div>
+                    <div class="col-3">
+                        <NumberCard 
+                            title="'RR Kantor'" 
+                            bgColor="'bg-itb-light-blue'" 
+                            field="'total_budget_realisasi'"
+                            model="'vit.budget_rkap'"
+                            domain="[]"
+                            context="{'search_default_group_by_name': 1}"
+                            icon="'fa fa-users'"
+                            onReload.bind="onMitraNumberCardReload"
+                        />
+                    </div>
+                    <div class="col-3">
+                        <NumberCard 
+                            title="'Pembangunan Kantor'" 
+                            bgColor="'bg-itb-light-blue'" 
+                            field="'total_budget_realisasi'"
+                            model="'vit.budget_rkap'"
+                            domain="[]"
+                            context="{'search_default_group_by_name': 1}"
+                            icon="'fa fa-users'"
+                            onReload.bind="onMitraNumberCardReload"
+                        />
+                    </div>
+                    <div class="col-3">
+                        <NumberCard 
+                            title="'Renov Kantor'" 
+                            bgColor="'bg-itb-light-blue'" 
+                            field="'total_budget_realisasi'"
+                            model="'vit.budget_rkap'"
+                            domain="[]"
+                            context="{'search_default_group_by_name': 1}"
+                            icon="'fa fa-users'"
+                            onReload.bind="onMitraNumberCardReload"
+                        />
+                    </div>
+                    <div class="col-3">
+                        <NumberCard 
+                            title="'Sapra Kantor'" 
+                            bgColor="'bg-itb-light-blue'" 
+                            field="'total_budget_realisasi'"
+                            model="'vit.budget_rkap'"
+                            domain="[]"
+                            context="{'search_default_group_by_name': 1}"
+                            icon="'fa fa-users'"
+                            onReload.bind="onMitraNumberCardReload"
+                        />
+                    </div>
+                    <div class="col"> <!-- Kept the second NumberCard in the same row -->
+                        <!-- <NumberCard 
+                            title="'Total Kerjasama'" 
+                            field="'total_kerjasama'"
+                            model="'vit.kerjasama_mitra_rel'"
+                            domain="[]"
+                            onReload.bind="onKerjasamaNumberCardReload"
+                            bgColor="'bg-itb-gold'"/> -->
+                    </div>
+                    <div class="col"> <!-- Added ms-3 for left margin -->
+                        <!-- <NumberCard 
+                            title="'MoU'" 
+                            bgColor="'bg-itb-primary'" 
+                            field="'total_kerjasama_mou'"
+                            model="'vit.kerjasama_mitra_rel'"
+                            domain="[['jenis_dokumen_id','ilike','mou']]"
+                            onReload.bind="onMoUNumberCardReload"
+                            icon="'fa fa-users'"/> -->
+                    </div>
+                    <div class="col"> <!-- Kept the second NumberCard in the same row -->
+                        <!-- <NumberCard 
+                            title="'MoA'" 
+                            field="'total_kerjasama_moa'"
+                            model="'vit.kerjasama_mitra_rel'"
+                            domain="[['jenis_dokumen_id','ilike','moa']]"
+                            onReload.bind="onMoANumberCardReload"
+                            bgColor="'bg-itb-light-blue'"/> -->
+                    </div>
+                    <div class="col"> <!-- Kept the second NumberCard in the same row -->
+                        <!-- <NumberCard 
+                            title="'IA'" 
+                            field="'total_kerjasama_ia'"
+                            model="'vit.kerjasama_mitra_rel'"
+                            domain="[['jenis_dokumen_id','ilike','ia']]"
+                            onReload.bind="onIaNumberCardReload"
+                            bgColor="'bg-itb-grey'"/> -->
+                    </div>
+                </div>
+
+                <div class="row mt-4 mb-2">
+                    <div class="col">
+                        <!-- <NumberCard 
+                            title="'Mahasiswa Inbound'" 
+                            bgColor="'bg-itb-light-blue'" 
+                            field="'mahasiswa_inbound'"
+                            model="'res.partner'"
+                            domain="[['is_mahasiswa_inbound', '=', true]]" 
+                            onReload.bind="onMahasiswaInboundNumberCardReload"
+                            icon="'fa fa-graduation-cap'"/> -->
+                    </div>
+                    <div class="col">
+                        <!-- <NumberCard 
+                            title="'Mahasiswa Outbound'" 
+                            bgColor="'bg-itb-primary'" 
+                            field="'mahasiswa_outbound'"
+                            model="'res.partner'"
+                            domain="[['is_mahasiswa_outbound', '=', true],['type_mahasiswa', '=', 'outbound']]" 
+                            context="{'default_is_mahasiswa_outbound':1}"
+                            onReload.bind="onMahasiswaOutboundNumberCardReload"
+                            icon="'fa fa-graduation-cap'"/> -->
+                    </div>
+                    <div class="col">
+                        <!-- <NumberCard 
+                            title="'Perjalanan Eksekutif'" 
+                            bgColor="'bg-itb-gold'" 
+                            field="'total_kunjungan_eksekutif'"
+                            model="'vit.kunjungan_eksekutif'"
+                            domain="[]"
+                            onReload.bind="onKunjunganEksekutifNumberCardReload"
+                            icon="'fa fa-university'"/> -->
+                    </div>
+                    <div class="col">
+                        <!-- <NumberCard 
+                            title="'Kunjungan Mitra'" 
+                            bgColor="'bg-itb-light-blue'" 
+                            field="'total_kunjungan_mitra'"
+                            model="'vit.kunjungan_mitra'"
+                            domain="[]"
+                            onReload.bind="onKunjunganMitraNumberCardReload"
+                            icon="'fa fa-users'"/> -->
+                    </div>
+                </div>
+
+                <!-- pie chart -->
+                <div class="row py-3">
+                    <div class="col-md-3">
+                        <!-- aktiv / nonaktif -->
+                        <!-- <PieChart 
+                            type="'pie'"                                
+                            title="'Status Kerjasama'" 
+                            model="'vit.kerjasama_mitra_rel'"
+                            domain="[]"
+                            field="'total_kerjasama_by_status'"
+                            context="{'search_default_group_by_status_id': 1}"
+                            onReload.bind="onPieChartReload1"
+                            colorIndex="1"
+                        /> -->
+                    </div>
+                
+                    <div class="col-md-3">
+                        <!-- LN/ DN -->
+                        <!-- <PieChart 
+                            type="'pie'"                                
+                            title="'Mitra Kerjasama'" 
+                            model="'vit.kerjasama_mitra_rel'"
+                            domain="[]"
+                            context="{'search_default_group_by_jenis_kerjasama': 1}"
+                            field="'total_kerjasama_by_jenis'"
+                            onReload.bind="onPieChartReload2"
+                            colorIndex="2"
+                        /> -->
+                    </div>
+
+                    <div class="col-md-3">
+                        <!-- Monitor leads -->
+                        <!-- <PieChart 
+                            type="'bar'"                                
+                            title="'Calon Kerjasama per Tahapan'" 
+                            model="'crm.lead'"
+                            domain="[]"
+                            context="{'search_default_stage': 1}"
+                            field="'total_lead_by_stage'"
+                            default_views="'kanban'"
+                            onReload.bind="onPieChartReload3"
+                            colorIndex="4"
+                        /> -->
+                    </div>
+                    <div class="col-md-3">
+                        <!-- monitor per unit kerja  -->
+                        <!-- <PieChart 
+                            type="'bar'"                                
+                            title="'Calon Kerjasama per Unit Kerja'" 
+                            model="'crm.lead'"
+                            domain="[]"
+                            context="{'search_default_operating_unit_id': 1}"
+                            field="'total_lead_by_unit_kerja'"
+                            onReload.bind="onPieChartReload4"
+                            
+                        /> -->
+                    </div>
+                </div>
+
+                <!-- cal heat map and bar chart -->
+                <div class="row mt-3 mb-3">
+                    <div class="col-12 col-md-4">
+                        <!-- <PieChart 
+                            type="'bar'"
+                            title="'Jumlah Pertukaran Mahasiswa Per Unit Kerja'" 
+                            model="'res.partner'"
+                            domain="[]"
+                            field="'total_pertukaran_by_unit_kerja'"
+                            onReload.bind="onPieChartReload7"
+                            colorIndex="1"
+                        />                                                           -->
+                    </div>   
+                    <div class="col-12 col-md-4">
+                        <!-- <PieChart 
+                            type="'bar'"
+                            title="'Jumlah Kerjasama Per Unit Kerja'" 
+                            model="'vit.kerjasama_mitra_rel'"
+                            domain="[]"
+                            field="'total_kerjasama_by_unit_kerja'"
+                            onReload.bind="onPieChartReload6"
+                            colorIndex="1"
+                        /> -->
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <!-- <PieChart 
+                            type="'bar'"
+                            title="'Pertumbuhan Kerjasama'" 
+                            model="'vit.kerjasama_mitra_rel'"
+                            domain="[]"
+                            field="'total_kerjasama_by_year_and_type'"
+                            onReload.bind="onPieChartReload5"
+                            colorIndex="2"
+                        /> -->
+                    </div>
+                </div> 
+
+                <!-- list and maps -->
+                <div class="row py-3">
+                    <div class="col-12 col-md-4">
+                        <!-- <ListCard 
+                            style="'height: 600px; overflow-y: auto;'"
+                            title="'Kerjasama'" 
+                            fields="['judul', 'keterangan', 'name','nama_mitra','tanggal_awal','mitra_location','status_id']"
+                            model="'vit.kerjasama_mitra_rel'"
+                            onReload.bind="onMitraListCardReload"
+                        /> -->
+                    </div>
+
+                    <div class="col-12 col-md-8" >
+                        <!-- <GoogleMap 
+                            domain="[]"
+                            onReload.bind="onGoogleMapReload"
+                        />
+                        <div class="mt-3">
+                            <CalHeatMap title="Kerjasama"/>
+                        </div> -->
+                    </div>
+
+                    <div class="col-12 col-md-8 d-flex flex-column justify-content-space-between">
+                        <!-- <div class="flex-fill">
+                            <GoogleMap 
+                                domain="[]"
+                                onReload.bind="onGoogleMapReload"
+                            />
+                        </div> -->
+                        <!-- <div class="flex-fill mt-3">
+                            <CalHeatMap title="Kerjasama"/>
+                        </div> -->
+                    </div>
+
+                </div>
+            </div>
+        </Layout>
+    </t>
+</templates>

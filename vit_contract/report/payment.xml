@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- report qweb view -->
+        <record id="action_report_vit_payment" model="ir.actions.report">
+            <field name="name">Payment</field>
+            <field name="model">vit.payment</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">vit_contract.vit_payment_report</field>
+            <field name="report_file">vit_contract.vit_payment_report</field>
+            <field name="print_report_name">object.name</field>
+            <field name="binding_model_id" ref="vit_contract.model_vit_payment"/>
+            <field name="binding_type">report</field>
+        </record>
+        <!-- document template -->
+        <template id="vit_contract.vit_payment_report_document" >
+            <t t-call="web.external_layout">
+                <t t-set="doc" t-value="doc.with_context({'lang': lang})"/>
+                <div class="page">
+                    <h2>
+                        Payment: <span t-field="doc.name"/>
+                    </h2>
+                    <div class="row mt32 mb32">
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Amount</strong>
+                            <p class="m-0" t-field="doc.amount" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Stage Is Draft</strong>
+                            <p class="m-0" t-field="doc.stage_is_draft" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Stage Is Done</strong>
+                            <p class="m-0" t-field="doc.stage_is_done" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Allow Confirm</strong>
+                            <p class="m-0" t-field="doc.allow_confirm" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Allow Cancel</strong>
+                            <p class="m-0" t-field="doc.allow_cancel" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Stage Name</strong>
+                            <p class="m-0" t-field="doc.stage_name" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Partner</strong>
+                            <p class="m-0" t-field="doc.partner_id"/>
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Budget Rkap</strong>
+                            <p class="m-0" t-field="doc.budget_rkap_id"/>
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Stage</strong>
+                            <p class="m-0" t-field="doc.stage_id"/>
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Termin</strong>
+                            <p class="m-0" t-field="doc.termin_id"/>
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Master Budget</strong>
+                            <p class="m-0" t-field="doc.master_budget_id"/>
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Kanwil Kancab</strong>
+                            <p class="m-0" t-field="doc.kanwil_kancab_id"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="oe_structure"/>
+            </t>
+        </template>
+
+        <!-- main template -->
+        <template id="vit_contract.vit_payment_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-set="lang" t-value="doc.create_uid.lang"/>
+                    <t t-call="vit_contract.vit_payment_report_document" />
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

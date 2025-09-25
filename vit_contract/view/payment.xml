@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- tree view -->
+        <record id="view_vit_payment_tree" model="ir.ui.view">
+            <field name="name">vit_payment_tree</field>
+            <field name="model">vit.payment</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="Payment">
+                    <field name="name" /> <!-- 100-->
+                    <field name="partner_id" /> <!-- 100-->
+                    <field name="amount" /> <!-- 101-->
+                    <field name="budget_rkap_id" /> <!-- 101-->
+                    <field name="stage_id" /> <!-- 102-->
+                    <field name="termin_id" /> <!-- 103-->
+                    <field name="master_budget_id" /> <!-- 104-->
+                    <field name="kanwil_kancab_id" /> <!-- 105-->
+                </tree>
+            </field>
+        </record>
+        <!-- pivot view -->
+        <record id="view_vit_payment_pivot" model="ir.ui.view">
+            <field name="name">vit_payment_tree</field>
+            <field name="model">vit.payment</field>
+            <field name="type">pivot</field>
+            <field name="arch" type="xml">
+                <pivot string="Payment">
+                    <field name="partner_id" type="row"/>
+                    <field name="budget_rkap_id" type="row"/>
+                    <field name="stage_id" type="row"/>
+                    <field name="termin_id" type="row"/>
+                    <field name="master_budget_id" type="row"/>
+                    <field name="kanwil_kancab_id" type="row"/>
+                </pivot>
+            </field>
+        </record>
+        <!-- form view -->
+        <record id="view_vit_payment_form" model="ir.ui.view">
+            <field name="name">vit_payment_form</field>
+            <field name="model">vit.payment</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Payment">
+                    <header>
+                        <button string="Confirm" type="object" name="action_confirm" invisible="allow_confirm==False" class="oe_highlight" icon="fa-check-circle" />
+                        <button string="Cancel" type="object" name="action_cancel" invisible="allow_cancel==False" icon="fa-times-circle"/>
+                        <field name="stage_id" widget="statusbar" options="{'fold_field':'fold'}" />
+                        <button string="Reload" type="object" name="action_reload_view" icon="fa-refresh"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <!--button type="object" name="action_view_detail" class="oe_stat_button" icon="fa-pencil-square-o"-->
+                                <!--field name="detail_count" widget="statinfo" string="Detail(s)"/-->
+                                <!--field name="detail_ids" invisible="1"/-->
+                            <!--/button-->
+                        </div>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" string="Payment Name"/>
+                            <h1><field name="name" /></h1>
+                        </div>
+                        <group>
+                            <group> <!-- left -->
+                                <field name="stage_is_draft" invisible="True" />
+                                <field name="stage_is_done" invisible="True" readonly="stage_is_draft==False"/>
+                                <field name="allow_confirm" invisible="True" readonly="stage_is_draft==False"/>
+                                <field name="allow_cancel" invisible="True" readonly="stage_is_draft==False"/>
+                                <field name="stage_name" invisible="True" readonly="stage_is_draft==False"/>
+                                <field name="amount"  readonly="stage_is_draft==False"/>
+                            </group>
+                            <group> <!-- right -->
+                                <field name="partner_id"  readonly="stage_is_draft==False"/>
+                                <field name="budget_rkap_id"  readonly="stage_is_draft==False"/>
+                                <field name="termin_id"  readonly="stage_is_draft==False"/>
+                                <field name="master_budget_id"  readonly="stage_is_draft==False"/>
+                                <field name="kanwil_kancab_id"  readonly="stage_is_draft==False"/>
+                            </group>
+                        </group>
+                        <notebook>
+                        </notebook>
+                        <group name="note_group" col="6" class="mt-2 mt-md-0">
+                            <group colspan="4">
+                            </group>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                            </group>
+                            <div class="clearfix"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- search -->
+        <record id="view_vit_payment_search" model="ir.ui.view">
+            <field name="name">vit_payment</field>
+            <field name="model">vit.payment</field>
+            <field name="arch" type="xml">
+                <search string="Payment">
+
+                    <filter string="Name" name="filter_by_name" domain="[('name','=','')]" />
+                    <filter string="Amount" name="filter_by_amount" domain="[('amount','=','')]" />
+                    <filter string="Stage Is Draft" name="filter_by_stage_is_draft" domain="[('stage_is_draft','=','')]" />
+                    <filter string="Stage Is Done" name="filter_by_stage_is_done" domain="[('stage_is_done','=','')]" />
+                    <filter string="Allow Confirm" name="filter_by_allow_confirm" domain="[('allow_confirm','=','')]" />
+                    <filter string="Allow Cancel" name="filter_by_allow_cancel" domain="[('allow_cancel','=','')]" />
+                    <filter string="Stage Name" name="filter_by_stage_name" domain="[('stage_name','=','')]" />
+                    <field name="name" select="True"/>
+                    <field name="amount" select="True"/>
+                    <field name="stage_is_draft" select="True"/>
+                    <field name="stage_is_done" select="True"/>
+                    <field name="allow_confirm" select="True"/>
+                    <field name="allow_cancel" select="True"/>
+                    <field name="stage_name" select="True"/>
+                    <field name="partner_id" select="True"/>
+                    <field name="budget_rkap_id" select="True"/>
+                    <field name="stage_id" select="True"/>
+                    <field name="termin_id" select="True"/>
+                    <field name="master_budget_id" select="True"/>
+                    <field name="kanwil_kancab_id" select="True"/>
+                    <group string="Group By..">
+                        <filter string="Partner" domain="[]" name="group_by_partner_id" context="{'group_by':'partner_id'}"/>
+                        <filter string="Budget Rkap" domain="[]" name="group_by_budget_rkap_id" context="{'group_by':'budget_rkap_id'}"/>
+                        <filter string="Stage" domain="[]" name="group_by_stage_id" context="{'group_by':'stage_id'}"/>
+                        <filter string="Termin" domain="[]" name="group_by_termin_id" context="{'group_by':'termin_id'}"/>
+                        <filter string="Master Budget" domain="[]" name="group_by_master_budget_id" context="{'group_by':'master_budget_id'}"/>
+                        <filter string="Kanwil Kancab" domain="[]" name="group_by_kanwil_kancab_id" context="{'group_by':'kanwil_kancab_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <!-- kanban , to show image, please add image, image_512, image_1920, or image_small in the model -->
+        <record id="view_vit_payment_kanban" model="ir.ui.view" >
+            <field name="name">vit_payment</field>
+            <field name="model">vit.payment</field>
+            <field name="arch" type="xml">
+                <kanban version="7.0">
+                    <field name="id" />
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_details">
+                                <h4>
+                                    <a type="open"><field name="name"/></a>
+                                </h4>
+                            </div> <!--oe_kanban_details-->
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <!-- graph -->
+        <record id="view_vit_payment_graph" model="ir.ui.view">
+            <field name="name">vit_payment</field>
+            <field name="model">vit.payment</field>
+            <field name="arch" type="xml">
+                <graph string="Payment" type="bar">
+                    <field name="partner_id"/>
+                </graph>
+            </field>
+        </record>
+        <!-- action window -->
+        <record id="action_payment" model="ir.actions.act_window">
+            <field name="name">Payment</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vit.payment</field>
+            <field name="view_mode">tree,form,kanban,pivot,graph</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a new Payment
+                </p><p>
+
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_payment" name="Payment" parent="vit_contract_sub_menu" action="action_payment" sequence="70"/>
+    </data>
+</odoo>

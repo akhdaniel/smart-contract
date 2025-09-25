@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_vit_syarat_termin_form_inherit" model="ir.ui.view">
+            <field name="name">vit.syarat_termin.form.inherit</field>
+            <field name="model">vit.syarat_termin</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_syarat_termin_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='master_syarat_termin_id']" position="replace"/>
+                    
+
+                <xpath expr="//field[@name='name']" position="before">
+                    <field name="master_syarat_termin_id"/>
+                </xpath>
+
+                <xpath expr="//field[@name='name']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='document']" position="replace"/>
+
+                <xpath expr="//form/sheet/group" position="inside">
+                    <field name="document" widget="pdf_viewer" />
+                </xpath>
+
+                <xpath expr="//field[@name='termin_id']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='verified']" position="attributes">
+                    <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+
+
+        <record id="view_vit_syarat_termin_tree_inherit" model="ir.ui.view">
+            <field name="name">view.vit.syarat.termin.tree.inherit</field>
+            <field name="model">vit.syarat_termin</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_syarat_termin_tree"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='name']" position="replace"/>
+
+                <xpath expr="//field[@name='master_syarat_termin_id']" position="replace"/>
+
+                <xpath expr="//field[@name='termin_id']" position="before">
+                    <field name="master_syarat_termin_id"/>
+                </xpath>
+
+            </field>
+        </record>
+                
+
+        <!-- <record id="view_vit_syarat_termin_tree_inherit" model="ir.ui.view">
+            <field name="name">vit.syarat_termin.tree.inherit</field>
+            <field name="model">vit.syarat_termin</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_syarat_termin_tree"/>
+            <field name="arch" type="xml">
+                
+                <xpath expr="//field[@name='master_syarat_termin_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                
+
+            </field>
+        </record> -->
+
+
+
+        <!-- tree view -->
+        <!--record id="view_syarat_termin_tree" model="ir.ui.view">
+            <field name="name">syarat_termin_tree</field>
+            <field name="model">vit.syarat_termin</field>
+            <field name="type">tree</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_syarat_termin_tree"/>
+            <field name="arch" type="xml">
+            </field>
+        </record-->
+        <!-- form view -->
+        <!-- record id="view_syarat_termin_form" model="ir.ui.view">
+            <field name="name">syarat_termin_form</field>
+            <field name="model">vit.syarat_termin</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_syarat_termin_form"/>
+            <field name="arch" type="xml">
+            </field>
+        </record-->
+        <!-- search -->
+        <!--record id="view_syarat_termin_search" model="ir.ui.view">
+            <field name="name">syarat_termin</field>
+            <field name="model">vit.syarat_termin</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_syarat_termin_search"/>
+            <field name="arch" type="xml">
+            </field>
+        </record-->
+        <!-- action window -->
+        <!--record id="vit_contract.action_syarat_termin" model="ir.actions.act_window">
+            <field name="name">Syarat Termin</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vit.syarat_termin</field>
+            <field name="view_mode">tree,form,kanban,pivot,calendar</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a new Syarat Termin
+                </p><p>
+
+                </p>
+            </field>
+        </record-->
+
+        <!-- <menuitem id="menu_syarat_termin" name="Syarat Termin" parent="vit_contract_config_menu" action="action_syarat_termin" sequence="100"/> -->
+    </data>
+</odoo>

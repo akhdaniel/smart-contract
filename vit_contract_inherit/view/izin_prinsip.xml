@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_vit_izin_prinsip_form_inherit" model="ir.ui.view">
+            <field name="name">view.vit.izin.prinsip.form.inherit</field>
+            <field name="model">vit.izin_prinsip</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_izin_prinsip_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='total_pagu']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+            
+                <xpath expr="//field[@name='kontrak_ids']/tree/field[@name='jenis_kontrak_id']" position="replace"/>
+
+                <xpath expr="//field[@name='izin_prinsip_line_ids']/tree/field[@name='pagu']" position="replace"/>
+
+              
+                <xpath expr="//field[@name='izin_prinsip_line_ids']/tree/field[@name='kanwil_kancab_id']" position="after">
+                    <field name="pagu"/>
+                </xpath>
+
+                <xpath expr="//field[@name='master_budget_id']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='kanwil_kancab_id']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+
+
+                <xpath expr="//page[@name='izin_prinsip_line_ids']" position="replace"/>
+
+                <xpath expr="//page[@name='kontrak_ids']" position="before">
+                    <page name="izin_prinsip_line_ids" string="Izin Prinsip Line">
+                        <field name="izin_prinsip_line_ids" readonly="stage_is_draft==False">
+                            <tree>
+                                <field name="jenis_kontrak_id"/>
+                                <field name="kanwil_kancab_id"/>
+                                <field name="pagu"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+
+        <!-- tree view -->
+        <!--record id="view_izin_prinsip_tree" model="ir.ui.view">
+            <field name="name">izin_prinsip_tree</field>
+            <field name="model">vit.izin_prinsip</field>
+            <field name="type">tree</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_izin_prinsip_tree"/>
+            <field name="arch" type="xml">
+            </field>
+        </record-->
+        <!-- form view -->
+        <!-- record id="view_izin_prinsip_form" model="ir.ui.view">
+            <field name="name">izin_prinsip_form</field>
+            <field name="model">vit.izin_prinsip</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_izin_prinsip_form"/>
+            <field name="arch" type="xml">
+            </field>
+        </record-->
+        <!-- search -->
+        <!--record id="view_izin_prinsip_search" model="ir.ui.view">
+            <field name="name">izin_prinsip</field>
+            <field name="model">vit.izin_prinsip</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_izin_prinsip_search"/>
+            <field name="arch" type="xml">
+            </field>
+        </record-->
+        <!-- action window -->
+        <!--record id="vit_contract.action_izin_prinsip" model="ir.actions.act_window">
+            <field name="name">Izin Prinsip</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vit.izin_prinsip</field>
+            <field name="view_mode">tree,form,kanban,pivot,calendar,graph</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a new Izin Prinsip
+                </p><p>
+
+                </p>
+            </field>
+        </record-->
+
+        <!-- <menuitem id="menu_izin_prinsip" name="Izin Prinsip" parent="vit_contract_config_menu" action="action_izin_prinsip" sequence="20"/> -->
+    </data>
+</odoo>

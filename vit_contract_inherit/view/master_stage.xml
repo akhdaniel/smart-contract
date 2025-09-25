@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- search -->
+        <!--record id="view_master_stage_search" model="ir.ui.view">
+            <field name="name">master_stage</field>
+            <field name="model">master.stage</field>
+            <field name="inherit_id" ref=""/>
+            <field name="arch" type="xml">
+            </field>
+        </record-->
+        <!-- action window -->
+        <!--record id="vit_contract.action_master_stage" model="ir.actions.act_window">
+            <field name="name">Master Stage</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">master.stage</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a new Master Stage
+                </p><p>
+
+                </p>
+            </field>
+        </record-->
+
+        <menuitem id="menu_master_stage" name="Master Stage" parent="vit_contract_config_menu" action="action_master_stage" sequence="110"/>
+    </data>
+</odoo>

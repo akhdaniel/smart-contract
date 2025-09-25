@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_vit_termin_form_inherit" model="ir.ui.view">
+            <field name="name">vit.termin.form.inherit</field>
+            <field name="model">vit.termin</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_termin_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//header/button[@name='action_confirm']" position="attributes">
+                    <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager</attribute>
+                </xpath>
+
+                <!-- <xpath expr="//page[@name='syarat_termin_ids']//field[@name='syarat_termin_ids']//tree//field[@name='master_syarat_termin_id']" position="attributes">
+                    <attribute name="column_invisible">1</attribute>
+                </xpath> -->
+
+                <xpath expr="//field[@name='nilai']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                    <attribute name="force_save">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='kontrak_id']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                     <attribute name="force_save">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                     <attribute name="force_save">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='document']" position="attributes">
+                    <attribute name="column_invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='deskripsi']" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='syarat_termin_ids']" position="attributes">
+                    <attribute name="readonly">stage_is_draft==True or stage_is_done==True</attribute>
+                    <attribute name="force_save">1</attribute>
+                </xpath>
+
+
+                <xpath expr="//page[@name='syarat_termin_ids']//tree//field[@name='verified']" position="replace"/>
+
+                <xpath expr="//page[@name='syarat_termin_ids']//tree//field[@name='due_date']" position="after">
+                    <field name="verified"/>
+                </xpath>
+
+                <xpath expr="//page[@name='syarat_termin_ids']//tree//field[@name='verified']" position="after">
+                    <button name="action_open_syarat_termin" string="Open" type="object" class="oe_highlight"/>
+                </xpath>
+
+
+                <xpath expr="//field[@name='syarat_termin_ids']/tree/field[@name='name']" position="replace"/>
+            </field>
+        </record>
+
+        <record id="view_vit_termin_tree_inherit" model="ir.ui.view">
+            <field name="name">view.vit.termin.tree.inherit</field>
+            <field name="model">vit.termin</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_termin_tree"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//tree/field[@name='deskripsi']" position="replace"/>
+                <xpath expr="//tree/field[@name='master_nama_termin_id']" position="after">
+                    <field name="deskripsi"/>
+                </xpath>
+
+
+                <xpath expr="//tree/field[@name='persentase']" position="replace"/>
+                <xpath expr="//tree/field[@name='nilai']" position="replace"/>
+                <xpath expr="//tree/field[@name='stage_id']" position="after">
+                    <field name="persentase"/>
+                    <field name="nilai"/>
+                </xpath>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

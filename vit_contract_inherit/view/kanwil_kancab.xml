@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- tree view -->
+        <!--record id="view_kanwil_kancab_tree" model="ir.ui.view">
+            <field name="name">kanwil_kancab_tree</field>
+            <field name="model">vit.kanwil_kancab</field>
+            <field name="type">tree</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_kanwil_kancab_tree"/>
+            <field name="arch" type="xml">
+            </field>
+        </record-->
+        <!-- form view -->
+        <!-- record id="view_kanwil_kancab_form" model="ir.ui.view">
+            <field name="name">kanwil_kancab_form</field>
+            <field name="model">vit.kanwil_kancab</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_kanwil_kancab_form"/>
+            <field name="arch" type="xml">
+            </field>
+        </record-->
+        <!-- search -->
+        <!--record id="view_kanwil_kancab_search" model="ir.ui.view">
+            <field name="name">kanwil_kancab</field>
+            <field name="model">vit.kanwil_kancab</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_kanwil_kancab_search"/>
+            <field name="arch" type="xml">
+            </field>
+        </record-->
+        <!-- action window -->
+        <!--record id="vit_contract.action_kanwil_kancab" model="ir.actions.act_window">
+            <field name="name">Kanwil Kancab</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vit.kanwil_kancab</field>
+            <field name="view_mode">tree,form,kanban,pivot</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a new Kanwil Kancab
+                </p><p>
+
+                </p>
+            </field>
+        </record-->
+
+        <menuitem id="menu_kanwil_kancab" name="Kanwil Kancab" parent="vit_contract_config_menu" action="action_kanwil_kancab" sequence="40"/>
+    </data>
+</odoo>

@@ -1,0 +1,8 @@
+<odoo>
+    <data>
+        <record id="group_vit_contract_vendor" model="res.groups">
+            <field name="name">Vendor</field>
+            <field name="category_id" ref="vit_contract.module_category_vit_contract"/>
+        </record>
+    </data>
+</odoo>

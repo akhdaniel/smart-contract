@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- action window -->
+        <record id="action_partner" model="ir.actions.act_window">
+            <field name="name">Partner</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a new Partner
+                </p><p>
+
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_partner" name="Partner" parent="vit_contract_config_menu" action="action_partner" sequence="60"/>
+    </data>
+</odoo>

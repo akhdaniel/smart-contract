@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+	<t t-name="vit_dashboard.Modal" owl="1">
+		<div class="modal d-block fade show" style="background-color: rgba(0,0,0,0.5);" tabindex="-1">
+			<div class="modal-dialog modal-xl modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">
+							<t t-esc="props.title"/>
+						</h5>
+						<button type="button" class="btn-close" t-on-click="props.onClose" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<t t-slot="default"/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</t>
+</templates>

@@ -1,0 +1,13 @@
+<odoo>
+    <data>
+        <record id="action_kerma_dashboard" model="ir.actions.client">
+            <field name="name">Kerma Dashboard</field>
+            <field name="tag">vit_dashboard.KermaDashboard</field>
+        </record>
+
+        <menuitem id="menu_kerma_dashboard" name="Dashboard Utama"
+            action="action_kerma_dashboard"
+            parent="vit_contract.vit_contract_config_menu"
+            sequence="1"/>
+    </data>
+</odoo>

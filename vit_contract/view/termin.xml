@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- tree view -->
+        <record id="view_vit_termin_tree" model="ir.ui.view">
+            <field name="name">vit_termin_tree</field>
+            <field name="model">vit.termin</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="Termin">
+                    <field name="name" /> <!-- 100-->
+                    <field name="nilai" /> <!-- 101-->
+                    <field name="kontrak_id" /> <!-- 101-->
+                    <field name="persentase" /> <!-- 102-->
+                    <field name="master_nama_termin_id" /> <!-- 102-->
+                    <field name="deskripsi" /> <!-- 103-->
+                    <field name="partner_id" /> <!-- 103-->
+                    <field name="stage_id" /> <!-- 104-->
+                </tree>
+            </field>
+        </record>
+        <!-- pivot view -->
+        <record id="view_vit_termin_pivot" model="ir.ui.view">
+            <field name="name">vit_termin_tree</field>
+            <field name="model">vit.termin</field>
+            <field name="type">pivot</field>
+            <field name="arch" type="xml">
+                <pivot string="Termin">
+                    <field name="kontrak_id" type="row"/>
+                    <field name="master_nama_termin_id" type="row"/>
+                    <field name="partner_id" type="row"/>
+                    <field name="stage_id" type="row"/>
+                </pivot>
+            </field>
+        </record>
+        <!-- form view -->
+        <record id="view_vit_termin_form" model="ir.ui.view">
+            <field name="name">vit_termin_form</field>
+            <field name="model">vit.termin</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Termin">
+                    <header>
+                        <button string="Confirm" type="object" name="action_confirm" invisible="allow_confirm==False" class="oe_highlight" icon="fa-check-circle" />
+                        <button string="Cancel" type="object" name="action_cancel" invisible="allow_cancel==False" icon="fa-times-circle"/>
+                        <field name="stage_id" widget="statusbar" options="{'fold_field':'fold'}" />
+                        <button string="Reload" type="object" name="action_reload_view" icon="fa-refresh"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <!--button type="object" name="action_view_detail" class="oe_stat_button" icon="fa-pencil-square-o"-->
+                                <!--field name="detail_count" widget="statinfo" string="Detail(s)"/-->
+                                <!--field name="detail_ids" invisible="1"/-->
+                            <!--/button-->
+                        </div>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" string="Termin Name"/>
+                            <h1><field name="name" /></h1>
+                        </div>
+                        <group>
+                            <group> <!-- left -->
+                                <field name="stage_is_draft" invisible="True" />
+                                <field name="stage_is_done" invisible="True" readonly="stage_is_draft==False"/>
+                                <field name="allow_confirm" invisible="True" readonly="stage_is_draft==False"/>
+                                <field name="allow_cancel" invisible="True" readonly="stage_is_draft==False"/>
+                                <field name="stage_name" invisible="True" readonly="stage_is_draft==False"/>
+                                <field name="nilai"  readonly="stage_is_draft==False"/>
+                                <field name="persentase"  readonly="stage_is_draft==False"/>
+                                <field name="deskripsi"  readonly="stage_is_draft==False"/>
+                            </group>
+                            <group> <!-- right -->
+                                <field name="kontrak_id"  readonly="stage_is_draft==False"/>
+                                <field name="master_nama_termin_id"  readonly="stage_is_draft==False"/>
+                                <field name="partner_id"  readonly="stage_is_draft==False"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="syarat_termin_ids" string="Syarat Termin">
+                                <field name="syarat_termin_ids" readonly="stage_is_draft==False">
+                                    <tree >
+                                        <field name="name" /> <!-- 100-->
+                                        <field name="verified" /> <!-- 101-->
+                                        <field name="master_syarat_termin_id" /> <!-- 101-->
+                                        <field name="due_date" /> <!-- 102-->
+                                        <field name="document" /> <!-- 103-->
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                        <group name="note_group" col="6" class="mt-2 mt-md-0">
+                            <group colspan="4">
+                            </group>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                            </group>
+                            <div class="clearfix"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- search -->
+        <record id="view_vit_termin_search" model="ir.ui.view">
+            <field name="name">vit_termin</field>
+            <field name="model">vit.termin</field>
+            <field name="arch" type="xml">
+                <search string="Termin">
+
+                    <filter string="Name" name="filter_by_name" domain="[('name','=','')]" />
+                    <filter string="Nilai" name="filter_by_nilai" domain="[('nilai','=','')]" />
+                    <filter string="Persentase" name="filter_by_persentase" domain="[('persentase','=','')]" />
+                    <filter string="Deskripsi" name="filter_by_deskripsi" domain="[('deskripsi','=','')]" />
+                    <filter string="Stage Is Draft" name="filter_by_stage_is_draft" domain="[('stage_is_draft','=','')]" />
+                    <filter string="Stage Is Done" name="filter_by_stage_is_done" domain="[('stage_is_done','=','')]" />
+                    <filter string="Allow Confirm" name="filter_by_allow_confirm" domain="[('allow_confirm','=','')]" />
+                    <filter string="Allow Cancel" name="filter_by_allow_cancel" domain="[('allow_cancel','=','')]" />
+                    <filter string="Stage Name" name="filter_by_stage_name" domain="[('stage_name','=','')]" />
+                    <field name="name" select="True"/>
+                    <field name="nilai" select="True"/>
+                    <field name="persentase" select="True"/>
+                    <field name="deskripsi" select="True"/>
+                    <field name="stage_is_draft" select="True"/>
+                    <field name="stage_is_done" select="True"/>
+                    <field name="allow_confirm" select="True"/>
+                    <field name="allow_cancel" select="True"/>
+                    <field name="stage_name" select="True"/>
+                    <field name="kontrak_id" select="True"/>
+                    <field name="master_nama_termin_id" select="True"/>
+                    <field name="partner_id" select="True"/>
+                    <field name="stage_id" select="True"/>
+                    <group string="Group By..">
+                        <filter string="Kontrak" domain="[]" name="group_by_kontrak_id" context="{'group_by':'kontrak_id'}"/>
+                        <filter string="Master Nama Termin" domain="[]" name="group_by_master_nama_termin_id" context="{'group_by':'master_nama_termin_id'}"/>
+                        <filter string="Partner" domain="[]" name="group_by_partner_id" context="{'group_by':'partner_id'}"/>
+                        <filter string="Stage" domain="[]" name="group_by_stage_id" context="{'group_by':'stage_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <!-- kanban , to show image, please add image, image_512, image_1920, or image_small in the model -->
+        <record id="view_vit_termin_kanban" model="ir.ui.view" >
+            <field name="name">vit_termin</field>
+            <field name="model">vit.termin</field>
+            <field name="arch" type="xml">
+                <kanban version="7.0">
+                    <field name="id" />
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_details">
+                                <h4>
+                                    <a type="open"><field name="name"/></a>
+                                </h4>
+                            </div> <!--oe_kanban_details-->
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <!-- graph -->
+        <record id="view_vit_termin_graph" model="ir.ui.view">
+            <field name="name">vit_termin</field>
+            <field name="model">vit.termin</field>
+            <field name="arch" type="xml">
+                <graph string="Termin" type="bar">
+                    <field name="kontrak_id"/>
+                </graph>
+            </field>
+        </record>
+        <!-- action window -->
+        <record id="action_termin" model="ir.actions.act_window">
+            <field name="name">Termin</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vit.termin</field>
+            <field name="view_mode">tree,form,kanban,pivot,graph</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a new Termin
+                </p><p>
+
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_termin" name="Termin" parent="vit_contract_sub_menu" action="action_termin" sequence="100"/>
+    </data>
+</odoo>

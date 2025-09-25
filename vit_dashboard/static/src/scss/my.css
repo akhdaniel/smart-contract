@@ -1,0 +1,152 @@
+.custom-map-button {
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+
+.custom-map-button:hover {
+    background: #eee;
+}
+
+.custom-map-button.selected {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+/* Ensure the parent container uses flexbox */
+.o_dashboard {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full viewport height */
+}
+
+/* Allow the second row to grow and take remaining space */
+.scrollable-row {
+    flex-grow: 1; /* Take up remaining space */
+    overflow-y: auto; /* Enable vertical scrolling if content overflows */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+.hover-underline {
+    transition: text-decoration 0.3s ease;
+}
+
+.hover-underline:hover {
+    text-decoration: underline;
+}
+
+.bg-itb-primary {
+  background-color: #002147 !important;
+  color: white;
+}
+
+.bg-itb-light-blue {
+  background-color: #0072CE !important;
+  color: white;
+}
+
+.bg-itb-gold {
+  background-color: #F7B500 !important;
+  color: white;
+}
+
+.bg-itb-grey {
+  background-color: #6C757D !important;
+  color: white;
+}
+
+/* Background dan batas bawah navbar */
+/* .o_main_navbar {
+    background-color: #002147 !important;
+    border-bottom: 3px solid #F7B500 !important;
+} */
+
+/* Warna teks brand dan menu utama */
+/* .o_main_navbar .o_menu_brand,
+.o_main_navbar .o_menu_sections a {
+    color: #FFFFFF !important;
+} */
+
+/* Hover dan active */
+/* .o_main_navbar .o_menu_sections a:hover,
+.o_main_navbar .o_menu_sections a:focus,
+.o_main_navbar .o_menu_sections .active {
+    background-color: #001a35 !important;
+    color: #FFFFFF !important;
+} */
+
+/* Warna dropdown user / notifikasi */
+/* .o_main_navbar .o_menu_systray .dropdown-toggle,
+.o_main_navbar .o_menu_systray .o_mail_systray_item {
+    color: #FFFFFF !important;
+} */
+
+/* Icon notifikasi */
+/* .o_main_navbar .o_notification_counter {
+    background-color: #F7B500 !important;
+    color: #002147 !important;
+} */
+
+
+/* Dropdown menu background */
+/* .o_main_navbar .dropdown-menu {
+    background-color: #ffffff !important; 
+    color: #002147 !important; 
+}
+
+.o_main_navbar .dropdown-menu a.dropdown-item {
+    color: #002147 !important;  
+}
+
+
+.o_main_navbar .dropdown-menu a.dropdown-item:hover,
+.o_main_navbar .dropdown-menu a.dropdown-item:focus {
+    background-color: #F7B500 !important; 
+    color: #002147 !important;
+    font-weight: 600;
+} */
+
+.o_form_view input[type="text"],
+.o_form_view textarea {
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+    padding: 6px 10px !important;
+    box-shadow: none !important;
+}
+
+.o_form_view .o_input {
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+    padding: 6px 10px !important;
+}
+
+
+
+/* .o-autocomplete--input {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    appearance: none;
+    border-radius: 0.375rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.o-autocomplete--input:focus {
+    color: #212529;
+    background-color: #fff;
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+} */

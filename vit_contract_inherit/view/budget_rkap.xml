@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_vit_budget_rkap_form_inherit" model="ir.ui.view">
+            <field name="name">view.vit.budget.rkap.form.inherit</field>
+            <field name="model">vit.budget_rkap</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_budget_rkap_form"/>
+            <field name="arch" type="xml">
+
+
+                <xpath expr="//field[@name='total_pagu_izin_prinsip']" position="replace"/>
+                <xpath expr="//field[@name='total_amount_kontrak']" position="replace"/>
+                <xpath expr="//field[@name='total_amount_payment']" position="replace"/>
+                <xpath expr="//field[@name='kanwil_kancab_id']" position="after">
+                    <field name="total_pagu_izin_prinsip"/>
+                    <field name="total_amount_kontrak"/>
+                    <field name="total_amount_payment"/>
+                </xpath>
+
+                <xpath expr="//page[@name='payment_ids']//tree/field[@name='amount']" position="replace"/>
+                <xpath expr="//page[@name='payment_ids']//tree/field[@name='kanwil_kancab_id']" position="after">
+                    <field name="amount"/>
+                </xpath>
+
+                <xpath expr="//field[@name='kontrak_ids']/tree/field[@name='amount_izin_prinsip']" position="replace"/>
+
+                <xpath expr="//field[@name='kontrak_ids']/tree/field[@name='stage_id']" position="before">
+                    <field name="partner_id"/>
+                </xpath>
+                
+                <xpath expr="//field[@name='kontrak_ids']/tree/field[@name='amount_kontrak']" position="replace"/>
+                <xpath expr="//field[@name='kontrak_ids']/tree/field[@name='master_budget_id']" position="after">
+                    <field name="amount_kontrak"/>
+                </xpath>
+
+                <xpath expr="//field[@name='izin_prinsip_ids']/tree/field[@name='total_pagu']" position="replace"/>
+                <xpath expr="//field[@name='izin_prinsip_ids']/tree/field[@name='kanwil_kancab_id']" position="after">
+                    <field name="total_pagu"/>
+                </xpath>
+
+            </field>
+        </record>
+
+
+        <record id="view_budget_rkap_tree" model="ir.ui.view">
+            <field name="name">budget_rkap_tree</field>
+            <field name="model">vit.budget_rkap</field>
+            <field name="type">tree</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_budget_rkap_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='amount']" position="replace"/>
+                <xpath expr="//field[@name='remaining']" position="replace"/>
+                <xpath expr="//field[@name='kanwil_kancab_id']" position="after">
+                    <field name="amount"/>
+                    <field name="remaining"/>
+                </xpath>
+
+
+                <xpath expr="//field[@name='total_qty_izin_prinsip']" position="replace"/>
+                <xpath expr="//field[@name='total_pagu_izin_prinsip']" position="after">
+                    <field name="total_qty_izin_prinsip"/>
+                </xpath>
+
+
+                <xpath expr="//field[@name='total_qty_kontrak']" position="replace"/>
+                <xpath expr="//field[@name='total_amount_kontrak']" position="after">
+                    <field name="total_qty_kontrak"/>
+                    <field name="total_qty_payment"/>
+                </xpath>
+
+
+            </field>
+        </record>
+
+
+
+        <!-- tree view -->
+        <!--record id="view_budget_rkap_tree" model="ir.ui.view">
+            <field name="name">budget_rkap_tree</field>
+            <field name="model">vit.budget_rkap</field>
+            <field name="type">tree</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_budget_rkap_tree"/>
+            <field name="arch" type="xml">
+            </field>
+        </record-->
+        <!-- form view -->
+        <!-- record id="view_budget_rkap_form" model="ir.ui.view">
+            <field name="name">budget_rkap_form</field>
+            <field name="model">vit.budget_rkap</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_budget_rkap_form"/>
+            <field name="arch" type="xml">
+            </field>
+        </record-->
+        <!-- search -->
+        <!--record id="view_budget_rkap_search" model="ir.ui.view">
+            <field name="name">budget_rkap</field>
+            <field name="model">vit.budget_rkap</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_budget_rkap_search"/>
+            <field name="arch" type="xml">
+            </field>
+        </record-->
+        <!-- action window -->
+        <!--record id="vit_contract.action_budget_rkap" model="ir.actions.act_window">
+            <field name="name">Budget Rkap</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vit.budget_rkap</field>
+            <field name="view_mode">tree,form,kanban,pivot,calendar</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a new Budget Rkap
+                </p><p>
+
+                </p>
+            </field>
+        </record-->
+
+        <!-- <menuitem id="menu_budget_rkap" name="Budget Rkap" parent="vit_contract_config_menu" action="action_budget_rkap" sequence="30"/> -->
+    </data>
+</odoo>

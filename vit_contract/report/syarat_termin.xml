@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- report qweb view -->
+        <record id="action_report_vit_syarat_termin" model="ir.actions.report">
+            <field name="name">Syarat Termin</field>
+            <field name="model">vit.syarat_termin</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">vit_contract.vit_syarat_termin_report</field>
+            <field name="report_file">vit_contract.vit_syarat_termin_report</field>
+            <field name="print_report_name">object.name</field>
+            <field name="binding_model_id" ref="vit_contract.model_vit_syarat_termin"/>
+            <field name="binding_type">report</field>
+        </record>
+        <!-- document template -->
+        <template id="vit_contract.vit_syarat_termin_report_document" >
+            <t t-call="web.external_layout">
+                <t t-set="doc" t-value="doc.with_context({'lang': lang})"/>
+                <div class="page">
+                    <h2>
+                        Syarat Termin: <span t-field="doc.name"/>
+                    </h2>
+                    <div class="row mt32 mb32">
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Verified</strong>
+                            <p class="m-0" t-field="doc.verified" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Due Date</strong>
+                            <p class="m-0" t-field="doc.due_date" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Document</strong>
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Termin</strong>
+                            <p class="m-0" t-field="doc.termin_id"/>
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Master Syarat Termin</strong>
+                            <p class="m-0" t-field="doc.master_syarat_termin_id"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="oe_structure"/>
+            </t>
+        </template>
+
+        <!-- main template -->
+        <template id="vit_contract.vit_syarat_termin_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-set="lang" t-value="doc.create_uid.lang"/>
+                    <t t-call="vit_contract.vit_syarat_termin_report_document" />
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- report qweb view -->
+        <record id="action_report_vit_droping" model="ir.actions.report">
+            <field name="name">Droping</field>
+            <field name="model">vit.droping</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">vit_contract.vit_droping_report</field>
+            <field name="report_file">vit_contract.vit_droping_report</field>
+            <field name="print_report_name">object.name</field>
+            <field name="binding_model_id" ref="vit_contract.model_vit_droping"/>
+            <field name="binding_type">report</field>
+        </record>
+        <!-- document template -->
+        <template id="vit_contract.vit_droping_report_document" >
+            <t t-call="web.external_layout">
+                <t t-set="doc" t-value="doc.with_context({'lang': lang})"/>
+                <div class="page">
+                    <h2>
+                        Droping: <span t-field="doc.name"/>
+                    </h2>
+                    <div class="row mt32 mb32">
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Jumlah</strong>
+                            <p class="m-0" t-field="doc.jumlah" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Stage Is Draft</strong>
+                            <p class="m-0" t-field="doc.stage_is_draft" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Stage Is Done</strong>
+                            <p class="m-0" t-field="doc.stage_is_done" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Allow Confirm</strong>
+                            <p class="m-0" t-field="doc.allow_confirm" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Allow Cancel</strong>
+                            <p class="m-0" t-field="doc.allow_cancel" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Stage Name</strong>
+                            <p class="m-0" t-field="doc.stage_name" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Kanwil Kancab</strong>
+                            <p class="m-0" t-field="doc.kanwil_kancab_id"/>
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Stage</strong>
+                            <p class="m-0" t-field="doc.stage_id"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="oe_structure"/>
+                <h2>Izin Prinsip</h2>
+                <table class="table table-sm o_main_table" name="izin_prinsip_ids_table">
+                    <thead>
+                        <tr>
+                            <td>Name</td>
+                            <td>Total Pagu</td>
+                            <td>Stage Is Draft</td>
+                            <td>Stage Is Done</td>
+                            <td>Allow Confirm</td>
+                            <td>Allow Cancel</td>
+                            <td>Stage Name</td>
+                            <td>Budget</td>
+                            <td>Stage</td>
+                            <td>Master Budget</td>
+                            <td>Kanwil Kancab</td>
+                            <td>Droping</td>
+                        </tr>
+                    </thead>
+                    <tbody class="izin_prinsip_ids_tbody">
+                        <tr t-foreach="doc.izin_prinsip_ids" t-as="line">
+                            <td><span t-field="line.name" /></td>
+                            <td><span t-field="line.total_pagu" /></td>
+                            <td><span t-field="line.stage_is_draft" /></td>
+                            <td><span t-field="line.stage_is_done" /></td>
+                            <td><span t-field="line.allow_confirm" /></td>
+                            <td><span t-field="line.allow_cancel" /></td>
+                            <td><span t-field="line.stage_name" /></td>
+                            <td><span t-field="line.budget_id" /></td>
+                            <td><span t-field="line.stage_id" /></td>
+                            <td><span t-field="line.master_budget_id" /></td>
+                            <td><span t-field="line.kanwil_kancab_id" /></td>
+                            <td><span t-field="line.droping_id" /></td>
+                        </tr> <!-- foreach-->
+                    </tbody>
+                </table>
+                <div class="oe_structure"/>
+            </t>
+        </template>
+
+        <!-- main template -->
+        <template id="vit_contract.vit_droping_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-set="lang" t-value="doc.create_uid.lang"/>
+                    <t t-call="vit_contract.vit_droping_report_document" />
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

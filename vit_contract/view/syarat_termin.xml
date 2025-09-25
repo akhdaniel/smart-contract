@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- tree view -->
+        <record id="view_vit_syarat_termin_tree" model="ir.ui.view">
+            <field name="name">vit_syarat_termin_tree</field>
+            <field name="model">vit.syarat_termin</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="Syarat Termin">
+                    <field name="name" /> <!-- 100-->
+                    <field name="termin_id" /> <!-- 100-->
+                    <field name="verified" /> <!-- 101-->
+                    <field name="master_syarat_termin_id" /> <!-- 101-->
+                    <field name="due_date" /> <!-- 102-->
+                    <field name="document" /> <!-- 103-->
+                </tree>
+            </field>
+        </record>
+        <!-- pivot view -->
+        <record id="view_vit_syarat_termin_pivot" model="ir.ui.view">
+            <field name="name">vit_syarat_termin_tree</field>
+            <field name="model">vit.syarat_termin</field>
+            <field name="type">pivot</field>
+            <field name="arch" type="xml">
+                <pivot string="Syarat Termin">
+                    <field name="termin_id" type="row"/>
+                    <field name="master_syarat_termin_id" type="row"/>
+                </pivot>
+            </field>
+        </record>
+        <!-- form view -->
+        <record id="view_vit_syarat_termin_form" model="ir.ui.view">
+            <field name="name">vit_syarat_termin_form</field>
+            <field name="model">vit.syarat_termin</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Syarat Termin">
+                    <header>
+                        <button string="Reload" type="object" name="action_reload_view" icon="fa-refresh"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <!--button type="object" name="action_view_detail" class="oe_stat_button" icon="fa-pencil-square-o"-->
+                                <!--field name="detail_count" widget="statinfo" string="Detail(s)"/-->
+                                <!--field name="detail_ids" invisible="1"/-->
+                            <!--/button-->
+                        </div>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" string="Syarat Termin Name"/>
+                            <h1><field name="name" /></h1>
+                        </div>
+                        <group>
+                            <group> <!-- left -->
+                                <field name="verified"  />
+                                <field name="due_date"  />
+                                <field name="document"  />
+                            </group>
+                            <group> <!-- right -->
+                                <field name="termin_id"  />
+                                <field name="master_syarat_termin_id"  />
+                            </group>
+                        </group>
+                        <notebook>
+                        </notebook>
+                        <group name="note_group" col="6" class="mt-2 mt-md-0">
+                            <group colspan="4">
+                            </group>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                            </group>
+                            <div class="clearfix"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- search -->
+        <record id="view_vit_syarat_termin_search" model="ir.ui.view">
+            <field name="name">vit_syarat_termin</field>
+            <field name="model">vit.syarat_termin</field>
+            <field name="arch" type="xml">
+                <search string="Syarat Termin">
+
+                    <filter string="Name" name="filter_by_name" domain="[('name','=','')]" />
+                    <filter string="Verified" name="filter_by_verified" domain="[('verified','=','')]" />
+                    <filter string="Due Date" name="filter_by_due_date" domain="[('due_date','=','')]" />
+                    <filter string="Document" name="filter_by_document" domain="[('document','=','')]" />
+                    <field name="name" select="True"/>
+                    <field name="verified" select="True"/>
+                    <field name="due_date" select="True"/>
+                    <field name="document" select="True"/>
+                    <field name="termin_id" select="True"/>
+                    <field name="master_syarat_termin_id" select="True"/>
+                    <group string="Group By..">
+                        <filter string="Termin" domain="[]" name="group_by_termin_id" context="{'group_by':'termin_id'}"/>
+                        <filter string="Master Syarat Termin" domain="[]" name="group_by_master_syarat_termin_id" context="{'group_by':'master_syarat_termin_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <!-- kanban , to show image, please add image, image_512, image_1920, or image_small in the model -->
+        <record id="view_vit_syarat_termin_kanban" model="ir.ui.view" >
+            <field name="name">vit_syarat_termin</field>
+            <field name="model">vit.syarat_termin</field>
+            <field name="arch" type="xml">
+                <kanban version="7.0">
+                    <field name="id" />
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_details">
+                                <h4>
+                                    <a type="open"><field name="name"/></a>
+                                </h4>
+                                <span class="text-muted">Due Date</span> <field name="due_date"></field>
+                            </div> <!--oe_kanban_details-->
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <!-- calendar if a date field exists -->
+        <record id="view_vit_syarat_termin_cal" model="ir.ui.view">
+            <field name="name">vit_syarat_termin_cal</field>
+            <field name="model">vit.syarat_termin</field>
+            <field name="arch" type="xml">
+                <calendar string="Syarat Termin" date_start="due_date">
+                    <field name="name" />
+                </calendar>
+            </field>
+        </record>
+        <!-- graph -->
+        <record id="view_vit_syarat_termin_graph" model="ir.ui.view">
+            <field name="name">vit_syarat_termin</field>
+            <field name="model">vit.syarat_termin</field>
+            <field name="arch" type="xml">
+                <graph string="Syarat Termin" type="bar">
+                    <field name="termin_id"/>
+                </graph>
+            </field>
+        </record>
+        <!-- action window -->
+        <record id="action_syarat_termin" model="ir.actions.act_window">
+            <field name="name">Syarat Termin</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vit.syarat_termin</field>
+            <field name="view_mode">tree,form,kanban,pivot,calendar,graph</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a new Syarat Termin
+                </p><p>
+
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_syarat_termin" name="Syarat Termin" parent="vit_contract_config_menu" action="action_syarat_termin" sequence="80"/>
+    </data>
+</odoo>
