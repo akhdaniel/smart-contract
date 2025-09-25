@@ -5,7 +5,6 @@
 	"version": "1.0",
 	"depends": [
 		"base",
-		"master_stage"
 	],
 	"author": "Akhmad Daniel Sembiring",
 	"category": "Utility",

@@ -8,7 +8,6 @@ from . import payment
 from . import syarat_termin
 from . import termin
 from . import izin_prinsip_line
-from . import master_stage
 from . import master_nama_termin
 from . import master_syarat_termin
 from . import master_budget
