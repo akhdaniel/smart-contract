@@ -7,35 +7,32 @@ class Droping(models.Model):
     jumlah = fields.Float(
         string="Jumlah",
         compute="_compute_jumlah",
-        store=True,
         readonly=True,
     )
 
-    total_pagu = fields.Float(
-        string="Total Pagu",
-        compute="_compute_total_pagu",
-        store=True,
+    izin_prinsip_ids = fields.One2many(
+        comodel_name="vit.izin_prinsip",
+        compute="_compute_izin_prinsip_ids",
+        string="Izin Prinsip",
     )
 
-    remaining = fields.Float(
-        string="Remaining",
-        compute="_compute_remaining",
-        store=True,
-    )
-
-    @api.depends("izin_prinsip_ids.total_pagu")
-    def _compute_total_pagu(self):
-        for rec in self:
-            rec.total_pagu = sum(rec.izin_prinsip_ids.mapped("total_pagu"))
-
-    @api.depends("izin_prinsip_ids.total_pagu", "izin_prinsip_ids.stage_id.done")
+    @api.depends("kanwil_kancab_id", "izin_prinsip_ids.total_pagu")
     def _compute_jumlah(self):
         for rec in self:
-            done_izin = rec.izin_prinsip_ids.filtered(lambda i: i.stage_id.done)
-            rec.jumlah = sum(done_izin.mapped("total_pagu"))
+            total = 0.0
+            if rec.kanwil_kancab_id:
+                izin_prinsips = self.env["vit.izin_prinsip"].search([
+                    ("kanwil_kancab_id", "=", rec.kanwil_kancab_id.id)
+                ])
+                total = sum(izin_prinsips.mapped("total_pagu"))
+            rec.jumlah = total
 
 
-    @api.depends("jumlah", "total_pagu")
-    def _compute_remaining(self):
+    def _compute_izin_prinsip_ids(self):
         for rec in self:
-            rec.remaining = rec.total_pagu - rec.jumlah
+            if rec.kanwil_kancab_id:
+                rec.izin_prinsip_ids = self.env["vit.izin_prinsip"].search([
+                    ("kanwil_kancab_id", "=", rec.kanwil_kancab_id.id)
+                ])
+            else:
+                rec.izin_prinsip_ids = False

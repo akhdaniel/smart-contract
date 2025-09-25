@@ -11,6 +11,10 @@
                 <xpath expr="//field[@name='total_pagu']" position="attributes">
                     <attribute name="readonly">1</attribute>
                 </xpath>
+
+                <xpath expr="//field[@name='droping_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
             
                 <xpath expr="//field[@name='kontrak_ids']/tree/field[@name='jenis_kontrak_id']" position="replace"/>
 

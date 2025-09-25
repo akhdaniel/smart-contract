@@ -48,15 +48,22 @@ class budget_rkap(models.Model):
 
     total_amount_droping = fields.Float(
         string="Total Amount Droping",
-        compute="_compute_total_droping",
-        store=True,
+        compute="_compute_total_amount_droping",
+        readonly=True,
     )
 
-    droping_ids = fields.One2many(
-        comodel_name="vit.droping",
-        inverse_name="kanwil_kancab_id",
-        string="Dropings"
-    )
+    @api.depends("kanwil_kancab_id")
+    def _compute_total_amount_droping(self):
+        for rec in self:
+            total = 0.0
+            if rec.kanwil_kancab_id:
+                dropings = self.env["vit.droping"].search([
+                    ("kanwil_kancab_id", "=", rec.kanwil_kancab_id.id)
+                ])
+                total = sum(dropings.mapped("jumlah"))
+            rec.total_amount_droping = total
+
+
 
 
     @api.depends(
@@ -85,17 +92,6 @@ class budget_rkap(models.Model):
     def _compute_remaining(self):
         for rec in self:
             rec.remaining = rec.amount - rec.total_amount_payment
-
-            
-
-    @api.depends("droping_ids.jumlah")
-    def _compute_total_droping(self):
-        for rec in self:
-            rec.total_amount_droping = sum(rec.droping_ids.mapped("jumlah"))
-
-
-
-
 
 
     def download_budget(self):
