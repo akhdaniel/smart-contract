@@ -28,11 +28,11 @@ class kontrak(models.Model):
 
 
 
-    @api.constrains('amount_kontrak', 'amount_izin_prinsip')
-    def _check_amount_kontrak(self):
-        for rec in self:
-            if rec.amount_kontrak > rec.amount_izin_prinsip:
-                raise ValidationError("Amount Kontrak tidak boleh lebih besar dari Amount Izin Prinsip.")
+    # @api.constrains('amount_izin_prinsip', 'amount_kontrak')
+    # def _check_amount_kontrak(self):
+    #     for rec in self:
+    #         if rec.amount_izin_prinsip < rec.amount_kontrak:
+    #             raise ValidationError("Amount Kontrak tidak boleh lebih besar dari Amount Izin Prinsip.")
             
 
             
