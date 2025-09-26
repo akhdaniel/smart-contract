@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_kontrak_portal,access_kontrak_portal,vit_contract.model_vit_kontrak,base.group_portal,1,0,0,0
+access_termin_portal,access_termin_portal,vit_contract.model_vit_termin,base.group_portal,1,0,0,0
+access_syarat_termin_portal,access_syarat_termin_portal,vit_contract.model_vit_syarat_termin,base.group_portal,1,1,1,0
+access_payment_portal,access_payment_portal,vit_contract.model_vit_payment,base.group_portal,1,0,0,0
