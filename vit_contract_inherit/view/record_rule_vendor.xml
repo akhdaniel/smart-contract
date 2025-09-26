@@ -8,5 +8,19 @@
             <field name="domain_force">[('partner_id','=',user.partner_id.id)]</field>
         </record>
 
+        <record id="vit_kontrak_vendor_rule" model="ir.rule">
+            <field name="name">Kontrak - Vendor Only</field>
+            <field name="model_id" ref="vit_contract.model_vit_kontrak"/>
+            <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_vendor'))]"/>
+            <field name="domain_force">[('partner_id', '=', user.partner_id.id)]</field>
+        </record>
+
+        <record id="vit_payment_vendor_rule" model="ir.rule">
+            <field name="name">Payment - Vendor Only</field>
+            <field name="model_id" ref="vit_contract.model_vit_payment"/>
+            <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_vendor'))]"/>
+            <field name="domain_force">[('termin_id.kontrak_id.partner_id', '=', user.partner_id.id)]</field>
+        </record>
+
     </data>
 </odoo>
