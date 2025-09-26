@@ -45,13 +45,19 @@ const handleLogin = async () => {
   error.value = ''
   try {
     const success = await authStore.login(username.value, password.value)
+    console.log('success>>>>',success)
     if (success) {
       router.push('/contracts')
     } else {
       error.value = 'Login failed. Please check your credentials.'
     }
   } catch (err) {
-    error.value = 'An error occurred during login.'
+    // This catch block is executed ONLY if the interceptor rejected the promise
+    // due to a session expired error. In this case, the interceptor has already
+    // logged out and redirected, so we don't need to do anything here.
+    // We can optionally log the error for debugging, but not display it to the user.
+    console.error('Login caught session expired error:', err);
+    // Do nothing, as interceptor has handled redirection.
   }
   loading.value = false
 }

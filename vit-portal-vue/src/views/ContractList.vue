@@ -11,12 +11,13 @@
       You have no contracts.
     </div>
     <div v-else class="list-group">
-      <router-link v-for="contract in contracts" :key="contract.id" :to="`/contracts/${contract.id}`" class="list-group-item list-group-item-action">
+      <router-link v-for="contract in contracts.records" :key="contract.id" :to="`/contracts/${contract.id}`" class="list-group-item list-group-item-action">
         <div class="d-flex w-100 justify-content-between">
+          
           <h5 class="mb-1">{{ contract.name }}</h5>
           <small>{{ contract.start_date }}</small>
         </div>
-        <p class="mb-1">{{ contract.izin_prinsip_id[1] }}</p>
+        <p class="mb-1">{{ contract.izin_prinsip_id.display_name }}</p>
       </router-link>
     </div>
   </div>
@@ -35,9 +36,10 @@ const authStore = useAuthStore()
 onMounted(async () => {
   try {
     const partnerId = authStore.user.partner_id;
-    const domain = [['partner_id', 'child_of', partnerId]];
+    const domain = [];
     const fields = ['name', 'start_date', 'izin_prinsip_id'];
     const result = await odooService.searchRead('vit.kontrak', domain, fields);
+    console.log('result===',result)
     if (result) {
       contracts.value = result;
     } else {

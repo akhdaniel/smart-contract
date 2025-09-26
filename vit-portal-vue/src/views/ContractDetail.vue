@@ -91,7 +91,7 @@ const fetchData = async () => {
   try {
     loading.value = true;
     // Fetch main contract details
-    const contractData = await odooService.read('vit.kontrak', [contractId], ['name', 'start_date', 'end_date', 'izin_prinsip_id', 'termin_ids', 'payment_ids', 'currency_id']);
+    const contractData = await odooService.read('vit.kontrak', [contractId]);
     if (!contractData || contractData.length === 0) {
       throw new Error('Contract not found.');
     }
@@ -99,18 +99,18 @@ const fetchData = async () => {
 
     // Fetch termins and their syarat_termins
     if (contract.value.termin_ids.length > 0) {
-        const terminData = await odooService.searchRead('vit.termin', [['id', 'in', contract.value.termin_ids]], ['name', 'syarat_termin_ids']);
-        for (let termin of terminData) {
-            if (termin.syarat_termin_ids.length > 0) {
-                termin.syarat_termin_ids = await odooService.searchRead('vit.syarat_termin', [['id', 'in', termin.syarat_termin_ids]], ['name', 'document']);
-            }
-        }
-        termins.value = terminData;
+        // const terminData = await odooService.searchRead('vit.termin', [['id', 'in', contract.value.termin_ids]], ['name', 'syarat_termin_ids']);
+        // for (let termin of terminData) {
+        //     if (termin.syarat_termin_ids.length > 0) {
+        //         termin.syarat_termin_ids = await odooService.searchRead('vit.syarat_termin', [['id', 'in', termin.syarat_termin_ids]], ['name', 'document']);
+        //     }
+        // }
+        // termins.value = terminData;
     }
 
     // Fetch payments
     if (contract.value.payment_ids.length > 0) {
-        payments.value = await odooService.searchRead('vit.payment', [['id', 'in', contract.value.payment_ids]], ['name', 'tanggal', 'amount', 'state']);
+        // payments.value = await odooService.searchRead('vit.payment', [['id', 'in', contract.value.payment_ids]], ['name', 'tanggal', 'amount', 'state']);
     }
 
   } catch (err) {
