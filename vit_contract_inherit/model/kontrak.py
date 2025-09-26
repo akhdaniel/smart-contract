@@ -28,11 +28,11 @@ class kontrak(models.Model):
 
 
 
-    # @api.constrains('amount_izin_prinsip', 'amount_kontrak')
-    # def _check_amount_kontrak(self):
-    #     for rec in self:
-    #         if rec.amount_izin_prinsip < rec.amount_kontrak:
-    #             raise ValidationError("Amount Kontrak tidak boleh lebih besar dari Amount Izin Prinsip.")
+    @api.constrains('amount_izin_prinsip', 'amount_kontrak')
+    def _check_amount_kontrak(self):
+        for rec in self:
+            if rec.amount_izin_prinsip < rec.amount_kontrak:
+                raise ValidationError("Amount Kontrak tidak boleh lebih besar dari Amount Izin Prinsip.")
             
 
             
@@ -66,5 +66,5 @@ class kontrak(models.Model):
                     raise UserError(_("Kontrak tidak bisa langsung masuk ke Done. "
                                     "Masih ada Termin yang belum selesai."))
 
-        return super(kontrak, self).action_confirm()
+        return super(kontrak, self).action_confirm()   
 
