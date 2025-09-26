@@ -29,7 +29,7 @@ const odooService = {
     const params = {
       service: 'common',
       method: 'login',
-      args: [ODOO_DB, username, password, {}]
+      args: [ODOO_DB, username, password]
     };
     const uid = await jsonrpc('/jsonrpc', params);
     if (uid) {
@@ -76,6 +76,10 @@ const odooService = {
 
   getUid() {
     return parseInt(localStorage.getItem('uid'));
+  },
+
+  getSid() {
+    return localStorage.getItem('sid');
   }
 };
 
