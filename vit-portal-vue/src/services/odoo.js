@@ -102,17 +102,28 @@ const odooService = {
         specification:{
           name:{},
           start_date:{},
+          end_date:{},
+          stage_id:{fields:{display_name:{}}},
           termin_ids:{
             fields:{
               name:{},
               nilai:{},
               persentase:{},
-              stage_id:{fields:{display_name:{}}}
+              stage_id:{fields:{display_name:{}}},
+              master_nama_termin_id:{fields:{display_name:{}}},
+              syarat_termin_ids:{
+                fields:{
+                  name:{},
+                  document:{}
+                }
+              }
             }
           },
           payment_ids:{
             fields:{
-              name:{}
+              name:{},
+              // date:{},
+              stage_id:{fields:{display_name:{}}},
             }
           },
           izin_prinsip_id:{fields:{
@@ -128,7 +139,8 @@ const odooService = {
     const params = {
         service: 'object',
         method: 'execute_kw',
-        args: [ODOO_DB, this.getUid(), false, model, 'read', [ids], {'fields': fields, 'context': {'uid': this.getUid()}}]
+        args: [ODOO_DB, this.getUid(), false, model, 'read', [ids], {'fields': fields, 'context': {'uid': this.getUid()}}],
+        
     }
     return await jsonrpc('/jsonrpc', params);
   },
@@ -137,7 +149,10 @@ const odooService = {
     const params = {
         service: 'object',
         method: 'execute_kw',
-        args: [ODOO_DB, this.getUid(), false, model, 'write', [[id], data], {'context': {'uid': this.getUid()}}]
+        args: [ODOO_DB, this.getUid(), false, model, 'write', [[id], data], {'context': {'uid': this.getUid()}}],
+        kwargs:{
+          context:{uid: this.getUid()},
+        }
     }
     return await jsonrpc('/jsonrpc', params);
   },

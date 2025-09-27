@@ -19,11 +19,12 @@
       </div>
 
       <h4 class="mt-5">Document Requirements</h4>
+      <div v-if="uploadError" class="alert alert-danger mt-3">{{ uploadError }}</div>
       <div class="accordion" id="terminAccordion">
         <div v-for="(termin, index) in termins" :key="termin.id" class="accordion-item">
           <h2 class="accordion-header" :id="`heading${termin.id}`">
             <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse${termin.id}`" :aria-expanded="index === 0 ? 'true' : 'false'" :aria-controls="`collapse${termin.id}`">
-              {{ termin.name }}
+              {{ termin.name }} -  {{ termin.master_nama_termin_id.display_name }}
             </button>
           </h2>
           <div :id="`collapse${termin.id}`" class="accordion-collapse collapse" :class="{ show: index === 0 }" :aria-labelledby="`heading${termin.id}`">
@@ -82,6 +83,7 @@ const termins = ref([])
 const payments = ref([])
 const loading = ref(true)
 const error = ref('')
+const uploadError = ref('')
 
 const ODOO_URL = import.meta.env.VITE_ODOO_URL;
 
@@ -99,18 +101,13 @@ const fetchData = async () => {
 
     // Fetch termins and their syarat_termins
     if (contract.value.termin_ids.length > 0) {
-        // const terminData = await odooService.searchRead('vit.termin', [['id', 'in', contract.value.termin_ids]], ['name', 'syarat_termin_ids']);
-        // for (let termin of terminData) {
-        //     if (termin.syarat_termin_ids.length > 0) {
-        //         termin.syarat_termin_ids = await odooService.searchRead('vit.syarat_termin', [['id', 'in', termin.syarat_termin_ids]], ['name', 'document']);
-        //     }
-        // }
-        // termins.value = terminData;
+        const terminData = contract.value.termin_ids
+        termins.value = terminData;
     }
 
     // Fetch payments
     if (contract.value.payment_ids.length > 0) {
-        // payments.value = await odooService.searchRead('vit.payment', [['id', 'in', contract.value.payment_ids]], ['name', 'tanggal', 'amount', 'state']);
+      payments.value = contract.value.payment_ids
     }
 
   } catch (err) {
@@ -122,6 +119,7 @@ const fetchData = async () => {
 }
 
 const uploadDocument = async (syaratId, event) => {
+    uploadError.value = ''; // Clear previous errors
     const file = event.target[0].files[0];
     if (!file) return;
 
@@ -135,26 +133,27 @@ const uploadDocument = async (syaratId, event) => {
                 // Refresh data to show the update
                 fetchData();
             } else {
-                alert('File upload failed.');
+                uploadError.value = 'File upload failed.';
             }
         } catch (err) {
-            alert('An error occurred during upload.');
+            uploadError.value = 'An error occurred during upload.';
+            console.error(err);
         }
     };
     reader.onerror = (error) => {
-        alert('Error reading file.');
+        uploadError.value = 'Error reading file.';
+        console.error(error);
     };
 }
 
 const getDownloadUrl = (syaratId, syaratName) => {
     // Odoo's default URL for downloading binary field content
-    return `${ODOO_URL}/web/content/vit.syarat_termin/${syaratId}/document?download=true&field=document&filename=${syaratName}`;
+    return `${ODOO_URL}/web/content/vit.syarat_termin/${syaratId}/document?download=true&field=document&filename=${encodeURIComponent(syaratName)}`;
 }
 
 const formatCurrency = (amount) => {
-    // Basic currency formatting, assumes the currency from the contract.
-    // A more robust solution would use the currency symbol from contract.value.currency_id
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+    const currencyCode = contract.value.currency_id ? contract.value.currency_id[1] : 'USD'; // Default to USD if not found
+    return new Intl.NumberFormat(undefined, { style: 'currency', currency: currencyCode }).format(amount);
 }
 
 onMounted(fetchData);
