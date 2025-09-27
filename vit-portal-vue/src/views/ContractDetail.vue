@@ -24,18 +24,18 @@
         <div v-for="(termin, index) in termins" :key="termin.id" class="accordion-item">
           <h2 class="accordion-header" :id="`heading${termin.id}`">
             <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse${termin.id}`" :aria-expanded="index === 0 ? 'true' : 'false'" :aria-controls="`collapse${termin.id}`">
-              {{ termin.name }} -  {{ termin.master_nama_termin_id.display_name }}
+              {{ termin.name }}
             </button>
           </h2>
-          <div :id="`collapse${termin.id}`" class="accordion-collapse collapse" :class="{ show: index === 0 }" :aria-labelledby="`heading${termin.id}`">
+          <div :id="`collapse${termin.id}`" class="accordion-collapse collapse" :class="{ show: index === 0 }" :aria-labelledby="`heading${termin.id}`" data-bs-parent="#terminAccordion">
             <div class="accordion-body">
               <ul class="list-group">
                 <li v-for="syarat in termin.syarat_termin_ids" :key="syarat.id" class="list-group-item d-flex justify-content-between align-items-center">
                   <div>
                     {{ syarat.name }}
-                    <a v-if="syarat.document" :href="getDownloadUrl(syarat.id, syarat.name)" target="_blank" class="ms-3">
-                        <i class="fa fa-fw fa-download"></i> View Document
-                    </a>
+                    <button v-if="syarat.document" @click="openPdfViewer(syarat.id, syarat.name)" class="btn btn-sm btn-info ms-3">
+                        <i class="fa fa-fw fa-eye"></i> View Document
+                    </button>
                   </div>
                   <div v-if="syarat.document" class="badge bg-success p-2">Completed</div>
                   <form v-else @submit.prevent="uploadDocument(syarat.id, $event)" class="d-flex">
@@ -69,6 +69,7 @@
         </tbody>
        </table>
     </div>
+    <PdfViewerModal :pdfUrl="currentPdfUrl" :show="showPdfModal" />
   </div>
 </template>
 
@@ -76,6 +77,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import odooService from '@/services/odoo'
+import PdfViewerModal from '@/components/PdfViewerModal.vue'
 
 const route = useRoute()
 const contract = ref(null)
@@ -85,6 +87,9 @@ const loading = ref(true)
 const error = ref('')
 const uploadError = ref('')
 
+const currentPdfUrl = ref(null);
+const showPdfModal = ref(false);
+
 const ODOO_URL = import.meta.env.VITE_ODOO_URL;
 
 const contractId = parseInt(route.params.id)
@@ -93,7 +98,8 @@ const fetchData = async () => {
   try {
     loading.value = true;
     // Fetch main contract details
-    const contractData = await odooService.read('vit.kontrak', [contractId]);
+    const contractData = await odooService.read('vit.kontrak', [contractId], 
+      ['name', 'start_date', 'end_date', 'izin_prinsip_id', 'termin_ids', 'payment_ids', 'currency_id']);
     if (!contractData || contractData.length === 0) {
       throw new Error('Contract not found.');
     }
@@ -102,12 +108,13 @@ const fetchData = async () => {
     // Fetch termins and their syarat_termins
     if (contract.value.termin_ids.length > 0) {
         const terminData = contract.value.termin_ids
+
         termins.value = terminData;
     }
 
     // Fetch payments
     if (contract.value.payment_ids.length > 0) {
-      payments.value = contract.value.payment_ids
+        payments.value = contract.value.payment_ids
     }
 
   } catch (err) {
@@ -151,10 +158,10 @@ const getDownloadUrl = (syaratId, syaratName) => {
     return `${ODOO_URL}/web/content/vit.syarat_termin/${syaratId}/document?download=true&field=document&filename=${encodeURIComponent(syaratName)}`;
 }
 
-const formatCurrency = (amount) => {
-    const currencyCode = contract.value.currency_id ? contract.value.currency_id[1] : 'USD'; // Default to USD if not found
-    return new Intl.NumberFormat(undefined, { style: 'currency', currency: currencyCode }).format(amount);
-}
+const openPdfViewer = (syaratId, syaratName) => {
+  currentPdfUrl.value = getDownloadUrl(syaratId, syaratName);
+  showPdfModal.value = true;
+};
 
 onMounted(fetchData);
 
