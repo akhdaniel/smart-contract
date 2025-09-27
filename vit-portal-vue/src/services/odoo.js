@@ -77,20 +77,6 @@ const odooService = {
     return await jsonrpc(`/web/dataset/call_kw/${model}/web_search_read`, params);
 
   },
-
-  async searchReadOld(model, domain = [], fields = [], limit = 80) {
-    const params = {
-        service: 'object',
-        method: 'call',
-        model:model,
-        // args: [ODOO_DB, this.getUid(), false, model, 'search_read', [domain],],
-        kwargs: {
-          'context': {'uid': this.getUid()}, 
-          'fields': fields, 'limit': limit
-        }
-    }
-    return await jsonrpc('/jsonrpc', params);
-  },
   async read(model, ids, domain = [], fields = [], limit = 80) {
     const params = {
       model:model,
@@ -135,21 +121,11 @@ const odooService = {
     return await jsonrpc(`/web/dataset/call_kw/${model}/web_read`, params);
 
   },
-  async readOld(model, ids, fields = []) {
-    const params = {
-        service: 'object',
-        method: 'execute_kw',
-        args: [ODOO_DB, this.getUid(), false, model, 'read', [ids], {'fields': fields, 'context': {'uid': this.getUid()}}],
-        
-    }
-    return await jsonrpc('/jsonrpc', params);
-  },
-
   async write(model, id, data) {
     const params = {
         service: 'object',
         method: 'execute_kw',
-        args: [ODOO_DB, this.getUid(), false, model, 'write', [[id], data], {'context': {'uid': this.getUid()}}],
+        args: [ODOO_DB, this.getUid(), '1', model, 'write', [[id], data], {'context': {'uid': this.getUid()}}],
         kwargs:{
           context:{uid: this.getUid()},
         }

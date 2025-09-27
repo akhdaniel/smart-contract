@@ -69,7 +69,7 @@
         </tbody>
        </table>
     </div>
-    <PdfViewerModal :pdfUrl="currentPdfUrl" :show="showPdfModal" />
+    <PdfViewerModal :pdfUrl="currentPdfUrl" :show="showPdfModal" @update:show="showPdfModal = $event" />
   </div>
 </template>
 
@@ -137,8 +137,14 @@ const uploadDocument = async (syaratId, event) => {
         try {
             const success = await odooService.write('vit.syarat_termin', syaratId, { document: base64File });
             if (success) {
-                // Refresh data to show the update
-                fetchData();
+                // Find the specific syarat_termin and update its document property
+                for (const termin of termins.value) {
+                    const targetSyarat = termin.syarat_termin_ids.find(s => s.id === syaratId);
+                    if (targetSyarat) {
+                        targetSyarat.document = base64File; // Update the document
+                        break;
+                    }
+                }
             } else {
                 uploadError.value = 'File upload failed.';
             }
@@ -155,7 +161,7 @@ const uploadDocument = async (syaratId, event) => {
 
 const getDownloadUrl = (syaratId, syaratName) => {
     // Odoo's default URL for downloading binary field content
-    return `${ODOO_URL}/web/content/vit.syarat_termin/${syaratId}/document?download=true&field=document&filename=${encodeURIComponent(syaratName)}`;
+    return `${ODOO_URL}/web/content/vit.syarat_termin/${syaratId}/document?field=document&filename=${encodeURIComponent(syaratName)}`;
 }
 
 const openPdfViewer = (syaratId, syaratName) => {

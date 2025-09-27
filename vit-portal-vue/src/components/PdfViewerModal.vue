@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { defineProps, watch, onMounted, ref } from 'vue';
+import { defineProps, watch, onMounted, ref, defineEmits } from 'vue';
 import { Modal } from 'bootstrap';
 
 const props = defineProps({
@@ -32,10 +32,17 @@ const props = defineProps({
   }
 });
 
+const emit = defineEmits(['update:show']);
+
 const modalInstance = ref(null);
 
 onMounted(() => {
-  modalInstance.value = new Modal(document.getElementById('pdfViewerModal'));
+  const modalElement = document.getElementById('pdfViewerModal');
+  modalInstance.value = new Modal(modalElement);
+
+  modalElement.addEventListener('hidden.bs.modal', () => {
+    emit('update:show', false);
+  });
 });
 
 watch(() => props.show, (newVal) => {

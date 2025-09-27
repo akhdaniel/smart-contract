@@ -2,7 +2,7 @@
   <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container">
-        <a class="navbar-brand" href="#">Vendor Portal</a>
+        <a class="navbar-brand" href="/contracts">Vendor Portal</a>
         <div v-if="authStore.isLoggedIn">
           <button @click="logout" class="btn btn-outline-secondary">Logout</button>
         </div>
