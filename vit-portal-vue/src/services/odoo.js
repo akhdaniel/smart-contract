@@ -57,7 +57,53 @@ const odooService = {
     // With HttpOnly cookies, we don't need to set headers manually.
   },
 
-  async searchRead(model, domain = [], fields = [], limit = 80) {
+  _parseFieldsString(fieldsString) {
+    const fields = [];
+    let currentField = '';
+    let bracketCount = 0;
+
+    for (let i = 0; i < fieldsString.length; i++) {
+      const char = fieldsString[i];
+
+      if (char === '[') {
+        bracketCount++;
+        currentField += char;
+      } else if (char === ']') {
+        bracketCount--;
+        currentField += char;
+      } else if (char === ',' && bracketCount === 0) {
+        fields.push(currentField.trim());
+        currentField = '';
+      } else {
+        currentField += char;
+      }
+    }
+    fields.push(currentField.trim());
+
+    return fields.filter(f => f !== '');
+  },
+
+  _buildSpecification(fieldsString) {
+    const specification = {};
+    const parsedFields = this._parseFieldsString(fieldsString);
+
+    for (const fieldDef of parsedFields) {
+      const one2manyMatch = fieldDef.match(/^(.*_ids)\[(.*)\]$/);
+      if (one2manyMatch) {
+        const relationName = one2manyMatch[1];
+        const nestedFieldsString = one2manyMatch[2];
+        specification[relationName] = {fields: this._buildSpecification(nestedFieldsString)};
+      } else if (fieldDef.endsWith('_id')) {
+        specification[fieldDef] = {fields:{display_name:{}}};
+      } else {
+        specification[fieldDef] = {};
+      }
+    }
+    return specification;
+  },
+
+  async searchRead(model, domain = [], specification = {}, limit = 80) {
+    // const specification = this._buildSpecification(fieldsString);
     const params = {
       model:model,
       method:'web_search_read',
@@ -65,61 +111,26 @@ const odooService = {
       kwargs:{
         context:{uid: this.getUid()},
         domain:domain,
-        specification:{
-          name:{},
-          start_date:{},
-          izin_prinsip_id:{fields:{
-            display_name:{}
-          }},
-        }
+        specification: specification,
+        limit: limit
       }
     }
     return await jsonrpc(`/web/dataset/call_kw/${model}/web_search_read`, params);
 
   },
-  async read(model, ids, domain = [], fields = [], limit = 80) {
+
+  async read(model, ids, specification = {}) {
+    // const specification = this._buildSpecification(fieldsString);
     const params = {
       model:model,
       method:'web_read',
       args:ids,
       kwargs:{
         context:{uid: this.getUid()},
-        // domain:domain,
-        specification:{
-          name:{},
-          start_date:{},
-          end_date:{},
-          stage_id:{fields:{display_name:{}}},
-          termin_ids:{
-            fields:{
-              name:{},
-              nilai:{},
-              persentase:{},
-              stage_id:{fields:{display_name:{}}},
-              master_nama_termin_id:{fields:{display_name:{}}},
-              syarat_termin_ids:{
-                fields:{
-                  name:{},
-                  document:{}
-                }
-              }
-            }
-          },
-          payment_ids:{
-            fields:{
-              name:{},
-              // date:{},
-              stage_id:{fields:{display_name:{}}},
-            }
-          },
-          izin_prinsip_id:{fields:{
-            display_name:{}
-          }},
-        }
+        specification: specification
       }
     }
     return await jsonrpc(`/web/dataset/call_kw/${model}/web_read`, params);
-
   },
   async write(model, id, data) {
     const params = {
