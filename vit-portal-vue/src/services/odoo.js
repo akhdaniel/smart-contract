@@ -132,16 +132,18 @@ const odooService = {
     }
     return await jsonrpc(`/web/dataset/call_kw/${model}/web_read`, params);
   },
-  async write(model, id, data) {
+
+  async write(model, id, data={},specification={}) {
     const params = {
-        service: 'object',
-        method: 'execute_kw',
-        args: [ODOO_DB, this.getUid(), '1', model, 'write', [[id], data], {'context': {'uid': this.getUid()}}],
+        model:model,
+        method: 'web_save',
+        args: [id, data], // data={documnet:'base6434827842878'}
         kwargs:{
+          specification:specification,
           context:{uid: this.getUid()},
         }
     }
-    return await jsonrpc('/jsonrpc', params);
+    return await jsonrpc(`/web/dataset/call_kw/${model}/web_write`, params);
   },
 
   getUid() {

@@ -13,7 +13,7 @@ export const useAuthStore = defineStore('auth', () => {
     console.log('result-----',result)
     if (result) {
       uid.value = result.uid
-      user.value = result.user_context
+      user.value = result
       localStorage.setItem('uid', uid.value)
       localStorage.setItem('user', JSON.stringify(user.value))
       return true

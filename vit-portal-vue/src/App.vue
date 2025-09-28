@@ -3,7 +3,8 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container">
         <a class="navbar-brand" href="/contracts">SmartContract Vendor Portal</a>
-        <div v-if="authStore.isLoggedIn">
+        <div v-if="authStore.isLoggedIn" class="d-flex align-items-center">
+          <span class="me-3">Welcome, {{ authStore.user.name }}</span>
           <button @click="logout" class="btn btn-outline-secondary">Logout</button>
         </div>
       </div>

@@ -53,6 +53,7 @@
                         <a class="" href="#" @click="openPdfViewer(syarat.id, syarat.name)">{{ syarat.name }}
                         <i class="px-2 fa-regular fa-eye"></i>
                         </a>
+                        <i class="px-2 fa-regular fa-trash-can text-danger" @click="deleteDocument(syarat.id)" style="cursor: pointer;"></i>
                       </div>
                     </div>
                   </div>
@@ -197,13 +198,15 @@ const uploadDocument = async (syaratId, event) => {
     uploadError.value = ''; // Clear previous errors
     const file = event.target[0].files[0];
     if (!file) return;
-
+    const specification = {
+      name:{},
+    }
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = async () => {
         const base64File = reader.result.split(',')[1];
         try {
-            const success = await odooService.write('vit.syarat_termin', syaratId, { document: base64File });
+            const success = await odooService.write('vit.syarat_termin', syaratId, { document: base64File }, specification);
             if (success) {
                 // Find the specific syarat_termin and update its document property
                 for (const termin of termins.value) {
@@ -227,6 +230,32 @@ const uploadDocument = async (syaratId, event) => {
     };
 }
 
+const deleteDocument = async (syaratId) => {
+  if (!confirm('Are you sure you want to delete this document?')) {
+    return;
+  }
+  uploadError.value = ''; // Clear previous errors
+  try {
+    const success = await odooService.write('vit.syarat_termin', syaratId, { document: false });
+    if (success) {
+      // Find the specific syarat_termin and update its document property
+      for (const termin of termins.value) {
+        const targetSyarat = termin.syarat_termin_ids.find(s => s.id === syaratId);
+        if (targetSyarat) {
+          targetSyarat.document = false; // Update the document
+          break;
+        }
+      }
+    } else {
+      uploadError.value = 'File deletion failed.';
+    }
+  } catch (err) {
+    uploadError.value = 'An error occurred during deletion.';
+    console.error(err);
+  }
+}
+
+
 const getDownloadUrl = (syaratId, syaratName) => {
     // Odoo's default URL for downloading binary field content
     return `${ODOO_URL}/web/content/vit.syarat_termin/${syaratId}/document?field=document&filename=${encodeURIComponent(syaratName)}`;
@@ -247,31 +276,9 @@ onMounted(fetchData);
     background-color: #e7f1ff;
 }
 
-.syarat-ribbon {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 0.25rem 0.75rem;
-    font-size: 0.5rem;
-    font-weight: bold;
-    color: white;
-    text-align: center;
-    white-space: nowrap;
-    border-radius: 0 0.25rem 0 0.25rem;
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-    z-index: 1;
-}
 .accordion-button {
     color: #0c63e4;
     background-color: #eee;
 }
-.bg-success {
-  background-color: rgb(7, 185, 102) !important
-}
-.btn-info{
-  color: #fff;
-}
-a{
-  text-decoration: none;
-}
+
 </style>

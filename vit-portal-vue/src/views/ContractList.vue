@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>Kontrak Saya</h3>
+    <h3>Daftar Kontrak</h3>
     <div v-if="loading" class="d-flex justify-content-center">
       <div class="spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
@@ -15,10 +15,10 @@
         <div class="d-flex w-100 justify-content-between">
           <h5 class="mb-1">{{ contract.name }}</h5>
         </div>
-          <small>{{ contract.start_date }} - {{ contract.end_date }}</small>
-        <p class="mb-1">Izin Prinzip: {{ contract.izin_prinsip_id.display_name }}</p>
-        <p class="mb-1">Budget: {{ contract.budget_rkap_id.display_name }}</p>
-        <div class="syarat-ribbon bg-success p-2">{{ contract.stage_id.display_name }}</div>
+        <p class="mb-1"><strong>Start / End Date</strong>: {{ contract.start_date }} - {{ contract.end_date }}</p>
+        <p class="mb-1"><strong>Izin Prinzip:</strong> {{ contract.izin_prinsip_id.display_name }}</p>
+        <p class="mb-1"><strong>Budget:</strong> {{ contract.budget_rkap_id.display_name }}</p>
+        <div class="syarat-ribbon p-2" :class="{ 'bg-warning': contract.stage_id.display_name.toLowerCase() === 'draft', 'bg-success': contract.stage_id.display_name.toLowerCase() === 'on progress', 'bg-secondary': contract.stage_id.display_name.toLowerCase() === 'done' }">{{ contract.stage_id.display_name }}</div>
 
       </router-link>
     </div>
@@ -44,9 +44,15 @@ onMounted(async () => {
       name:{},
       start_date:{},
       end_date:{},
-      izin_prinsip_id:{},
-      budget_rkap_id:{},
-      stage_id:{}
+      izin_prinsip_id:{
+        fields:{display_name:{}}
+      },
+      budget_rkap_id:{
+        fields:{display_name:{}}
+      },
+      stage_id:{
+        fields:{display_name:{}}
+      }
     }
     const result = await odooService.searchRead('vit.kontrak', domain, specification);
     console.log('result===',result)
@@ -63,18 +69,5 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.syarat-ribbon {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 0.25rem 0.75rem;
-    font-size: 0.75rem;
-    font-weight: bold;
-    color: white;
-    text-align: center;
-    white-space: nowrap;
-    border-radius: 0 0 0 0.25rem;
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-    z-index: 1;
-}
+
 </style>
