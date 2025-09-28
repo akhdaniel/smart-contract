@@ -12,10 +12,22 @@
       <div class="card mt-4">
         <div class="card-header">Detail Kontrak</div>
         <div class="card-body">
-            <p><strong>Budget:</strong> {{ contract.budget_rkap_id.display_name }}</p>
-            <p><strong>Izin Prinsip:</strong> {{ contract.izin_prinsip_id.display_name }}</p>
-            <p><strong>Start Date:</strong> {{ contract.start_date }}</p>
-            <p><strong>End Date:</strong> {{ contract.end_date }}</p>
+          <div class="d-flex justify-content-between">
+            <div>
+              <p><strong>Budget:</strong> {{ contract.budget_rkap_id.display_name }}</p>
+              <p><strong>Izin Prinsip:</strong> {{ contract.izin_prinsip_id.display_name }}</p>
+              <p><strong>Start Date:</strong> {{ contract.start_date }}</p>
+              <p><strong>End Date:</strong> {{ contract.end_date }}</p>
+              <p><strong>Stage:</strong> {{ contract.stage_id.display_name }}</p>
+            </div>
+            <div>
+              <p><strong>Kanwil:</strong> {{ contract.partner_id.display_name }}</p>
+              <p><strong>Kanca:</strong> {{ contract.partner_id.display_name }}</p>
+              <p><strong>Nilai Kontrak:</strong> {{ contract.amount_kontrak }}</p>
+              <p><strong>Jenis Kontrak:</strong> {{ contract.jenis_kontrak_id.display_name }}</p>
+              <p><strong>Vendor:</strong> {{ contract.partner_id.display_name }}</p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -114,10 +126,20 @@ const fetchData = async () => {
       name:{},
       start_date:{},
       end_date:{},
+      amount_kontrak:{},
+      jenis_kontrak_id:{
+        fields:{display_name:{}}
+      },
       budget_rkap_id:{
         fields:{display_name:{}}
       },
+      stage_id:{
+        fields:{display_name:{}}
+      },
       izin_prinsip_id:{
+        fields:{display_name:{}}
+      },
+      partner_id:{
         fields:{display_name:{}}
       },
       termin_ids:{
