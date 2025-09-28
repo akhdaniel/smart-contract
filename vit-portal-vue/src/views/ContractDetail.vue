@@ -33,17 +33,23 @@
               <ul class="list-group">
                 <li v-for="syarat in termin.syarat_termin_ids" :key="syarat.id" class="list-group-item position-relative">
                   <div class="d-flex justify-content-between align-items-start">
-                    <div class="fw-bold fs-5">
-                      {{ syarat.name }}
+                    <div class="px-1 fs-5" v-if="!syarat.document" >
+                      <div>{{ syarat.name }}</div>
                     </div>
-                    <div v-if="syarat.document" class="syarat-ribbon bg-success p-2">Completed</div>
+                    <div class="px-1 fs-5" v-else >
+                      <div>
+                        <a class="" href="#" @click="openPdfViewer(syarat.id, syarat.name)">{{ syarat.name }}
+                        <i class="px-2 fa-regular fa-eye"></i>
+                        </a>
+                      </div>
+                    </div>
                   </div>
-                  <div v-if="syarat.document" class="mt-2">
-                    <button @click="openPdfViewer(syarat.id, syarat.name)" class="btn btn-sm btn-info">
-                        <i class="fa fa-fw fa-eye"></i> View Document
-                    </button>
-                  </div>
-                  <form v-else @submit.prevent="uploadDocument(syarat.id, $event)" class="d-flex mt-2">
+
+
+
+                  <div v-if="syarat.document" class="syarat-ribbon bg-success">Verified</div>
+                  <div class="px-1 fs-6">Due date: {{ syarat.due_date }}</div>
+                  <form v-if="!syarat.document" @submit.prevent="uploadDocument(syarat.id, $event)" class="d-flex mt-2">
                     <input type="file" class="form-control form-control-sm me-2" required>
                     <button type="submit" class="btn btn-sm btn-primary">Upload</button>
                   </form>
@@ -126,6 +132,7 @@ const fetchData = async () => {
           syarat_termin_ids:{
             fields:{
               name:{},
+              due_date:{},
               document:{}
             }
           },
@@ -223,12 +230,12 @@ onMounted(fetchData);
     top: 0;
     right: 0;
     padding: 0.25rem 0.75rem;
-    font-size: 0.75rem;
+    font-size: 0.5rem;
     font-weight: bold;
     color: white;
     text-align: center;
     white-space: nowrap;
-    border-radius: 0 0 0 0.25rem;
+    border-radius: 0 0.25rem 0 0.25rem;
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
     z-index: 1;
 }
@@ -241,5 +248,8 @@ onMounted(fetchData);
 }
 .btn-info{
   color: #fff;
+}
+a{
+  text-decoration: none;
 }
 </style>
