@@ -3,12 +3,20 @@
 
     <!-- Portal Home: Add Contracts Card -->
     <template id="portal_my_home_contract" name="Show Contracts in My Account" inherit_id="portal.portal_my_home">
-        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
-            <t t-if="contract_count" t-call="portal.portal_docs_entry">
-                <t t-set="title">Contracts</t>
-                <t t-set="url">/my/contracts</t>
-                <t t-set="count" t-value="contract_count"/>
-            </t>
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="after">
+            <div class="row mt-4">
+                <div class="col-12 col-lg-6">
+                     <div class="card text-center">
+                        <div class="card-header">
+                            <h5 class="card-title">My Contracts</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">You have <t t-esc="contract_count"/> contracts.</p>
+                            <a href="/my/contracts" class="btn btn-primary">View Contracts</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </xpath>
     </template>
 
@@ -147,5 +155,7 @@
             </div>
         </t>
     </template>
+
+    
 
 </odoo>
