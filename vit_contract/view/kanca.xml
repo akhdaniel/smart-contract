@@ -2,26 +2,37 @@
 <odoo>
     <data>
         <!-- tree view -->
-        <record id="view_vit_master_budget_tree" model="ir.ui.view">
-            <field name="name">vit_master_budget_tree</field>
-            <field name="model">vit.master_budget</field>
+        <record id="view_vit_kanca_tree" model="ir.ui.view">
+            <field name="name">vit_kanca_tree</field>
+            <field name="model">vit.kanca</field>
             <field name="type">tree</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
-                <tree string="Master Budget">
+                <tree string="Kanca">
                     <field name="name" /> <!-- 100-->
-                    <field name="jenis_penugasan" /> <!-- 101-->
+                    <field name="kanwil_id" /> <!-- 100-->
                 </tree>
             </field>
         </record>
+        <!-- pivot view -->
+        <record id="view_vit_kanca_pivot" model="ir.ui.view">
+            <field name="name">vit_kanca_tree</field>
+            <field name="model">vit.kanca</field>
+            <field name="type">pivot</field>
+            <field name="arch" type="xml">
+                <pivot string="Kanca">
+                    <field name="kanwil_id" type="row"/>
+                </pivot>
+            </field>
+        </record>
         <!-- form view -->
-        <record id="view_vit_master_budget_form" model="ir.ui.view">
-            <field name="name">vit_master_budget_form</field>
-            <field name="model">vit.master_budget</field>
+        <record id="view_vit_kanca_form" model="ir.ui.view">
+            <field name="name">vit_kanca_form</field>
+            <field name="model">vit.kanca</field>
             <field name="type">form</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
-                <form string="Master Budget">
+                <form string="Kanca">
                     <header>
                         <button string="Reload" type="object" name="action_reload_view" icon="fa-refresh"/>
                     </header>
@@ -33,14 +44,14 @@
                             <!--/button-->
                         </div>
                         <div class="oe_title">
-                            <label for="name" class="oe_edit_only" string="Master Budget Name"/>
+                            <label for="name" class="oe_edit_only" string="Kanca Name"/>
                             <h1><field name="name" /></h1>
                         </div>
                         <group>
                             <group> <!-- left -->
-                                <field name="jenis_penugasan"  />
                             </group>
                             <group> <!-- right -->
+                                <field name="kanwil_id"  />
                             </group>
                         </group>
                         <notebook>
@@ -57,26 +68,25 @@
             </field>
         </record>
         <!-- search -->
-        <record id="view_vit_master_budget_search" model="ir.ui.view">
-            <field name="name">vit_master_budget</field>
-            <field name="model">vit.master_budget</field>
+        <record id="view_vit_kanca_search" model="ir.ui.view">
+            <field name="name">vit_kanca</field>
+            <field name="model">vit.kanca</field>
             <field name="arch" type="xml">
-                <search string="Master Budget">
+                <search string="Kanca">
 
                     <filter string="Name" name="filter_by_name" domain="[('name','=','')]" />
-                    <filter string="Jenis Penugasan" name="filter_by_jenis_penugasan" domain="[('jenis_penugasan','=','')]" />
                     <field name="name" select="True"/>
-                    <field name="jenis_penugasan" select="True"/>
+                    <field name="kanwil_id" select="True"/>
                     <group string="Group By..">
-                        <filter string="Jenis Penugasan" domain="[]" name="group_by_jenis_penugasan" context="{'group_by':'jenis_penugasan'}"/>
+                        <filter string="Kanwil" domain="[]" name="group_by_kanwil_id" context="{'group_by':'kanwil_id'}"/>
                     </group>
                 </search>
             </field>
         </record>
         <!-- kanban , to show image, please add image, image_512, image_1920, or image_small in the model -->
-        <record id="view_vit_master_budget_kanban" model="ir.ui.view" >
-            <field name="name">vit_master_budget</field>
-            <field name="model">vit.master_budget</field>
+        <record id="view_vit_kanca_kanban" model="ir.ui.view" >
+            <field name="name">vit_kanca</field>
+            <field name="model">vit.kanca</field>
             <field name="arch" type="xml">
                 <kanban version="7.0">
                     <field name="id" />
@@ -92,21 +102,31 @@
                 </kanban>
             </field>
         </record>
+        <!-- graph -->
+        <record id="view_vit_kanca_graph" model="ir.ui.view">
+            <field name="name">vit_kanca</field>
+            <field name="model">vit.kanca</field>
+            <field name="arch" type="xml">
+                <graph string="Kanca" type="bar">
+                    <field name="kanwil_id"/>
+                </graph>
+            </field>
+        </record>
         <!-- action window -->
-        <record id="action_master_budget" model="ir.actions.act_window">
-            <field name="name">Master Budget</field>
+        <record id="action_kanca" model="ir.actions.act_window">
+            <field name="name">Kanca</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">vit.master_budget</field>
-            <field name="view_mode">tree,form,kanban,pivot</field>
+            <field name="res_model">vit.kanca</field>
+            <field name="view_mode">tree,form,kanban,pivot,graph</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
-                Click to add a new Master Budget
+                Click to add a new Kanca
                 </p><p>
 
                 </p>
             </field>
         </record>
 
-        <menuitem id="menu_master_budget" name="Master Budget" parent="vit_contract_config_menu" action="action_master_budget" sequence="170"/>
+        <menuitem id="menu_kanca" name="Kanca" parent="vit_contract_config_menu" action="action_kanca" sequence="210"/>
     </data>
 </odoo>

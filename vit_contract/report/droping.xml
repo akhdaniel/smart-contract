@@ -46,8 +46,8 @@
                             <p class="m-0" t-field="doc.stage_name" />
                         </div>
                         <div class="col-auto mw-100 mb-2">
-                            <strong>Kanwil Kancab</strong>
-                            <p class="m-0" t-field="doc.kanwil_kancab_id"/>
+                            <strong>Kanwil</strong>
+                            <p class="m-0" t-field="doc.kanwil_id"/>
                         </div>
                         <div class="col-auto mw-100 mb-2">
                             <strong>Stage</strong>
@@ -56,38 +56,46 @@
                     </div>
                 </div>
                 <div class="oe_structure"/>
-                <h2>Izin Prinsip</h2>
-                <table class="table table-sm o_main_table" name="izin_prinsip_ids_table">
+                <h2>Termin Kontrak</h2>
+                <table class="table table-sm o_main_table" name="termin_kontrak_ids_table">
                     <thead>
                         <tr>
                             <td>Name</td>
-                            <td>Total Pagu</td>
+                            <td>Nilai</td>
+                            <td>Persentase</td>
+                            <td>Deskripsi</td>
                             <td>Stage Is Draft</td>
                             <td>Stage Is Done</td>
                             <td>Allow Confirm</td>
                             <td>Allow Cancel</td>
                             <td>Stage Name</td>
-                            <td>Budget</td>
+                            <td>Due Date</td>
+                            <td>Is Droping Done</td>
+                            <td>Master Nama Termin</td>
                             <td>Stage</td>
-                            <td>Master Budget</td>
-                            <td>Kanwil Kancab</td>
                             <td>Droping</td>
+                            <td>Partner</td>
+                            <td>Kontrak</td>
                         </tr>
                     </thead>
-                    <tbody class="izin_prinsip_ids_tbody">
-                        <tr t-foreach="doc.izin_prinsip_ids" t-as="line">
+                    <tbody class="termin_kontrak_ids_tbody">
+                        <tr t-foreach="doc.termin_kontrak_ids" t-as="line">
                             <td><span t-field="line.name" /></td>
-                            <td><span t-field="line.total_pagu" /></td>
+                            <td><span t-field="line.nilai" /></td>
+                            <td><span t-field="line.persentase" /></td>
+                            <td><span t-field="line.deskripsi" /></td>
                             <td><span t-field="line.stage_is_draft" /></td>
                             <td><span t-field="line.stage_is_done" /></td>
                             <td><span t-field="line.allow_confirm" /></td>
                             <td><span t-field="line.allow_cancel" /></td>
                             <td><span t-field="line.stage_name" /></td>
-                            <td><span t-field="line.budget_id" /></td>
+                            <td><span t-field="line.due_date" /></td>
+                            <td><span t-field="line.is_droping_done" /></td>
+                            <td><span t-field="line.master_nama_termin_id" /></td>
                             <td><span t-field="line.stage_id" /></td>
-                            <td><span t-field="line.master_budget_id" /></td>
-                            <td><span t-field="line.kanwil_kancab_id" /></td>
                             <td><span t-field="line.droping_id" /></td>
+                            <td><span t-field="line.partner_id" /></td>
+                            <td><span t-field="line.kontrak_id" /></td>
                         </tr> <!-- foreach-->
                     </tbody>
                 </table>

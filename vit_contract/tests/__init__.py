@@ -1,7 +1,7 @@
 from . import common
 from . import test_izin_prinsip
 from . import test_budget_rkap
-from . import test_kanwil_kancab
+from . import test_kanwil
 from . import test_kontrak
 from . import test_payment
 from . import test_syarat_termin
@@ -17,3 +17,4 @@ from . import test_master_budget
 from . import test_droping
 from . import test_state_termin
 from . import test_state_droping
+from . import test_kanca

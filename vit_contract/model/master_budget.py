@@ -14,6 +14,7 @@ class master_budget(models.Model):
         pass
 
     name = fields.Char( required=True, copy=False, string=_("Name"))
+    jenis_penugasan = fields.Selection(selection=[('pso', 'Pso'),('kom', 'Kom')],  string=_("Jenis Penugasan"))
 
 
     def copy(self, default=None):

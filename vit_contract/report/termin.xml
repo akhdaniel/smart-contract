@@ -54,20 +54,32 @@
                             <p class="m-0" t-field="doc.stage_name" />
                         </div>
                         <div class="col-auto mw-100 mb-2">
-                            <strong>Kontrak</strong>
-                            <p class="m-0" t-field="doc.kontrak_id"/>
+                            <strong>Due Date</strong>
+                            <p class="m-0" t-field="doc.due_date" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Is Droping Done</strong>
+                            <p class="m-0" t-field="doc.is_droping_done" />
                         </div>
                         <div class="col-auto mw-100 mb-2">
                             <strong>Master Nama Termin</strong>
                             <p class="m-0" t-field="doc.master_nama_termin_id"/>
                         </div>
                         <div class="col-auto mw-100 mb-2">
+                            <strong>Stage</strong>
+                            <p class="m-0" t-field="doc.stage_id"/>
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Droping</strong>
+                            <p class="m-0" t-field="doc.droping_id"/>
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
                             <strong>Partner</strong>
                             <p class="m-0" t-field="doc.partner_id"/>
                         </div>
                         <div class="col-auto mw-100 mb-2">
-                            <strong>Stage</strong>
-                            <p class="m-0" t-field="doc.stage_id"/>
+                            <strong>Kontrak</strong>
+                            <p class="m-0" t-field="doc.kontrak_id"/>
                         </div>
                     </div>
                 </div>
@@ -80,6 +92,7 @@
                             <td>Verified</td>
                             <td>Due Date</td>
                             <td>Document</td>
+                            <td>Upload Date</td>
                             <td>Termin</td>
                             <td>Master Syarat Termin</td>
                         </tr>
@@ -90,6 +103,7 @@
                             <td><span t-field="line.verified" /></td>
                             <td><span t-field="line.due_date" /></td>
                             <td><span t-field="line.document" /></td>
+                            <td><span t-field="line.upload_date" /></td>
                             <td><span t-field="line.termin_id" /></td>
                             <td><span t-field="line.master_syarat_termin_id" /></td>
                         </tr> <!-- foreach-->

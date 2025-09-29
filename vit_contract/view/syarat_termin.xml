@@ -15,6 +15,7 @@
                     <field name="master_syarat_termin_id" /> <!-- 101-->
                     <field name="due_date" /> <!-- 102-->
                     <field name="document" /> <!-- 103-->
+                    <field name="upload_date" /> <!-- 104-->
                 </tree>
             </field>
         </record>
@@ -57,6 +58,7 @@
                                 <field name="verified"  />
                                 <field name="due_date"  />
                                 <field name="document"  />
+                                <field name="upload_date"  />
                             </group>
                             <group> <!-- right -->
                                 <field name="termin_id"  />
@@ -87,10 +89,12 @@
                     <filter string="Verified" name="filter_by_verified" domain="[('verified','=','')]" />
                     <filter string="Due Date" name="filter_by_due_date" domain="[('due_date','=','')]" />
                     <filter string="Document" name="filter_by_document" domain="[('document','=','')]" />
+                    <filter string="Upload Date" name="filter_by_upload_date" domain="[('upload_date','=','')]" />
                     <field name="name" select="True"/>
                     <field name="verified" select="True"/>
                     <field name="due_date" select="True"/>
                     <field name="document" select="True"/>
+                    <field name="upload_date" select="True"/>
                     <field name="termin_id" select="True"/>
                     <field name="master_syarat_termin_id" select="True"/>
                     <group string="Group By..">
@@ -113,7 +117,7 @@
                                 <h4>
                                     <a type="open"><field name="name"/></a>
                                 </h4>
-                                <span class="text-muted">Due Date</span> <field name="due_date"></field>
+                                <span class="text-muted">Upload Date</span> <field name="upload_date"></field>
                             </div> <!--oe_kanban_details-->
                         </t>
                     </templates>
@@ -125,7 +129,7 @@
             <field name="name">vit_syarat_termin_cal</field>
             <field name="model">vit.syarat_termin</field>
             <field name="arch" type="xml">
-                <calendar string="Syarat Termin" date_start="due_date">
+                <calendar string="Syarat Termin" date_start="upload_date">
                     <field name="name" />
                 </calendar>
             </field>

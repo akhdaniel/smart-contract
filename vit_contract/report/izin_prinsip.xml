@@ -58,12 +58,8 @@
                             <p class="m-0" t-field="doc.master_budget_id"/>
                         </div>
                         <div class="col-auto mw-100 mb-2">
-                            <strong>Kanwil Kancab</strong>
-                            <p class="m-0" t-field="doc.kanwil_kancab_id"/>
-                        </div>
-                        <div class="col-auto mw-100 mb-2">
-                            <strong>Droping</strong>
-                            <p class="m-0" t-field="doc.droping_id"/>
+                            <strong>Kanwil</strong>
+                            <p class="m-0" t-field="doc.kanwil_id"/>
                         </div>
                     </div>
                 </div>
@@ -82,13 +78,16 @@
                             <td>Stage Name</td>
                             <td>Amount Izin Prinsip</td>
                             <td>Amount Kontrak</td>
+                            <td>Amount Denda</td>
+                            <td>Persentasi Denda</td>
                             <td>Izin Prinsip</td>
-                            <td>Partner</td>
                             <td>Budget Rkap</td>
-                            <td>Kanwil Kancab</td>
                             <td>Stage</td>
                             <td>Jenis Kontrak</td>
                             <td>Master Budget</td>
+                            <td>Kanca</td>
+                            <td>Kanwil</td>
+                            <td>Partner</td>
                         </tr>
                     </thead>
                     <tbody class="kontrak_ids_tbody">
@@ -103,13 +102,16 @@
                             <td><span t-field="line.stage_name" /></td>
                             <td><span t-field="line.amount_izin_prinsip" /></td>
                             <td><span t-field="line.amount_kontrak" /></td>
+                            <td><span t-field="line.amount_denda" /></td>
+                            <td><span t-field="line.persentasi_denda" /></td>
                             <td><span t-field="line.izin_prinsip_id" /></td>
-                            <td><span t-field="line.partner_id" /></td>
                             <td><span t-field="line.budget_rkap_id" /></td>
-                            <td><span t-field="line.kanwil_kancab_id" /></td>
                             <td><span t-field="line.stage_id" /></td>
                             <td><span t-field="line.jenis_kontrak_id" /></td>
                             <td><span t-field="line.master_budget_id" /></td>
+                            <td><span t-field="line.kanca_id" /></td>
+                            <td><span t-field="line.kanwil_id" /></td>
+                            <td><span t-field="line.partner_id" /></td>
                         </tr> <!-- foreach-->
                     </tbody>
                 </table>
@@ -120,18 +122,20 @@
                         <tr>
                             <td>Name</td>
                             <td>Pagu</td>
-                            <td>Izin Prinsip</td>
                             <td>Jenis Kontrak</td>
-                            <td>Kanwil Kancab</td>
+                            <td>Kanwil</td>
+                            <td>Kanca</td>
+                            <td>Izin Prinsip</td>
                         </tr>
                     </thead>
                     <tbody class="izin_prinsip_line_ids_tbody">
                         <tr t-foreach="doc.izin_prinsip_line_ids" t-as="line">
                             <td><span t-field="line.name" /></td>
                             <td><span t-field="line.pagu" /></td>
-                            <td><span t-field="line.izin_prinsip_id" /></td>
                             <td><span t-field="line.jenis_kontrak_id" /></td>
-                            <td><span t-field="line.kanwil_kancab_id" /></td>
+                            <td><span t-field="line.kanwil_id" /></td>
+                            <td><span t-field="line.kanca_id" /></td>
+                            <td><span t-field="line.izin_prinsip_id" /></td>
                         </tr> <!-- foreach-->
                     </tbody>
                 </table>

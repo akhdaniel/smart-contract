@@ -13,7 +13,7 @@
                     <field name="amount" /> <!-- 101-->
                     <field name="master_budget_id" /> <!-- 101-->
                     <field name="remaining" /> <!-- 102-->
-                    <field name="kanwil_kancab_id" /> <!-- 102-->
+                    <field name="kanwil_id" /> <!-- 102-->
                     <field name="total_pagu_izin_prinsip" /> <!-- 103-->
                     <field name="total_amount_kontrak" /> <!-- 104-->
                     <field name="total_amount_payment" /> <!-- 105-->
@@ -31,7 +31,7 @@
             <field name="arch" type="xml">
                 <pivot string="Budget Rkap">
                     <field name="master_budget_id" type="row"/>
-                    <field name="kanwil_kancab_id" type="row"/>
+                    <field name="kanwil_id" type="row"/>
                 </pivot>
             </field>
         </record>
@@ -70,7 +70,7 @@
                             </group>
                             <group> <!-- right -->
                                 <field name="master_budget_id"  />
-                                <field name="kanwil_kancab_id"  />
+                                <field name="kanwil_id"  />
                             </group>
                         </group>
                         <notebook>
@@ -81,7 +81,7 @@
                                         <field name="total_pagu" /> <!-- 101-->
                                         <field name="stage_id" /> <!-- 101-->
                                         <field name="master_budget_id" /> <!-- 102-->
-                                        <field name="kanwil_kancab_id" /> <!-- 103-->
+                                        <field name="kanwil_id" /> <!-- 103-->
                                     </tree>
                                 </field>
                             </page>
@@ -91,11 +91,15 @@
                                         <field name="name" /> <!-- 100-->
                                         <field name="start_date" /> <!-- 101-->
                                         <field name="end_date" /> <!-- 102-->
+                                        <field name="stage_id" /> <!-- 102-->
                                         <field name="amount_izin_prinsip" /> <!-- 103-->
+                                        <field name="jenis_kontrak_id" /> <!-- 103-->
                                         <field name="amount_kontrak" /> <!-- 104-->
-                                        <field name="stage_id" /> <!-- 104-->
-                                        <field name="jenis_kontrak_id" /> <!-- 105-->
-                                        <field name="master_budget_id" /> <!-- 106-->
+                                        <field name="master_budget_id" /> <!-- 104-->
+                                        <field name="amount_denda" /> <!-- 105-->
+                                        <field name="kanca_id" /> <!-- 105-->
+                                        <field name="persentasi_denda" /> <!-- 106-->
+                                        <field name="partner_id" /> <!-- 107-->
                                     </tree>
                                 </field>
                             </page>
@@ -104,10 +108,12 @@
                                     <tree >
                                         <field name="name" /> <!-- 100-->
                                         <field name="amount" /> <!-- 101-->
+                                        <field name="request_date" /> <!-- 102-->
                                         <field name="stage_id" /> <!-- 102-->
+                                        <field name="payment_date" /> <!-- 103-->
                                         <field name="termin_id" /> <!-- 103-->
                                         <field name="master_budget_id" /> <!-- 104-->
-                                        <field name="kanwil_kancab_id" /> <!-- 105-->
+                                        <field name="kanwil_id" /> <!-- 105-->
                                     </tree>
                                 </field>
                             </page>
@@ -149,10 +155,10 @@
                     <field name="total_qty_kontrak" select="True"/>
                     <field name="total_amount_droping" select="True"/>
                     <field name="master_budget_id" select="True"/>
-                    <field name="kanwil_kancab_id" select="True"/>
+                    <field name="kanwil_id" select="True"/>
                     <group string="Group By..">
                         <filter string="Master Budget" domain="[]" name="group_by_master_budget_id" context="{'group_by':'master_budget_id'}"/>
-                        <filter string="Kanwil Kancab" domain="[]" name="group_by_kanwil_kancab_id" context="{'group_by':'kanwil_kancab_id'}"/>
+                        <filter string="Kanwil" domain="[]" name="group_by_kanwil_id" context="{'group_by':'kanwil_id'}"/>
                     </group>
                 </search>
             </field>

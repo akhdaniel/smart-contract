@@ -58,8 +58,8 @@
                             <p class="m-0" t-field="doc.master_budget_id"/>
                         </div>
                         <div class="col-auto mw-100 mb-2">
-                            <strong>Kanwil Kancab</strong>
-                            <p class="m-0" t-field="doc.kanwil_kancab_id"/>
+                            <strong>Kanwil</strong>
+                            <p class="m-0" t-field="doc.kanwil_id"/>
                         </div>
                     </div>
                 </div>
@@ -78,8 +78,7 @@
                             <td>Budget</td>
                             <td>Stage</td>
                             <td>Master Budget</td>
-                            <td>Kanwil Kancab</td>
-                            <td>Droping</td>
+                            <td>Kanwil</td>
                         </tr>
                     </thead>
                     <tbody class="izin_prinsip_ids_tbody">
@@ -94,8 +93,7 @@
                             <td><span t-field="line.budget_id" /></td>
                             <td><span t-field="line.stage_id" /></td>
                             <td><span t-field="line.master_budget_id" /></td>
-                            <td><span t-field="line.kanwil_kancab_id" /></td>
-                            <td><span t-field="line.droping_id" /></td>
+                            <td><span t-field="line.kanwil_id" /></td>
                         </tr> <!-- foreach-->
                     </tbody>
                 </table>
@@ -114,13 +112,16 @@
                             <td>Stage Name</td>
                             <td>Amount Izin Prinsip</td>
                             <td>Amount Kontrak</td>
+                            <td>Amount Denda</td>
+                            <td>Persentasi Denda</td>
                             <td>Izin Prinsip</td>
-                            <td>Partner</td>
                             <td>Budget Rkap</td>
-                            <td>Kanwil Kancab</td>
                             <td>Stage</td>
                             <td>Jenis Kontrak</td>
                             <td>Master Budget</td>
+                            <td>Kanca</td>
+                            <td>Kanwil</td>
+                            <td>Partner</td>
                         </tr>
                     </thead>
                     <tbody class="kontrak_ids_tbody">
@@ -135,13 +136,16 @@
                             <td><span t-field="line.stage_name" /></td>
                             <td><span t-field="line.amount_izin_prinsip" /></td>
                             <td><span t-field="line.amount_kontrak" /></td>
+                            <td><span t-field="line.amount_denda" /></td>
+                            <td><span t-field="line.persentasi_denda" /></td>
                             <td><span t-field="line.izin_prinsip_id" /></td>
-                            <td><span t-field="line.partner_id" /></td>
                             <td><span t-field="line.budget_rkap_id" /></td>
-                            <td><span t-field="line.kanwil_kancab_id" /></td>
                             <td><span t-field="line.stage_id" /></td>
                             <td><span t-field="line.jenis_kontrak_id" /></td>
                             <td><span t-field="line.master_budget_id" /></td>
+                            <td><span t-field="line.kanca_id" /></td>
+                            <td><span t-field="line.kanwil_id" /></td>
+                            <td><span t-field="line.partner_id" /></td>
                         </tr> <!-- foreach-->
                     </tbody>
                 </table>
@@ -157,12 +161,14 @@
                             <td>Allow Confirm</td>
                             <td>Allow Cancel</td>
                             <td>Stage Name</td>
+                            <td>Request Date</td>
+                            <td>Payment Date</td>
                             <td>Partner</td>
                             <td>Budget Rkap</td>
                             <td>Stage</td>
                             <td>Termin</td>
                             <td>Master Budget</td>
-                            <td>Kanwil Kancab</td>
+                            <td>Kanwil</td>
                         </tr>
                     </thead>
                     <tbody class="payment_ids_tbody">
@@ -174,12 +180,14 @@
                             <td><span t-field="line.allow_confirm" /></td>
                             <td><span t-field="line.allow_cancel" /></td>
                             <td><span t-field="line.stage_name" /></td>
+                            <td><span t-field="line.request_date" /></td>
+                            <td><span t-field="line.payment_date" /></td>
                             <td><span t-field="line.partner_id" /></td>
                             <td><span t-field="line.budget_rkap_id" /></td>
                             <td><span t-field="line.stage_id" /></td>
                             <td><span t-field="line.termin_id" /></td>
                             <td><span t-field="line.master_budget_id" /></td>
-                            <td><span t-field="line.kanwil_kancab_id" /></td>
+                            <td><span t-field="line.kanwil_id" /></td>
                         </tr> <!-- foreach-->
                     </tbody>
                 </table>

@@ -11,7 +11,7 @@
                 <tree string="Droping">
                     <field name="name" /> <!-- 100-->
                     <field name="jumlah" /> <!-- 101-->
-                    <field name="kanwil_kancab_id" /> <!-- 101-->
+                    <field name="kanwil_id" /> <!-- 101-->
                     <field name="stage_id" /> <!-- 102-->
                 </tree>
             </field>
@@ -23,7 +23,7 @@
             <field name="type">pivot</field>
             <field name="arch" type="xml">
                 <pivot string="Droping">
-                    <field name="kanwil_kancab_id" type="row"/>
+                    <field name="kanwil_id" type="row"/>
                     <field name="stage_id" type="row"/>
                 </pivot>
             </field>
@@ -64,18 +64,23 @@
                                 <field name="jumlah"  readonly="stage_is_draft==False"/>
                             </group>
                             <group> <!-- right -->
-                                <field name="kanwil_kancab_id"  readonly="stage_is_draft==False"/>
+                                <field name="kanwil_id"  readonly="stage_is_draft==False"/>
                             </group>
                         </group>
                         <notebook>
-                            <page name="izin_prinsip_ids" string="Izin Prinsip">
-                                <field name="izin_prinsip_ids" readonly="stage_is_draft==False">
+                            <page name="termin_kontrak_ids" string="Termin Kontrak">
+                                <field name="termin_kontrak_ids" readonly="stage_is_draft==False">
                                     <tree >
                                         <field name="name" /> <!-- 100-->
-                                        <field name="total_pagu" /> <!-- 101-->
-                                        <field name="stage_id" /> <!-- 101-->
-                                        <field name="master_budget_id" /> <!-- 102-->
-                                        <field name="kanwil_kancab_id" /> <!-- 103-->
+                                        <field name="nilai" /> <!-- 101-->
+                                        <field name="master_nama_termin_id" /> <!-- 101-->
+                                        <field name="persentase" /> <!-- 102-->
+                                        <field name="stage_id" /> <!-- 102-->
+                                        <field name="deskripsi" /> <!-- 103-->
+                                        <field name="due_date" /> <!-- 104-->
+                                        <field name="partner_id" /> <!-- 104-->
+                                        <field name="is_droping_done" /> <!-- 105-->
+                                        <field name="kontrak_id" /> <!-- 105-->
                                     </tree>
                                 </field>
                             </page>
@@ -112,10 +117,10 @@
                     <field name="allow_confirm" select="True"/>
                     <field name="allow_cancel" select="True"/>
                     <field name="stage_name" select="True"/>
-                    <field name="kanwil_kancab_id" select="True"/>
+                    <field name="kanwil_id" select="True"/>
                     <field name="stage_id" select="True"/>
                     <group string="Group By..">
-                        <filter string="Kanwil Kancab" domain="[]" name="group_by_kanwil_kancab_id" context="{'group_by':'kanwil_kancab_id'}"/>
+                        <filter string="Kanwil" domain="[]" name="group_by_kanwil_id" context="{'group_by':'kanwil_id'}"/>
                         <filter string="Stage" domain="[]" name="group_by_stage_id" context="{'group_by':'stage_id'}"/>
                     </group>
                 </search>
@@ -146,7 +151,7 @@
             <field name="model">vit.droping</field>
             <field name="arch" type="xml">
                 <graph string="Droping" type="bar">
-                    <field name="kanwil_kancab_id"/>
+                    <field name="kanwil_id"/>
                 </graph>
             </field>
         </record>

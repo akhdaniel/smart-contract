@@ -5,7 +5,6 @@ import logging
 _logger = logging.getLogger(__name__)
 
 class syarat_termin(models.Model):
-    _name = "vit.termin"
     _inherit = "vit.termin"
 
 
@@ -13,14 +12,17 @@ class syarat_termin(models.Model):
 
 
     partner_id = fields.Many2one(
-        "res.partner",
-        related="kontrak_id.partner_id",
+        comodel_name="res.partner",
         string="Partner",
-        store=False,
+        related="kontrak_id.partner_id",
         readonly=True,
     )
 
-
+    kontrak_id = fields.Many2one(
+        comodel_name="vit.kontrak",
+        string="Kontrak",
+        ondelete="cascade"
+    )
 
 
     @api.onchange('persentase', 'kontrak_id')
@@ -107,7 +109,7 @@ class syarat_termin(models.Model):
     #                 'amount': rec.nilai,
     #                 'partner_id': kontrak.partner_id.id,
     #                 'budget_rkap_id': kontrak.budget_rkap_id.id,
-    #                 'kanwil_kancab_id': kontrak.kanwil_kancab_id.id,
+    #                 'kanwil_id': kontrak.kanwil_id.id,
     #                 'master_budget_id': kontrak.master_budget_id.id,
     #                 'termin_id': rec.id,
     #             })
@@ -167,7 +169,7 @@ class syarat_termin(models.Model):
                     'amount': rec.nilai,
                     'partner_id': kontrak.partner_id.id,
                     'budget_rkap_id': kontrak.budget_rkap_id.id,
-                    'kanwil_kancab_id': kontrak.kanwil_kancab_id.id,
+                    'kanwil_id': kontrak.kanwil_id.id,
                     'master_budget_id': kontrak.master_budget_id.id,
                     'termin_id': rec.id,
                 })

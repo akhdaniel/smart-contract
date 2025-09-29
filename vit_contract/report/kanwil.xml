@@ -2,23 +2,23 @@
 <odoo>
     <data>
         <!-- report qweb view -->
-        <record id="action_report_vit_kanwil_kancab" model="ir.actions.report">
-            <field name="name">Kanwil Kancab</field>
-            <field name="model">vit.kanwil_kancab</field>
+        <record id="action_report_vit_kanwil" model="ir.actions.report">
+            <field name="name">Kanwil</field>
+            <field name="model">vit.kanwil</field>
             <field name="report_type">qweb-pdf</field>
-            <field name="report_name">vit_contract.vit_kanwil_kancab_report</field>
-            <field name="report_file">vit_contract.vit_kanwil_kancab_report</field>
+            <field name="report_name">vit_contract.vit_kanwil_report</field>
+            <field name="report_file">vit_contract.vit_kanwil_report</field>
             <field name="print_report_name">object.name</field>
-            <field name="binding_model_id" ref="vit_contract.model_vit_kanwil_kancab"/>
+            <field name="binding_model_id" ref="vit_contract.model_vit_kanwil"/>
             <field name="binding_type">report</field>
         </record>
         <!-- document template -->
-        <template id="vit_contract.vit_kanwil_kancab_report_document" >
+        <template id="vit_contract.vit_kanwil_report_document" >
             <t t-call="web.external_layout">
                 <t t-set="doc" t-value="doc.with_context({'lang': lang})"/>
                 <div class="page">
                     <h2>
-                        Kanwil Kancab: <span t-field="doc.name"/>
+                        Kanwil: <span t-field="doc.name"/>
                     </h2>
                     <div class="row mt32 mb32">
                     </div>
@@ -38,13 +38,16 @@
                             <td>Stage Name</td>
                             <td>Amount Izin Prinsip</td>
                             <td>Amount Kontrak</td>
+                            <td>Amount Denda</td>
+                            <td>Persentasi Denda</td>
                             <td>Izin Prinsip</td>
-                            <td>Partner</td>
                             <td>Budget Rkap</td>
-                            <td>Kanwil Kancab</td>
                             <td>Stage</td>
                             <td>Jenis Kontrak</td>
                             <td>Master Budget</td>
+                            <td>Kanca</td>
+                            <td>Kanwil</td>
+                            <td>Partner</td>
                         </tr>
                     </thead>
                     <tbody class="kontrak_ids_tbody">
@@ -59,13 +62,16 @@
                             <td><span t-field="line.stage_name" /></td>
                             <td><span t-field="line.amount_izin_prinsip" /></td>
                             <td><span t-field="line.amount_kontrak" /></td>
+                            <td><span t-field="line.amount_denda" /></td>
+                            <td><span t-field="line.persentasi_denda" /></td>
                             <td><span t-field="line.izin_prinsip_id" /></td>
-                            <td><span t-field="line.partner_id" /></td>
                             <td><span t-field="line.budget_rkap_id" /></td>
-                            <td><span t-field="line.kanwil_kancab_id" /></td>
                             <td><span t-field="line.stage_id" /></td>
                             <td><span t-field="line.jenis_kontrak_id" /></td>
                             <td><span t-field="line.master_budget_id" /></td>
+                            <td><span t-field="line.kanca_id" /></td>
+                            <td><span t-field="line.kanwil_id" /></td>
+                            <td><span t-field="line.partner_id" /></td>
                         </tr> <!-- foreach-->
                     </tbody>
                 </table>
@@ -81,7 +87,7 @@
                             <td>Allow Confirm</td>
                             <td>Allow Cancel</td>
                             <td>Stage Name</td>
-                            <td>Kanwil Kancab</td>
+                            <td>Kanwil</td>
                             <td>Stage</td>
                         </tr>
                     </thead>
@@ -94,8 +100,24 @@
                             <td><span t-field="line.allow_confirm" /></td>
                             <td><span t-field="line.allow_cancel" /></td>
                             <td><span t-field="line.stage_name" /></td>
-                            <td><span t-field="line.kanwil_kancab_id" /></td>
+                            <td><span t-field="line.kanwil_id" /></td>
                             <td><span t-field="line.stage_id" /></td>
+                        </tr> <!-- foreach-->
+                    </tbody>
+                </table>
+                <div class="oe_structure"/>
+                <h2>Kanca</h2>
+                <table class="table table-sm o_main_table" name="kanca_ids_table">
+                    <thead>
+                        <tr>
+                            <td>Name</td>
+                            <td>Kanwil</td>
+                        </tr>
+                    </thead>
+                    <tbody class="kanca_ids_tbody">
+                        <tr t-foreach="doc.kanca_ids" t-as="line">
+                            <td><span t-field="line.name" /></td>
+                            <td><span t-field="line.kanwil_id" /></td>
                         </tr> <!-- foreach-->
                     </tbody>
                 </table>
@@ -104,11 +126,11 @@
         </template>
 
         <!-- main template -->
-        <template id="vit_contract.vit_kanwil_kancab_report">
+        <template id="vit_contract.vit_kanwil_report">
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="doc">
                     <t t-set="lang" t-value="doc.create_uid.lang"/>
-                    <t t-call="vit_contract.vit_kanwil_kancab_report_document" />
+                    <t t-call="vit_contract.vit_kanwil_report_document" />
                 </t>
             </t>
         </template>

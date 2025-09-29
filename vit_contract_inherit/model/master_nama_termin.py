@@ -5,3 +5,5 @@ class master_nama_termin(models.Model):
 
     _name = "vit.master_nama_termin"
     _inherit = "vit.master_nama_termin"
+
+    

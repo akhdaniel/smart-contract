@@ -9,10 +9,10 @@
             <field name="arch" type="xml">
 
 
-                <xpath expr="//tree/field[@name='kanwil_kancab_id']" position="replace"/>
+                <xpath expr="//tree/field[@name='kanwil_id']" position="replace"/>
                 <xpath expr="//tree/field[@name='master_budget_id']" position="replace"/>
                 <xpath expr="//tree/field[@name='budget_rkap_id']" position="after">
-                    <field name="kanwil_kancab_id"/>
+                    <field name="kanwil_id"/>
                     <field name="master_budget_id"/>
                 </xpath>
 
@@ -55,7 +55,7 @@
                     <attribute name="readonly">1</attribute>
                 </xpath>
 
-                <xpath expr="//field[@name='kanwil_kancab_id']" position="attributes">
+                <xpath expr="//field[@name='kanwil_id']" position="attributes">
                     <attribute name="readonly">1</attribute>
                 </xpath>
 

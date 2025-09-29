@@ -83,7 +83,6 @@ class izin_prinsip(models.Model):
     budget_id = fields.Many2one(comodel_name="vit.budget_rkap",  string=_("Budget"))
     stage_id = fields.Many2one(comodel_name="vit.state_izin_prinsip",  default=_get_first_stage, copy=False, group_expand="_group_expand_states",  string=_("Stage"))
     master_budget_id = fields.Many2one(comodel_name="vit.master_budget",  string=_("Master Budget"))
-    kanwil_kancab_id = fields.Many2one(comodel_name="vit.kanwil_kancab",  string=_("Kanwil Kancab"))
-    droping_id = fields.Many2one(comodel_name="vit.droping",  string=_("Droping"))
+    kanwil_id = fields.Many2one(comodel_name="vit.kanwil",  string=_("Kanwil"))
     kontrak_ids = fields.One2many(comodel_name="vit.kontrak",  inverse_name="izin_prinsip_id",  string=_("Kontrak"))
     izin_prinsip_line_ids = fields.One2many(comodel_name="vit.izin_prinsip_line",  inverse_name="izin_prinsip_id",  string=_("Izin Prinsip Line"))

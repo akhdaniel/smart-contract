@@ -8,7 +8,6 @@ from odoo.exceptions import ValidationError
 _logger = logging.getLogger(__name__)
 
 class kontrak(models.Model):
-    _name = "vit.kontrak"
     _inherit = "vit.kontrak"
 
     izin_prinsip_id = fields.Many2one(
@@ -16,6 +15,52 @@ class kontrak(models.Model):
         string="Izin Prinsip",
         domain=[('stage_is_done', '=', True)],  
     )
+
+    budget_rkap_id = fields.Many2one(
+        comodel_name="vit.budget_rkap",  
+        related="izin_prinsip_id.budget_id", 
+        string=_("Budget Rkap")
+    )
+
+    master_budget_id = fields.Many2one(
+        comodel_name="vit.master_budget",  
+        related="izin_prinsip_id.master_budget_id", 
+        string=_("Master Budget")
+    )
+
+    kanwil_id = fields.Many2one(
+        comodel_name="vit.kanwil",  
+        related="izin_prinsip_id.kanwil_id", 
+        string=_("Kanwil")
+    )
+    
+
+    is_late_upload = fields.Boolean(
+        string="Late Upload",
+        compute="_compute_is_late_upload",
+        store=False
+    )
+
+    late_termin_names = fields.Char(
+        string="Termin Terlambat",
+        compute="_compute_is_late_upload",
+        store=False
+    )
+
+    @api.depends('termin_ids.syarat_termin_ids.upload_date',
+                 'termin_ids.syarat_termin_ids.due_date')
+    def _compute_is_late_upload(self):
+        for rec in self:
+            late_termins = []
+            for t in rec.termin_ids:
+                if any(
+                    s.upload_date and s.due_date and s.upload_date > s.due_date
+                    for s in t.syarat_termin_ids
+                ):
+                    # pakai nama master termin biar jelas
+                    late_termins.append(t.master_nama_termin_id.name or t.name)
+            rec.is_late_upload = bool(late_termins)
+            rec.late_termin_names = ", ".join(late_termins) if late_termins else ""
 
 
     @api.onchange('jenis_kontrak_id')

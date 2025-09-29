@@ -17,5 +17,4 @@ class partner(models.Model):
 
 
 
-    kontrak_ids = fields.One2many(comodel_name="vit.kontrak",  inverse_name="partner_id",  string=_("Kontrak"))
     payment_ids = fields.One2many(comodel_name="vit.payment",  inverse_name="partner_id",  string=_("Payment"))

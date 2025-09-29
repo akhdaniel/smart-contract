@@ -17,6 +17,7 @@ class syarat_termin(models.Model):
     verified = fields.Boolean( string=_("Verified"))
     due_date = fields.Date( string=_("Due Date"))
     document = fields.Binary( string=_("Document"))
+    upload_date = fields.Date( string=_("Upload Date"))
 
 
     def copy(self, default=None):

@@ -19,10 +19,10 @@ class izin_prinsip(models.Model):
         readonly=True,
     )
 
-    kanwil_kancab_id = fields.Many2one(
-        comodel_name="vit.kanwil_kancab",
-        string=_("Kanwil Kancab"),
-        related="budget_id.kanwil_kancab_id",
+    kanwil_id = fields.Many2one(
+        comodel_name="vit.kanwil",
+        string=_("Kanwil"),
+        related="budget_id.kanwil_id",
         store=True,
         readonly=True,
     )

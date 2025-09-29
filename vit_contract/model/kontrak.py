@@ -10,6 +10,10 @@ class kontrak(models.Model):
     _description = "vit.kontrak"
 
 
+    def action_create_addendum(self, ):
+        pass
+
+
     def action_reload_view(self):
         pass
 
@@ -23,6 +27,8 @@ class kontrak(models.Model):
     stage_name = fields.Char(related="stage_id.name", store=True,  string=_("Stage Name"))
     amount_izin_prinsip = fields.Float(readonly=True,  string=_("Amount Izin Prinsip"))
     amount_kontrak = fields.Float( string=_("Amount Kontrak"))
+    amount_denda = fields.Float( string=_("Amount Denda"))
+    persentasi_denda = fields.Float( string=_("Persentasi Denda"))
 
 
     @api.model_create_multi
@@ -84,10 +90,11 @@ class kontrak(models.Model):
         return super(kontrak, self).copy(default)
 
     izin_prinsip_id = fields.Many2one(comodel_name="vit.izin_prinsip",  string=_("Izin Prinsip"))
-    partner_id = fields.Many2one(comodel_name="res.partner",  string=_("Partner"))
-    budget_rkap_id = fields.Many2one(comodel_name="vit.budget_rkap", related="izin_prinsip_id.budget_id", readonly=True,  string=_("Budget Rkap"))
-    kanwil_kancab_id = fields.Many2one(comodel_name="vit.kanwil_kancab", related="izin_prinsip_id.kanwil_kancab_id", readonly=True,  string=_("Kanwil Kancab"))
+    budget_rkap_id = fields.Many2one(comodel_name="vit.budget_rkap",  string=_("Budget Rkap"))
     stage_id = fields.Many2one(comodel_name="vit.kontrak_state",  default=_get_first_stage, copy=False, group_expand="_group_expand_states",  string=_("Stage"))
     jenis_kontrak_id = fields.Many2one(comodel_name="vit.jenis_kontrak",  string=_("Jenis Kontrak"))
-    master_budget_id = fields.Many2one(comodel_name="vit.master_budget", related="izin_prinsip_id.master_budget_id", readonly=True,  string=_("Master Budget"))
+    master_budget_id = fields.Many2one(comodel_name="vit.master_budget",  string=_("Master Budget"))
+    kanca_id = fields.Many2one(comodel_name="vit.kanca",  string=_("Kanca"))
+    kanwil_id = fields.Many2one(comodel_name="vit.kanwil",  string=_("Kanwil"))
+    partner_id = fields.Many2one(comodel_name="res.partner",  string=_("Partner"))
     termin_ids = fields.One2many(comodel_name="vit.termin",  inverse_name="kontrak_id",  string=_("Termin"))

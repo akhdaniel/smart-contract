@@ -9,25 +9,24 @@
             <field name="arch" type="xml">
 
 
-                <xpath expr="//field[@name='total_pagu_izin_prinsip']" position="replace"/>
+                <!-- <xpath expr="//field[@name='total_pagu_izin_prinsip']" position="replace"/>
                 <xpath expr="//field[@name='total_amount_kontrak']" position="replace"/>
                 <xpath expr="//field[@name='total_amount_payment']" position="replace"/>
-                <xpath expr="//field[@name='kanwil_kancab_id']" position="after">
-                    <field name="total_pagu_izin_prinsip"/>
+                <xpath expr="//field[@name='kanwil_id']" position="after">
                     <field name="total_amount_kontrak"/>
                     <field name="total_amount_payment"/>
-                </xpath>
+                </xpath> -->
 
                 <xpath expr="//page[@name='payment_ids']//tree/field[@name='amount']" position="replace"/>
-                <xpath expr="//page[@name='payment_ids']//tree/field[@name='kanwil_kancab_id']" position="after">
+                <xpath expr="//page[@name='payment_ids']//tree/field[@name='kanwil_id']" position="after">
                     <field name="amount"/>
                 </xpath>
 
                 <xpath expr="//field[@name='kontrak_ids']/tree/field[@name='amount_izin_prinsip']" position="replace"/>
 
-                <xpath expr="//field[@name='kontrak_ids']/tree/field[@name='stage_id']" position="before">
+                <!-- <xpath expr="//field[@name='kontrak_ids']/tree/field[@name='stage_id']" position="before">
                     <field name="partner_id"/>
-                </xpath>
+                </xpath> -->
                 
                 <xpath expr="//field[@name='kontrak_ids']/tree/field[@name='amount_kontrak']" position="replace"/>
                 <xpath expr="//field[@name='kontrak_ids']/tree/field[@name='master_budget_id']" position="after">
@@ -35,7 +34,7 @@
                 </xpath>
 
                 <xpath expr="//field[@name='izin_prinsip_ids']/tree/field[@name='total_pagu']" position="replace"/>
-                <xpath expr="//field[@name='izin_prinsip_ids']/tree/field[@name='kanwil_kancab_id']" position="after">
+                <xpath expr="//field[@name='izin_prinsip_ids']/tree/field[@name='kanwil_id']" position="after">
                     <field name="total_pagu"/>
                 </xpath>
 
@@ -49,12 +48,12 @@
             <field name="type">tree</field>
             <field name="inherit_id" ref="vit_contract.view_vit_budget_rkap_tree"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='amount']" position="replace"/>
+                <!-- <xpath expr="//field[@name='amount']" position="replace"/>
                 <xpath expr="//field[@name='remaining']" position="replace"/>
-                <xpath expr="//field[@name='kanwil_kancab_id']" position="after">
+                <xpath expr="//field[@name='kanwil_id']" position="after">
                     <field name="amount"/>
                     <field name="remaining"/>
-                </xpath>
+                </xpath> -->
 
 
                 <xpath expr="//field[@name='total_qty_izin_prinsip']" position="replace"/>

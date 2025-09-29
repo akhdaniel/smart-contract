@@ -9,7 +9,9 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <tree string="Master Nama Termin">
+                    <field name="sequence"  widget='handle'/>
                     <field name="name" /> <!-- 100-->
+                    <field name="type" /> <!-- 102-->
                 </tree>
             </field>
         </record>
@@ -37,6 +39,8 @@
                         </div>
                         <group>
                             <group> <!-- left -->
+                                <field name="sequence"  />
+                                <field name="type"  />
                             </group>
                             <group> <!-- right -->
                             </group>
@@ -62,8 +66,13 @@
                 <search string="Master Nama Termin">
 
                     <filter string="Name" name="filter_by_name" domain="[('name','=','')]" />
+                    <filter string="Sequence" name="filter_by_sequence" domain="[('sequence','=','')]" />
+                    <filter string="Type" name="filter_by_type" domain="[('type','=','')]" />
                     <field name="name" select="True"/>
+                    <field name="sequence" select="True"/>
+                    <field name="type" select="True"/>
                     <group string="Group By..">
+                        <filter string="Type" domain="[]" name="group_by_type" context="{'group_by':'type'}"/>
                     </group>
                 </search>
             </field>

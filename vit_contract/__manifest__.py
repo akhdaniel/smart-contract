@@ -4,7 +4,7 @@
 	"name": "Vit Contract",
 	"version": "1.0",
 	"depends": [
-		"base",
+		"base"
 	],
 	"author": "Akhmad Daniel Sembiring",
 	"category": "Utility",
@@ -26,8 +26,8 @@
 		"data/sequence_izin_prinsip.xml",
 		"view/budget_rkap.xml",
 		"report/budget_rkap.xml",
-		"view/kanwil_kancab.xml",
-		"report/kanwil_kancab.xml",
+		"view/kanwil.xml",
+		"report/kanwil.xml",
 		"view/kontrak.xml",
 		"report/kontrak.xml",
 		"data/sequence_kontrak.xml",
@@ -67,7 +67,9 @@
 		"data/vit.state_termin.csv",
 		"view/state_droping.xml",
 		"report/state_droping.xml",
-		"data/vit.state_droping.csv"
+		"data/vit.state_droping.csv",
+		"view/kanca.xml",
+		"report/kanca.xml"
 	],
 	"installable": True,
 	"auto_install": False,

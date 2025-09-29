@@ -4,7 +4,7 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 import logging
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, UserError
 _logger = logging.getLogger(__name__)
 
 class syarat_termin(models.Model):
@@ -20,6 +20,16 @@ class syarat_termin(models.Model):
         comodel_name="vit.master_syarat_termin",
         required=True,
         string="Master Syarat Termin"
+    )
+
+    due_date = fields.Date( 
+        string=_("Due Date"),
+        required=True,    
+    )
+
+    upload_date = fields.Date(
+        string="Upload Date",
+        readonly=True,
     )
 
 
@@ -61,3 +71,33 @@ class syarat_termin(models.Model):
                     'message': _("Upload Document dulu sebelum centang Verified."),
                 }
             }
+        
+
+    def write(self, vals):
+        if "document" in vals:  
+            if vals.get("document"):  
+                vals["upload_date"] = fields.Date.context_today(self)
+            else: 
+                vals["upload_date"] = False
+        return super().write(vals)
+
+    @api.model
+    def create(self, vals):
+        if vals.get("document"):
+            vals["upload_date"] = fields.Date.context_today(self)
+        else:
+            vals["upload_date"] = False
+        return super().create(vals)
+
+    @api.onchange('document')
+    def _onchange_document_due_date(self):
+        if self.document and self.due_date:
+            today = fields.Date.context_today(self)
+            if today > self.due_date:
+                return {
+                    'warning': {
+                        'title': _("Peringatan"),
+                        'message': _("Anda melewati tanggal Upload yang tertera (Due Date: %s)") % (self.due_date),
+                    }
+                }
+

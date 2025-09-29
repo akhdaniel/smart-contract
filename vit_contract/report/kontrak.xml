@@ -58,20 +58,20 @@
                             <p class="m-0" t-field="doc.amount_kontrak" />
                         </div>
                         <div class="col-auto mw-100 mb-2">
+                            <strong>Amount Denda</strong>
+                            <p class="m-0" t-field="doc.amount_denda" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Persentasi Denda</strong>
+                            <p class="m-0" t-field="doc.persentasi_denda" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
                             <strong>Izin Prinsip</strong>
                             <p class="m-0" t-field="doc.izin_prinsip_id"/>
                         </div>
                         <div class="col-auto mw-100 mb-2">
-                            <strong>Partner</strong>
-                            <p class="m-0" t-field="doc.partner_id"/>
-                        </div>
-                        <div class="col-auto mw-100 mb-2">
                             <strong>Budget Rkap</strong>
                             <p class="m-0" t-field="doc.budget_rkap_id"/>
-                        </div>
-                        <div class="col-auto mw-100 mb-2">
-                            <strong>Kanwil Kancab</strong>
-                            <p class="m-0" t-field="doc.kanwil_kancab_id"/>
                         </div>
                         <div class="col-auto mw-100 mb-2">
                             <strong>Stage</strong>
@@ -84,6 +84,18 @@
                         <div class="col-auto mw-100 mb-2">
                             <strong>Master Budget</strong>
                             <p class="m-0" t-field="doc.master_budget_id"/>
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Kanca</strong>
+                            <p class="m-0" t-field="doc.kanca_id"/>
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Kanwil</strong>
+                            <p class="m-0" t-field="doc.kanwil_id"/>
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Partner</strong>
+                            <p class="m-0" t-field="doc.partner_id"/>
                         </div>
                     </div>
                 </div>
@@ -101,10 +113,13 @@
                             <td>Allow Confirm</td>
                             <td>Allow Cancel</td>
                             <td>Stage Name</td>
-                            <td>Kontrak</td>
+                            <td>Due Date</td>
+                            <td>Is Droping Done</td>
                             <td>Master Nama Termin</td>
-                            <td>Partner</td>
                             <td>Stage</td>
+                            <td>Droping</td>
+                            <td>Partner</td>
+                            <td>Kontrak</td>
                         </tr>
                     </thead>
                     <tbody class="termin_ids_tbody">
@@ -118,10 +133,13 @@
                             <td><span t-field="line.allow_confirm" /></td>
                             <td><span t-field="line.allow_cancel" /></td>
                             <td><span t-field="line.stage_name" /></td>
-                            <td><span t-field="line.kontrak_id" /></td>
+                            <td><span t-field="line.due_date" /></td>
+                            <td><span t-field="line.is_droping_done" /></td>
                             <td><span t-field="line.master_nama_termin_id" /></td>
-                            <td><span t-field="line.partner_id" /></td>
                             <td><span t-field="line.stage_id" /></td>
+                            <td><span t-field="line.droping_id" /></td>
+                            <td><span t-field="line.partner_id" /></td>
+                            <td><span t-field="line.kontrak_id" /></td>
                         </tr> <!-- foreach-->
                     </tbody>
                 </table>

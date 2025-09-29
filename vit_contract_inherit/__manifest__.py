@@ -21,7 +21,7 @@
 	"data": [
         'security/groups.xml',
         'security/ir.model.access.csv',
-        "view/menu.xml",
+        # "view/menu.xml",
         'view/record_rule_vendor.xml',
 		#"view/izin_prinsip.xml",
         "view/budget_rkap.xml",

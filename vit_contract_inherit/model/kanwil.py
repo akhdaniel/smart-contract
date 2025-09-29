@@ -6,6 +6,7 @@ from odoo.exceptions import UserError
 import logging
 _logger = logging.getLogger(__name__)
 
-class kanwil_kancab(models.Model):
-    _name = "vit.kanwil_kancab"
-    _inherit = "vit.kanwil_kancab"
+class kanwil(models.Model):
+
+    _name = "vit.kanwil"
+    _inherit = "vit.kanwil"

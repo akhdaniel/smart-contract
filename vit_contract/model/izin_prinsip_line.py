@@ -24,6 +24,7 @@ class izin_prinsip_line(models.Model):
         })
         return super(izin_prinsip_line, self).copy(default)
 
-    izin_prinsip_id = fields.Many2one(comodel_name="vit.izin_prinsip",  string=_("Izin Prinsip"))
     jenis_kontrak_id = fields.Many2one(comodel_name="vit.jenis_kontrak",  string=_("Jenis Kontrak"))
-    kanwil_kancab_id = fields.Many2one(comodel_name="vit.kanwil_kancab",  string=_("Kanwil Kancab"))
+    kanwil_id = fields.Many2one(comodel_name="vit.kanwil",  string=_("Kanwil"))
+    kanca_id = fields.Many2one(comodel_name="vit.kanca",  string=_("Kanca"))
+    izin_prinsip_id = fields.Many2one(comodel_name="vit.izin_prinsip",  string=_("Izin Prinsip"))

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from . import izin_prinsip
 from . import budget_rkap
-from . import kanwil_kancab
+from . import kanwil
 from . import kontrak
 from . import partner
 from . import payment
@@ -18,3 +18,4 @@ from . import master_budget
 from . import droping
 from . import state_termin
 from . import state_droping
+from . import kanca

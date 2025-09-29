@@ -21,7 +21,7 @@
                 <xpath expr="//tree/field[@name='pagu']" position="replace"/>
 
 
-                <xpath expr="//tree/field[@name='kanwil_kancab_id']" position="after">
+                <xpath expr="//tree/field[@name='kanwil_id']" position="after">
                     <field name="pagu"/>
                 </xpath>
 

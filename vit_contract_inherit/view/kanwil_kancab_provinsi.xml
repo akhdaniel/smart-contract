@@ -2,54 +2,54 @@
     <data noupdate="1">
 
         <!-- Sumatera -->
-        <record id="kanwil_aceh" model="vit.kanwil_kancab"><field name="name">Aceh</field></record>
-        <record id="kanwil_sumut" model="vit.kanwil_kancab"><field name="name">Sumatera Utara</field></record>
-        <record id="kanwil_sumbar" model="vit.kanwil_kancab"><field name="name">Sumatera Barat</field></record>
-        <record id="kanwil_riau" model="vit.kanwil_kancab"><field name="name">Riau</field></record>
-        <record id="kanwil_jambi" model="vit.kanwil_kancab"><field name="name">Jambi</field></record>
-        <record id="kanwil_sumsel" model="vit.kanwil_kancab"><field name="name">Sumatera Selatan</field></record>
-        <record id="kanwil_bengkulu" model="vit.kanwil_kancab"><field name="name">Bengkulu</field></record>
-        <record id="kanwil_lampung" model="vit.kanwil_kancab"><field name="name">Lampung</field></record>
-        <record id="kanwil_babel" model="vit.kanwil_kancab"><field name="name">Kepulauan Bangka Belitung</field></record>
-        <record id="kanwil_kepri" model="vit.kanwil_kancab"><field name="name">Kepulauan Riau</field></record>
+        <record id="kanwil_aceh" model="vit.kanwil"><field name="name">Aceh</field></record>
+        <record id="kanwil_sumut" model="vit.kanwil"><field name="name">Sumatera Utara</field></record>
+        <record id="kanwil_sumbar" model="vit.kanwil"><field name="name">Sumatera Barat</field></record>
+        <record id="kanwil_riau" model="vit.kanwil"><field name="name">Riau</field></record>
+        <record id="kanwil_jambi" model="vit.kanwil"><field name="name">Jambi</field></record>
+        <record id="kanwil_sumsel" model="vit.kanwil"><field name="name">Sumatera Selatan</field></record>
+        <record id="kanwil_bengkulu" model="vit.kanwil"><field name="name">Bengkulu</field></record>
+        <record id="kanwil_lampung" model="vit.kanwil"><field name="name">Lampung</field></record>
+        <record id="kanwil_babel" model="vit.kanwil"><field name="name">Kepulauan Bangka Belitung</field></record>
+        <record id="kanwil_kepri" model="vit.kanwil"><field name="name">Kepulauan Riau</field></record>
 
         <!-- Jawa -->
-        <record id="kanwil_dki" model="vit.kanwil_kancab"><field name="name">DKI Jakarta</field></record>
-        <record id="kanwil_jabar" model="vit.kanwil_kancab"><field name="name">Jawa Barat</field></record>
-        <record id="kanwil_jateng" model="vit.kanwil_kancab"><field name="name">Jawa Tengah</field></record>
-        <record id="kanwil_diy" model="vit.kanwil_kancab"><field name="name">DI Yogyakarta</field></record>
-        <record id="kanwil_jatim" model="vit.kanwil_kancab"><field name="name">Jawa Timur</field></record>
-        <record id="kanwil_banten" model="vit.kanwil_kancab"><field name="name">Banten</field></record>
+        <record id="kanwil_dki" model="vit.kanwil"><field name="name">DKI Jakarta</field></record>
+        <record id="kanwil_jabar" model="vit.kanwil"><field name="name">Jawa Barat</field></record>
+        <record id="kanwil_jateng" model="vit.kanwil"><field name="name">Jawa Tengah</field></record>
+        <record id="kanwil_diy" model="vit.kanwil"><field name="name">DI Yogyakarta</field></record>
+        <record id="kanwil_jatim" model="vit.kanwil"><field name="name">Jawa Timur</field></record>
+        <record id="kanwil_banten" model="vit.kanwil"><field name="name">Banten</field></record>
 
         <!-- Bali & Nusa Tenggara -->
-        <record id="kanwil_bali" model="vit.kanwil_kancab"><field name="name">Bali</field></record>
-        <record id="kanwil_ntb" model="vit.kanwil_kancab"><field name="name">Nusa Tenggara Barat</field></record>
-        <record id="kanwil_ntt" model="vit.kanwil_kancab"><field name="name">Nusa Tenggara Timur</field></record>
+        <record id="kanwil_bali" model="vit.kanwil"><field name="name">Bali</field></record>
+        <record id="kanwil_ntb" model="vit.kanwil"><field name="name">Nusa Tenggara Barat</field></record>
+        <record id="kanwil_ntt" model="vit.kanwil"><field name="name">Nusa Tenggara Timur</field></record>
 
         <!-- Kalimantan -->
-        <record id="kanwil_kalbar" model="vit.kanwil_kancab"><field name="name">Kalimantan Barat</field></record>
-        <record id="kanwil_kalteng" model="vit.kanwil_kancab"><field name="name">Kalimantan Tengah</field></record>
-        <record id="kanwil_kalsel" model="vit.kanwil_kancab"><field name="name">Kalimantan Selatan</field></record>
-        <record id="kanwil_kaltim" model="vit.kanwil_kancab"><field name="name">Kalimantan Timur</field></record>
-        <record id="kanwil_kaltara" model="vit.kanwil_kancab"><field name="name">Kalimantan Utara</field></record>
+        <record id="kanwil_kalbar" model="vit.kanwil"><field name="name">Kalimantan Barat</field></record>
+        <record id="kanwil_kalteng" model="vit.kanwil"><field name="name">Kalimantan Tengah</field></record>
+        <record id="kanwil_kalsel" model="vit.kanwil"><field name="name">Kalimantan Selatan</field></record>
+        <record id="kanwil_kaltim" model="vit.kanwil"><field name="name">Kalimantan Timur</field></record>
+        <record id="kanwil_kaltara" model="vit.kanwil"><field name="name">Kalimantan Utara</field></record>
 
         <!-- Sulawesi -->
-        <record id="kanwil_sulut" model="vit.kanwil_kancab"><field name="name">Sulawesi Utara</field></record>
-        <record id="kanwil_sulteng" model="vit.kanwil_kancab"><field name="name">Sulawesi Tengah</field></record>
-        <record id="kanwil_sulsel" model="vit.kanwil_kancab"><field name="name">Sulawesi Selatan</field></record>
-        <record id="kanwil_sultra" model="vit.kanwil_kancab"><field name="name">Sulawesi Tenggara</field></record>
-        <record id="kanwil_gorontalo" model="vit.kanwil_kancab"><field name="name">Gorontalo</field></record>
-        <record id="kanwil_sulbar" model="vit.kanwil_kancab"><field name="name">Sulawesi Barat</field></record>
+        <record id="kanwil_sulut" model="vit.kanwil"><field name="name">Sulawesi Utara</field></record>
+        <record id="kanwil_sulteng" model="vit.kanwil"><field name="name">Sulawesi Tengah</field></record>
+        <record id="kanwil_sulsel" model="vit.kanwil"><field name="name">Sulawesi Selatan</field></record>
+        <record id="kanwil_sultra" model="vit.kanwil"><field name="name">Sulawesi Tenggara</field></record>
+        <record id="kanwil_gorontalo" model="vit.kanwil"><field name="name">Gorontalo</field></record>
+        <record id="kanwil_sulbar" model="vit.kanwil"><field name="name">Sulawesi Barat</field></record>
 
         <!-- Maluku & Papua -->
-        <record id="kanwil_maluku" model="vit.kanwil_kancab"><field name="name">Maluku</field></record>
-        <record id="kanwil_malut" model="vit.kanwil_kancab"><field name="name">Maluku Utara</field></record>
-        <record id="kanwil_papua" model="vit.kanwil_kancab"><field name="name">Papua</field></record>
-        <record id="kanwil_pabar" model="vit.kanwil_kancab"><field name="name">Papua Barat</field></record>
-        <record id="kanwil_papua_tengah" model="vit.kanwil_kancab"><field name="name">Papua Tengah</field></record>
-        <record id="kanwil_papua_pegunungan" model="vit.kanwil_kancab"><field name="name">Papua Pegunungan</field></record>
-        <record id="kanwil_papua_selatan" model="vit.kanwil_kancab"><field name="name">Papua Selatan</field></record>
-        <record id="kanwil_papua_baratdaya" model="vit.kanwil_kancab"><field name="name">Papua Barat Daya</field></record>
+        <record id="kanwil_maluku" model="vit.kanwil"><field name="name">Maluku</field></record>
+        <record id="kanwil_malut" model="vit.kanwil"><field name="name">Maluku Utara</field></record>
+        <record id="kanwil_papua" model="vit.kanwil"><field name="name">Papua</field></record>
+        <record id="kanwil_pabar" model="vit.kanwil"><field name="name">Papua Barat</field></record>
+        <record id="kanwil_papua_tengah" model="vit.kanwil"><field name="name">Papua Tengah</field></record>
+        <record id="kanwil_papua_pegunungan" model="vit.kanwil"><field name="name">Papua Pegunungan</field></record>
+        <record id="kanwil_papua_selatan" model="vit.kanwil"><field name="name">Papua Selatan</field></record>
+        <record id="kanwil_papua_baratdaya" model="vit.kanwil"><field name="name">Papua Barat Daya</field></record>
 
     </data>
 </odoo>

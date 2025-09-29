@@ -28,13 +28,31 @@
                     <attribute name="readonly">1</attribute>
                 </xpath>
 
-                <xpath expr="//field[@name='verified']" position="attributes">
-                    <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager</attribute>
+                <xpath expr="//field[@name='master_syarat_termin_id']" position="replace">
+                    <field name="master_syarat_termin_id" groups="base.group_user,!vit_contract_inherit.group_vit_contract_vendor"/>
+
+                    <field name="master_syarat_termin_id" readonly="1" groups="vit_contract_inherit.group_vit_contract_vendor"/>
+                </xpath>
+
+
+
+                <xpath expr="//field[@name='due_date']" position="replace">
+                    <field name="due_date" groups="base.group_user,!vit_contract_inherit.group_vit_contract_vendor"/>
+
+                    <field name="due_date" readonly="1" groups="vit_contract_inherit.group_vit_contract_vendor"/>
+                </xpath>
+
+
+
+                <xpath expr="//field[@name='verified']" position="replace">
+                    <field name="verified" groups="base.group_user,!vit_contract_inherit.group_vit_contract_vendor"/>
+
+                    <field name="verified" readonly="1" groups="vit_contract_inherit.group_vit_contract_vendor"/>
                 </xpath>
 
             </field>
         </record>
-
+                
 
 
         <record id="view_vit_syarat_termin_tree_inherit" model="ir.ui.view">

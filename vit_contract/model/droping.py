@@ -84,6 +84,6 @@ class droping(models.Model):
         })
         return super(droping, self).copy(default)
 
-    izin_prinsip_ids = fields.One2many(comodel_name="vit.izin_prinsip",  inverse_name="droping_id",  string=_("Izin Prinsip"))
-    kanwil_kancab_id = fields.Many2one(comodel_name="vit.kanwil_kancab",  string=_("Kanwil Kancab"))
+    termin_kontrak_ids = fields.One2many(comodel_name="vit.termin",  inverse_name="droping_id",  string=_("Termin Kontrak"))
+    kanwil_id = fields.Many2one(comodel_name="vit.kanwil",  string=_("Kanwil"))
     stage_id = fields.Many2one(comodel_name="vit.state_droping",  default=_get_first_stage, copy=False, group_expand="_group_expand_states",  string=_("Stage"))

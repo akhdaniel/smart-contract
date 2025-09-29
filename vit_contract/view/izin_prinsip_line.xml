@@ -10,10 +10,11 @@
             <field name="arch" type="xml">
                 <tree string="Izin Prinsip Line">
                     <field name="name" /> <!-- 100-->
-                    <field name="izin_prinsip_id" /> <!-- 100-->
+                    <field name="jenis_kontrak_id" /> <!-- 100-->
                     <field name="pagu" /> <!-- 101-->
-                    <field name="jenis_kontrak_id" /> <!-- 101-->
-                    <field name="kanwil_kancab_id" /> <!-- 102-->
+                    <field name="kanwil_id" /> <!-- 101-->
+                    <field name="kanca_id" /> <!-- 102-->
+                    <field name="izin_prinsip_id" /> <!-- 103-->
                 </tree>
             </field>
         </record>
@@ -24,9 +25,10 @@
             <field name="type">pivot</field>
             <field name="arch" type="xml">
                 <pivot string="Izin Prinsip Line">
-                    <field name="izin_prinsip_id" type="row"/>
                     <field name="jenis_kontrak_id" type="row"/>
-                    <field name="kanwil_kancab_id" type="row"/>
+                    <field name="kanwil_id" type="row"/>
+                    <field name="kanca_id" type="row"/>
+                    <field name="izin_prinsip_id" type="row"/>
                 </pivot>
             </field>
         </record>
@@ -57,9 +59,10 @@
                                 <field name="pagu"  />
                             </group>
                             <group> <!-- right -->
-                                <field name="izin_prinsip_id"  />
                                 <field name="jenis_kontrak_id"  />
-                                <field name="kanwil_kancab_id"  />
+                                <field name="kanwil_id"  />
+                                <field name="kanca_id"  />
+                                <field name="izin_prinsip_id"  />
                             </group>
                         </group>
                         <notebook>
@@ -86,13 +89,15 @@
                     <filter string="Pagu" name="filter_by_pagu" domain="[('pagu','=','')]" />
                     <field name="name" select="True"/>
                     <field name="pagu" select="True"/>
-                    <field name="izin_prinsip_id" select="True"/>
                     <field name="jenis_kontrak_id" select="True"/>
-                    <field name="kanwil_kancab_id" select="True"/>
+                    <field name="kanwil_id" select="True"/>
+                    <field name="kanca_id" select="True"/>
+                    <field name="izin_prinsip_id" select="True"/>
                     <group string="Group By..">
-                        <filter string="Izin Prinsip" domain="[]" name="group_by_izin_prinsip_id" context="{'group_by':'izin_prinsip_id'}"/>
                         <filter string="Jenis Kontrak" domain="[]" name="group_by_jenis_kontrak_id" context="{'group_by':'jenis_kontrak_id'}"/>
-                        <filter string="Kanwil Kancab" domain="[]" name="group_by_kanwil_kancab_id" context="{'group_by':'kanwil_kancab_id'}"/>
+                        <filter string="Kanwil" domain="[]" name="group_by_kanwil_id" context="{'group_by':'kanwil_id'}"/>
+                        <filter string="Kanca" domain="[]" name="group_by_kanca_id" context="{'group_by':'kanca_id'}"/>
+                        <filter string="Izin Prinsip" domain="[]" name="group_by_izin_prinsip_id" context="{'group_by':'izin_prinsip_id'}"/>
                     </group>
                 </search>
             </field>
@@ -122,7 +127,7 @@
             <field name="model">vit.izin_prinsip_line</field>
             <field name="arch" type="xml">
                 <graph string="Izin Prinsip Line" type="bar">
-                    <field name="izin_prinsip_id"/>
+                    <field name="jenis_kontrak_id"/>
                 </graph>
             </field>
         </record>

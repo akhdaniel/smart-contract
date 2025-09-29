@@ -24,6 +24,8 @@ class payment(models.Model):
     allow_confirm = fields.Boolean(related="stage_id.allow_confirm", store=True,  string=_("Allow Confirm"))
     allow_cancel = fields.Boolean(related="stage_id.allow_cancel", store=True,  string=_("Allow Cancel"))
     stage_name = fields.Char(related="stage_id.name", store=True,  string=_("Stage Name"))
+    request_date = fields.Date( string=_("Request Date"))
+    payment_date = fields.Date( string=_("Payment Date"))
 
 
     @api.model_create_multi
@@ -89,4 +91,4 @@ class payment(models.Model):
     stage_id = fields.Many2one(comodel_name="vit.state_payment",  default=_get_first_stage, copy=False, group_expand="_group_expand_states",  string=_("Stage"))
     termin_id = fields.Many2one(comodel_name="vit.termin",  string=_("Termin"))
     master_budget_id = fields.Many2one(comodel_name="vit.master_budget",  string=_("Master Budget"))
-    kanwil_kancab_id = fields.Many2one(comodel_name="vit.kanwil_kancab",  string=_("Kanwil Kancab"))
+    kanwil_id = fields.Many2one(comodel_name="vit.kanwil",  string=_("Kanwil"))

@@ -8,11 +8,11 @@ import logging
 _logger = logging.getLogger(__name__)
 
 @tagged('post_install', '-at_install')
-class KanwilKancabTestCase(VitContractCommon):
+class KanwilTestCase(VitContractCommon):
 
-	def test_vit_kanwil_kancab_count(cls):
+	def test_vit_kanwil_count(cls):
 		_logger.info(' -------------------- test record count -----------------------------------------')
 		cls.assertEqual(
 		    4,
-		    len(cls.kanwil_kancabs)
+		    len(cls.kanwils)
 		)

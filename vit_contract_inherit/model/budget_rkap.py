@@ -46,22 +46,22 @@ class budget_rkap(models.Model):
         store=True,
     )
 
-    total_amount_droping = fields.Float(
-        string="Total Amount Droping",
-        compute="_compute_total_amount_droping",
-        readonly=True,
-    )
+    # total_amount_droping = fields.Float(
+    #     string="Total Amount Droping",
+    #     compute="_compute_total_amount_droping",
+    #     readonly=True,
+    # )
 
-    @api.depends("kanwil_kancab_id")
-    def _compute_total_amount_droping(self):
-        for rec in self:
-            total = 0.0
-            if rec.kanwil_kancab_id:
-                dropings = self.env["vit.droping"].search([
-                    ("kanwil_kancab_id", "=", rec.kanwil_kancab_id.id)
-                ])
-                total = sum(dropings.mapped("jumlah"))
-            rec.total_amount_droping = total
+    # @api.depends("kanwil_id")
+    # def _compute_total_amount_droping(self):
+    #     for rec in self:
+    #         total = 0.0
+    #         if rec.kanwil_id:
+    #             dropings = self.env["vit.droping"].search([
+    #                 ("kanwil_id", "=", rec.kanwil_id.id)
+    #             ])
+    #             total = sum(dropings.mapped("jumlah"))
+    #         rec.total_amount_droping = total
 
 
 

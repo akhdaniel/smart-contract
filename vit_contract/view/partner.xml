@@ -1,6 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+        <!-- form inherited view -->
+        <record id="view_partner_form" model="ir.ui.view">
+            <field name="name">partner_form</field>
+            <field name="model">res.partner</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page id="partner" string="Vit Contract">
+                        <group>
+                            <group>
+                            </group>
+                            <group>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="payment_ids" string="Payment">
+                                <field name="payment_ids">
+                                    <tree >
+                                        <field name="name"/>
+                                        <field name="amount"/>
+                                        <field name="stage_is_draft"/>
+                                        <field name="stage_is_done"/>
+                                        <field name="allow_confirm"/>
+                                        <field name="allow_cancel"/>
+                                        <field name="stage_name"/>
+                                        <field name="request_date"/>
+                                        <field name="payment_date"/>
+                                        <field name="stage_id"/>
+                                        <field name="termin_id"/>
+                                        <field name="master_budget_id"/>
+                                        <field name="kanwil_id"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </page>
+                </notebook>
+            </field>
+        </record>
         <!-- action window -->
         <record id="action_partner" model="ir.actions.act_window">
             <field name="name">Partner</field>

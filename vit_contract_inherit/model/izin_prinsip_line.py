@@ -10,7 +10,7 @@ class izin_prinsip(models.Model):
     _inherit = "vit.izin_prinsip_line"
 
     name = fields.Char( required=False, copy=False, string=_("Name"))
-    kanwil_kancab_id = fields.Many2one(comodel_name="vit.kanwil_kancab", related="izin_prinsip_id.kanwil_kancab_id", string="Kanwil", store=True)
+    kanwil_id = fields.Many2one(comodel_name="vit.kanwil", related="izin_prinsip_id.kanwil_id", string="Kanwil", store=True)
 
 
     @api.constrains('jenis_kontrak_id', 'izin_prinsip_id')

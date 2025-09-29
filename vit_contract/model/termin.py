@@ -22,6 +22,8 @@ class termin(models.Model):
     allow_confirm = fields.Boolean(related="stage_id.allow_confirm", store=True,  string=_("Allow Confirm"))
     allow_cancel = fields.Boolean(related="stage_id.allow_cancel", store=True,  string=_("Allow Cancel"))
     stage_name = fields.Char(related="stage_id.name", store=True,  string=_("Stage Name"))
+    due_date = fields.Date( string=_("Due Date"))
+    is_droping_done = fields.Boolean( string=_("Is Droping Done"))
 
 
     @api.model_create_multi
@@ -83,7 +85,8 @@ class termin(models.Model):
         return super(termin, self).copy(default)
 
     syarat_termin_ids = fields.One2many(comodel_name="vit.syarat_termin",  inverse_name="termin_id",  string=_("Syarat Termin"))
-    kontrak_id = fields.Many2one(comodel_name="vit.kontrak",  string=_("Kontrak"))
     master_nama_termin_id = fields.Many2one(comodel_name="vit.master_nama_termin",  string=_("Master Nama Termin"))
-    partner_id = fields.Many2one(comodel_name="vit.kontrak",  string=_("Partner"))
     stage_id = fields.Many2one(comodel_name="vit.state_termin",  default=_get_first_stage, copy=False, group_expand="_group_expand_states",  string=_("Stage"))
+    droping_id = fields.Many2one(comodel_name="vit.droping",  string=_("Droping"))
+    partner_id = fields.Many2one(comodel_name="res.partner",  string=_("Partner"))
+    kontrak_id = fields.Many2one(comodel_name="vit.kontrak",  string=_("Kontrak"))
