@@ -63,6 +63,10 @@
                     <attribute name="readonly">1</attribute>
                 </xpath>
 
+                <xpath expr="//field[@name='payment_date']" position="after">
+                    <field name="attachments" widget="many2many_binary_preview" string="Attachments"/>
+                </xpath>
+
             </field>
         </record>
         <!-- tree view -->

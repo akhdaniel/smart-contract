@@ -5,7 +5,8 @@
 	"version": "1.0",
 	"depends": [
 		"base",
-		"vit_contract"
+		"vit_contract",
+        "ps_m2m_field_attachment_preview",
 	],
 	"author": "Akhmad Daniel Sembiring",
 	"category": "Utility",
@@ -34,7 +35,7 @@
 		"view/syarat_termin.xml",
         "view/termin.xml",
         "view/droping.xml",
-        "view/kanwil_kancab_provinsi.xml",
+        "view/kanwil_provinsi.xml",
         
 	],
 	"installable": True,

@@ -57,10 +57,6 @@
                             <strong>Master Budget</strong>
                             <p class="m-0" t-field="doc.master_budget_id"/>
                         </div>
-                        <div class="col-auto mw-100 mb-2">
-                            <strong>Kanwil</strong>
-                            <p class="m-0" t-field="doc.kanwil_id"/>
-                        </div>
                     </div>
                 </div>
                 <div class="oe_structure"/>
@@ -169,6 +165,7 @@
                             <td>Termin</td>
                             <td>Master Budget</td>
                             <td>Kanwil</td>
+                            <td>Kontrakk</td>
                         </tr>
                     </thead>
                     <tbody class="payment_ids_tbody">
@@ -188,6 +185,7 @@
                             <td><span t-field="line.termin_id" /></td>
                             <td><span t-field="line.master_budget_id" /></td>
                             <td><span t-field="line.kanwil_id" /></td>
+                            <td><span t-field="line.kontrakk_id" /></td>
                         </tr> <!-- foreach-->
                     </tbody>
                 </table>

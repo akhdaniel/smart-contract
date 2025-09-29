@@ -112,6 +112,20 @@
                                     </tree>
                                 </field>
                             </page>
+                            <page name="payment_ids" string="Payment">
+                                <field name="payment_ids" readonly="stage_is_draft==False">
+                                    <tree >
+                                        <field name="name" /> <!-- 100-->
+                                        <field name="amount" /> <!-- 101-->
+                                        <field name="request_date" /> <!-- 102-->
+                                        <field name="stage_id" /> <!-- 102-->
+                                        <field name="payment_date" /> <!-- 103-->
+                                        <field name="termin_id" /> <!-- 103-->
+                                        <field name="master_budget_id" /> <!-- 104-->
+                                        <field name="kanwil_id" /> <!-- 105-->
+                                    </tree>
+                                </field>
+                            </page>
                         </notebook>
                         <group name="note_group" col="6" class="mt-2 mt-md-0">
                             <group colspan="4">

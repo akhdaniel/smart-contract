@@ -4,6 +4,10 @@ from odoo import models, fields, api, _
 class Droping(models.Model):
     _inherit = "vit.droping"
 
+    attachments = fields.Many2many(
+        'ir.attachment',
+        string='Upload'
+    )
 
     jumlah = fields.Float(
         string="Jumlah",

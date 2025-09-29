@@ -98,3 +98,4 @@ class kontrak(models.Model):
     kanwil_id = fields.Many2one(comodel_name="vit.kanwil",  string=_("Kanwil"))
     partner_id = fields.Many2one(comodel_name="res.partner",  string=_("Partner"))
     termin_ids = fields.One2many(comodel_name="vit.termin",  inverse_name="kontrak_id",  string=_("Termin"))
+    payment_ids = fields.One2many(comodel_name="vit.payment",  inverse_name="kontrakk_id",  string=_("Payment"))

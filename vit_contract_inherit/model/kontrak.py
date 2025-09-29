@@ -10,6 +10,11 @@ _logger = logging.getLogger(__name__)
 class kontrak(models.Model):
     _inherit = "vit.kontrak"
 
+    attachments = fields.Many2many(
+        'ir.attachment',
+        string='Upload'
+    )
+
     izin_prinsip_id = fields.Many2one(
         comodel_name="vit.izin_prinsip",
         string="Izin Prinsip",

@@ -8,18 +8,19 @@
             <field name="arch" type="xml">
 
                 <sheet position="before">
-
                     <field name="is_late_upload" invisible="1"/>
                     <field name="late_termin_names" invisible="1"/>
-
                     <div class="alert alert-warning o_form_label"
                         invisible="not is_late_upload">
                         ⚠ Data ini ada keterlambatan pada:
                         <field name="late_termin_names" nolabel="1" readonly="1"/>
                         , maka akan dikenakan denda.
                     </div>
-
                 </sheet>
+
+                <xpath expr="//field[@name='persentasi_denda']" position="after">
+                    <field name="attachments" widget="many2many_binary_preview" string="Attachments"/>
+                </xpath>
 
                 <xpath expr="//field[@name='izin_prinsip_id']" position="attributes">
                     <attribute name="force_save">1</attribute>

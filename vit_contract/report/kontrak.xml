@@ -144,6 +144,50 @@
                     </tbody>
                 </table>
                 <div class="oe_structure"/>
+                <h2>Payment</h2>
+                <table class="table table-sm o_main_table" name="payment_ids_table">
+                    <thead>
+                        <tr>
+                            <td>Name</td>
+                            <td>Amount</td>
+                            <td>Stage Is Draft</td>
+                            <td>Stage Is Done</td>
+                            <td>Allow Confirm</td>
+                            <td>Allow Cancel</td>
+                            <td>Stage Name</td>
+                            <td>Request Date</td>
+                            <td>Payment Date</td>
+                            <td>Partner</td>
+                            <td>Budget Rkap</td>
+                            <td>Stage</td>
+                            <td>Termin</td>
+                            <td>Master Budget</td>
+                            <td>Kanwil</td>
+                            <td>Kontrakk</td>
+                        </tr>
+                    </thead>
+                    <tbody class="payment_ids_tbody">
+                        <tr t-foreach="doc.payment_ids" t-as="line">
+                            <td><span t-field="line.name" /></td>
+                            <td><span t-field="line.amount" /></td>
+                            <td><span t-field="line.stage_is_draft" /></td>
+                            <td><span t-field="line.stage_is_done" /></td>
+                            <td><span t-field="line.allow_confirm" /></td>
+                            <td><span t-field="line.allow_cancel" /></td>
+                            <td><span t-field="line.stage_name" /></td>
+                            <td><span t-field="line.request_date" /></td>
+                            <td><span t-field="line.payment_date" /></td>
+                            <td><span t-field="line.partner_id" /></td>
+                            <td><span t-field="line.budget_rkap_id" /></td>
+                            <td><span t-field="line.stage_id" /></td>
+                            <td><span t-field="line.termin_id" /></td>
+                            <td><span t-field="line.master_budget_id" /></td>
+                            <td><span t-field="line.kanwil_id" /></td>
+                            <td><span t-field="line.kontrakk_id" /></td>
+                        </tr> <!-- foreach-->
+                    </tbody>
+                </table>
+                <div class="oe_structure"/>
             </t>
         </template>
 

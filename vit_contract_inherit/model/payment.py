@@ -10,6 +10,11 @@ class payment(models.Model):
     _name = "vit.payment"
     _inherit = "vit.payment"
 
+    attachments = fields.Many2many(
+        'ir.attachment',
+        string='Upload'
+    )
+
     name = fields.Char( required=True, copy=False, default="New", readonly=True,  string=_("Name"))
 
     def kirim_request_pembayaran(self, ):

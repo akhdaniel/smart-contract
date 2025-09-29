@@ -8,6 +8,7 @@ class master_nama_termin(models.Model):
 
     _name = "vit.master_nama_termin"
     _description = "vit.master_nama_termin"
+
     _order = "sequence asc"
 
     def action_reload_view(self):

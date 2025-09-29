@@ -12,6 +12,11 @@
                     <attribute name="readonly">1</attribute>
                 </xpath>
 
+
+                <xpath expr="//field[@name='total_pagu']" position="after">
+                    <field name="attachments" widget="many2many_binary_preview" string="Attachments"/>
+                </xpath>
+
                 <!-- <xpath expr="//field[@name='droping_id']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath> -->
@@ -38,7 +43,6 @@
                 </xpath>
 
                 <xpath expr="//field[@name='kanwil_id']" position="attributes">
-                    <attribute name="readonly">1</attribute>
                     <attribute name="force_save">1</attribute>
                 </xpath>
 

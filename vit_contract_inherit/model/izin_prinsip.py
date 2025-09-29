@@ -10,21 +10,21 @@ class izin_prinsip(models.Model):
     _name = "vit.izin_prinsip"
     _inherit = "vit.izin_prinsip"
 
+    attachments = fields.Many2many(
+        'ir.attachment',
+        string='Upload'
+    )
 
     master_budget_id = fields.Many2one(
         comodel_name="vit.master_budget",
         string=_("Master Budget"),
         related="budget_id.master_budget_id",
-        store=True,
         readonly=True,
     )
 
     kanwil_id = fields.Many2one(
         comodel_name="vit.kanwil",
         string=_("Kanwil"),
-        related="budget_id.kanwil_id",
-        store=True,
-        readonly=True,
     )
 
 

@@ -92,3 +92,4 @@ class payment(models.Model):
     termin_id = fields.Many2one(comodel_name="vit.termin",  string=_("Termin"))
     master_budget_id = fields.Many2one(comodel_name="vit.master_budget",  string=_("Master Budget"))
     kanwil_id = fields.Many2one(comodel_name="vit.kanwil",  string=_("Kanwil"))
+    kontrakk_id = fields.Many2one(comodel_name="vit.kontrak",  string=_("Kontrakk"))

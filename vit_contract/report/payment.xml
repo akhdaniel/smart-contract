@@ -77,6 +77,10 @@
                             <strong>Kanwil</strong>
                             <p class="m-0" t-field="doc.kanwil_id"/>
                         </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Kontrakk</strong>
+                            <p class="m-0" t-field="doc.kontrakk_id"/>
+                        </div>
                     </div>
                 </div>
                 <div class="oe_structure"/>
