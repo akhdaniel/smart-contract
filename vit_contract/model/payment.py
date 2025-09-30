@@ -95,3 +95,4 @@ class payment(models.Model):
     kontrak_id = fields.Many2one(comodel_name="vit.kontrak",  string=_("Kontrak"))
     master_nama_termin_id = fields.Many2one(comodel_name="vit.master_nama_termin",  string=_("Master Nama Termin"))
     stage_id = fields.Many2one(comodel_name="vit.state_payment",  default=_get_first_stage, copy=False, group_expand="_group_expand_states",  string=_("Stage"))
+    amount_denda_id = fields.Many2one(comodel_name="vit.kontrak",  string=_("Amount Denda"))

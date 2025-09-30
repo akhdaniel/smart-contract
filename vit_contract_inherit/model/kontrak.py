@@ -76,6 +76,40 @@ class kontrak(models.Model):
         store=False
     )
 
+    overdue_days = fields.Integer(
+        string="Overdue Days",
+        compute="_compute_overdue_days",
+        store=True,
+    )
+    amount_denda = fields.Float(
+        string="Amount Denda",
+        compute="_compute_overdue_days",
+        store=True,
+    )
+
+    @api.depends("termin_ids.verification_date",
+                 "termin_ids.syarat_termin_ids.upload_date",
+                 "amount_kontrak", "persentasi_denda")
+    def _compute_overdue_days(self):
+        for rec in self:
+            overdue = 0
+            if rec.termin_ids:
+                for termin in rec.termin_ids:
+                    if termin.verification_date:
+                        for syarat in termin.syarat_termin_ids:
+                            if syarat.upload_date:
+                                delta = (syarat.upload_date - termin.verification_date).days
+                                if delta > overdue:
+                                    overdue = delta
+            rec.overdue_days = max(overdue, 0)
+
+            if rec.overdue_days > 0 and rec.amount_kontrak and rec.persentasi_denda:
+                rec.amount_denda = rec.amount_kontrak * (rec.persentasi_denda / 100.0) * rec.overdue_days
+            else:
+                rec.amount_denda = 0.0
+
+
+
     # @api.onchange('izin_prinsip_id')
     # def _onchange_izin_prinsip_id(self):
     #     if self.izin_prinsip_id:
@@ -123,6 +157,14 @@ class kontrak(models.Model):
         else:
             self.jenis_kontrak_many = [(5, 0, 0)]
             return {'domain': {'jenis_kontrak_id': []}}
+        
+
+    @api.constrains("persentasi_denda")
+    def _check_persentasi_denda(self):
+        for rec in self:
+            if rec.persentasi_denda < 0 or rec.persentasi_denda > 100:
+                raise ValidationError(_("Persentasi Denda harus antara 0 dan 100"))
+    
 
     @api.onchange('jenis_kontrak_id')
     def _onchange_jenis_kontrak(self):

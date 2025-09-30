@@ -89,6 +89,10 @@
                             <strong>Stage</strong>
                             <p class="m-0" t-field="doc.stage_id"/>
                         </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Amount Denda</strong>
+                            <p class="m-0" t-field="doc.amount_denda_id"/>
+                        </div>
                     </div>
                 </div>
                 <div class="oe_structure"/>

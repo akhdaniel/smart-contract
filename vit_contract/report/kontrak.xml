@@ -130,6 +130,7 @@
                             <td>Kontrak</td>
                             <td>Master Nama Termin</td>
                             <td>Stage</td>
+                            <td>Amount Denda</td>
                         </tr>
                     </thead>
                     <tbody class="payment_ids_tbody">
@@ -152,6 +153,7 @@
                             <td><span t-field="line.kontrak_id" /></td>
                             <td><span t-field="line.master_nama_termin_id" /></td>
                             <td><span t-field="line.stage_id" /></td>
+                            <td><span t-field="line.amount_denda_id" /></td>
                         </tr> <!-- foreach-->
                     </tbody>
                 </table>

@@ -62,10 +62,10 @@
                 <xpath expr="//field[@name='jenis_kontrak_id']" position="replace"/>
                 <xpath expr="//field[@name='partner_id']" position="replace"/>
                 <xpath expr="//field[@name='izin_prinsip_id']" position="after">
-                    <field name="job_izin_prinsip_id"/>
+                    <field name="job_izin_prinsip_id"  readonly="stage_is_draft==False"/>
                     <field name="jenis_kontrak_many" invisible="1"/>
-                    <field name="jenis_kontrak_id"/>
-                    <field name="partner_id"/>
+                    <field name="jenis_kontrak_id"  readonly="stage_is_draft==False"/>
+                    <field name="partner_id"  readonly="stage_is_draft==False"/>
                 </xpath>
 
                 <xpath expr="//field[@name='job_izin_prinsip_id']" position="attributes">

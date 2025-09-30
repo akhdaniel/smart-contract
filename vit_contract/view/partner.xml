@@ -35,6 +35,7 @@
                                         <field name="kanwil_id"/>
                                         <field name="stage_id"/>
                                         <field name="master_nama_termin_id"/>
+                                        <field name="amount_denda_id"/>
                                     </tree>
                                 </field>
                             </page>
