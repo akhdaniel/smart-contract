@@ -70,6 +70,7 @@
                             <td>Allow Cancel</td>
                             <td>Stage Name</td>
                             <td>Due Date</td>
+                            <td>Verification Date</td>
                             <td>Is Droping Done</td>
                             <td>Master Nama Termin</td>
                             <td>Stage</td>
@@ -90,6 +91,7 @@
                             <td><span t-field="line.allow_cancel" /></td>
                             <td><span t-field="line.stage_name" /></td>
                             <td><span t-field="line.due_date" /></td>
+                            <td><span t-field="line.verification_date" /></td>
                             <td><span t-field="line.is_droping_done" /></td>
                             <td><span t-field="line.master_nama_termin_id" /></td>
                             <td><span t-field="line.stage_id" /></td>

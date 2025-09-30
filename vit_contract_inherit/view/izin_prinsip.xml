@@ -20,17 +20,6 @@
                 <!-- <xpath expr="//field[@name='droping_id']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath> -->
-            
-
-            
-                <xpath expr="//field[@name='kontrak_ids']/tree/field[@name='jenis_kontrak_id']" position="replace"/>
-
-                <xpath expr="//field[@name='izin_prinsip_line_ids']/tree/field[@name='pagu']" position="replace"/>
-
-              
-                <xpath expr="//field[@name='izin_prinsip_line_ids']/tree/field[@name='kanwil_id']" position="after">
-                    <field name="pagu"/>
-                </xpath>
 
 
                 <xpath expr="//field[@name='kontrak_ids']/tree/field[@name='amount_izin_prinsip']" position="attributes">
@@ -47,16 +36,15 @@
                 </xpath>
 
 
-                <xpath expr="//page[@name='izin_prinsip_line_ids']" position="replace"/>
+                <xpath expr="//page[@name='job_izin_prinsip_ids']" position="replace"/>
 
                 <xpath expr="//page[@name='kontrak_ids']" position="before">
-                    <page name="izin_prinsip_line_ids" string="Izin Prinsip Line">
-                        <field name="izin_prinsip_line_ids" readonly="stage_is_draft==False">
+                    <page name="job_izin_prinsip_ids" string="Job Izin Prinsip">
+                        <field name="job_izin_prinsip_ids" readonly="stage_is_draft==False">
                             <tree>
-                                <field name="jenis_kontrak_id"/>
-                                <field name="kanwil_id"/>
+                                <field name="name"/>
                                 <field name="kanca_id"/>
-                                <field name="pagu"/>
+                                <field name="total_pagu_job"/>
                             </tree>
                         </field>
                     </page>

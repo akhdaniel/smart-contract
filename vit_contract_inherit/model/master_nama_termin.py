@@ -5,6 +5,9 @@ class master_nama_termin(models.Model):
 
     _name = "vit.master_nama_termin"
     _inherit = "vit.master_nama_termin"
+    _order = "sequence asc"
+
+    sequence = fields.Integer( string=_("Sequence"), default=10)
 
     type = fields.Selection(
         selection=[

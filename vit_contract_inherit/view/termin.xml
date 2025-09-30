@@ -37,8 +37,9 @@
                     <attribute name="column_invisible">1</attribute>
                 </xpath>
 
-                <xpath expr="//field[@name='deskripsi']" position="attributes">
-                    <attribute name="readonly">0</attribute>
+                <xpath expr="//field[@name='deskripsi']" position="replace"/>
+                <xpath expr="//field[@name='is_droping_done']" position="after">
+                    <field name="deskripsi"/>
                 </xpath>
 
                 <xpath expr="//field[@name='syarat_termin_ids']" position="attributes">
@@ -68,9 +69,8 @@
             <field name="inherit_id" ref="vit_contract.view_vit_termin_tree"/>
             <field name="arch" type="xml">
 
-                <xpath expr="//tree/field[@name='deskripsi']" position="replace"/>
-                <xpath expr="//tree/field[@name='master_nama_termin_id']" position="after">
-                    <field name="deskripsi"/>
+                <xpath expr="//tree/field[@name='deskripsi']" position="attributes">
+                    <attribute name="column_invisible">1</attribute>
                 </xpath>
 
 

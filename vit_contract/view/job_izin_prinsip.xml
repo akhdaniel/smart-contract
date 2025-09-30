@@ -2,44 +2,40 @@
 <odoo>
     <data>
         <!-- tree view -->
-        <record id="view_vit_izin_prinsip_line_tree" model="ir.ui.view">
-            <field name="name">vit_izin_prinsip_line_tree</field>
-            <field name="model">vit.izin_prinsip_line</field>
+        <record id="view_vit_job_izin_prinsip_tree" model="ir.ui.view">
+            <field name="name">vit_job_izin_prinsip_tree</field>
+            <field name="model">vit.job_izin_prinsip</field>
             <field name="type">tree</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
-                <tree string="Izin Prinsip Line">
+                <tree string="Job Izin Prinsip">
                     <field name="name" /> <!-- 100-->
-                    <field name="jenis_kontrak_id" /> <!-- 100-->
-                    <field name="pagu" /> <!-- 101-->
-                    <field name="kanwil_id" /> <!-- 101-->
+                    <field name="total_pagu_job" /> <!-- 101-->
+                    <field name="izin_prinsip_id" /> <!-- 101-->
                     <field name="kanca_id" /> <!-- 102-->
-                    <field name="job_izin_prinsip_id" /> <!-- 103-->
                 </tree>
             </field>
         </record>
         <!-- pivot view -->
-        <record id="view_vit_izin_prinsip_line_pivot" model="ir.ui.view">
-            <field name="name">vit_izin_prinsip_line_tree</field>
-            <field name="model">vit.izin_prinsip_line</field>
+        <record id="view_vit_job_izin_prinsip_pivot" model="ir.ui.view">
+            <field name="name">vit_job_izin_prinsip_tree</field>
+            <field name="model">vit.job_izin_prinsip</field>
             <field name="type">pivot</field>
             <field name="arch" type="xml">
-                <pivot string="Izin Prinsip Line">
-                    <field name="jenis_kontrak_id" type="row"/>
-                    <field name="kanwil_id" type="row"/>
+                <pivot string="Job Izin Prinsip">
+                    <field name="izin_prinsip_id" type="row"/>
                     <field name="kanca_id" type="row"/>
-                    <field name="job_izin_prinsip_id" type="row"/>
                 </pivot>
             </field>
         </record>
         <!-- form view -->
-        <record id="view_vit_izin_prinsip_line_form" model="ir.ui.view">
-            <field name="name">vit_izin_prinsip_line_form</field>
-            <field name="model">vit.izin_prinsip_line</field>
+        <record id="view_vit_job_izin_prinsip_form" model="ir.ui.view">
+            <field name="name">vit_job_izin_prinsip_form</field>
+            <field name="model">vit.job_izin_prinsip</field>
             <field name="type">form</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
-                <form string="Izin Prinsip Line">
+                <form string="Job Izin Prinsip">
                     <header>
                         <button string="Reload" type="object" name="action_reload_view" icon="fa-refresh"/>
                     </header>
@@ -51,21 +47,30 @@
                             <!--/button-->
                         </div>
                         <div class="oe_title">
-                            <label for="name" class="oe_edit_only" string="Izin Prinsip Line Name"/>
+                            <label for="name" class="oe_edit_only" string="Job Izin Prinsip Name"/>
                             <h1><field name="name" /></h1>
                         </div>
                         <group>
                             <group> <!-- left -->
-                                <field name="pagu"  />
+                                <field name="total_pagu_job"  />
                             </group>
                             <group> <!-- right -->
-                                <field name="jenis_kontrak_id"  />
-                                <field name="kanwil_id"  />
+                                <field name="izin_prinsip_id"  />
                                 <field name="kanca_id"  />
-                                <field name="job_izin_prinsip_id"  />
                             </group>
                         </group>
                         <notebook>
+                            <page name="izin_prinsip_line_ids" string="Izin Prinsip Line">
+                                <field name="izin_prinsip_line_ids" >
+                                    <tree >
+                                        <field name="name" /> <!-- 100-->
+                                        <field name="jenis_kontrak_id" /> <!-- 100-->
+                                        <field name="pagu" /> <!-- 101-->
+                                        <field name="kanwil_id" /> <!-- 101-->
+                                        <field name="kanca_id" /> <!-- 102-->
+                                    </tree>
+                                </field>
+                            </page>
                         </notebook>
                         <group name="note_group" col="6" class="mt-2 mt-md-0">
                             <group colspan="4">
@@ -79,33 +84,29 @@
             </field>
         </record>
         <!-- search -->
-        <record id="view_vit_izin_prinsip_line_search" model="ir.ui.view">
-            <field name="name">vit_izin_prinsip_line</field>
-            <field name="model">vit.izin_prinsip_line</field>
+        <record id="view_vit_job_izin_prinsip_search" model="ir.ui.view">
+            <field name="name">vit_job_izin_prinsip</field>
+            <field name="model">vit.job_izin_prinsip</field>
             <field name="arch" type="xml">
-                <search string="Izin Prinsip Line">
+                <search string="Job Izin Prinsip">
 
                     <filter string="Name" name="filter_by_name" domain="[('name','=','')]" />
-                    <filter string="Pagu" name="filter_by_pagu" domain="[('pagu','=','')]" />
+                    <filter string="Total Pagu Job" name="filter_by_total_pagu_job" domain="[('total_pagu_job','=','')]" />
                     <field name="name" select="True"/>
-                    <field name="pagu" select="True"/>
-                    <field name="jenis_kontrak_id" select="True"/>
-                    <field name="kanwil_id" select="True"/>
+                    <field name="total_pagu_job" select="True"/>
+                    <field name="izin_prinsip_id" select="True"/>
                     <field name="kanca_id" select="True"/>
-                    <field name="job_izin_prinsip_id" select="True"/>
                     <group string="Group By..">
-                        <filter string="Jenis Kontrak" domain="[]" name="group_by_jenis_kontrak_id" context="{'group_by':'jenis_kontrak_id'}"/>
-                        <filter string="Kanwil" domain="[]" name="group_by_kanwil_id" context="{'group_by':'kanwil_id'}"/>
+                        <filter string="Izin Prinsip" domain="[]" name="group_by_izin_prinsip_id" context="{'group_by':'izin_prinsip_id'}"/>
                         <filter string="Kanca" domain="[]" name="group_by_kanca_id" context="{'group_by':'kanca_id'}"/>
-                        <filter string="Job Izin Prinsip" domain="[]" name="group_by_job_izin_prinsip_id" context="{'group_by':'job_izin_prinsip_id'}"/>
                     </group>
                 </search>
             </field>
         </record>
         <!-- kanban , to show image, please add image, image_512, image_1920, or image_small in the model -->
-        <record id="view_vit_izin_prinsip_line_kanban" model="ir.ui.view" >
-            <field name="name">vit_izin_prinsip_line</field>
-            <field name="model">vit.izin_prinsip_line</field>
+        <record id="view_vit_job_izin_prinsip_kanban" model="ir.ui.view" >
+            <field name="name">vit_job_izin_prinsip</field>
+            <field name="model">vit.job_izin_prinsip</field>
             <field name="arch" type="xml">
                 <kanban version="7.0">
                     <field name="id" />
@@ -122,30 +123,30 @@
             </field>
         </record>
         <!-- graph -->
-        <record id="view_vit_izin_prinsip_line_graph" model="ir.ui.view">
-            <field name="name">vit_izin_prinsip_line</field>
-            <field name="model">vit.izin_prinsip_line</field>
+        <record id="view_vit_job_izin_prinsip_graph" model="ir.ui.view">
+            <field name="name">vit_job_izin_prinsip</field>
+            <field name="model">vit.job_izin_prinsip</field>
             <field name="arch" type="xml">
-                <graph string="Izin Prinsip Line" type="bar">
-                    <field name="jenis_kontrak_id"/>
+                <graph string="Job Izin Prinsip" type="bar">
+                    <field name="izin_prinsip_id"/>
                 </graph>
             </field>
         </record>
         <!-- action window -->
-        <record id="action_izin_prinsip_line" model="ir.actions.act_window">
-            <field name="name">Izin Prinsip Line</field>
+        <record id="action_job_izin_prinsip" model="ir.actions.act_window">
+            <field name="name">Job Izin Prinsip</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">vit.izin_prinsip_line</field>
+            <field name="res_model">vit.job_izin_prinsip</field>
             <field name="view_mode">tree,form,kanban,pivot,graph</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
-                Click to add a new Izin Prinsip Line
+                Click to add a new Job Izin Prinsip
                 </p><p>
 
                 </p>
             </field>
         </record>
 
-        <menuitem id="menu_izin_prinsip_line" name="Izin Prinsip Line" parent="vit_contract_config_menu" action="action_izin_prinsip_line" sequence="110"/>
+        <menuitem id="menu_job_izin_prinsip" name="Job Izin Prinsip" parent="vit_contract_config_menu" action="action_job_izin_prinsip" sequence="220"/>
     </data>
 </odoo>

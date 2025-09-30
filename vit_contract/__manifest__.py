@@ -69,7 +69,12 @@
 		"report/state_droping.xml",
 		"data/vit.state_droping.csv",
 		"view/kanca.xml",
-		"report/kanca.xml"
+		"report/kanca.xml",
+		"view/job_izin_prinsip.xml",
+		"report/job_izin_prinsip.xml",
+		"view/state_payment.xml",
+		"report/state_payment.xml",
+		"data/vit.state_payment.csv"
 	],
 	"installable": True,
 	"auto_install": False,

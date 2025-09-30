@@ -1,5 +1,7 @@
 #!/usr/bin/python
 from . import izin_prinsip
+from . import job_izin_prinsip
+from . import jenis_kontrak
 from . import budget_rkap
 from . import kanwil
 from . import kanca

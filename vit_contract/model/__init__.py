@@ -19,3 +19,5 @@ from . import droping
 from . import state_termin
 from . import state_droping
 from . import kanca
+from . import job_izin_prinsip
+from . import state_payment

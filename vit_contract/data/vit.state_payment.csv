@@ -1,3 +1,4 @@
-id,name,sequence,draft,done,fold,allow_confirm
-state_payment_1,Draft,20,true,false,false,true
-state_payment_2,Done,40,false,true,false
+id,name,sequence,draft,on_progress,done,fold,allow_confirm
+state_payment_1,Draft,20,true,false,false,false,true
+state_payment_2,On Progress,30,false,true,false,false,true
+state_payment_3,Done,40,false,false,true,false

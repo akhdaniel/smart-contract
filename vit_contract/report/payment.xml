@@ -78,8 +78,16 @@
                             <p class="m-0" t-field="doc.kanwil_id"/>
                         </div>
                         <div class="col-auto mw-100 mb-2">
-                            <strong>Kontrakk</strong>
-                            <p class="m-0" t-field="doc.kontrakk_id"/>
+                            <strong>Kontrak</strong>
+                            <p class="m-0" t-field="doc.kontrak_id"/>
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Master Nama Termin</strong>
+                            <p class="m-0" t-field="doc.master_nama_termin_id"/>
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Stage</strong>
+                            <p class="m-0" t-field="doc.stage_id"/>
                         </div>
                     </div>
                 </div>

@@ -22,16 +22,13 @@ class izin_prinsip(models.Model):
         readonly=True,
     )
 
-    kanwil_id = fields.Many2one(
-        comodel_name="vit.kanwil",
-        string=_("Kanwil"),
+
+    total_pagu = fields.Float(
+        string="Total Pagu",
+        compute="_compute_total_pagu",
     )
 
-
-    total_pagu = fields.Float( string=_("Total Pagu"), compute="_compute_total_pagu", store=True)
-
-
-    @api.depends('izin_prinsip_line_ids.pagu')
+    @api.depends("job_izin_prinsip_ids.total_pagu_job")
     def _compute_total_pagu(self):
         for rec in self:
-            rec.total_pagu = sum(line.pagu for line in rec.izin_prinsip_line_ids)
+            rec.total_pagu = sum(job.total_pagu_job for job in rec.job_izin_prinsip_ids)

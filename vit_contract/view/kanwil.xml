@@ -56,7 +56,9 @@
                                         <field name="amount_denda" /> <!-- 105-->
                                         <field name="kanca_id" /> <!-- 105-->
                                         <field name="persentasi_denda" /> <!-- 106-->
+                                        <field name="overdue_days" /> <!-- 107-->
                                         <field name="partner_id" /> <!-- 107-->
+                                        <field name="job_izin_prinsip_id" /> <!-- 108-->
                                     </tree>
                                 </field>
                             </page>

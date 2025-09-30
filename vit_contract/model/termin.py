@@ -23,6 +23,7 @@ class termin(models.Model):
     allow_cancel = fields.Boolean(related="stage_id.allow_cancel", store=True,  string=_("Allow Cancel"))
     stage_name = fields.Char(related="stage_id.name", store=True,  string=_("Stage Name"))
     due_date = fields.Date( string=_("Due Date"))
+    verification_date = fields.Date( string=_("Verification Date"))
     is_droping_done = fields.Boolean( string=_("Is Droping Done"))
 
 

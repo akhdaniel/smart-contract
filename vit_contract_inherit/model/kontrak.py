@@ -21,6 +21,24 @@ class kontrak(models.Model):
         domain=[('stage_is_done', '=', True)],  
     )
 
+    job_izin_prinsip_id = fields.Many2one(
+        'vit.job_izin_prinsip',
+        string="Job Izin Prinsip",
+        domain="[('izin_prinsip_id', '=', izin_prinsip_id)]",
+    )
+
+    jenis_kontrak_many = fields.Many2many(
+        comodel_name="vit.jenis_kontrak",
+        string="Jenis Kontrak Filter",
+        help="Daftar jenis kontrak yang valid untuk Job Izin Prinsip ini"
+    )
+
+    jenis_kontrak_id = fields.Many2one(
+        comodel_name="vit.jenis_kontrak",
+        string="Jenis Kontrak",
+        domain="[('id', 'in', jenis_kontrak_many)]",
+    )
+
     budget_rkap_id = fields.Many2one(
         comodel_name="vit.budget_rkap",  
         related="izin_prinsip_id.budget_id", 
@@ -38,6 +56,12 @@ class kontrak(models.Model):
         related="izin_prinsip_id.kanwil_id", 
         string=_("Kanwil")
     )
+
+    kanca_id = fields.Many2one(
+        comodel_name="vit.kanca",
+        string="Kanca",
+        related="job_izin_prinsip_id.kanca_id",
+    )
     
 
     is_late_upload = fields.Boolean(
@@ -51,6 +75,64 @@ class kontrak(models.Model):
         compute="_compute_is_late_upload",
         store=False
     )
+
+    # @api.onchange('izin_prinsip_id')
+    # def _onchange_izin_prinsip_id(self):
+    #     if self.izin_prinsip_id:
+    #         self.job_izin_prinsip_id = False
+    #         self.jenis_kontrak_id = False
+    #         self.jenis_kontrak_many = [(5, 0, 0)]
+    #     else:
+    #         self.job_izin_prinsip_id = False
+    #         self.jenis_kontrak_id = False
+    #         self.jenis_kontrak_many = [(5, 0, 0)]
+
+    @api.onchange('izin_prinsip_id')
+    def _onchange_izin_prinsip_id(self):
+        # pakai context special biar bisa bandingin nilai lama
+        if self._origin and self._origin.izin_prinsip_id:
+            old_izin = self._origin.izin_prinsip_id.id
+        else:
+            old_izin = False
+
+        new_izin = self.izin_prinsip_id.id if self.izin_prinsip_id else False
+
+        if old_izin and new_izin and old_izin == new_izin:
+            # izin masih sama → tidak reset
+            return
+
+        # izin ganti → reset turunan
+        self.job_izin_prinsip_id = False
+        self.jenis_kontrak_id = False
+        self.jenis_kontrak_many = [(5, 0, 0)]
+
+
+
+
+    @api.onchange('job_izin_prinsip_id')
+    def _onchange_job_izin_prinsip_id(self):
+        if self.job_izin_prinsip_id:
+            jenis_ids = self.env['vit.izin_prinsip_line'].search([
+                ('job_izin_prinsip_id', '=', self.job_izin_prinsip_id.id)
+            ]).mapped('jenis_kontrak_id').ids
+
+            # isi field Many2many
+            self.jenis_kontrak_many = [(6, 0, jenis_ids)]
+
+            return {'domain': {'jenis_kontrak_id': [('id', 'in', jenis_ids)]}}
+        else:
+            self.jenis_kontrak_many = [(5, 0, 0)]
+            return {'domain': {'jenis_kontrak_id': []}}
+
+    @api.onchange('jenis_kontrak_id')
+    def _onchange_jenis_kontrak(self):
+        if self.jenis_kontrak_id and self.job_izin_prinsip_id:
+            for line in self.job_izin_prinsip_id.izin_prinsip_line_ids:
+                if line.jenis_kontrak_id == self.jenis_kontrak_id:
+                    self.amount_izin_prinsip = line.pagu
+                    break
+
+    
 
     @api.depends('termin_ids.syarat_termin_ids.upload_date',
                  'termin_ids.syarat_termin_ids.due_date')
@@ -66,15 +148,6 @@ class kontrak(models.Model):
                     late_termins.append(t.master_nama_termin_id.name or t.name)
             rec.is_late_upload = bool(late_termins)
             rec.late_termin_names = ", ".join(late_termins) if late_termins else ""
-
-
-    @api.onchange('jenis_kontrak_id')
-    def _onchange_jenis_kontrak(self):
-        if self.jenis_kontrak_id and self.izin_prinsip_id:
-            for line in self.izin_prinsip_id.izin_prinsip_line_ids:
-                if line.jenis_kontrak_id == self.jenis_kontrak_id:
-                    self.amount_izin_prinsip = line.pagu
-                    break
 
 
 

@@ -8,8 +8,9 @@ class state_payment(models.Model):
     """
     {
     "is_a_stage":true,
-    "data":[{"name":"Draft","sequence":20,"draft":true, "done":false, "fold":false, "allow_confirm":true},
-            {"name":"Done", "sequence":40,"draft":false, "done":true, "fold":false}]
+    "data":[{"name":"Draft","sequence":20,"draft":true, "on_progress":false, "done":false, "fold":false, "allow_confirm":true},
+            {"name":"On Progress", "sequence":30,"draft":false, "on_progress":true, "done":false, "fold":false, "allow_confirm":true},
+            {"name":"Done", "sequence":40,"draft":false, "on_progress":false, "done":true, "fold":false}]
     }
     """
 
@@ -31,6 +32,7 @@ class state_payment(models.Model):
     allow_cancel = fields.Boolean( string=_("Allow Cancel"))
     execute_enter = fields.Char( string=_("Execute Enter"))
     confirmation = fields.Char( string=_("Confirmation"))
+    on_progress = fields.Boolean( string=_("On Progress"))
 
 
     def copy(self, default=None):

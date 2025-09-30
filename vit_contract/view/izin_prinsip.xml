@@ -87,17 +87,17 @@
                                         <field name="amount_denda" /> <!-- 105-->
                                         <field name="kanca_id" /> <!-- 105-->
                                         <field name="persentasi_denda" /> <!-- 106-->
+                                        <field name="overdue_days" /> <!-- 107-->
                                         <field name="partner_id" /> <!-- 107-->
+                                        <field name="job_izin_prinsip_id" /> <!-- 108-->
                                     </tree>
                                 </field>
                             </page>
-                            <page name="izin_prinsip_line_ids" string="Izin Prinsip Line">
-                                <field name="izin_prinsip_line_ids" readonly="stage_is_draft==False">
+                            <page name="job_izin_prinsip_ids" string="Job Izin Prinsip">
+                                <field name="job_izin_prinsip_ids" readonly="stage_is_draft==False">
                                     <tree >
                                         <field name="name" /> <!-- 100-->
-                                        <field name="jenis_kontrak_id" /> <!-- 100-->
-                                        <field name="pagu" /> <!-- 101-->
-                                        <field name="kanwil_id" /> <!-- 101-->
+                                        <field name="total_pagu_job" /> <!-- 101-->
                                         <field name="kanca_id" /> <!-- 102-->
                                     </tree>
                                 </field>

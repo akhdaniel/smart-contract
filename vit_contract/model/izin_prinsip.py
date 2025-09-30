@@ -85,4 +85,4 @@ class izin_prinsip(models.Model):
     master_budget_id = fields.Many2one(comodel_name="vit.master_budget",  string=_("Master Budget"))
     kanwil_id = fields.Many2one(comodel_name="vit.kanwil",  string=_("Kanwil"))
     kontrak_ids = fields.One2many(comodel_name="vit.kontrak",  inverse_name="izin_prinsip_id",  string=_("Kontrak"))
-    izin_prinsip_line_ids = fields.One2many(comodel_name="vit.izin_prinsip_line",  inverse_name="izin_prinsip_id",  string=_("Izin Prinsip Line"))
+    job_izin_prinsip_ids = fields.One2many(comodel_name="vit.job_izin_prinsip",  inverse_name="izin_prinsip_id",  string=_("Job Izin Prinsip"))

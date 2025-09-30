@@ -24,6 +24,11 @@ class syarat_termin(models.Model):
         ondelete="cascade"
     )
 
+    verification_date = fields.Date( 
+        required=True,
+        string=_("Verification Date"),
+    )
+
 
     @api.onchange('persentase', 'kontrak_id')
     def _onchange_persentase(self):
@@ -172,6 +177,9 @@ class syarat_termin(models.Model):
                     'kanwil_id': kontrak.kanwil_id.id,
                     'master_budget_id': kontrak.master_budget_id.id,
                     'termin_id': rec.id,
+                    'kontrak_id': kontrak.id, 
+                    'master_nama_termin_id': rec.master_nama_termin_id.id,
+                    'payment_date': fields.Date.context_today(self),
                 })
 
                 all_done = all(k.stage_id.done for k in kontrak.termin_ids)

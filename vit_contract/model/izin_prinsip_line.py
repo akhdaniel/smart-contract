@@ -27,4 +27,4 @@ class izin_prinsip_line(models.Model):
     jenis_kontrak_id = fields.Many2one(comodel_name="vit.jenis_kontrak",  string=_("Jenis Kontrak"))
     kanwil_id = fields.Many2one(comodel_name="vit.kanwil",  string=_("Kanwil"))
     kanca_id = fields.Many2one(comodel_name="vit.kanca",  string=_("Kanca"))
-    izin_prinsip_id = fields.Many2one(comodel_name="vit.izin_prinsip",  string=_("Izin Prinsip"))
+    job_izin_prinsip_id = fields.Many2one(comodel_name="vit.job_izin_prinsip",  string=_("Job Izin Prinsip"))

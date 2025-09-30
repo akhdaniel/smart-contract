@@ -58,6 +58,10 @@
                             <p class="m-0" t-field="doc.due_date" />
                         </div>
                         <div class="col-auto mw-100 mb-2">
+                            <strong>Verification Date</strong>
+                            <p class="m-0" t-field="doc.verification_date" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
                             <strong>Is Droping Done</strong>
                             <p class="m-0" t-field="doc.is_droping_done" />
                         </div>

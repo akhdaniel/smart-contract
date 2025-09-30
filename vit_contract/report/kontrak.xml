@@ -66,6 +66,10 @@
                             <p class="m-0" t-field="doc.persentasi_denda" />
                         </div>
                         <div class="col-auto mw-100 mb-2">
+                            <strong>Overdue Days</strong>
+                            <p class="m-0" t-field="doc.overdue_days" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
                             <strong>Izin Prinsip</strong>
                             <p class="m-0" t-field="doc.izin_prinsip_id"/>
                         </div>
@@ -97,52 +101,12 @@
                             <strong>Partner</strong>
                             <p class="m-0" t-field="doc.partner_id"/>
                         </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Job Izin Prinsip</strong>
+                            <p class="m-0" t-field="doc.job_izin_prinsip_id"/>
+                        </div>
                     </div>
                 </div>
-                <div class="oe_structure"/>
-                <h2>Termin</h2>
-                <table class="table table-sm o_main_table" name="termin_ids_table">
-                    <thead>
-                        <tr>
-                            <td>Name</td>
-                            <td>Nilai</td>
-                            <td>Persentase</td>
-                            <td>Deskripsi</td>
-                            <td>Stage Is Draft</td>
-                            <td>Stage Is Done</td>
-                            <td>Allow Confirm</td>
-                            <td>Allow Cancel</td>
-                            <td>Stage Name</td>
-                            <td>Due Date</td>
-                            <td>Is Droping Done</td>
-                            <td>Master Nama Termin</td>
-                            <td>Stage</td>
-                            <td>Droping</td>
-                            <td>Partner</td>
-                            <td>Kontrak</td>
-                        </tr>
-                    </thead>
-                    <tbody class="termin_ids_tbody">
-                        <tr t-foreach="doc.termin_ids" t-as="line">
-                            <td><span t-field="line.name" /></td>
-                            <td><span t-field="line.nilai" /></td>
-                            <td><span t-field="line.persentase" /></td>
-                            <td><span t-field="line.deskripsi" /></td>
-                            <td><span t-field="line.stage_is_draft" /></td>
-                            <td><span t-field="line.stage_is_done" /></td>
-                            <td><span t-field="line.allow_confirm" /></td>
-                            <td><span t-field="line.allow_cancel" /></td>
-                            <td><span t-field="line.stage_name" /></td>
-                            <td><span t-field="line.due_date" /></td>
-                            <td><span t-field="line.is_droping_done" /></td>
-                            <td><span t-field="line.master_nama_termin_id" /></td>
-                            <td><span t-field="line.stage_id" /></td>
-                            <td><span t-field="line.droping_id" /></td>
-                            <td><span t-field="line.partner_id" /></td>
-                            <td><span t-field="line.kontrak_id" /></td>
-                        </tr> <!-- foreach-->
-                    </tbody>
-                </table>
                 <div class="oe_structure"/>
                 <h2>Payment</h2>
                 <table class="table table-sm o_main_table" name="payment_ids_table">
@@ -163,7 +127,9 @@
                             <td>Termin</td>
                             <td>Master Budget</td>
                             <td>Kanwil</td>
-                            <td>Kontrakk</td>
+                            <td>Kontrak</td>
+                            <td>Master Nama Termin</td>
+                            <td>Stage</td>
                         </tr>
                     </thead>
                     <tbody class="payment_ids_tbody">
@@ -183,7 +149,55 @@
                             <td><span t-field="line.termin_id" /></td>
                             <td><span t-field="line.master_budget_id" /></td>
                             <td><span t-field="line.kanwil_id" /></td>
-                            <td><span t-field="line.kontrakk_id" /></td>
+                            <td><span t-field="line.kontrak_id" /></td>
+                            <td><span t-field="line.master_nama_termin_id" /></td>
+                            <td><span t-field="line.stage_id" /></td>
+                        </tr> <!-- foreach-->
+                    </tbody>
+                </table>
+                <div class="oe_structure"/>
+                <h2>Termin</h2>
+                <table class="table table-sm o_main_table" name="termin_ids_table">
+                    <thead>
+                        <tr>
+                            <td>Name</td>
+                            <td>Nilai</td>
+                            <td>Persentase</td>
+                            <td>Deskripsi</td>
+                            <td>Stage Is Draft</td>
+                            <td>Stage Is Done</td>
+                            <td>Allow Confirm</td>
+                            <td>Allow Cancel</td>
+                            <td>Stage Name</td>
+                            <td>Due Date</td>
+                            <td>Verification Date</td>
+                            <td>Is Droping Done</td>
+                            <td>Master Nama Termin</td>
+                            <td>Stage</td>
+                            <td>Droping</td>
+                            <td>Partner</td>
+                            <td>Kontrak</td>
+                        </tr>
+                    </thead>
+                    <tbody class="termin_ids_tbody">
+                        <tr t-foreach="doc.termin_ids" t-as="line">
+                            <td><span t-field="line.name" /></td>
+                            <td><span t-field="line.nilai" /></td>
+                            <td><span t-field="line.persentase" /></td>
+                            <td><span t-field="line.deskripsi" /></td>
+                            <td><span t-field="line.stage_is_draft" /></td>
+                            <td><span t-field="line.stage_is_done" /></td>
+                            <td><span t-field="line.allow_confirm" /></td>
+                            <td><span t-field="line.allow_cancel" /></td>
+                            <td><span t-field="line.stage_name" /></td>
+                            <td><span t-field="line.due_date" /></td>
+                            <td><span t-field="line.verification_date" /></td>
+                            <td><span t-field="line.is_droping_done" /></td>
+                            <td><span t-field="line.master_nama_termin_id" /></td>
+                            <td><span t-field="line.stage_id" /></td>
+                            <td><span t-field="line.droping_id" /></td>
+                            <td><span t-field="line.partner_id" /></td>
+                            <td><span t-field="line.kontrak_id" /></td>
                         </tr> <!-- foreach-->
                     </tbody>
                 </table>

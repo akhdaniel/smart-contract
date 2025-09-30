@@ -11,17 +11,17 @@
                     <attribute name="column_invisible">1</attribute>
                 </xpath>
 
-                <xpath expr="//tree/field[@name='jenis_kontrak_id']" position="replace"/>
-               
-                <xpath expr="//tree/field[@name='izin_prinsip_id']" position="before">
-                    <field name="jenis_kontrak_id"/>
+                <xpath expr="//tree/field[@name='kanwil_id']" position="attributes">
+                    <attribute name="column_invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//tree/field[@name='kanca_id']" position="attributes">
+                    <attribute name="column_invisible">1</attribute>
                 </xpath>
 
 
                 <xpath expr="//tree/field[@name='pagu']" position="replace"/>
-
-
-                <xpath expr="//tree/field[@name='kanwil_id']" position="after">
+                <xpath expr="//tree/field[@name='job_izin_prinsip_id']" position="after">
                     <field name="pagu"/>
                 </xpath>
 
@@ -43,6 +43,10 @@
 
                 <xpath expr="//form//field[@name='name']" position="attributes">
                     <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//form//field[@name='job_izin_prinsip_id']" position="attributes">
+                    <attribute name="readonly">1</attribute>
                 </xpath>
 
 

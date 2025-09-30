@@ -18,8 +18,9 @@
                     <field name="droping_id" /> <!-- 103-->
                     <field name="due_date" /> <!-- 104-->
                     <field name="partner_id" /> <!-- 104-->
-                    <field name="is_droping_done" /> <!-- 105-->
+                    <field name="verification_date" /> <!-- 105-->
                     <field name="kontrak_id" /> <!-- 105-->
+                    <field name="is_droping_done" /> <!-- 106-->
                 </tree>
             </field>
         </record>
@@ -74,6 +75,7 @@
                                 <field name="persentase"  readonly="stage_is_draft==False"/>
                                 <field name="deskripsi"  readonly="stage_is_draft==False"/>
                                 <field name="due_date"  readonly="stage_is_draft==False"/>
+                                <field name="verification_date"  readonly="stage_is_draft==False"/>
                                 <field name="is_droping_done"  readonly="stage_is_draft==False"/>
                             </group>
                             <group> <!-- right -->
@@ -125,6 +127,7 @@
                     <filter string="Allow Cancel" name="filter_by_allow_cancel" domain="[('allow_cancel','=','')]" />
                     <filter string="Stage Name" name="filter_by_stage_name" domain="[('stage_name','=','')]" />
                     <filter string="Due Date" name="filter_by_due_date" domain="[('due_date','=','')]" />
+                    <filter string="Verification Date" name="filter_by_verification_date" domain="[('verification_date','=','')]" />
                     <filter string="Is Droping Done" name="filter_by_is_droping_done" domain="[('is_droping_done','=','')]" />
                     <field name="name" select="True"/>
                     <field name="nilai" select="True"/>
@@ -136,6 +139,7 @@
                     <field name="allow_cancel" select="True"/>
                     <field name="stage_name" select="True"/>
                     <field name="due_date" select="True"/>
+                    <field name="verification_date" select="True"/>
                     <field name="is_droping_done" select="True"/>
                     <field name="master_nama_termin_id" select="True"/>
                     <field name="stage_id" select="True"/>
@@ -165,7 +169,7 @@
                                 <h4>
                                     <a type="open"><field name="name"/></a>
                                 </h4>
-                                <span class="text-muted">Due Date</span> <field name="due_date"></field>
+                                <span class="text-muted">Verification Date</span> <field name="verification_date"></field>
                             </div> <!--oe_kanban_details-->
                         </t>
                     </templates>
@@ -177,7 +181,7 @@
             <field name="name">vit_termin_cal</field>
             <field name="model">vit.termin</field>
             <field name="arch" type="xml">
-                <calendar string="Termin" date_start="due_date">
+                <calendar string="Termin" date_start="verification_date">
                     <field name="name" />
                 </calendar>
             </field>

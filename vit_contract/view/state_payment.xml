@@ -19,6 +19,7 @@
                     <field name="allow_cancel" /> <!-- 107-->
                     <field name="execute_enter" /> <!-- 108-->
                     <field name="confirmation" /> <!-- 109-->
+                    <field name="on_progress" /> <!-- 110-->
                 </tree>
             </field>
         </record>
@@ -55,6 +56,7 @@
                                 <field name="allow_cancel"  />
                                 <field name="execute_enter"  />
                                 <field name="confirmation"  />
+                                <field name="on_progress"  />
                             </group>
                             <group> <!-- right -->
                             </group>
@@ -89,6 +91,7 @@
                     <filter string="Allow Cancel" name="filter_by_allow_cancel" domain="[('allow_cancel','=','')]" />
                     <filter string="Execute Enter" name="filter_by_execute_enter" domain="[('execute_enter','=','')]" />
                     <filter string="Confirmation" name="filter_by_confirmation" domain="[('confirmation','=','')]" />
+                    <filter string="On Progress" name="filter_by_on_progress" domain="[('on_progress','=','')]" />
                     <field name="name" select="True"/>
                     <field name="sequence" select="True"/>
                     <field name="draft" select="True"/>
@@ -99,6 +102,7 @@
                     <field name="allow_cancel" select="True"/>
                     <field name="execute_enter" select="True"/>
                     <field name="confirmation" select="True"/>
+                    <field name="on_progress" select="True"/>
                     <group string="Group By..">
                     </group>
                 </search>
@@ -138,6 +142,6 @@
             </field>
         </record>
 
-        <menuitem id="menu_state_payment" name="State Payment" parent="vit_contract_config_menu" action="action_state_payment" sequence="150"/>
+        <menuitem id="menu_state_payment" name="State Payment" parent="vit_contract_config_menu" action="action_state_payment" sequence="230"/>
     </data>
 </odoo>

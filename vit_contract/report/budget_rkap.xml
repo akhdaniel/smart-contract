@@ -110,6 +110,7 @@
                             <td>Amount Kontrak</td>
                             <td>Amount Denda</td>
                             <td>Persentasi Denda</td>
+                            <td>Overdue Days</td>
                             <td>Izin Prinsip</td>
                             <td>Budget Rkap</td>
                             <td>Stage</td>
@@ -118,6 +119,7 @@
                             <td>Kanca</td>
                             <td>Kanwil</td>
                             <td>Partner</td>
+                            <td>Job Izin Prinsip</td>
                         </tr>
                     </thead>
                     <tbody class="kontrak_ids_tbody">
@@ -134,6 +136,7 @@
                             <td><span t-field="line.amount_kontrak" /></td>
                             <td><span t-field="line.amount_denda" /></td>
                             <td><span t-field="line.persentasi_denda" /></td>
+                            <td><span t-field="line.overdue_days" /></td>
                             <td><span t-field="line.izin_prinsip_id" /></td>
                             <td><span t-field="line.budget_rkap_id" /></td>
                             <td><span t-field="line.stage_id" /></td>
@@ -142,6 +145,7 @@
                             <td><span t-field="line.kanca_id" /></td>
                             <td><span t-field="line.kanwil_id" /></td>
                             <td><span t-field="line.partner_id" /></td>
+                            <td><span t-field="line.job_izin_prinsip_id" /></td>
                         </tr> <!-- foreach-->
                     </tbody>
                 </table>
@@ -165,7 +169,9 @@
                             <td>Termin</td>
                             <td>Master Budget</td>
                             <td>Kanwil</td>
-                            <td>Kontrakk</td>
+                            <td>Kontrak</td>
+                            <td>Master Nama Termin</td>
+                            <td>Stage</td>
                         </tr>
                     </thead>
                     <tbody class="payment_ids_tbody">
@@ -185,7 +191,9 @@
                             <td><span t-field="line.termin_id" /></td>
                             <td><span t-field="line.master_budget_id" /></td>
                             <td><span t-field="line.kanwil_id" /></td>
-                            <td><span t-field="line.kontrakk_id" /></td>
+                            <td><span t-field="line.kontrak_id" /></td>
+                            <td><span t-field="line.master_nama_termin_id" /></td>
+                            <td><span t-field="line.stage_id" /></td>
                         </tr> <!-- foreach-->
                     </tbody>
                 </table>

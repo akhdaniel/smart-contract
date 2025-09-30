@@ -92,4 +92,6 @@ class payment(models.Model):
     termin_id = fields.Many2one(comodel_name="vit.termin",  string=_("Termin"))
     master_budget_id = fields.Many2one(comodel_name="vit.master_budget",  string=_("Master Budget"))
     kanwil_id = fields.Many2one(comodel_name="vit.kanwil",  string=_("Kanwil"))
-    kontrakk_id = fields.Many2one(comodel_name="vit.kontrak",  string=_("Kontrakk"))
+    kontrak_id = fields.Many2one(comodel_name="vit.kontrak",  string=_("Kontrak"))
+    master_nama_termin_id = fields.Many2one(comodel_name="vit.master_nama_termin",  string=_("Master Nama Termin"))
+    stage_id = fields.Many2one(comodel_name="vit.state_payment",  default=_get_first_stage, copy=False, group_expand="_group_expand_states",  string=_("Stage"))

@@ -1,0 +1,48 @@
+<odoo>
+    <data>
+        <record id="view_vit_job_izin_prinsip_tree_inherit" model="ir.ui.view">
+            <field name="name">vit.job.izin.prinsip.tree.inherit</field>
+            <field name="model">vit.job_izin_prinsip</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_job_izin_prinsip_tree"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='total_pagu_job']" position="replace"/>
+                <xpath expr="//field[@name='kanca_id']" position="after">
+                    <field name="total_pagu_job"/>
+                </xpath>
+
+            </field>
+        </record>
+
+
+        <record id="view_vit_job_izin_prinsip_form_inherit" model="ir.ui.view">
+            <field name="name">vit.job_izin_prinsip.form.inherit</field>
+            <field name="model">vit.job_izin_prinsip</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_job_izin_prinsip_form"/>
+            <field name="arch" type="xml">
+
+
+                <xpath expr="//field[@name='total_pagu_job']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+
+                <xpath expr="//page[@name='izin_prinsip_line_ids']//tree/field[@name='name']" position="replace"/>
+
+                <xpath expr="//page[@name='izin_prinsip_line_ids']/field/tree" position="attributes">
+                    <attribute name="editable">bottom</attribute>
+                </xpath>
+
+                <xpath expr="//page[@name='izin_prinsip_line_ids']//field[@name='kanwil_id']" position="attributes">
+                    <attribute name="column_invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//page[@name='izin_prinsip_line_ids']//field[@name='kanca_id']" position="attributes">
+                    <attribute name="column_invisible">1</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- report qweb view -->
+        <record id="action_report_vit_job_izin_prinsip" model="ir.actions.report">
+            <field name="name">Job Izin Prinsip</field>
+            <field name="model">vit.job_izin_prinsip</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">vit_contract.vit_job_izin_prinsip_report</field>
+            <field name="report_file">vit_contract.vit_job_izin_prinsip_report</field>
+            <field name="print_report_name">object.name</field>
+            <field name="binding_model_id" ref="vit_contract.model_vit_job_izin_prinsip"/>
+            <field name="binding_type">report</field>
+        </record>
+        <!-- document template -->
+        <template id="vit_contract.vit_job_izin_prinsip_report_document" >
+            <t t-call="web.external_layout">
+                <t t-set="doc" t-value="doc.with_context({'lang': lang})"/>
+                <div class="page">
+                    <h2>
+                        Job Izin Prinsip: <span t-field="doc.name"/>
+                    </h2>
+                    <div class="row mt32 mb32">
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Total Pagu Job</strong>
+                            <p class="m-0" t-field="doc.total_pagu_job" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Izin Prinsip</strong>
+                            <p class="m-0" t-field="doc.izin_prinsip_id"/>
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Kanca</strong>
+                            <p class="m-0" t-field="doc.kanca_id"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="oe_structure"/>
+                <h2>Izin Prinsip Line</h2>
+                <table class="table table-sm o_main_table" name="izin_prinsip_line_ids_table">
+                    <thead>
+                        <tr>
+                            <td>Name</td>
+                            <td>Pagu</td>
+                            <td>Jenis Kontrak</td>
+                            <td>Kanwil</td>
+                            <td>Kanca</td>
+                            <td>Job Izin Prinsip</td>
+                        </tr>
+                    </thead>
+                    <tbody class="izin_prinsip_line_ids_tbody">
+                        <tr t-foreach="doc.izin_prinsip_line_ids" t-as="line">
+                            <td><span t-field="line.name" /></td>
+                            <td><span t-field="line.pagu" /></td>
+                            <td><span t-field="line.jenis_kontrak_id" /></td>
+                            <td><span t-field="line.kanwil_id" /></td>
+                            <td><span t-field="line.kanca_id" /></td>
+                            <td><span t-field="line.job_izin_prinsip_id" /></td>
+                        </tr> <!-- foreach-->
+                    </tbody>
+                </table>
+                <div class="oe_structure"/>
+            </t>
+        </template>
+
+        <!-- main template -->
+        <template id="vit_contract.vit_job_izin_prinsip_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-set="lang" t-value="doc.create_uid.lang"/>
+                    <t t-call="vit_contract.vit_job_izin_prinsip_report_document" />
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

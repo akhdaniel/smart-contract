@@ -18,16 +18,21 @@
                     </div>
                 </sheet>
 
-                <xpath expr="//field[@name='persentasi_denda']" position="after">
-                    <field name="attachments" widget="many2many_binary_preview" string="Attachments"/>
-                </xpath>
 
-                <xpath expr="//field[@name='izin_prinsip_id']" position="attributes">
+
+                <xpath expr="//field[@name='start_date']" position="attributes">
                     <attribute name="force_save">1</attribute>
                     <attribute name="required">1</attribute>
                 </xpath>
 
-                <xpath expr="//field[@name='partner_id']" position="attributes">
+                <xpath expr="//field[@name='end_date']" position="attributes">
+                    <attribute name="force_save">1</attribute>
+                    <attribute name="required">1</attribute>
+                </xpath>
+
+
+                <xpath expr="//field[@name='izin_prinsip_id']" position="attributes">
+                    <attribute name="force_save">1</attribute>
                     <attribute name="required">1</attribute>
                 </xpath>
 
@@ -44,18 +49,53 @@
                     <attribute name="readonly">1</attribute>
                 </xpath>
 
-                <xpath expr="//field[@name='master_budget_id']" position="replace"/>
-                <xpath expr="//field[@name='kanwil_id']" position="after">
-                    <field name="master_budget_id"/>
+                <xpath expr="//field[@name='kanca_id']" position="attributes">
+                    <attribute name="readonly">1</attribute>
                 </xpath>
 
                 <xpath expr="//field[@name='master_budget_id']" position="attributes">
                     <attribute name="readonly">1</attribute>
                 </xpath>
 
-                <xpath expr="//field[@name='jenis_kontrak_id']" position="attributes">
+
+                <xpath expr="//field[@name='job_izin_prinsip_id']" position="replace"/>
+                <xpath expr="//field[@name='jenis_kontrak_id']" position="replace"/>
+                <xpath expr="//field[@name='partner_id']" position="replace"/>
+                <xpath expr="//field[@name='izin_prinsip_id']" position="after">
+                    <field name="job_izin_prinsip_id"/>
+                    <field name="jenis_kontrak_many" invisible="1"/>
+                    <field name="jenis_kontrak_id"/>
+                    <field name="partner_id"/>
+                </xpath>
+
+                <xpath expr="//field[@name='job_izin_prinsip_id']" position="attributes">
+                    <attribute name="force_save">1</attribute>
                     <attribute name="required">1</attribute>
                 </xpath>
+
+                <xpath expr="//field[@name='jenis_kontrak_id']" position="attributes">
+                    <attribute name="force_save">1</attribute>
+                    <attribute name="required">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="force_save">1</attribute>
+                    <attribute name="required">1</attribute>
+                </xpath>
+
+
+
+                <xpath expr="//field[@name='budget_rkap_id']" position="replace"/>
+                <xpath expr="//field[@name='master_budget_id']" position="replace"/>
+                <xpath expr="//field[@name='kanwil_id']" position="replace"/>
+                <xpath expr="//field[@name='kanca_id']" position="replace"/>
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="budget_rkap_id"/>
+                    <field name="master_budget_id"/>
+                    <field name="kanwil_id"/>
+                    <field name="kanca_id"/>
+                </xpath>
+
 
                 <xpath expr="//page[@name='termin_ids']//tree/field[@name='master_nama_termin_id']" position="attributes">
                     <attribute name="required">1</attribute>
@@ -81,6 +121,25 @@
                     <attribute name="force_save">1</attribute>
                 </xpath>
 
+                <xpath expr="//page[@name='payment_ids']" position="replace"/>
+
+                <xpath expr="//page[@name='termin_ids']" position="after">
+                    <page name="payment_ids" string="Payment">
+                        <field name="payment_ids" readonly="stage_is_draft==False">
+                            <tree>
+                                <field name="name"/>
+                                <field name="payment_date"/>
+                                <field name="termin_id"/>
+                                <field name="amount"/>
+                            </tree>
+                        </field>
+                    </page>
+
+
+                    <page name="attachments_tab" string="Attachments">
+                        <field name="attachments" widget="many2many_binary_preview" string="Attachments"/>
+                    </page>
+                </xpath>
 
             </field>
         </record>

@@ -19,7 +19,9 @@
                     <field name="termin_id" /> <!-- 103-->
                     <field name="master_budget_id" /> <!-- 104-->
                     <field name="kanwil_id" /> <!-- 105-->
-                    <field name="kontrakk_id" /> <!-- 106-->
+                    <field name="kontrak_id" /> <!-- 106-->
+                    <field name="master_nama_termin_id" /> <!-- 107-->
+                    <field name="stage_id" /> <!-- 108-->
                 </tree>
             </field>
         </record>
@@ -36,7 +38,9 @@
                     <field name="termin_id" type="row"/>
                     <field name="master_budget_id" type="row"/>
                     <field name="kanwil_id" type="row"/>
-                    <field name="kontrakk_id" type="row"/>
+                    <field name="kontrak_id" type="row"/>
+                    <field name="master_nama_termin_id" type="row"/>
+                    <field name="stage_id" type="row"/>
                 </pivot>
             </field>
         </record>
@@ -82,7 +86,8 @@
                                 <field name="termin_id"  readonly="stage_is_draft==False"/>
                                 <field name="master_budget_id"  readonly="stage_is_draft==False"/>
                                 <field name="kanwil_id"  readonly="stage_is_draft==False"/>
-                                <field name="kontrakk_id"  readonly="stage_is_draft==False"/>
+                                <field name="kontrak_id"  readonly="stage_is_draft==False"/>
+                                <field name="master_nama_termin_id"  readonly="stage_is_draft==False"/>
                             </group>
                         </group>
                         <notebook>
@@ -129,7 +134,9 @@
                     <field name="termin_id" select="True"/>
                     <field name="master_budget_id" select="True"/>
                     <field name="kanwil_id" select="True"/>
-                    <field name="kontrakk_id" select="True"/>
+                    <field name="kontrak_id" select="True"/>
+                    <field name="master_nama_termin_id" select="True"/>
+                    <field name="stage_id" select="True"/>
                     <group string="Group By..">
                         <filter string="Partner" domain="[]" name="group_by_partner_id" context="{'group_by':'partner_id'}"/>
                         <filter string="Budget Rkap" domain="[]" name="group_by_budget_rkap_id" context="{'group_by':'budget_rkap_id'}"/>
@@ -137,7 +144,9 @@
                         <filter string="Termin" domain="[]" name="group_by_termin_id" context="{'group_by':'termin_id'}"/>
                         <filter string="Master Budget" domain="[]" name="group_by_master_budget_id" context="{'group_by':'master_budget_id'}"/>
                         <filter string="Kanwil" domain="[]" name="group_by_kanwil_id" context="{'group_by':'kanwil_id'}"/>
-                        <filter string="Kontrakk" domain="[]" name="group_by_kontrakk_id" context="{'group_by':'kontrakk_id'}"/>
+                        <filter string="Kontrak" domain="[]" name="group_by_kontrak_id" context="{'group_by':'kontrak_id'}"/>
+                        <filter string="Master Nama Termin" domain="[]" name="group_by_master_nama_termin_id" context="{'group_by':'master_nama_termin_id'}"/>
+                        <filter string="Stage" domain="[]" name="group_by_stage_id" context="{'group_by':'stage_id'}"/>
                     </group>
                 </search>
             </field>
