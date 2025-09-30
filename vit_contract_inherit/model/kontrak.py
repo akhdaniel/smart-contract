@@ -88,8 +88,8 @@ class kontrak(models.Model):
     )
 
     @api.depends("termin_ids.verification_date",
-                 "termin_ids.syarat_termin_ids.upload_date",
-                 "amount_kontrak", "persentasi_denda")
+             "termin_ids.syarat_termin_ids.upload_date",
+             "amount_kontrak", "persentasi_denda")
     def _compute_overdue_days(self):
         for rec in self:
             overdue = 0
@@ -98,8 +98,8 @@ class kontrak(models.Model):
                     if termin.verification_date:
                         for syarat in termin.syarat_termin_ids:
                             if syarat.upload_date:
-                                delta = (syarat.upload_date - termin.verification_date).days
-                                if delta > overdue:
+                                delta = (termin.verification_date - syarat.upload_date).days
+                                if delta > overdue: 
                                     overdue = delta
             rec.overdue_days = max(overdue, 0)
 
@@ -107,6 +107,7 @@ class kontrak(models.Model):
                 rec.amount_denda = rec.amount_kontrak * (rec.persentasi_denda / 100.0) * rec.overdue_days
             else:
                 rec.amount_denda = 0.0
+
 
 
 
