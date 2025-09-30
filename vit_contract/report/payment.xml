@@ -54,6 +54,10 @@
                             <p class="m-0" t-field="doc.payment_date" />
                         </div>
                         <div class="col-auto mw-100 mb-2">
+                            <strong>Amount Denda</strong>
+                            <p class="m-0" t-field="doc.amount_denda" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
                             <strong>Partner</strong>
                             <p class="m-0" t-field="doc.partner_id"/>
                         </div>
@@ -88,10 +92,6 @@
                         <div class="col-auto mw-100 mb-2">
                             <strong>Stage</strong>
                             <p class="m-0" t-field="doc.stage_id"/>
-                        </div>
-                        <div class="col-auto mw-100 mb-2">
-                            <strong>Amount Denda</strong>
-                            <p class="m-0" t-field="doc.amount_denda_id"/>
                         </div>
                     </div>
                 </div>

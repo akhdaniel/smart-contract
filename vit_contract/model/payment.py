@@ -26,6 +26,7 @@ class payment(models.Model):
     stage_name = fields.Char(related="stage_id.name", store=True,  string=_("Stage Name"))
     request_date = fields.Date( string=_("Request Date"))
     payment_date = fields.Date( string=_("Payment Date"))
+    amount_denda = fields.Float( string=_("Amount Denda"))
 
 
     @api.model_create_multi
@@ -95,4 +96,3 @@ class payment(models.Model):
     kontrak_id = fields.Many2one(comodel_name="vit.kontrak",  string=_("Kontrak"))
     master_nama_termin_id = fields.Many2one(comodel_name="vit.master_nama_termin",  string=_("Master Nama Termin"))
     stage_id = fields.Many2one(comodel_name="vit.state_payment",  default=_get_first_stage, copy=False, group_expand="_group_expand_states",  string=_("Stage"))
-    amount_denda_id = fields.Many2one(comodel_name="vit.kontrak",  string=_("Amount Denda"))

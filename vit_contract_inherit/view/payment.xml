@@ -43,6 +43,11 @@
                     <attribute name="readonly">1</attribute>
                 </xpath>
 
+                <xpath expr="//field[@name='amount_denda']" position="replace"/>
+                <xpath expr="//field[@name='amount']" position="after">
+                    <field name="amount_denda" readonly="1"/>
+                </xpath>
+
                 <xpath expr="//field[@name='partner_id']" position="attributes">
                     <attribute name="readonly">1</attribute>
                 </xpath>

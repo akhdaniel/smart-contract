@@ -172,6 +172,7 @@ class syarat_termin(models.Model):
                 self.env['vit.payment'].create({
                     'name': 'PAY/' + rec.name,
                     'amount': rec.nilai,
+                    'amount_denda': kontrak.amount_denda,
                     'partner_id': kontrak.partner_id.id,
                     'budget_rkap_id': kontrak.budget_rkap_id.id,
                     'kanwil_id': kontrak.kanwil_id.id,

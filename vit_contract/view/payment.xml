@@ -17,12 +17,12 @@
                     <field name="stage_id" /> <!-- 102-->
                     <field name="payment_date" /> <!-- 103-->
                     <field name="termin_id" /> <!-- 103-->
+                    <field name="amount_denda" /> <!-- 104-->
                     <field name="master_budget_id" /> <!-- 104-->
                     <field name="kanwil_id" /> <!-- 105-->
                     <field name="kontrak_id" /> <!-- 106-->
                     <field name="master_nama_termin_id" /> <!-- 107-->
                     <field name="stage_id" /> <!-- 108-->
-                    <field name="amount_denda_id" /> <!-- 109-->
                 </tree>
             </field>
         </record>
@@ -42,7 +42,6 @@
                     <field name="kontrak_id" type="row"/>
                     <field name="master_nama_termin_id" type="row"/>
                     <field name="stage_id" type="row"/>
-                    <field name="amount_denda_id" type="row"/>
                 </pivot>
             </field>
         </record>
@@ -81,6 +80,7 @@
                                 <field name="amount"  readonly="stage_is_draft==False"/>
                                 <field name="request_date"  readonly="stage_is_draft==False"/>
                                 <field name="payment_date"  readonly="stage_is_draft==False"/>
+                                <field name="amount_denda"  readonly="stage_is_draft==False"/>
                             </group>
                             <group> <!-- right -->
                                 <field name="partner_id"  readonly="stage_is_draft==False"/>
@@ -90,7 +90,6 @@
                                 <field name="kanwil_id"  readonly="stage_is_draft==False"/>
                                 <field name="kontrak_id"  readonly="stage_is_draft==False"/>
                                 <field name="master_nama_termin_id"  readonly="stage_is_draft==False"/>
-                                <field name="amount_denda_id"  readonly="stage_is_draft==False"/>
                             </group>
                         </group>
                         <notebook>
@@ -122,6 +121,7 @@
                     <filter string="Stage Name" name="filter_by_stage_name" domain="[('stage_name','=','')]" />
                     <filter string="Request Date" name="filter_by_request_date" domain="[('request_date','=','')]" />
                     <filter string="Payment Date" name="filter_by_payment_date" domain="[('payment_date','=','')]" />
+                    <filter string="Amount Denda" name="filter_by_amount_denda" domain="[('amount_denda','=','')]" />
                     <field name="name" select="True"/>
                     <field name="amount" select="True"/>
                     <field name="stage_is_draft" select="True"/>
@@ -131,6 +131,7 @@
                     <field name="stage_name" select="True"/>
                     <field name="request_date" select="True"/>
                     <field name="payment_date" select="True"/>
+                    <field name="amount_denda" select="True"/>
                     <field name="partner_id" select="True"/>
                     <field name="budget_rkap_id" select="True"/>
                     <field name="stage_id" select="True"/>
@@ -140,7 +141,6 @@
                     <field name="kontrak_id" select="True"/>
                     <field name="master_nama_termin_id" select="True"/>
                     <field name="stage_id" select="True"/>
-                    <field name="amount_denda_id" select="True"/>
                     <group string="Group By..">
                         <filter string="Partner" domain="[]" name="group_by_partner_id" context="{'group_by':'partner_id'}"/>
                         <filter string="Budget Rkap" domain="[]" name="group_by_budget_rkap_id" context="{'group_by':'budget_rkap_id'}"/>
@@ -151,7 +151,6 @@
                         <filter string="Kontrak" domain="[]" name="group_by_kontrak_id" context="{'group_by':'kontrak_id'}"/>
                         <filter string="Master Nama Termin" domain="[]" name="group_by_master_nama_termin_id" context="{'group_by':'master_nama_termin_id'}"/>
                         <filter string="Stage" domain="[]" name="group_by_stage_id" context="{'group_by':'stage_id'}"/>
-                        <filter string="Amount Denda" domain="[]" name="group_by_amount_denda_id" context="{'group_by':'amount_denda_id'}"/>
                     </group>
                 </search>
             </field>

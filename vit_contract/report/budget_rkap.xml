@@ -163,6 +163,7 @@
                             <td>Stage Name</td>
                             <td>Request Date</td>
                             <td>Payment Date</td>
+                            <td>Amount Denda</td>
                             <td>Partner</td>
                             <td>Budget Rkap</td>
                             <td>Stage</td>
@@ -172,7 +173,6 @@
                             <td>Kontrak</td>
                             <td>Master Nama Termin</td>
                             <td>Stage</td>
-                            <td>Amount Denda</td>
                         </tr>
                     </thead>
                     <tbody class="payment_ids_tbody">
@@ -186,6 +186,7 @@
                             <td><span t-field="line.stage_name" /></td>
                             <td><span t-field="line.request_date" /></td>
                             <td><span t-field="line.payment_date" /></td>
+                            <td><span t-field="line.amount_denda" /></td>
                             <td><span t-field="line.partner_id" /></td>
                             <td><span t-field="line.budget_rkap_id" /></td>
                             <td><span t-field="line.stage_id" /></td>
@@ -195,7 +196,6 @@
                             <td><span t-field="line.kontrak_id" /></td>
                             <td><span t-field="line.master_nama_termin_id" /></td>
                             <td><span t-field="line.stage_id" /></td>
-                            <td><span t-field="line.amount_denda_id" /></td>
                         </tr> <!-- foreach-->
                     </tbody>
                 </table>
