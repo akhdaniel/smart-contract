@@ -23,7 +23,7 @@
             <div>
               <p><strong>Kanwil:</strong> {{ contract.partner_id.display_name }}</p>
               <p><strong>Kanca:</strong> {{ contract.partner_id.display_name }}</p>
-              <p><strong>Nilai Kontrak:</strong> {{ contract.amount_kontrak }}</p>
+              <p><strong>Nilai Kontrak:</strong> {{ formatCurrency(contract.amount_kontrak) }}</p>
               <p><strong>Jenis Kontrak:</strong> {{ contract.jenis_kontrak_id.display_name }}</p>
               <p><strong>Vendor:</strong> {{ contract.partner_id.display_name }}</p>
             </div>
@@ -264,6 +264,26 @@ const getDownloadUrl = (syaratId, syaratName) => {
 const openPdfViewer = (syaratId, syaratName) => {
   currentPdfUrl.value = getDownloadUrl(syaratId, syaratName);
   showPdfModal.value = true;
+};
+
+// Format currency function
+const formatCurrency = (amount) => {
+  if (amount === null || amount === undefined) return 'Rp 0';
+  try {
+    // Convert to number if it's a string
+    const numAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
+    if (isNaN(numAmount)) return 'Rp 0';
+    
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(numAmount);
+  } catch (error) {
+    console.error('Error formatting currency:', error);
+    return 'Rp ' + amount;
+  }
 };
 
 onMounted(fetchData);
