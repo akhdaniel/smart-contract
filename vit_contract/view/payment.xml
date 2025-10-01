@@ -19,8 +19,11 @@
                     <field name="termin_id" /> <!-- 103-->
                     <field name="amount_denda" /> <!-- 104-->
                     <field name="master_budget_id" /> <!-- 104-->
+                    <field name="amount_budget_rkap" /> <!-- 105-->
                     <field name="kanwil_id" /> <!-- 105-->
+                    <field name="amount_izin_prinsip" /> <!-- 106-->
                     <field name="kontrak_id" /> <!-- 106-->
+                    <field name="amount_kontrak" /> <!-- 107-->
                     <field name="stage_id" /> <!-- 107-->
                     <field name="master_nama_termin_id" /> <!-- 108-->
                 </tree>
@@ -81,6 +84,9 @@
                                 <field name="request_date"  readonly="stage_is_draft==False"/>
                                 <field name="payment_date"  readonly="stage_is_draft==False"/>
                                 <field name="amount_denda"  readonly="stage_is_draft==False"/>
+                                <field name="amount_budget_rkap"  readonly="stage_is_draft==False"/>
+                                <field name="amount_izin_prinsip"  readonly="stage_is_draft==False"/>
+                                <field name="amount_kontrak"  readonly="stage_is_draft==False"/>
                             </group>
                             <group> <!-- right -->
                                 <field name="partner_id"  readonly="stage_is_draft==False"/>
@@ -122,6 +128,9 @@
                     <filter string="Request Date" name="filter_by_request_date" domain="[('request_date','=','')]" />
                     <filter string="Payment Date" name="filter_by_payment_date" domain="[('payment_date','=','')]" />
                     <filter string="Amount Denda" name="filter_by_amount_denda" domain="[('amount_denda','=','')]" />
+                    <filter string="Amount Budget Rkap" name="filter_by_amount_budget_rkap" domain="[('amount_budget_rkap','=','')]" />
+                    <filter string="Amount Izin Prinsip" name="filter_by_amount_izin_prinsip" domain="[('amount_izin_prinsip','=','')]" />
+                    <filter string="Amount Kontrak" name="filter_by_amount_kontrak" domain="[('amount_kontrak','=','')]" />
                     <field name="name" select="True"/>
                     <field name="amount" select="True"/>
                     <field name="stage_is_draft" select="True"/>
@@ -132,6 +141,9 @@
                     <field name="request_date" select="True"/>
                     <field name="payment_date" select="True"/>
                     <field name="amount_denda" select="True"/>
+                    <field name="amount_budget_rkap" select="True"/>
+                    <field name="amount_izin_prinsip" select="True"/>
+                    <field name="amount_kontrak" select="True"/>
                     <field name="partner_id" select="True"/>
                     <field name="budget_rkap_id" select="True"/>
                     <field name="stage_id" select="True"/>

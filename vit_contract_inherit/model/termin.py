@@ -181,7 +181,10 @@ class syarat_termin(models.Model):
                 self.env['vit.payment'].create({
                     'name': 'PAY/' + rec.name,
                     'amount': rec.nilai,
-                    'amount_denda': kontrak.amount_denda,
+                    'amount_denda': kontrak.amount_denda or 0.0,
+                    'amount_budget_rkap': kontrak.budget_rkap_id.amount or 0.0,
+                    'amount_izin_prinsip': kontrak.amount_izin_prinsip or 0.0,
+                    'amount_kontrak': kontrak.amount_kontrak or 0.0,
                     'partner_id': kontrak.partner_id.id,
                     'budget_rkap_id': kontrak.budget_rkap_id.id,
                     'kanwil_id': kontrak.kanwil_id.id,
@@ -206,6 +209,32 @@ class syarat_termin(models.Model):
         return {'type': 'ir.actions.client', 'tag': 'reload'}
 
 
+    # def action_cancel(self):
+    #     for rec in self:
+    #         kontrak = rec.kontrak_id
+
+    #         payments = self.env['vit.payment'].search([('termin_id', '=', rec.id)])
+    #         payments.unlink()
+
+    #         old_stage = rec.stage_id
+
+    #         cancel_stage = self.env['vit.state_termin'].search([('draft', '=', True)], limit=1)
+    #         if cancel_stage:
+    #             rec.stage_id = cancel_stage.id
+
+    #         progress_stage = self.env['vit.kontrak_state'].search([('on_progress', '=', True)], limit=1)
+    #         if not progress_stage:
+    #             raise UserError(_("Stage On Progress untuk Kontrak tidak ditemukan!"))
+    #         kontrak.write({'stage_id': progress_stage.id})
+
+    #         if old_stage.done and rec.stage_id == cancel_stage:
+    #             return {'type': 'ir.actions.client', 'tag': 'reload'}
+
+    #     return True
+
+
+
+
     def action_cancel(self):
         for rec in self:
             kontrak = rec.kontrak_id
@@ -215,19 +244,30 @@ class syarat_termin(models.Model):
 
             old_stage = rec.stage_id
 
-            cancel_stage = self.env['vit.state_termin'].search([('draft', '=', True)], limit=1)
-            if cancel_stage:
-                rec.stage_id = cancel_stage.id
+            draft_stage = self.env['vit.state_termin'].search([('draft', '=', True)], limit=1)
+            progress_stage = self.env['vit.state_termin'].search([('on_progress', '=', True)], limit=1)
+            done_stage = self.env['vit.state_termin'].search([('done', '=', True)], limit=1)
 
-            progress_stage = self.env['vit.kontrak_state'].search([('on_progress', '=', True)], limit=1)
-            if not progress_stage:
-                raise UserError(_("Stage On Progress untuk Kontrak tidak ditemukan!"))
-            kontrak.write({'stage_id': progress_stage.id})
+            if not draft_stage or not progress_stage or not done_stage:
+                raise UserError(_("Stage Draft / On Progress / Done untuk Termin tidak ditemukan!"))
 
-            if old_stage.done and rec.stage_id == cancel_stage:
-                return {'type': 'ir.actions.client', 'tag': 'reload'}
+            # logika bertahap termin
+            if old_stage == done_stage:
+                rec.stage_id = progress_stage.id
+                kontrak.write({'stage_id': self.env['vit.kontrak_state'].search([('on_progress', '=', True)], limit=1).id})
+
+            elif old_stage == progress_stage:
+                rec.stage_id = draft_stage.id
+                kontrak.write({'stage_id': self.env['vit.kontrak_state'].search([('draft', '=', True)], limit=1).id})
+
+            elif old_stage == draft_stage:
+                rec.stage_id = draft_stage.id  # tetap di draft
+
+            return {'type': 'ir.actions.client', 'tag': 'reload'}
 
         return True
+
+
 
 
 

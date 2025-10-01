@@ -113,7 +113,10 @@
                                         <field name="termin_id" /> <!-- 103-->
                                         <field name="amount_denda" /> <!-- 104-->
                                         <field name="master_budget_id" /> <!-- 104-->
+                                        <field name="amount_budget_rkap" /> <!-- 105-->
                                         <field name="kanwil_id" /> <!-- 105-->
+                                        <field name="amount_izin_prinsip" /> <!-- 106-->
+                                        <field name="amount_kontrak" /> <!-- 107-->
                                         <field name="stage_id" /> <!-- 107-->
                                         <field name="master_nama_termin_id" /> <!-- 108-->
                                     </tree>

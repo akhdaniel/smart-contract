@@ -27,6 +27,9 @@ class payment(models.Model):
     request_date = fields.Date( string=_("Request Date"))
     payment_date = fields.Date( string=_("Payment Date"))
     amount_denda = fields.Float( string=_("Amount Denda"))
+    amount_budget_rkap = fields.Float( string=_("Amount Budget Rkap"))
+    amount_izin_prinsip = fields.Float( string=_("Amount Izin Prinsip"))
+    amount_kontrak = fields.Float( string=_("Amount Kontrak"))
 
 
     @api.model_create_multi
