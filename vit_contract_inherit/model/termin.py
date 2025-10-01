@@ -187,7 +187,7 @@ class syarat_termin(models.Model):
                     'amount': rec.nilai,
                     'amount_denda': kontrak.amount_denda or 0.0,
                     'amount_budget_rkap': kontrak.budget_rkap_id.amount or 0.0,
-                    'amount_izin_prinsip': kontrak.amount_izin_prinsip or 0.0,
+                    'amount_izin_prinsip': kontrak.izin_prinsip_id.total_pagu or 0.0,
                     'amount_kontrak': kontrak.amount_kontrak or 0.0,
                     'partner_id': kontrak.partner_id.id,
                     'budget_rkap_id': kontrak.budget_rkap_id.id,
