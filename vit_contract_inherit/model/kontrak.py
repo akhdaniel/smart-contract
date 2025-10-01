@@ -66,47 +66,57 @@ class kontrak(models.Model):
 
     is_late_upload = fields.Boolean(
         string="Late Upload",
-        compute="_compute_is_late_upload",
-        store=False
+        compute="_compute_overdue_and_late",
     )
 
     late_termin_names = fields.Char(
         string="Termin Terlambat",
-        compute="_compute_is_late_upload",
-        store=False
+        compute="_compute_overdue_and_late",
     )
 
     overdue_days = fields.Integer(
         string="Overdue Days",
-        compute="_compute_overdue_days",
-        store=True,
+        compute="_compute_overdue_and_late",
     )
     amount_denda = fields.Float(
         string="Amount Denda",
-        compute="_compute_overdue_days",
-        store=True,
+        compute="_compute_overdue_and_late",
     )
 
-    @api.depends("termin_ids.verification_date",
-             "termin_ids.syarat_termin_ids.upload_date",
+    @api.depends("termin_ids.syarat_termin_ids.upload_date",
+             "termin_ids.due_date",
              "amount_kontrak", "persentasi_denda")
-    def _compute_overdue_days(self):
+    def _compute_overdue_and_late(self):
         for rec in self:
-            overdue = 0
+            max_overdue = 0
+            late_termins = []
+
             if rec.termin_ids:
                 for termin in rec.termin_ids:
-                    if termin.verification_date:
+                    overdue = 0
+                    if termin.due_date:
                         for syarat in termin.syarat_termin_ids:
                             if syarat.upload_date:
-                                delta = (termin.verification_date - syarat.upload_date).days
-                                if delta > overdue: 
-                                    overdue = delta
-            rec.overdue_days = max(overdue, 0)
+                                delta = (syarat.upload_date - termin.due_date).days
+                                if delta > 0:
+                                    overdue = max(overdue, delta)
 
-            if rec.overdue_days > 0 and rec.amount_kontrak and rec.persentasi_denda:
-                rec.amount_denda = rec.amount_kontrak * (rec.persentasi_denda / 100.0) * rec.overdue_days
+                    if overdue > 0:
+                        late_termins.append(termin.master_nama_termin_id.name or termin.name)
+                        if overdue > max_overdue:
+                            max_overdue = overdue
+
+            rec.overdue_days = max_overdue
+            if max_overdue > 0 and rec.amount_kontrak and rec.persentasi_denda:
+                rec.amount_denda = rec.amount_kontrak * (rec.persentasi_denda / 100.0) * max_overdue
             else:
                 rec.amount_denda = 0.0
+
+            rec.is_late_upload = bool(late_termins)
+            rec.late_termin_names = ", ".join(late_termins) if late_termins else ""
+
+
+
 
 
 

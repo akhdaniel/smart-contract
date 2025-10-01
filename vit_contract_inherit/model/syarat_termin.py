@@ -32,6 +32,15 @@ class syarat_termin(models.Model):
         readonly=True,
     )
 
+    @api.constrains('due_date', 'termin_id')
+    def _check_due_date_not_exceed_termin(self):
+        for rec in self:
+            if rec.due_date and rec.termin_id and rec.termin_id.due_date:
+                if rec.due_date > rec.termin_id.due_date:
+                    raise ValidationError(_(
+                        "Due Date syarat termin (%s) tidak boleh lebih dari Due Date termin induknya (%s)."
+                    ) % (rec.due_date, rec.termin_id.due_date))
+
 
 
 
