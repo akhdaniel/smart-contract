@@ -232,5 +232,81 @@ class kontrak(models.Model):
                     raise UserError(_("Kontrak tidak bisa langsung masuk ke Done. "
                                     "Masih ada Termin yang belum selesai."))
 
-        return super(kontrak, self).action_confirm()   
+        return super(kontrak, self).action_confirm() 
+    
+
+    def action_cancel(self):
+        for rec in self:
+            self.env['vit.payment'].search([('termin_id', 'in', rec.termin_ids.ids)]).unlink()
+
+            kontrak_stage = rec.stage_id
+            new_stage = False
+
+            if kontrak_stage.done:
+                new_stage = self.env['vit.kontrak_state'].search([('on_progress', '=', True)], limit=1)
+
+            elif kontrak_stage.on_progress:
+                new_stage = self.env['vit.kontrak_state'].search([('draft', '=', True)], limit=1)
+
+            elif kontrak_stage.draft:
+                new_stage = kontrak_stage  
+
+            if not new_stage:
+                raise UserError(_("Stage tujuan untuk Cancel tidak ditemukan!"))
+
+            rec.stage_id = new_stage.id
+
+            rec._sync_termin_stage(new_stage)
+
+        return {'type': 'ir.actions.client', 'tag': 'reload'}
+    
+
+    def _sync_termin_stage(self, kontrak_stage):
+        for rec in self:
+            if kontrak_stage.draft:
+                termin_stage = self.env['vit.state_termin'].search([('draft', '=', True)], limit=1)
+            elif kontrak_stage.on_progress:
+                termin_stage = self.env['vit.state_termin'].search([('on_progress', '=', True)], limit=1)
+            elif kontrak_stage.done:
+                termin_stage = self.env['vit.state_termin'].search([('done', '=', True)], limit=1)
+            else:
+                termin_stage = False
+
+            if termin_stage:
+                self.env['vit.payment'].search([('termin_id', 'in', rec.termin_ids.ids)]).unlink()
+                rec.termin_ids.write({'stage_id': termin_stage.id})
+
+
+    
+
+    # def action_cancel(self):
+    #     for rec in self:
+    #         self.env['vit.payment'].search([('termin_id', 'in', rec.termin_ids.ids)]).unlink()
+
+    #         draft_stage = self.env['vit.kontrak_state'].search([('draft', '=', True)], limit=1)
+    #         if not draft_stage:
+    #             raise UserError(_("Stage Draft untuk Kontrak tidak ditemukan!"))
+    #         rec.stage_id = draft_stage.id
+
+    #         rec._sync_termin_stage(draft_stage)
+
+    #     return {'type': 'ir.actions.client', 'tag': 'reload'}
+
+
+    # def _sync_termin_stage(self, kontrak_stage):
+    #     for rec in self:
+    #         if kontrak_stage.draft:
+    #             termin_stage = self.env['vit.state_termin'].search([('draft', '=', True)], limit=1)
+    #         elif kontrak_stage.on_progress:
+    #             termin_stage = self.env['vit.state_termin'].search([('on_progress', '=', True)], limit=1)
+    #         elif kontrak_stage.done:
+    #             termin_stage = self.env['vit.state_termin'].search([('done', '=', True)], limit=1)
+    #         else:
+    #             termin_stage = False
+
+    #         if termin_stage:
+    #             self.env['vit.payment'].search([('termin_id', 'in', rec.termin_ids.ids)]).unlink()
+    #             rec.termin_ids.write({'stage_id': termin_stage.id})
+
+
 
