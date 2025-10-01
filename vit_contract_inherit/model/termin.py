@@ -4,7 +4,7 @@ from odoo.exceptions import ValidationError
 import logging
 _logger = logging.getLogger(__name__)
 
-class syarat_termin(models.Model):
+class termin(models.Model):
     _inherit = "vit.termin"
 
 
@@ -32,6 +32,11 @@ class syarat_termin(models.Model):
     verification_date = fields.Date(
         string=_("Verification Date"),
     )
+
+    def write(self, vals):
+        if "is_droping_done" in vals and vals["is_droping_done"] is False:
+            vals["droping_id"] = False
+        return super(termin, self).write(vals)
 
 
     @api.onchange('persentase', 'kontrak_id')

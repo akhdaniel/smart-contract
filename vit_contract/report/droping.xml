@@ -46,8 +46,8 @@
                             <p class="m-0" t-field="doc.stage_name" />
                         </div>
                         <div class="col-auto mw-100 mb-2">
-                            <strong>Due Date</strong>
-                            <p class="m-0" t-field="doc.due_date" />
+                            <strong>Date</strong>
+                            <p class="m-0" t-field="doc.date" />
                         </div>
                         <div class="col-auto mw-100 mb-2">
                             <strong>Kanwil</strong>

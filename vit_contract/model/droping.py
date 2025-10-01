@@ -24,7 +24,7 @@ class droping(models.Model):
     allow_confirm = fields.Boolean(related="stage_id.allow_confirm", store=True,  string=_("Allow Confirm"))
     allow_cancel = fields.Boolean(related="stage_id.allow_cancel", store=True,  string=_("Allow Cancel"))
     stage_name = fields.Char(related="stage_id.name", store=True,  string=_("Stage Name"))
-    due_date = fields.Date( string=_("Due Date"))
+    date = fields.Date( string=_("Date"))
 
 
     @api.model_create_multi

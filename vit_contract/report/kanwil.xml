@@ -91,7 +91,7 @@
                             <td>Allow Confirm</td>
                             <td>Allow Cancel</td>
                             <td>Stage Name</td>
-                            <td>Due Date</td>
+                            <td>Date</td>
                             <td>Kanwil</td>
                             <td>Stage</td>
                             <td>Master Budget</td>
@@ -106,7 +106,7 @@
                             <td><span t-field="line.allow_confirm" /></td>
                             <td><span t-field="line.allow_cancel" /></td>
                             <td><span t-field="line.stage_name" /></td>
-                            <td><span t-field="line.due_date" /></td>
+                            <td><span t-field="line.date" /></td>
                             <td><span t-field="line.kanwil_id" /></td>
                             <td><span t-field="line.stage_id" /></td>
                             <td><span t-field="line.master_budget_id" /></td>
