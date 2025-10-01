@@ -23,7 +23,7 @@
             <div>
               <p><strong>Kanwil:</strong> {{ contract.partner_id.display_name }}</p>
               <p><strong>Kanca:</strong> {{ contract.partner_id.display_name }}</p>
-              <p><strong>Nilai Kontrak:</strong> {{ contract.amount_kontrak }}</p>
+              <p><strong>Nilai Kontrak:</strong> {{ formatCurrency(contract.amount_kontrak) }}</p>
               <p><strong>Jenis Kontrak:</strong> {{ contract.jenis_kontrak_id.display_name }}</p>
               <p><strong>Vendor:</strong> {{ contract.partner_id.display_name }}</p>
             </div>
