@@ -24,8 +24,12 @@ class syarat_termin(models.Model):
         ondelete="cascade"
     )
 
-    verification_date = fields.Date( 
+    due_date = fields.Date(
         required=True,
+        string=_("Due Date"),
+    )
+
+    verification_date = fields.Date(
         string=_("Verification Date"),
     )
 
