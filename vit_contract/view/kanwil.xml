@@ -67,7 +67,9 @@
                                     <tree >
                                         <field name="name" /> <!-- 100-->
                                         <field name="jumlah" /> <!-- 101-->
+                                        <field name="due_date" /> <!-- 102-->
                                         <field name="stage_id" /> <!-- 102-->
+                                        <field name="master_budget_id" /> <!-- 103-->
                                     </tree>
                                 </field>
                             </page>

@@ -46,12 +46,20 @@
                             <p class="m-0" t-field="doc.stage_name" />
                         </div>
                         <div class="col-auto mw-100 mb-2">
+                            <strong>Due Date</strong>
+                            <p class="m-0" t-field="doc.due_date" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
                             <strong>Kanwil</strong>
                             <p class="m-0" t-field="doc.kanwil_id"/>
                         </div>
                         <div class="col-auto mw-100 mb-2">
                             <strong>Stage</strong>
                             <p class="m-0" t-field="doc.stage_id"/>
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Master Budget</strong>
+                            <p class="m-0" t-field="doc.master_budget_id"/>
                         </div>
                     </div>
                 </div>

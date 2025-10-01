@@ -12,8 +12,10 @@
 
         
 
-        <xpath expr="//field[@name='jumlah']" position="after">
-          <field name="attachments" widget="many2many_binary_preview" string="Attachments"/>
+        <xpath expr="//page[@name='termin_kontrak_ids']" position="after">
+          <page name="attachments_page" string="Attachments">
+            <field name="attachments" widget="many2many_binary_preview"/>
+          </page>
         </xpath>
 
       </field>

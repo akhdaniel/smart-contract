@@ -24,6 +24,7 @@ class droping(models.Model):
     allow_confirm = fields.Boolean(related="stage_id.allow_confirm", store=True,  string=_("Allow Confirm"))
     allow_cancel = fields.Boolean(related="stage_id.allow_cancel", store=True,  string=_("Allow Cancel"))
     stage_name = fields.Char(related="stage_id.name", store=True,  string=_("Stage Name"))
+    due_date = fields.Date( string=_("Due Date"))
 
 
     @api.model_create_multi
@@ -87,3 +88,4 @@ class droping(models.Model):
     termin_kontrak_ids = fields.One2many(comodel_name="vit.termin",  inverse_name="droping_id",  string=_("Termin Kontrak"))
     kanwil_id = fields.Many2one(comodel_name="vit.kanwil",  string=_("Kanwil"))
     stage_id = fields.Many2one(comodel_name="vit.state_droping",  default=_get_first_stage, copy=False, group_expand="_group_expand_states",  string=_("Stage"))
+    master_budget_id = fields.Many2one(comodel_name="vit.master_budget",  string=_("Master Budget"))

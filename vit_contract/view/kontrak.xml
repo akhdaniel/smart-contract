@@ -113,8 +113,8 @@
                                         <field name="amount_denda" /> <!-- 104-->
                                         <field name="master_budget_id" /> <!-- 104-->
                                         <field name="kanwil_id" /> <!-- 105-->
-                                        <field name="master_nama_termin_id" /> <!-- 107-->
-                                        <field name="stage_id" /> <!-- 108-->
+                                        <field name="stage_id" /> <!-- 107-->
+                                        <field name="master_nama_termin_id" /> <!-- 108-->
                                     </tree>
                                 </field>
                             </page>
