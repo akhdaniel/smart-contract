@@ -33,6 +33,15 @@ class termin(models.Model):
         string=_("Verification Date"),
     )
 
+    @api.constrains("due_date", "kontrak_id")
+    def _check_due_date_vs_end_date(self):
+        for rec in self:
+            if rec.kontrak_id and rec.kontrak_id.end_date and rec.due_date:
+                if rec.due_date > rec.kontrak_id.end_date:
+                    raise ValidationError(_(
+                        "Due Date (%s) tidak boleh melebihi End Date Kontrak (%s)."
+                    ) % (rec.due_date, rec.kontrak_id.end_date))
+
     def write(self, vals):
         if "is_droping_done" in vals and vals["is_droping_done"] is False:
             vals["droping_id"] = False
