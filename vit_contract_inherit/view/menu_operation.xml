@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="0">
+
+    <!-- Override menu Budget Rkap supaya pindah ke Operations -->
+    <record id="vit_contract.menu_budget_rkap" model="ir.ui.menu">
+      <field name="parent_id" ref="vit_contract.vit_contract_sub_menu"/>
+      <field name="sequence">10</field>
+    </record>
+
+  </data>
+</odoo>
