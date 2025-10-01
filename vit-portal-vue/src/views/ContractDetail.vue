@@ -266,6 +266,8 @@ const openPdfViewer = (syaratId, syaratName) => {
   showPdfModal.value = true;
 };
 
+onMounted(fetchData);
+
 // Format currency function
 const formatCurrency = (amount) => {
   if (amount === null || amount === undefined) return 'Rp 0';
@@ -285,8 +287,6 @@ const formatCurrency = (amount) => {
     return 'Rp ' + amount;
   }
 };
-
-onMounted(fetchData);
 
 </script>
 
