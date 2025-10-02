@@ -134,7 +134,6 @@ class kontrak(models.Model):
 
     @api.onchange('izin_prinsip_id')
     def _onchange_izin_prinsip_id(self):
-        # pakai context special biar bisa bandingin nilai lama
         if self._origin and self._origin.izin_prinsip_id:
             old_izin = self._origin.izin_prinsip_id.id
         else:
@@ -143,10 +142,8 @@ class kontrak(models.Model):
         new_izin = self.izin_prinsip_id.id if self.izin_prinsip_id else False
 
         if old_izin and new_izin and old_izin == new_izin:
-            # izin masih sama → tidak reset
             return
 
-        # izin ganti → reset turunan
         self.job_izin_prinsip_id = False
         self.jenis_kontrak_id = False
         self.jenis_kontrak_many = [(5, 0, 0)]
@@ -212,8 +209,28 @@ class kontrak(models.Model):
             
 
             
+    # @api.constrains("izin_prinsip_id", "jenis_kontrak_id", "partner_id")
+    # def _check_duplicate_izin_prinsip_jenis_kontrak(self):
+    #     for rec in self:
+    #         if rec.izin_prinsip_id and rec.jenis_kontrak_id and rec.partner_id:
+    #             dupe = self.search([
+    #                 ("id", "!=", rec.id),
+    #                 ("izin_prinsip_id", "=", rec.izin_prinsip_id.id),
+    #                 ("partner_id", "=", rec.partner_id.id),
+    #                 ("jenis_kontrak_id", "=", rec.jenis_kontrak_id.id),
+    #             ], limit=1)
+    #             if dupe:
+    #                 raise ValidationError(
+    #                     _("Jenis Kontrak %s sudah dipakai oleh Partner %s untuk Izin Prinsip %s, tidak boleh duplikat!") 
+    #                     % (rec.jenis_kontrak_id.name, rec.partner_id.name, rec.izin_prinsip_id.name)
+    #                 )
+
+
     @api.constrains("izin_prinsip_id", "jenis_kontrak_id", "partner_id")
     def _check_duplicate_izin_prinsip_jenis_kontrak(self):
+        if self.env.context.get("bypass_duplicate_check"):
+            return
+
         for rec in self:
             if rec.izin_prinsip_id and rec.jenis_kontrak_id and rec.partner_id:
                 dupe = self.search([
@@ -287,36 +304,100 @@ class kontrak(models.Model):
                 rec.termin_ids.write({'stage_id': termin_stage.id})
 
 
-    
+    # def action_create_addendum(self):
+    #     self.ensure_one()
+        
+    #     # Copy kontrak dengan bypass constraint
+    #     kontrak_copy = self.with_context(bypass_duplicate_check=True).copy({
+    #         'name': self.env['ir.sequence'].next_by_code('vit.kontrak') or _('New'),
+    #         'stage_id': self.stage_id.id,  # <-- paksa ikut stage aslinya
+    #     })
 
-    # def action_cancel(self):
-    #     for rec in self:
-    #         self.env['vit.payment'].search([('termin_id', 'in', rec.termin_ids.ids)]).unlink()
+    #     # Duplikasi termin
+    #     new_termins = []
+    #     for termin in self.termin_ids:
+    #         new_termin = termin.with_context(bypass_duplicate_check=True).copy({
+    #             'kontrak_id': kontrak_copy.id,
+    #             'stage_id': termin.stage_id.id,  # <-- paksa termin ikut stage aslinya juga
+    #         })
+    #         new_termins.append(new_termin.id)
+    #     kontrak_copy.termin_ids = [(6, 0, new_termins)]
 
-    #         draft_stage = self.env['vit.kontrak_state'].search([('draft', '=', True)], limit=1)
-    #         if not draft_stage:
-    #             raise UserError(_("Stage Draft untuk Kontrak tidak ditemukan!"))
-    #         rec.stage_id = draft_stage.id
+    #     # Duplikasi payments
+    #     new_payments = []
+    #     for payment in self.payment_ids:
+    #         new_payment = payment.with_context(bypass_duplicate_check=True).copy({
+    #             'kontrak_id': kontrak_copy.id,
+    #         })
+    #         new_payments.append(new_payment.id)
+    #     kontrak_copy.payment_ids = [(6, 0, new_payments)]
 
-    #         rec._sync_termin_stage(draft_stage)
+    #     # Duplikasi attachments
+    #     attachments = self.env['ir.attachment'].search([
+    #         ('res_model', '=', 'vit.kontrak'),
+    #         ('res_id', '=', self.id)
+    #     ])
+    #     for att in attachments:
+    #         att.copy({'res_id': kontrak_copy.id})
 
-    #     return {'type': 'ir.actions.client', 'tag': 'reload'}
+    #     return {
+    #         'name': _('Kontrak Addendum'),
+    #         'type': 'ir.actions.act_window',
+    #         'res_model': 'vit.kontrak',
+    #         'view_mode': 'form',
+    #         'res_id': kontrak_copy.id,
+    #         'target': 'current',
+    #     }
 
 
-    # def _sync_termin_stage(self, kontrak_stage):
-    #     for rec in self:
-    #         if kontrak_stage.draft:
-    #             termin_stage = self.env['vit.state_termin'].search([('draft', '=', True)], limit=1)
-    #         elif kontrak_stage.on_progress:
-    #             termin_stage = self.env['vit.state_termin'].search([('on_progress', '=', True)], limit=1)
-    #         elif kontrak_stage.done:
-    #             termin_stage = self.env['vit.state_termin'].search([('done', '=', True)], limit=1)
-    #         else:
-    #             termin_stage = False
+    def action_create_addendum(self):
+        self.ensure_one()
+        
+        kontrak_copy = self.with_context(bypass_duplicate_check=True).copy({
+            'name': self.env['ir.sequence'].next_by_code('vit.kontrak') or _('New'),
+            'stage_id': self.stage_id.id,
+        })
 
-    #         if termin_stage:
-    #             self.env['vit.payment'].search([('termin_id', 'in', rec.termin_ids.ids)]).unlink()
-    #             rec.termin_ids.write({'stage_id': termin_stage.id})
+        new_termins = []
+        for termin in self.termin_ids:
+            new_termin = termin.with_context(bypass_duplicate_check=True).copy({
+                'kontrak_id': kontrak_copy.id,
+                'stage_id': termin.stage_id.id,
+            })
+            
+            new_syarat = []
+            for syarat in termin.syarat_termin_ids:
+                syarat_copy = syarat.copy({
+                    'termin_id': new_termin.id,
+                })
+                new_syarat.append(syarat_copy.id)
+            new_termin.syarat_termin_ids = [(6, 0, new_syarat)]
+
+            new_termins.append(new_termin.id)
+
+        kontrak_copy.termin_ids = [(6, 0, new_termins)]
+
+        attachments = self.env['ir.attachment'].search([
+            ('res_model', '=', 'vit.kontrak'),
+            ('res_id', '=', self.id)
+        ])
+        for att in attachments:
+            att.copy({'res_id': kontrak_copy.id})
+
+        kontrak_copy._compute_overdue_and_late()
+        kontrak_copy._compute_is_late_upload()
+
+        return {
+            'name': _('Kontrak Addendum'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'vit.kontrak',
+            'view_mode': 'form',
+            'res_id': kontrak_copy.id,
+            'target': 'current',
+        }
+
+
+
 
 
 
