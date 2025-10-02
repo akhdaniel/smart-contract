@@ -82,21 +82,39 @@ class syarat_termin(models.Model):
             }
         
 
-    def write(self, vals):
-        if "document" in vals:  
-            if vals.get("document"):  
-                vals["upload_date"] = fields.Date.context_today(self)
-            else: 
-                vals["upload_date"] = False
-        return super().write(vals)
+    # def write(self, vals):
+    #     if "document" in vals:  
+    #         if vals.get("document"):  
+    #             vals["upload_date"] = fields.Date.context_today(self)
+    #         else: 
+    #             vals["upload_date"] = False
+    #     return super().write(vals)
+
+    # @api.model
+    # def create(self, vals):
+    #     if vals.get("document"):
+    #         vals["upload_date"] = fields.Date.context_today(self)
+    #     else:
+    #         vals["upload_date"] = False
+    #     return super().create(vals)
 
     @api.model
     def create(self, vals):
-        if vals.get("document"):
-            vals["upload_date"] = fields.Date.context_today(self)
-        else:
-            vals["upload_date"] = False
+        if "upload_date" not in vals:
+            if vals.get("document"):
+                vals["upload_date"] = fields.Date.context_today(self)
+            else:
+                vals["upload_date"] = False
         return super().create(vals)
+
+    def write(self, vals):
+        if "document" in vals and "upload_date" not in vals:
+            if vals.get("document"):
+                vals["upload_date"] = fields.Date.context_today(self)
+            else:
+                vals["upload_date"] = False
+        return super().write(vals)
+
 
     @api.onchange('document')
     def _onchange_document_due_date(self):

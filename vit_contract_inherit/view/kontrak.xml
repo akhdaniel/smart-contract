@@ -7,6 +7,11 @@
             <field name="inherit_id" ref="vit_contract.view_vit_kontrak_form"/>
             <field name="arch" type="xml">
 
+                <xpath expr="//form/sheet" position="before">
+                    <field name="is_addendum" invisible="1"/>
+                </xpath>
+
+
                 <sheet position="before">
                     <field name="is_late_upload" invisible="1"/>
                     <field name="late_termin_names" invisible="1"/>
@@ -17,6 +22,47 @@
                         , maka akan dikenakan denda.
                     </div>
                 </sheet>
+
+                <!-- <xpath expr="//div[@class='oe_button_box']" position="inside">
+                    <button name="action_view_addendums" type="object"
+                        class="oe_stat_button float-end" icon="fa-edit">
+                        <field name="addendum_count" widget="statinfo" string="Addendum"/>
+                    </button>
+                </xpath> -->
+
+                <xpath expr="//div[@class='oe_button_box']" position="after">
+                <div class="oe_stat_icon float-end"
+                    invisible="not addendum_count"
+                    style="border:1px solid purple; border-radius:6px; padding:2px 8px; display:inline-flex; align-items:center; gap:6px; margin-left:8px;">
+                    <button name="action_view_addendums" type="object"
+                            style="background:none; border:none; padding:0; margin:0; display:inline-flex; align-items:center; gap:4px;">
+                        <i class="fa fa-edit" style="font-size:18px;"/>
+                        <span style="font-size:14px;">
+                            <field name="addendum_count"/> Addendum
+                        </span>
+                    </button>
+                </div>
+
+                <div class="oe_stat_icon float-end"
+                    invisible="not is_addendum"
+                    style="border:1px solid green; border-radius:6px; padding:2px 8px; display:inline-flex; align-items:center; gap:6px; margin-left:8px;">
+                    <button name="action_view_origin_kontrak" type="object"
+                            style="background:none; border:none; padding:0; margin:0; display:inline-flex; align-items:center; gap:4px;">
+                        <i class="fa fa-link" style="font-size:18px;"/>
+                        <span style="font-size:14px;">
+                            Kontrak Asal
+                        </span>
+                    </button>
+                </div>
+            </xpath>
+
+
+
+
+
+
+
+
 
 
 
@@ -121,6 +167,27 @@
                     <attribute name="force_save">1</attribute>
                 </xpath>
 
+
+
+
+                <xpath expr="//page[@name='termin_ids']/field[@name='termin_ids']/tree" position="attributes">
+                    <attribute name="delete">false</attribute>
+                </xpath>
+
+
+                <xpath expr="//field[@name='termin_ids']/tree/field[@name='is_droping_done']" position="after">
+                    <field name="stage_is_draft" column_invisible="1"/>
+                    <button name="action_delete_line"
+                            string="Delete"
+                            type="object"
+                            icon="fa-trash"
+                            class="oe_link"
+                            invisible="not stage_is_draft"/>
+                </xpath>
+
+
+
+
                 <xpath expr="//page[@name='payment_ids']" position="replace"/>
 
                 <xpath expr="//page[@name='termin_ids']" position="after">
@@ -140,6 +207,37 @@
                         <field name="attachments" widget="many2many_binary_preview" string="Attachments"/>
                     </page>
                 </xpath>
+
+
+
+
+
+
+                <xpath expr="//field[@name='start_date']" position="attributes">
+                    <attribute name="readonly">is_addendum==True or stage_is_draft==False</attribute>
+                </xpath>
+                <xpath expr="//field[@name='amount_denda']" position="attributes">
+                    <attribute name="readonly">is_addendum==True or stage_is_draft==False</attribute>
+                </xpath>
+                <xpath expr="//field[@name='persentasi_denda']" position="attributes">
+                    <attribute name="readonly">is_addendum==True or stage_is_draft==False</attribute>
+                </xpath>
+                <xpath expr="//field[@name='overdue_days']" position="attributes">
+                    <attribute name="readonly">is_addendum==True or stage_is_draft==False</attribute>
+                </xpath>
+                <xpath expr="//field[@name='izin_prinsip_id']" position="attributes">
+                    <attribute name="readonly">is_addendum==True or stage_is_draft==False</attribute>
+                </xpath>
+                <xpath expr="//field[@name='job_izin_prinsip_id']" position="attributes">
+                    <attribute name="readonly">is_addendum==True or stage_is_draft==False</attribute>
+                </xpath>
+                <xpath expr="//field[@name='jenis_kontrak_id']" position="attributes">
+                    <attribute name="readonly">is_addendum==True or stage_is_draft==False</attribute>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="readonly">is_addendum==True or stage_is_draft==False</attribute>
+                </xpath>
+
 
             </field>
         </record>

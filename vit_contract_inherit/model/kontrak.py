@@ -83,6 +83,36 @@ class kontrak(models.Model):
         compute="_compute_overdue_and_late",
     )
 
+    is_addendum = fields.Boolean(
+        string="Is Addendum",
+        default=False
+    )
+
+    addendum_origin_id = fields.Many2one(
+        'vit.kontrak',
+        string="Kontrak Induk",
+        index=True,
+        ondelete="cascade"
+    )
+
+    addendum_ids = fields.One2many(
+        'vit.kontrak',
+        'addendum_origin_id',
+        string="Addendums"
+    )
+
+    addendum_count = fields.Integer(
+        string="Jumlah Addendum",
+        compute="_compute_addendum_count"
+    )
+
+    @api.depends('addendum_ids')
+    def _compute_addendum_count(self):
+        for rec in self:
+            rec.addendum_count = len(rec.addendum_ids)
+
+
+
     @api.depends("termin_ids.syarat_termin_ids.upload_date",
              "termin_ids.due_date",
              "amount_kontrak", "persentasi_denda")
@@ -350,33 +380,59 @@ class kontrak(models.Model):
     #     }
 
 
+
     def action_create_addendum(self):
         self.ensure_one()
-        
+
+        # Batasin: tiap kontrak / addendum hanya bisa punya 1 addendum child
+        if self.addendum_ids:
+            raise UserError(_("Kontrak ini sudah punya Addendum, tidak bisa bikin lebih dari 1."))
+
+        if not self.stage_id or self.stage_id.name.lower() != "on progress":
+            raise UserError(_("Addendum hanya bisa dibuat kalau kontrak di stage 'On Progress'."))
+
+        # Generate nama addendum: parent name + -X
+        base_name = self.name
+        if "-" in base_name:
+            # sudah ada addendum, hitung lanjutannya
+            parts = base_name.split("-")
+            try:
+                last_num = int(parts[-1])
+                new_name = f"{base_name}-{last_num+1}"
+            except ValueError:
+                new_name = f"{base_name}-1"
+        else:
+            new_name = f"{base_name}-1"
+
         kontrak_copy = self.with_context(bypass_duplicate_check=True).copy({
-            'name': self.env['ir.sequence'].next_by_code('vit.kontrak') or _('New'),
-            'stage_id': self.stage_id.id,
+            'name': new_name,
+            'stage_id': self.env['vit.kontrak_state'].search([('draft', '=', True)], limit=1).id,
+            'is_addendum': True,
+            'addendum_origin_id': self.id,
         })
 
+        # copy termin
         new_termins = []
         for termin in self.termin_ids:
             new_termin = termin.with_context(bypass_duplicate_check=True).copy({
                 'kontrak_id': kontrak_copy.id,
                 'stage_id': termin.stage_id.id,
             })
-            
+            # copy syarat
             new_syarat = []
             for syarat in termin.syarat_termin_ids:
                 syarat_copy = syarat.copy({
                     'termin_id': new_termin.id,
+                    'upload_date': syarat.upload_date,
+                    'due_date': syarat.due_date,
                 })
                 new_syarat.append(syarat_copy.id)
             new_termin.syarat_termin_ids = [(6, 0, new_syarat)]
-
             new_termins.append(new_termin.id)
 
         kontrak_copy.termin_ids = [(6, 0, new_termins)]
 
+        # copy attachments
         attachments = self.env['ir.attachment'].search([
             ('res_model', '=', 'vit.kontrak'),
             ('res_id', '=', self.id)
@@ -398,6 +454,49 @@ class kontrak(models.Model):
 
 
 
+
+
+    
+    def action_view_addendums(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Addendums'),
+            'res_model': 'vit.kontrak',
+            'view_mode': 'tree,form',
+            'domain': [('addendum_origin_id', '=', self.id)],
+            'context': dict(self.env.context, default_addendum_origin_id=self.id),
+        }
+    
+
+    def action_view_origin_kontrak(self):
+        self.ensure_one()
+        if not self.addendum_origin_id:
+            return False
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Kontrak Induk',
+            'res_model': 'vit.kontrak',
+            'view_mode': 'form',
+            'res_id': self.addendum_origin_id.id,
+            'target': 'current',
+        }
+    
+
+
+
+class KontrakInherit(models.Model):
+    _inherit = "vit.kontrak"
+
+    def copy(self, default=None):
+        default = dict(default or {})
+
+        if default.get("name"):
+            return models.BaseModel.copy(self, default)
+
+        # Kalau manual duplicate, kasih custom -DUP
+        default["name"] = f"{self.name}-DUP"
+        return models.BaseModel.copy(self, default)
 
 
 

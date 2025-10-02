@@ -33,6 +33,11 @@ class termin(models.Model):
         string=_("Verification Date"),
     )
 
+    def action_delete_line(self):
+        for rec in self:
+            rec.unlink()
+        return True
+
     @api.constrains("due_date", "kontrak_id")
     def _check_due_date_vs_end_date(self):
         for rec in self:
@@ -292,15 +297,6 @@ class termin(models.Model):
 
 
 
-
-
-
-
-
-
-
-
-
     # @api.onchange('persentase', 'kontrak_id')
     # def _onchange_persentase(self):
     #     if self.kontrak_id and self.kontrak_id.amount_kontrak and self.persentase:
@@ -319,3 +315,29 @@ class termin(models.Model):
     #             total = sum(rec.kontrak_id.termin_ids.mapped('persentase'))
     #             if total > 100:
     #                 raise ValidationError("Total semua persentase termin pada kontrak ini tidak boleh lebih dari 100%.")
+
+
+
+class TerminInherit(models.Model):
+    _inherit = "vit.termin"
+
+    def copy(self, default=None):
+        default = dict(default or {})
+
+        # Kalau sudah dikasih name (misal dari addendum kontrak), pakai langsung
+        if default.get("name"):
+            return models.BaseModel.copy(self, default)
+
+        base_name = self.name
+        if "-" in base_name:
+            parts = base_name.split("-")
+            try:
+                last_num = int(parts[-1])
+                new_name = f"{base_name}-{last_num+1}"
+            except ValueError:
+                new_name = f"{base_name}-1"
+        else:
+            new_name = f"{base_name}-1"
+
+        default["name"] = new_name
+        return models.BaseModel.copy(self, default)
