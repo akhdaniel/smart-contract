@@ -7,6 +7,11 @@
             <field name="inherit_id" ref="vit_contract.view_vit_kontrak_form"/>
             <field name="arch" type="xml">
 
+
+                <xpath expr="//button[@name='action_create_addendum']" position="attributes">
+                    <attribute name="invisible">stage_is_draft==True or stage_is_done==True</attribute>
+                </xpath>
+
                 <xpath expr="//form/sheet" position="before">
                     <field name="is_addendum" invisible="1"/>
                 </xpath>

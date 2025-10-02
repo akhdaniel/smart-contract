@@ -391,10 +391,9 @@ class kontrak(models.Model):
         if not self.stage_id or self.stage_id.name.lower() != "on progress":
             raise UserError(_("Addendum hanya bisa dibuat kalau kontrak di stage 'On Progress'."))
 
-        # Generate nama addendum: parent name + -X
+        # Generate nama addendum
         base_name = self.name
         if "-" in base_name:
-            # sudah ada addendum, hitung lanjutannya
             parts = base_name.split("-")
             try:
                 last_num = int(parts[-1])
@@ -404,6 +403,13 @@ class kontrak(models.Model):
         else:
             new_name = f"{base_name}-1"
 
+        # --- PAKSA kontrak asal pindah ke DONE ---
+        done_stage = self.env['vit.kontrak_state'].search([('done', '=', True)], limit=1)
+        if not done_stage:
+            raise UserError(_("Stage DONE tidak ditemukan!"))
+        self.stage_id = done_stage.id
+
+        # Copy kontrak sebagai Addendum
         kontrak_copy = self.with_context(bypass_duplicate_check=True).copy({
             'name': new_name,
             'stage_id': self.env['vit.kontrak_state'].search([('draft', '=', True)], limit=1).id,
@@ -411,7 +417,7 @@ class kontrak(models.Model):
             'addendum_origin_id': self.id,
         })
 
-        # copy termin
+        # Copy termin
         new_termins = []
         for termin in self.termin_ids:
             new_termin = termin.with_context(bypass_duplicate_check=True).copy({
