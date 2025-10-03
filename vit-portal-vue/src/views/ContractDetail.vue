@@ -21,8 +21,8 @@
               <p><strong>Stage:</strong> {{ contract.stage_id.display_name }}</p>
             </div>
             <div>
-              <p><strong>Kanwil:</strong> {{ contract.partner_id.display_name }}</p>
-              <p><strong>Kanca:</strong> {{ contract.partner_id.display_name }}</p>
+              <p><strong>Kanwil:</strong> {{ contract.kanwil_id.display_name }}</p>
+              <p><strong>Kanca:</strong> {{ contract.kanca_id.display_name }}</p>
               <p><strong>Nilai Kontrak:</strong> {{ formatCurrency(contract.amount_kontrak) }}</p>
               <p><strong>Jenis Kontrak:</strong> {{ contract.jenis_kontrak_id.display_name }}</p>
               <p><strong>Vendor:</strong> {{ contract.partner_id.display_name }}</p>
@@ -37,7 +37,13 @@
         <div v-for="(termin, index) in termins" :key="termin.id" class="accordion-item">
           <h2 class="accordion-header" :id="`heading${termin.id}`">
             <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse${termin.id}`" :aria-expanded="index === 0 ? 'true' : 'false'" :aria-controls="`collapse${termin.id}`">
-              {{ termin.name }}
+              <div>
+              <div style="font-weight:bold">{{ termin.master_nama_termin_id.display_name }},
+              {{ termin.persentase }}%,
+              {{ formatCurrency(termin.nilai) }}
+              </div>
+              <div style="font-size:9pt; ">{{ termin.name }}</div>
+              </div>
             </button>
           </h2>
           <div :id="`collapse${termin.id}`" class="accordion-collapse collapse" :class="{ show: index === 0 }" :aria-labelledby="`heading${termin.id}`" data-bs-parent="#terminAccordion">
@@ -53,14 +59,15 @@
                         <a class="" href="#" @click="openPdfViewer(syarat.id, syarat.name)">{{ syarat.name }}
                         <i class="px-2 fa-regular fa-eye"></i>
                         </a>
-                        <i class="px-2 fa-regular fa-trash-can text-danger" @click="deleteDocument(syarat.id)" style="cursor: pointer;"></i>
+                        <i v-if="syarat.document && !syarat.verified" class="px-2 fa-regular fa-trash-can text-danger" @click="deleteDocument(syarat.id)" style="cursor: pointer;"></i>
                       </div>
                     </div>
                   </div>
 
 
 
-                  <div v-if="syarat.document" class="syarat-ribbon bg-success">Verified</div>
+                  <div v-if="syarat.document && !syarat.verified" class="syarat-ribbon bg-warning">Uploaded</div>
+                  <div v-if="syarat.document && syarat.verified" class="syarat-ribbon bg-success">Verified</div>
                   <div class="px-1 fs-6">Due date: {{ syarat.due_date }}</div>
                   <form v-if="!syarat.document" @submit.prevent="uploadDocument(syarat.id, $event)" class="d-flex mt-2">
                     <input type="file" class="form-control form-control-sm me-2" required>
@@ -78,7 +85,8 @@
         <thead>
             <tr>
                 <th>Number</th>
-                <th>Date</th>
+                <th>Request Date</th>
+                <th>Payment Date</th>
                 <th class="text-end">Amount</th>
                 <th class="text-center">Status</th>
             </tr>
@@ -86,9 +94,20 @@
         <tbody>
             <tr v-for="payment in payments" :key="payment.id">
                 <td>{{ payment.name }}</td>
-                <td>{{ payment.tanggal }}</td>
+                <td>{{ payment.request_date?payment.request_date:"" }}</td>
+                <td>{{ payment.payment_date }}</td>
                 <td class="text-end">{{ formatCurrency(payment.amount) }}</td>
-                <td class="text-center"><span class="badge bg-info">{{ payment.state }}</span></td>
+                <td class="text-center">
+                  
+                  <span class="badge" :class="{
+                    'bg-info': payment.stage_id.display_name === 'On Progress',
+                    'bg-secondary': payment.stage_id.display_name === 'Draft',
+                    'bg-success': payment.stage_id.display_name === 'Done'
+                  }">
+                    {{ payment.stage_id.display_name }}
+                  </span>
+
+                </td>
             </tr>
         </tbody>
        </table>
@@ -143,9 +162,16 @@ const fetchData = async () => {
       partner_id:{
         fields:{display_name:{}}
       },
+      kanwil_id:{
+        fields:{display_name:{}}
+      },
+      kanca_id:{
+        fields:{display_name:{}}
+      },
       termin_ids:{
         fields:{
           name:{},
+          nilai:{},
           master_nama_termin_id:{
             fields:{
               display_name:{}
@@ -156,7 +182,8 @@ const fetchData = async () => {
             fields:{
               name:{},
               due_date:{},
-              document:{}
+              document:{},
+              verified:{}
             }
           },
         }
@@ -165,8 +192,18 @@ const fetchData = async () => {
         fields:{display_name:{}}
       },
       payment_ids:{
-        name:{},
-        amount:{}
+        fields:{
+          name:{},
+          request_date:{},
+          payment_date:{},
+          amount:{},
+          termin_id:{
+            fields:{display_name:{}}
+          },
+          stage_id:{
+            fields:{display_name:{}}
+          },
+        }
       }
     }
     const contractData = await odooService.read('vit.kontrak', [contractId], specification);
