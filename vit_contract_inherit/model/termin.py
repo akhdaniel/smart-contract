@@ -215,6 +215,7 @@ class termin(models.Model):
                     'termin_id': rec.id,
                     'kontrak_id': kontrak.id, 
                     'master_nama_termin_id': rec.master_nama_termin_id.id,
+                    'izin_prinsip_id': kontrak.izin_prinsip_id.id,
                     'payment_date': fields.Date.context_today(self),
                 })
 

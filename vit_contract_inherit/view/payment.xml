@@ -81,6 +81,10 @@
                     <attribute name="readonly">1</attribute>
                 </xpath>
 
+                <xpath expr="//field[@name='izin_prinsip_id']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+
                 <xpath expr="//field[@name='kontrak_id']" position="attributes">
                     <attribute name="readonly">1</attribute>
                 </xpath>

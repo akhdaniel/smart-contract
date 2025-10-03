@@ -26,6 +26,7 @@
                     <field name="amount_kontrak" /> <!-- 107-->
                     <field name="stage_id" /> <!-- 107-->
                     <field name="master_nama_termin_id" /> <!-- 108-->
+                    <field name="izin_prinsip_id" /> <!-- 109-->
                 </tree>
             </field>
         </record>
@@ -45,6 +46,7 @@
                     <field name="kontrak_id" type="row"/>
                     <field name="stage_id" type="row"/>
                     <field name="master_nama_termin_id" type="row"/>
+                    <field name="izin_prinsip_id" type="row"/>
                 </pivot>
             </field>
         </record>
@@ -96,6 +98,7 @@
                                 <field name="kanwil_id"  readonly="stage_is_draft==False"/>
                                 <field name="kontrak_id"  readonly="stage_is_draft==False"/>
                                 <field name="master_nama_termin_id"  readonly="stage_is_draft==False"/>
+                                <field name="izin_prinsip_id"  readonly="stage_is_draft==False"/>
                             </group>
                         </group>
                         <notebook>
@@ -153,6 +156,7 @@
                     <field name="kontrak_id" select="True"/>
                     <field name="stage_id" select="True"/>
                     <field name="master_nama_termin_id" select="True"/>
+                    <field name="izin_prinsip_id" select="True"/>
                     <group string="Group By..">
                         <filter string="Partner" domain="[]" name="group_by_partner_id" context="{'group_by':'partner_id'}"/>
                         <filter string="Budget Rkap" domain="[]" name="group_by_budget_rkap_id" context="{'group_by':'budget_rkap_id'}"/>
@@ -163,6 +167,7 @@
                         <filter string="Kontrak" domain="[]" name="group_by_kontrak_id" context="{'group_by':'kontrak_id'}"/>
                         <filter string="Stage" domain="[]" name="group_by_stage_id" context="{'group_by':'stage_id'}"/>
                         <filter string="Master Nama Termin" domain="[]" name="group_by_master_nama_termin_id" context="{'group_by':'master_nama_termin_id'}"/>
+                        <filter string="Izin Prinsip" domain="[]" name="group_by_izin_prinsip_id" context="{'group_by':'izin_prinsip_id'}"/>
                     </group>
                 </search>
             </field>

@@ -119,6 +119,7 @@
                                         <field name="amount_kontrak" /> <!-- 107-->
                                         <field name="stage_id" /> <!-- 107-->
                                         <field name="master_nama_termin_id" /> <!-- 108-->
+                                        <field name="izin_prinsip_id" /> <!-- 109-->
                                     </tree>
                                 </field>
                             </page>

@@ -105,6 +105,10 @@
                             <strong>Master Nama Termin</strong>
                             <p class="m-0" t-field="doc.master_nama_termin_id"/>
                         </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Izin Prinsip</strong>
+                            <p class="m-0" t-field="doc.izin_prinsip_id"/>
+                        </div>
                     </div>
                 </div>
                 <div class="oe_structure"/>

@@ -69,11 +69,13 @@ class kontrak(models.Model):
     is_late_upload = fields.Boolean(
         string="Late Upload",
         compute="_compute_overdue_and_late",
+        store=True,
     )
 
     late_termin_names = fields.Char(
         string="Termin Terlambat",
         compute="_compute_overdue_and_late",
+        store=True,
     )
     
     persentasi_denda = fields.Float( 
@@ -83,10 +85,12 @@ class kontrak(models.Model):
     overdue_days = fields.Integer(
         string="Overdue Days",
         compute="_compute_overdue_and_late",
+        store=True,
     )
     amount_denda = fields.Float(
         string="Amount Denda",
         compute="_compute_overdue_and_late",
+        store=True,
     )
 
     is_addendum = fields.Boolean(
@@ -109,7 +113,8 @@ class kontrak(models.Model):
 
     addendum_count = fields.Integer(
         string="Jumlah Addendum",
-        compute="_compute_addendum_count"
+        compute="_compute_addendum_count",
+        store=True,
     )
 
     @api.depends('addendum_ids')

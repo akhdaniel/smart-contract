@@ -176,6 +176,7 @@
                             <td>Kontrak</td>
                             <td>Stage</td>
                             <td>Master Nama Termin</td>
+                            <td>Izin Prinsip</td>
                         </tr>
                     </thead>
                     <tbody class="payment_ids_tbody">
@@ -202,6 +203,7 @@
                             <td><span t-field="line.kontrak_id" /></td>
                             <td><span t-field="line.stage_id" /></td>
                             <td><span t-field="line.master_nama_termin_id" /></td>
+                            <td><span t-field="line.izin_prinsip_id" /></td>
                         </tr> <!-- foreach-->
                     </tbody>
                 </table>
