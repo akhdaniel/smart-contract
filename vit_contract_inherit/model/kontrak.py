@@ -10,6 +10,8 @@ _logger = logging.getLogger(__name__)
 class kontrak(models.Model):
     _inherit = "vit.kontrak"
 
+    active = fields.Boolean(default=True)
+
     attachments = fields.Many2many(
         'ir.attachment',
         string='Upload'
@@ -73,6 +75,10 @@ class kontrak(models.Model):
         string="Termin Terlambat",
         compute="_compute_overdue_and_late",
     )
+    
+    persentasi_denda = fields.Float( 
+        string=_("Per mil Denda")
+    )
 
     overdue_days = fields.Integer(
         string="Overdue Days",
@@ -114,27 +120,38 @@ class kontrak(models.Model):
 
 
     @api.depends("termin_ids.syarat_termin_ids.upload_date",
-             "termin_ids.due_date",
-             "amount_kontrak", "persentasi_denda")
+                "termin_ids.due_date",
+                "amount_kontrak", "persentasi_denda")
     def _compute_overdue_and_late(self):
         for rec in self:
             max_overdue = 0
             late_termins = []
 
-            if rec.termin_ids:
-                for termin in rec.termin_ids:
-                    overdue = 0
-                    if termin.due_date:
-                        for syarat in termin.syarat_termin_ids:
-                            if syarat.upload_date:
-                                delta = (syarat.upload_date - termin.due_date).days
-                                if delta > 0:
-                                    overdue = max(overdue, delta)
+            # filter termin yang bukan Retensi
+            non_retensi_termins = rec.termin_ids.filtered(
+                lambda t: t.master_nama_termin_id.type != 'is_retensi'
+            )
 
-                    if overdue > 0:
-                        late_termins.append(termin.master_nama_termin_id.name or termin.name)
-                        if overdue > max_overdue:
-                            max_overdue = overdue
+            # ambil termin terakhir berdasarkan sequence
+            last_termin = False
+            if non_retensi_termins:
+                last_termin = max(
+                    non_retensi_termins,
+                    key=lambda t: t.master_nama_termin_id.sequence or 0
+                )
+
+            if last_termin:
+                overdue = 0
+                if last_termin.due_date:
+                    for syarat in last_termin.syarat_termin_ids:
+                        if syarat.upload_date:
+                            delta = (syarat.upload_date - last_termin.due_date).days
+                            if delta > 0:
+                                overdue = max(overdue, delta)
+
+                if overdue > 0:
+                    late_termins.append(last_termin.master_nama_termin_id.name or last_termin.name)
+                    max_overdue = overdue
 
             rec.overdue_days = max_overdue
             if max_overdue > 0 and rec.amount_kontrak and rec.persentasi_denda:
@@ -144,6 +161,9 @@ class kontrak(models.Model):
 
             rec.is_late_upload = bool(late_termins)
             rec.late_termin_names = ", ".join(late_termins) if late_termins else ""
+
+
+
 
 
 
@@ -236,44 +256,33 @@ class kontrak(models.Model):
         for rec in self:
             if rec.amount_izin_prinsip < rec.amount_kontrak:
                 raise ValidationError("Amount Kontrak tidak boleh lebih besar dari Amount Izin Prinsip.")
-            
-
-            
-    # @api.constrains("izin_prinsip_id", "jenis_kontrak_id", "partner_id")
-    # def _check_duplicate_izin_prinsip_jenis_kontrak(self):
-    #     for rec in self:
-    #         if rec.izin_prinsip_id and rec.jenis_kontrak_id and rec.partner_id:
-    #             dupe = self.search([
-    #                 ("id", "!=", rec.id),
-    #                 ("izin_prinsip_id", "=", rec.izin_prinsip_id.id),
-    #                 ("partner_id", "=", rec.partner_id.id),
-    #                 ("jenis_kontrak_id", "=", rec.jenis_kontrak_id.id),
-    #             ], limit=1)
-    #             if dupe:
-    #                 raise ValidationError(
-    #                     _("Jenis Kontrak %s sudah dipakai oleh Partner %s untuk Izin Prinsip %s, tidak boleh duplikat!") 
-    #                     % (rec.jenis_kontrak_id.name, rec.partner_id.name, rec.izin_prinsip_id.name)
-    #                 )
 
 
-    @api.constrains("izin_prinsip_id", "jenis_kontrak_id", "partner_id")
+
+    @api.constrains("izin_prinsip_id", "job_izin_prinsip_id", "jenis_kontrak_id", "partner_id")
     def _check_duplicate_izin_prinsip_jenis_kontrak(self):
         if self.env.context.get("bypass_duplicate_check"):
             return
-
         for rec in self:
-            if rec.izin_prinsip_id and rec.jenis_kontrak_id and rec.partner_id:
+            if rec.izin_prinsip_id and rec.job_izin_prinsip_id and rec.jenis_kontrak_id and rec.partner_id:
                 dupe = self.search([
                     ("id", "!=", rec.id),
                     ("izin_prinsip_id", "=", rec.izin_prinsip_id.id),
+                    ("job_izin_prinsip_id", "=", rec.job_izin_prinsip_id.id),
                     ("partner_id", "=", rec.partner_id.id),
                     ("jenis_kontrak_id", "=", rec.jenis_kontrak_id.id),
                 ], limit=1)
                 if dupe:
                     raise ValidationError(
-                        _("Jenis Kontrak %s sudah dipakai oleh Partner %s untuk Izin Prinsip %s, tidak boleh duplikat!") 
-                        % (rec.jenis_kontrak_id.name, rec.partner_id.name, rec.izin_prinsip_id.name)
+                        _("Jenis Kontrak %s sudah dipakai oleh Partner %s untuk Izin Prinsip %s (Job %s), tidak boleh duplikat!") 
+                        % (
+                            rec.jenis_kontrak_id.name,
+                            rec.partner_id.name,
+                            rec.izin_prinsip_id.name,
+                            rec.job_izin_prinsip_id.name,
+                        )
                     )
+
 
 
 
@@ -384,14 +393,12 @@ class kontrak(models.Model):
     def action_create_addendum(self):
         self.ensure_one()
 
-        # Batasin: tiap kontrak / addendum hanya bisa punya 1 addendum child
         if self.addendum_ids:
             raise UserError(_("Kontrak ini sudah punya Addendum, tidak bisa bikin lebih dari 1."))
 
         if not self.stage_id or self.stage_id.name.lower() != "on progress":
             raise UserError(_("Addendum hanya bisa dibuat kalau kontrak di stage 'On Progress'."))
 
-        # Generate nama addendum
         base_name = self.name
         if "-" in base_name:
             parts = base_name.split("-")
@@ -403,28 +410,26 @@ class kontrak(models.Model):
         else:
             new_name = f"{base_name}-1"
 
-        # --- PAKSA kontrak asal pindah ke DONE ---
         done_stage = self.env['vit.kontrak_state'].search([('done', '=', True)], limit=1)
         if not done_stage:
             raise UserError(_("Stage DONE tidak ditemukan!"))
         self.stage_id = done_stage.id
+        self.active = False
 
-        # Copy kontrak sebagai Addendum
         kontrak_copy = self.with_context(bypass_duplicate_check=True).copy({
             'name': new_name,
             'stage_id': self.env['vit.kontrak_state'].search([('draft', '=', True)], limit=1).id,
             'is_addendum': True,
             'addendum_origin_id': self.id,
+            'active': True,
         })
 
-        # Copy termin
         new_termins = []
         for termin in self.termin_ids:
             new_termin = termin.with_context(bypass_duplicate_check=True).copy({
                 'kontrak_id': kontrak_copy.id,
                 'stage_id': termin.stage_id.id,
             })
-            # copy syarat
             new_syarat = []
             for syarat in termin.syarat_termin_ids:
                 syarat_copy = syarat.copy({
@@ -438,7 +443,6 @@ class kontrak(models.Model):
 
         kontrak_copy.termin_ids = [(6, 0, new_termins)]
 
-        # copy attachments
         attachments = self.env['ir.attachment'].search([
             ('res_model', '=', 'vit.kontrak'),
             ('res_id', '=', self.id)
@@ -481,13 +485,14 @@ class kontrak(models.Model):
             return False
         return {
             'type': 'ir.actions.act_window',
-            'name': 'Kontrak Induk',
+            'name': _('Kontrak Asal'),
             'res_model': 'vit.kontrak',
-            'view_mode': 'form',
-            'res_id': self.addendum_origin_id.id,
-            'target': 'current',
+            'view_mode': 'tree,form',
+            'domain': [('id', '=', self.addendum_origin_id.id)],
+            'context': dict(self.env.context, active_test=False, default_addendum_origin_id=self.addendum_origin_id.id),
         }
-    
+
+        
 
 
 

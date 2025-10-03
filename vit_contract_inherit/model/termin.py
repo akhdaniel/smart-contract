@@ -225,11 +225,12 @@ class termin(models.Model):
                         raise UserError(_("Stage Done untuk Kontrak tidak ditemukan!"))
                     kontrak.write({'stage_id': done_stage.id})
 
+                return {'type': 'ir.actions.client', 'tag': 'reload'}
+
             else:
                 payments = self.env['vit.payment'].search([('termin_id', '=', rec.id)])
                 payments.unlink()
 
-        return {'type': 'ir.actions.client', 'tag': 'reload'}
 
 
     # def action_cancel(self):

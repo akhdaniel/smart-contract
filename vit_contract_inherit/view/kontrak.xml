@@ -175,10 +175,10 @@
                 </xpath>
 
 
-                <xpath expr="//field[@name='termin_ids']" position="attributes">
+                <!-- <xpath expr="//field[@name='termin_ids']" position="attributes">
                     <attribute name="readonly">stage_is_draft==True or stage_is_done==True</attribute>
                     <attribute name="force_save">1</attribute>
-                </xpath>
+                </xpath> -->
 
 
 
@@ -249,6 +249,17 @@
                 </xpath>
                 <xpath expr="//field[@name='partner_id']" position="attributes">
                     <attribute name="readonly">is_addendum==True or stage_is_draft==False</attribute>
+                </xpath>
+
+
+                <xpath expr="//field[@name='amount_denda']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                    <attribute name="force_save">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='overdue_days']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                    <attribute name="force_save">1</attribute>
                 </xpath>
 
 
