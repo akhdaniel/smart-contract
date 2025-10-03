@@ -341,3 +341,6 @@ class TerminInherit(models.Model):
 
         default["name"] = new_name
         return models.BaseModel.copy(self, default)
+    
+    
+

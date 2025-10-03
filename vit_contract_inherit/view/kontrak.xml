@@ -7,6 +7,14 @@
             <field name="inherit_id" ref="vit_contract.view_vit_kontrak_form"/>
             <field name="arch" type="xml">
 
+                <xpath expr="//header/button[@name='action_confirm']" position="attributes">
+                    <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager</attribute>
+                </xpath>
+
+                <xpath expr="//header/button[@name='action_cancel']" position="attributes">
+                    <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager</attribute>
+                </xpath>
+
 
                 <xpath expr="//button[@name='action_create_addendum']" position="attributes">
                     <attribute name="invisible">stage_is_draft==True or stage_is_done==True</attribute>

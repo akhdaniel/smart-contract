@@ -128,3 +128,28 @@ class syarat_termin(models.Model):
                     }
                 }
 
+
+
+class SyaratTerminInherit(models.Model):
+    _inherit = "vit.syarat_termin"
+
+    def copy(self, default=None):
+        default = dict(default or {})
+
+        # Kalau sudah dikasih name (misal dari addendum termin), pakai langsung
+        if default.get("name"):
+            return models.BaseModel.copy(self, default)
+
+        base_name = self.name
+        if "-" in base_name:
+            parts = base_name.split("-")
+            try:
+                last_num = int(parts[-1])
+                new_name = f"{base_name}-{last_num+1}"
+            except ValueError:
+                new_name = f"{base_name}-1"
+        else:
+            new_name = f"{base_name}-1"
+
+        default["name"] = new_name
+        return models.BaseModel.copy(self, default)
