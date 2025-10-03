@@ -8,20 +8,22 @@
             <field name="inherit_id" ref="vit_contract.view_vit_payment_tree"/>
             <field name="arch" type="xml">
 
-
                 <xpath expr="//tree/field[@name='kanwil_id']" position="replace"/>
                 <xpath expr="//tree/field[@name='master_budget_id']" position="replace"/>
+                <xpath expr="//tree/field[@name='amount']" position="replace"/>
+                <xpath expr="//tree/field[@name='amount_budget_rkap']" position="replace"/>
+                <xpath expr="//tree/field[@name='amount_izin_prinsip']" position="replace"/>
+                <xpath expr="//tree/field[@name='amount_kontrak']" position="replace"/>
+                <xpath expr="//tree/field[@name='amount_denda']" position="replace"/>
                 <xpath expr="//tree/field[@name='budget_rkap_id']" position="after">
                     <field name="kanwil_id"/>
                     <field name="master_budget_id"/>
-                </xpath>
-
-                <xpath expr="//tree/field[@name='amount']" position="replace"/>
-
-                <xpath expr="//tree/field[@name='termin_id']" position="after">
                     <field name="amount"/>
+                    <field name="amount_budget_rkap"/>
+                    <field name="amount_izin_prinsip"/>
+                    <field name="amount_kontrak"/>
+                    <field name="amount_denda"/>
                 </xpath>
-
             </field>
         </record>
 
@@ -32,20 +34,31 @@
             <field name="inherit_id" ref="vit_contract.view_vit_payment_form"/>
             <field name="arch" type="xml">
 
+                <xpath expr="//header/button[@name='action_confirm']" position="attributes">
+                    <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager</attribute>
+                </xpath>
+
+                <xpath expr="//header/button[@name='action_cancel']" position="attributes">
+                    <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='amount_budget_rkap']" position="replace"/>
+                <xpath expr="//field[@name='amount_izin_prinsip']" position="replace"/>
+                <xpath expr="//field[@name='amount_kontrak']" position="replace"/>
+                <xpath expr="//field[@name='amount_denda']" position="replace"/>
                 <xpath expr="//field[@name='partner_id']" position="replace"/>
                 <xpath expr="//field[@name='termin_id']" position="replace"/>
                 <xpath expr="//field[@name='amount']" position="after">
-                    <field name="partner_id"/>
-                    <field name="termin_id"/>
+                    <field name="amount_budget_rkap" readonly="1"/>
+                    <field name="amount_izin_prinsip" readonly="1"/>
+                    <field name="amount_kontrak" readonly="1"/>
+                    <field name="amount_denda" readonly="1"/>
+                    <field name="partner_id" readonly="1"/>
+                    <field name="termin_id" readonly="1"/>
                 </xpath>
 
                 <xpath expr="//field[@name='amount']" position="attributes">
                     <attribute name="readonly">1</attribute>
-                </xpath>
-
-                <xpath expr="//field[@name='amount_denda']" position="replace"/>
-                <xpath expr="//field[@name='amount']" position="after">
-                    <field name="amount_denda" readonly="1"/>
                 </xpath>
 
                 <xpath expr="//field[@name='partner_id']" position="attributes">

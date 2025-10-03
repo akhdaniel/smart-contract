@@ -32,6 +32,15 @@ class syarat_termin(models.Model):
         readonly=True,
     )
 
+    @api.constrains('due_date', 'termin_id')
+    def _check_due_date_not_exceed_termin(self):
+        for rec in self:
+            if rec.due_date and rec.termin_id and rec.termin_id.due_date:
+                if rec.due_date > rec.termin_id.due_date:
+                    raise ValidationError(_(
+                        "Due Date syarat termin (%s) tidak boleh lebih dari Due Date termin induknya (%s)."
+                    ) % (rec.due_date, rec.termin_id.due_date))
+
 
 
 
@@ -73,21 +82,39 @@ class syarat_termin(models.Model):
             }
         
 
-    def write(self, vals):
-        if "document" in vals:  
-            if vals.get("document"):  
-                vals["upload_date"] = fields.Date.context_today(self)
-            else: 
-                vals["upload_date"] = False
-        return super().write(vals)
+    # def write(self, vals):
+    #     if "document" in vals:  
+    #         if vals.get("document"):  
+    #             vals["upload_date"] = fields.Date.context_today(self)
+    #         else: 
+    #             vals["upload_date"] = False
+    #     return super().write(vals)
+
+    # @api.model
+    # def create(self, vals):
+    #     if vals.get("document"):
+    #         vals["upload_date"] = fields.Date.context_today(self)
+    #     else:
+    #         vals["upload_date"] = False
+    #     return super().create(vals)
 
     @api.model
     def create(self, vals):
-        if vals.get("document"):
-            vals["upload_date"] = fields.Date.context_today(self)
-        else:
-            vals["upload_date"] = False
+        if "upload_date" not in vals:
+            if vals.get("document"):
+                vals["upload_date"] = fields.Date.context_today(self)
+            else:
+                vals["upload_date"] = False
         return super().create(vals)
+
+    def write(self, vals):
+        if "document" in vals and "upload_date" not in vals:
+            if vals.get("document"):
+                vals["upload_date"] = fields.Date.context_today(self)
+            else:
+                vals["upload_date"] = False
+        return super().write(vals)
+
 
     @api.onchange('document')
     def _onchange_document_due_date(self):
@@ -101,3 +128,28 @@ class syarat_termin(models.Model):
                     }
                 }
 
+
+
+class SyaratTerminInherit(models.Model):
+    _inherit = "vit.syarat_termin"
+
+    def copy(self, default=None):
+        default = dict(default or {})
+
+        # Kalau sudah dikasih name (misal dari addendum termin), pakai langsung
+        if default.get("name"):
+            return models.BaseModel.copy(self, default)
+
+        base_name = self.name
+        if "-" in base_name:
+            parts = base_name.split("-")
+            try:
+                last_num = int(parts[-1])
+                new_name = f"{base_name}-{last_num+1}"
+            except ValueError:
+                new_name = f"{base_name}-1"
+        else:
+            new_name = f"{base_name}-1"
+
+        default["name"] = new_name
+        return models.BaseModel.copy(self, default)

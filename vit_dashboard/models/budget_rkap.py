@@ -5,86 +5,83 @@ import logging
 _logger = logging.getLogger(__name__)
 from .tools import domain_to_sql, process_domain
 
-class budget_rkap(models.Model):
+class BudgetRkap(models.Model):
     _inherit = 'vit.budget_rkap'
 
     @api.model
     def get_statistics(self, domain=None, field=None, limit=10, offset=0):
         """
-        This method is used to get the statistics of the partners.
-        :param domain: Optional domain to filter the records.
-        :param field: The specific field or statistic to retrieve.
-        :return: Dictionary containing the requested statistics.
+        This method is used to get the statistics of the budgets.
+        Sekarang kanwil_id diambil dari izin_prinsip (bukan dari budget_rkap langsung).
         """
-        
-        domain = domain or []  # Use an empty domain if none is provided
-        cr = self.env.cr
+        domain = domain or []
 
-        # if field == 'total_budget_realisasi':
-        #     # domain = [('kanwil_kancab_id', '=',[])] + (domain, self)
-        #     domain = []
-        #     amount = sum(self.env['vit.budget_rkap'].search(domain).mapped('amount'))
-        #     total_realisasi = sum(self.env['vit.budget_rkap'].search(domain).mapped('total_amount_payment'))
-        #     persentasi = (total_realisasi / amount * 100) if amount > 0 else 0
-        #     return {
-        #         'amount': amount,
-        #         'total_realisasi': total_realisasi,
-        #         'persentasi': persentasi,
-        #     }
-        
         if field == 'total_budget_realisasi':
-            # contoh ambil satu record
-            record = self.env['vit.budget_rkap'].search([], limit=1)
+            record = self.env['vit.izin_prinsip'].search([], limit=1)
+            domain_ip = []
+            if record.kanwil_id:
+                domain_ip = [('kanwil_id', '=', record.kanwil_id.id)]
 
-            domain = []
-            if record.kanwil_kancab_id:
-                domain = [('kanwil_kancab_id', '=', record.kanwil_kancab_id.id)]
+            izin_prinsip_list = self.env['vit.izin_prinsip'].search(domain_ip)
+            # ambil semua master_budget yang dipakai izin_prinsip tsb
+            master_ids = izin_prinsip_list.mapped('master_budget_id').ids
 
-            budgets = self.env['vit.budget_rkap'].search(domain)
+            # filter budget_rkap berdasarkan master_budget_id
+            budgets = self.env['vit.budget_rkap'].search([('master_budget_id', 'in', master_ids)])
+
             amount = sum(budgets.mapped('amount'))
             total_realisasi = sum(budgets.mapped('total_amount_payment'))
             persentasi = (total_realisasi / amount * 100) if amount > 0 else 0
 
             return {
-                'kanwil_name': record.kanwil_kancab_id.name if record.kanwil_kancab_id else '',
+                'kanwil_name': record.kanwil_id.name if record.kanwil_id else '',
                 'amount': amount,
                 'total_realisasi': total_realisasi,
-                'persentasi': persentasi,
+                'persentasi': round(persentasi, 2),
             }
-        
-        if field == 'master_budget_summary':
-            record = self.env['vit.budget_rkap'].search([], limit=1)
-            domain = []
-            if record.kanwil_kancab_id:
-                domain = [('kanwil_kancab_id', '=', record.kanwil_kancab_id.id)]
 
-            budgets = self.env['vit.budget_rkap'].search(domain)
+        if field == 'master_budget_summary':
+            record = self.env['vit.izin_prinsip'].search([], limit=1)
+            domain_ip = []
+            if record.kanwil_id:
+                domain_ip = [('kanwil_id', '=', record.kanwil_id.id)]
+
+            izin_prinsip_list = self.env['vit.izin_prinsip'].search(domain_ip)
+            master_ids = izin_prinsip_list.mapped('master_budget_id').ids
+
+            # ambil semua master budget di sistem (bukan cuma yang ada di izin_prinsip / budget)
+            master_budgets = self.env['vit.master_budget'].search([])
+
+            budgets = self.env['vit.budget_rkap'].search([('master_budget_id', 'in', master_ids)])
+
             master_summaries = []
-            for mb in budgets.mapped("master_budget_id"):
+            for mb in master_budgets:
                 mb_budgets = budgets.filtered(lambda b: b.master_budget_id == mb)
 
-                total_pagu = sum(mb_budgets.mapped("total_pagu_izin_prinsip")) or 0
-                total_kontrak = sum(mb_budgets.mapped("total_amount_kontrak")) or 0
-                total_droping = sum(mb_budgets.mapped("total_amount_droping")) or 0
+                total_pagu = sum(mb_budgets.mapped("total_pagu_izin_prinsip")) if mb_budgets else 0
+                total_kontrak = sum(mb_budgets.mapped("total_amount_kontrak")) if mb_budgets else 0
+                total_droping = sum(mb_budgets.mapped("total_amount_droping")) if mb_budgets else 0
 
                 persen_kontrak = (total_kontrak / total_pagu * 100) if total_pagu > 0 else 0
                 persen_droping = (total_droping / total_pagu * 100) if total_pagu > 0 else 0
 
                 master_summaries.append({
                     "master_budget": mb.name,
-                    "remaining": sum(mb_budgets.mapped("remaining")),
-                    "total_qty_izin_prinsip": sum(mb_budgets.mapped("total_qty_izin_prinsip")),
+                    "remaining": sum(mb_budgets.mapped("remaining")) if mb_budgets else 0,
+                    "total_qty_izin_prinsip": sum(mb_budgets.mapped("total_qty_izin_prinsip")) if mb_budgets else 0,
                     "total_pagu_izin_prinsip": total_pagu,
-                    "total_qty_kontrak": sum(mb_budgets.mapped("total_qty_kontrak")),
+                    "total_qty_kontrak": sum(mb_budgets.mapped("total_qty_kontrak")) if mb_budgets else 0,
                     "total_amount_kontrak": total_kontrak,
                     "total_amount_droping": total_droping,
-                    "persen_kontrak": persen_kontrak,
-                    "persen_droping": persen_droping,
+                    "persen_kontrak": round(persen_kontrak, 2),
+                    "persen_droping": round(persen_droping, 2),
                 })
 
             return {
                 'master_summaries': master_summaries,
             }
+
+
 
 
 

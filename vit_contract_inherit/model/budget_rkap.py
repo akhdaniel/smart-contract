@@ -46,22 +46,12 @@ class budget_rkap(models.Model):
         store=True,
     )
 
-    # total_amount_droping = fields.Float(
-    #     string="Total Amount Droping",
-    #     compute="_compute_total_amount_droping",
-    #     readonly=True,
-    # )
+    total_amount_droping = fields.Float(
+        string="Total Amount Droping",
+        compute="_compute_totals",
+        store=True,
+    )
 
-    # @api.depends("kanwil_id")
-    # def _compute_total_amount_droping(self):
-    #     for rec in self:
-    #         total = 0.0
-    #         if rec.kanwil_id:
-    #             dropings = self.env["vit.droping"].search([
-    #                 ("kanwil_id", "=", rec.kanwil_id.id)
-    #             ])
-    #             total = sum(dropings.mapped("jumlah"))
-    #         rec.total_amount_droping = total
 
 
 
@@ -80,13 +70,20 @@ class budget_rkap(models.Model):
             kontrak_done = rec.kontrak_ids.filtered(lambda k: k.stage_is_done)
             payment_done = rec.payment_ids.filtered(lambda p: p.stage_is_done)
 
+            dropings = self.env["vit.droping"].search([
+                ("master_budget_id", "=", rec.master_budget_id.id),
+            ])
+
             rec.total_pagu_izin_prinsip = sum(izin_done.mapped("total_pagu"))
             rec.total_amount_kontrak = sum(kontrak_done.mapped("amount_kontrak"))
             rec.total_amount_payment = sum(payment_done.mapped("amount"))
+            rec.total_amount_droping = sum(dropings.mapped("jumlah"))
 
             rec.total_qty_izin_prinsip = len(izin_done)
             rec.total_qty_kontrak = len(kontrak_done)
             rec.total_qty_payment = len(payment_done)
+
+
 
     @api.depends("amount", "total_amount_payment")
     def _compute_remaining(self):

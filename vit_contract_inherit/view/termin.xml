@@ -11,6 +11,10 @@
                     <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager</attribute>
                 </xpath>
 
+                <xpath expr="//header/button[@name='action_cancel']" position="attributes">
+                    <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager</attribute>
+                </xpath>
+
 
                 <!-- <xpath expr="//page[@name='syarat_termin_ids']//field[@name='syarat_termin_ids']//tree//field[@name='master_syarat_termin_id']" position="attributes">
                     <attribute name="column_invisible">1</attribute>

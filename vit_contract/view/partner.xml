@@ -30,6 +30,9 @@
                                         <field name="request_date"/>
                                         <field name="payment_date"/>
                                         <field name="amount_denda"/>
+                                        <field name="amount_budget_rkap"/>
+                                        <field name="amount_izin_prinsip"/>
+                                        <field name="amount_kontrak"/>
                                         <field name="stage_id"/>
                                         <field name="termin_id"/>
                                         <field name="master_budget_id"/>

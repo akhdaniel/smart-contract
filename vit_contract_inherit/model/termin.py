@@ -4,7 +4,7 @@ from odoo.exceptions import ValidationError
 import logging
 _logger = logging.getLogger(__name__)
 
-class syarat_termin(models.Model):
+class termin(models.Model):
     _inherit = "vit.termin"
 
 
@@ -24,10 +24,33 @@ class syarat_termin(models.Model):
         ondelete="cascade"
     )
 
-    verification_date = fields.Date( 
+    due_date = fields.Date(
         required=True,
+        string=_("Due Date"),
+    )
+
+    verification_date = fields.Date(
         string=_("Verification Date"),
     )
+
+    def action_delete_line(self):
+        for rec in self:
+            rec.unlink()
+        return True
+
+    @api.constrains("due_date", "kontrak_id")
+    def _check_due_date_vs_end_date(self):
+        for rec in self:
+            if rec.kontrak_id and rec.kontrak_id.end_date and rec.due_date:
+                if rec.due_date > rec.kontrak_id.end_date:
+                    raise ValidationError(_(
+                        "Due Date (%s) tidak boleh melebihi End Date Kontrak (%s)."
+                    ) % (rec.due_date, rec.kontrak_id.end_date))
+
+    def write(self, vals):
+        if "is_droping_done" in vals and vals["is_droping_done"] is False:
+            vals["droping_id"] = False
+        return super(termin, self).write(vals)
 
 
     @api.onchange('persentase', 'kontrak_id')
@@ -181,7 +204,10 @@ class syarat_termin(models.Model):
                 self.env['vit.payment'].create({
                     'name': 'PAY/' + rec.name,
                     'amount': rec.nilai,
-                    'amount_denda': kontrak.amount_denda,
+                    'amount_denda': kontrak.amount_denda or 0.0,
+                    'amount_budget_rkap': kontrak.budget_rkap_id.amount or 0.0,
+                    'amount_izin_prinsip': kontrak.izin_prinsip_id.total_pagu or 0.0,
+                    'amount_kontrak': kontrak.amount_kontrak or 0.0,
                     'partner_id': kontrak.partner_id.id,
                     'budget_rkap_id': kontrak.budget_rkap_id.id,
                     'kanwil_id': kontrak.kanwil_id.id,
@@ -206,6 +232,32 @@ class syarat_termin(models.Model):
         return {'type': 'ir.actions.client', 'tag': 'reload'}
 
 
+    # def action_cancel(self):
+    #     for rec in self:
+    #         kontrak = rec.kontrak_id
+
+    #         payments = self.env['vit.payment'].search([('termin_id', '=', rec.id)])
+    #         payments.unlink()
+
+    #         old_stage = rec.stage_id
+
+    #         cancel_stage = self.env['vit.state_termin'].search([('draft', '=', True)], limit=1)
+    #         if cancel_stage:
+    #             rec.stage_id = cancel_stage.id
+
+    #         progress_stage = self.env['vit.kontrak_state'].search([('on_progress', '=', True)], limit=1)
+    #         if not progress_stage:
+    #             raise UserError(_("Stage On Progress untuk Kontrak tidak ditemukan!"))
+    #         kontrak.write({'stage_id': progress_stage.id})
+
+    #         if old_stage.done and rec.stage_id == cancel_stage:
+    #             return {'type': 'ir.actions.client', 'tag': 'reload'}
+
+    #     return True
+
+
+
+
     def action_cancel(self):
         for rec in self:
             kontrak = rec.kontrak_id
@@ -215,26 +267,28 @@ class syarat_termin(models.Model):
 
             old_stage = rec.stage_id
 
-            cancel_stage = self.env['vit.state_termin'].search([('draft', '=', True)], limit=1)
-            if cancel_stage:
-                rec.stage_id = cancel_stage.id
+            draft_stage = self.env['vit.state_termin'].search([('draft', '=', True)], limit=1)
+            progress_stage = self.env['vit.state_termin'].search([('on_progress', '=', True)], limit=1)
+            done_stage = self.env['vit.state_termin'].search([('done', '=', True)], limit=1)
 
-            progress_stage = self.env['vit.kontrak_state'].search([('on_progress', '=', True)], limit=1)
-            if not progress_stage:
-                raise UserError(_("Stage On Progress untuk Kontrak tidak ditemukan!"))
-            kontrak.write({'stage_id': progress_stage.id})
+            if not draft_stage or not progress_stage or not done_stage:
+                raise UserError(_("Stage Draft / On Progress / Done untuk Termin tidak ditemukan!"))
 
-            if old_stage.done and rec.stage_id == cancel_stage:
-                return {'type': 'ir.actions.client', 'tag': 'reload'}
+            # logika bertahap termin
+            if old_stage == done_stage:
+                rec.stage_id = progress_stage.id
+                kontrak.write({'stage_id': self.env['vit.kontrak_state'].search([('on_progress', '=', True)], limit=1).id})
+
+            elif old_stage == progress_stage:
+                rec.stage_id = draft_stage.id
+                kontrak.write({'stage_id': self.env['vit.kontrak_state'].search([('draft', '=', True)], limit=1).id})
+
+            elif old_stage == draft_stage:
+                rec.stage_id = draft_stage.id  # tetap di draft
+
+            return {'type': 'ir.actions.client', 'tag': 'reload'}
 
         return True
-
-
-
-
-
-
-
 
 
 
@@ -261,3 +315,32 @@ class syarat_termin(models.Model):
     #             total = sum(rec.kontrak_id.termin_ids.mapped('persentase'))
     #             if total > 100:
     #                 raise ValidationError("Total semua persentase termin pada kontrak ini tidak boleh lebih dari 100%.")
+
+
+
+class TerminInherit(models.Model):
+    _inherit = "vit.termin"
+
+    def copy(self, default=None):
+        default = dict(default or {})
+
+        # Kalau sudah dikasih name (misal dari addendum kontrak), pakai langsung
+        if default.get("name"):
+            return models.BaseModel.copy(self, default)
+
+        base_name = self.name
+        if "-" in base_name:
+            parts = base_name.split("-")
+            try:
+                last_num = int(parts[-1])
+                new_name = f"{base_name}-{last_num+1}"
+            except ValueError:
+                new_name = f"{base_name}-1"
+        else:
+            new_name = f"{base_name}-1"
+
+        default["name"] = new_name
+        return models.BaseModel.copy(self, default)
+    
+    
+

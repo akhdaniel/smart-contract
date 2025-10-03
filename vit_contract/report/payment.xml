@@ -58,6 +58,18 @@
                             <p class="m-0" t-field="doc.amount_denda" />
                         </div>
                         <div class="col-auto mw-100 mb-2">
+                            <strong>Amount Budget Rkap</strong>
+                            <p class="m-0" t-field="doc.amount_budget_rkap" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Amount Izin Prinsip</strong>
+                            <p class="m-0" t-field="doc.amount_izin_prinsip" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Amount Kontrak</strong>
+                            <p class="m-0" t-field="doc.amount_kontrak" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
                             <strong>Partner</strong>
                             <p class="m-0" t-field="doc.partner_id"/>
                         </div>
