@@ -25,6 +25,10 @@ class termin(models.Model):
     due_date = fields.Date( string=_("Due Date"))
     verification_date = fields.Date( string=_("Verification Date"))
     is_droping_done = fields.Boolean( string=_("Is Droping Done"))
+    syarat_progress = fields.Float( string=_("Syarat Progress"))
+    actual_progress = fields.Float( string=_("Actual Progress"))
+    syarat_output = fields.Text( string=_("Syarat Output"))
+    actual_output = fields.Text( string=_("Actual Output"))
 
 
     @api.model_create_multi

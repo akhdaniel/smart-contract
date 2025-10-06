@@ -5,10 +5,19 @@ import logging
 _logger = logging.getLogger(__name__)
 
 class termin(models.Model):
-    _inherit = "vit.termin"
+    _name = "vit.termin"
+    _inherit = ["vit.termin", "mail.thread", "mail.activity.mixin"]
 
 
     name = fields.Char( required=True, copy=False, string=_("Name"))
+
+    type_kontrak = fields.Selection(
+        selection=[('fisik', 'Fisik'), ('non_fisik', 'Non Fisik')],
+        related='kontrak_id.jenis_kontrak_id.type',
+        store=True,
+        string='Tipe Kontrak'
+    )
+
 
 
     partner_id = fields.Many2one(
@@ -208,6 +217,8 @@ class termin(models.Model):
                     'amount_budget_rkap': kontrak.budget_rkap_id.amount or 0.0,
                     'amount_izin_prinsip': kontrak.izin_prinsip_id.total_pagu or 0.0,
                     'amount_kontrak': kontrak.amount_kontrak or 0.0,
+                    'syarat_progress': rec.syarat_progress or 0.0,
+                    'actual_progress': rec.actual_progress or 0.0,
                     'partner_id': kontrak.partner_id.id,
                     'budget_rkap_id': kontrak.budget_rkap_id.id,
                     'kanwil_id': kontrak.kanwil_id.id,
@@ -216,7 +227,7 @@ class termin(models.Model):
                     'kontrak_id': kontrak.id, 
                     'master_nama_termin_id': rec.master_nama_termin_id.id,
                     'izin_prinsip_id': kontrak.izin_prinsip_id.id,
-                    'payment_date': fields.Date.context_today(self),
+                    'request_date': fields.Date.context_today(self),
                 })
 
                 all_done = all(k.stage_id.done for k in kontrak.termin_ids)

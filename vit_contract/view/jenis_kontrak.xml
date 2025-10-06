@@ -10,6 +10,7 @@
             <field name="arch" type="xml">
                 <tree string="Jenis Kontrak">
                     <field name="name" /> <!-- 100-->
+                    <field name="type" /> <!-- 101-->
                 </tree>
             </field>
         </record>
@@ -37,6 +38,7 @@
                         </div>
                         <group>
                             <group> <!-- left -->
+                                <field name="type"  />
                             </group>
                             <group> <!-- right -->
                             </group>
@@ -62,8 +64,11 @@
                 <search string="Jenis Kontrak">
 
                     <filter string="Name" name="filter_by_name" domain="[('name','=','')]" />
+                    <filter string="Type" name="filter_by_type" domain="[('type','=','')]" />
                     <field name="name" select="True"/>
+                    <field name="type" select="True"/>
                     <group string="Group By..">
+                        <filter string="Type" domain="[]" name="group_by_type" context="{'group_by':'type'}"/>
                     </group>
                 </search>
             </field>

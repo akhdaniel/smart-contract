@@ -18,6 +18,7 @@
                 <xpath expr="//tree/field[@name='budget_rkap_id']" position="after">
                     <field name="kanwil_id"/>
                     <field name="master_budget_id"/>
+                    <field name="master_nama_termin_id"/>
                     <field name="amount"/>
                     <field name="amount_budget_rkap"/>
                     <field name="amount_izin_prinsip"/>
@@ -34,6 +35,14 @@
             <field name="inherit_id" ref="vit_contract.view_vit_payment_form"/>
             <field name="arch" type="xml">
 
+                <xpath expr="//sheet" position="after">
+                    <div class="oe_chatter"
+                        options="{'display_log_button': False, 'display_log_note_button': False, 'display_activity_button': False}">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </xpath>
+
                 <xpath expr="//header/button[@name='action_confirm']" position="attributes">
                     <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager</attribute>
                 </xpath>
@@ -46,6 +55,8 @@
                 <xpath expr="//field[@name='amount_izin_prinsip']" position="replace"/>
                 <xpath expr="//field[@name='amount_kontrak']" position="replace"/>
                 <xpath expr="//field[@name='amount_denda']" position="replace"/>
+                <xpath expr="//field[@name='syarat_progress']" position="replace"/>
+                <xpath expr="//field[@name='actual_progress']" position="replace"/>
                 <xpath expr="//field[@name='partner_id']" position="replace"/>
                 <xpath expr="//field[@name='termin_id']" position="replace"/>
                 <xpath expr="//field[@name='amount']" position="after">
@@ -53,6 +64,8 @@
                     <field name="amount_izin_prinsip" readonly="1"/>
                     <field name="amount_kontrak" readonly="1"/>
                     <field name="amount_denda" readonly="1"/>
+                    <field name="syarat_progress" readonly="1"/>
+                    <field name="actual_progress" readonly="1"/>
                     <field name="partner_id" readonly="1"/>
                     <field name="termin_id" readonly="1"/>
                 </xpath>
@@ -93,7 +106,7 @@
                     <attribute name="readonly">1</attribute>
                 </xpath>
 
-                <xpath expr="//field[@name='payment_date']" position="attributes">
+                <xpath expr="//field[@name='request_date']" position="attributes">
                     <attribute name="readonly">1</attribute>
                 </xpath>
 

@@ -8,7 +8,8 @@ from odoo.exceptions import ValidationError
 _logger = logging.getLogger(__name__)
 
 class kontrak(models.Model):
-    _inherit = "vit.kontrak"
+    _name = "vit.kontrak"
+    _inherit = ["vit.kontrak", "mail.thread", "mail.activity.mixin"]
 
     active = fields.Boolean(default=True)
 

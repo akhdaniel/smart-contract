@@ -125,6 +125,8 @@
                             <td>Amount Budget Rkap</td>
                             <td>Amount Izin Prinsip</td>
                             <td>Amount Kontrak</td>
+                            <td>Syarat Progress</td>
+                            <td>Actual Progress</td>
                             <td>Partner</td>
                             <td>Budget Rkap</td>
                             <td>Stage</td>
@@ -152,6 +154,8 @@
                             <td><span t-field="line.amount_budget_rkap" /></td>
                             <td><span t-field="line.amount_izin_prinsip" /></td>
                             <td><span t-field="line.amount_kontrak" /></td>
+                            <td><span t-field="line.syarat_progress" /></td>
+                            <td><span t-field="line.actual_progress" /></td>
                             <td><span t-field="line.partner_id" /></td>
                             <td><span t-field="line.budget_rkap_id" /></td>
                             <td><span t-field="line.stage_id" /></td>
@@ -182,6 +186,10 @@
                             <td>Due Date</td>
                             <td>Verification Date</td>
                             <td>Is Droping Done</td>
+                            <td>Syarat Progress</td>
+                            <td>Actual Progress</td>
+                            <td>Syarat Output</td>
+                            <td>Actual Output</td>
                             <td>Master Nama Termin</td>
                             <td>Stage</td>
                             <td>Droping</td>
@@ -203,6 +211,10 @@
                             <td><span t-field="line.due_date" /></td>
                             <td><span t-field="line.verification_date" /></td>
                             <td><span t-field="line.is_droping_done" /></td>
+                            <td><span t-field="line.syarat_progress" /></td>
+                            <td><span t-field="line.actual_progress" /></td>
+                            <td><span t-field="line.syarat_output" /></td>
+                            <td><span t-field="line.actual_output" /></td>
                             <td><span t-field="line.master_nama_termin_id" /></td>
                             <td><span t-field="line.stage_id" /></td>
                             <td><span t-field="line.droping_id" /></td>

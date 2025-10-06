@@ -66,6 +66,22 @@
                             <p class="m-0" t-field="doc.is_droping_done" />
                         </div>
                         <div class="col-auto mw-100 mb-2">
+                            <strong>Syarat Progress</strong>
+                            <p class="m-0" t-field="doc.syarat_progress" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Actual Progress</strong>
+                            <p class="m-0" t-field="doc.actual_progress" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Syarat Output</strong>
+                            <p class="m-0" t-field="doc.syarat_output" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Actual Output</strong>
+                            <p class="m-0" t-field="doc.actual_output" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
                             <strong>Master Nama Termin</strong>
                             <p class="m-0" t-field="doc.master_nama_termin_id"/>
                         </div>

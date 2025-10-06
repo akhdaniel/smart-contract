@@ -25,7 +25,9 @@
                     <field name="kontrak_id" /> <!-- 106-->
                     <field name="amount_kontrak" /> <!-- 107-->
                     <field name="stage_id" /> <!-- 107-->
+                    <field name="syarat_progress" /> <!-- 108-->
                     <field name="master_nama_termin_id" /> <!-- 108-->
+                    <field name="actual_progress" /> <!-- 109-->
                     <field name="izin_prinsip_id" /> <!-- 109-->
                 </tree>
             </field>
@@ -89,6 +91,8 @@
                                 <field name="amount_budget_rkap"  readonly="stage_is_draft==False"/>
                                 <field name="amount_izin_prinsip"  readonly="stage_is_draft==False"/>
                                 <field name="amount_kontrak"  readonly="stage_is_draft==False"/>
+                                <field name="syarat_progress"  readonly="stage_is_draft==False"/>
+                                <field name="actual_progress"  readonly="stage_is_draft==False"/>
                             </group>
                             <group> <!-- right -->
                                 <field name="partner_id"  readonly="stage_is_draft==False"/>
@@ -134,6 +138,8 @@
                     <filter string="Amount Budget Rkap" name="filter_by_amount_budget_rkap" domain="[('amount_budget_rkap','=','')]" />
                     <filter string="Amount Izin Prinsip" name="filter_by_amount_izin_prinsip" domain="[('amount_izin_prinsip','=','')]" />
                     <filter string="Amount Kontrak" name="filter_by_amount_kontrak" domain="[('amount_kontrak','=','')]" />
+                    <filter string="Syarat Progress" name="filter_by_syarat_progress" domain="[('syarat_progress','=','')]" />
+                    <filter string="Actual Progress" name="filter_by_actual_progress" domain="[('actual_progress','=','')]" />
                     <field name="name" select="True"/>
                     <field name="amount" select="True"/>
                     <field name="stage_is_draft" select="True"/>
@@ -147,6 +153,8 @@
                     <field name="amount_budget_rkap" select="True"/>
                     <field name="amount_izin_prinsip" select="True"/>
                     <field name="amount_kontrak" select="True"/>
+                    <field name="syarat_progress" select="True"/>
+                    <field name="actual_progress" select="True"/>
                     <field name="partner_id" select="True"/>
                     <field name="budget_rkap_id" select="True"/>
                     <field name="stage_id" select="True"/>

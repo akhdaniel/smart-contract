@@ -14,6 +14,7 @@ class jenis_kontrak(models.Model):
         pass
 
     name = fields.Char( required=True, copy=False, string=_("Name"))
+    type = fields.Selection(selection=[('fisik', 'Fisik'),('non_fisik', 'Non Fisik')],  string=_("Type"))
 
 
     def copy(self, default=None):

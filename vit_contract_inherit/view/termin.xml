@@ -7,6 +7,14 @@
             <field name="inherit_id" ref="vit_contract.view_vit_termin_form"/>
             <field name="arch" type="xml">
 
+                <xpath expr="//sheet" position="after">
+                    <div class="oe_chatter"
+                         options="{'display_log_button': False, 'display_log_note_button': False, 'display_activity_button': False}">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </xpath>
+
                 <xpath expr="//header/button[@name='action_confirm']" position="attributes">
                     <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager</attribute>
                 </xpath>
@@ -71,6 +79,111 @@
                 <xpath expr="//page[@name='syarat_termin_ids']//tree//field[@name='upload_date']" position="after">
                     <button name="action_open_syarat_termin" string="Open" type="object" class="oe_highlight"/>
                 </xpath>
+
+
+
+
+
+                <!-- <xpath expr="//field[@name='syarat_progress']" position="attributes">
+                    <attribute name="groups">base.group_system,vit_contract.group_vit_contract_manager</attribute>
+                    <attribute name="modifiers">
+                        {"invisible": [["kontrak_id.jenis_kontrak_id.type", "!=", "fisik"]]}
+                    </attribute>
+                </xpath>
+
+
+                <xpath expr="//field[@name='actual_progress']" position="attributes">
+                    <attribute name="groups">base.group_system,vit_contract.group_vit_contract_manager</attribute>
+                    <attribute name="modifiers">
+                        {"invisible": [["kontrak_id.jenis_kontrak_id.type", "!=", "non_fisik"]]}
+                    </attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='syarat_output']" position="attributes">
+                    <attribute name="groups">vit_contract_inherit.group_vit_contract_vendor</attribute>
+                    <attribute name="modifiers">
+                        {"invisible": [["kontrak_id.jenis_kontrak_id.type", "!=", "fisik"]]}
+                    </attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='actual_output']" position="attributes">
+                    <attribute name="groups">vit_contract_inherit.group_vit_contract_vendor</attribute>
+                    <attribute name="modifiers">
+                        {"invisible": [["kontrak_id.jenis_kontrak_id.type", "!=", "non_fisik"]]}
+                    </attribute>
+                </xpath> -->
+
+
+
+
+                <xpath expr="//field[@name='nilai']" position="replace">
+                    <field name="nilai" readonly="1" groups="base.group_user,!vit_contract_inherit.group_vit_contract_vendor"/>
+                </xpath>
+
+                <!-- Persentase -->
+                <xpath expr="//field[@name='persentase']" position="replace">
+                    <field name="persentase" groups="base.group_user,!vit_contract_inherit.group_vit_contract_vendor"/>
+                    <field name="persentase" readonly="1" groups="vit_contract_inherit.group_vit_contract_vendor"/>
+                </xpath>
+
+                <!-- Due Date -->
+                <xpath expr="//field[@name='due_date']" position="replace">
+                    <field name="due_date" groups="base.group_user,!vit_contract_inherit.group_vit_contract_vendor"/>
+                    <field name="due_date" readonly="1" groups="vit_contract_inherit.group_vit_contract_vendor"/>
+                </xpath>
+
+                <!-- Verification Date -->
+                <xpath expr="//field[@name='verification_date']" position="replace">
+                    <field name="verification_date" groups="base.group_user,!vit_contract_inherit.group_vit_contract_vendor"/>
+                    <field name="verification_date" readonly="1" groups="vit_contract_inherit.group_vit_contract_vendor"/>
+                </xpath>
+
+                <!-- Deskripsi -->
+                <xpath expr="//field[@name='deskripsi']" position="replace">
+                    <field name="deskripsi" groups="base.group_user,!vit_contract_inherit.group_vit_contract_vendor"/>
+                    <field name="deskripsi" readonly="1" groups="vit_contract_inherit.group_vit_contract_vendor"/>
+                </xpath>
+
+                <!-- Master Nama Termin -->
+                <xpath expr="//field[@name='master_nama_termin_id']" position="replace">
+                    <field name="master_nama_termin_id" groups="base.group_user,!vit_contract_inherit.group_vit_contract_vendor"/>
+                    <field name="master_nama_termin_id" readonly="1" groups="vit_contract_inherit.group_vit_contract_vendor"/>
+                </xpath>
+
+
+
+
+
+                <xpath expr="//sheet" position="inside">
+                    <field name="type_kontrak" invisible="1"/>
+                </xpath>
+
+
+                <xpath expr="//field[@name='syarat_progress']" position="replace">
+                    <field name="syarat_progress" invisible="type_kontrak != 'fisik'" groups="base.group_user,!vit_contract_inherit.group_vit_contract_vendor"/>
+                        
+                    <field name="syarat_progress" invisible="type_kontrak != 'fisik'" readonly="1" groups="vit_contract_inherit.group_vit_contract_vendor"/>
+                </xpath>
+
+                <xpath expr="//field[@name='actual_progress']" position="replace">
+                    <field name="actual_progress" invisible="type_kontrak != 'non_fisik'" groups="base.group_user,!vit_contract_inherit.group_vit_contract_vendor"/>
+                        
+                    <field name="actual_progress" invisible="type_kontrak != 'non_fisik'" readonly="1" groups="vit_contract_inherit.group_vit_contract_vendor"/>
+                </xpath>
+
+                <xpath expr="//field[@name='syarat_output']" position="replace">
+                    <field name="syarat_output" invisible="type_kontrak != 'fisik'" readonly="1" groups="base.group_user,!vit_contract_inherit.group_vit_contract_vendor"/>
+                        
+                    <field name="syarat_output" invisible="type_kontrak != 'fisik'" groups="vit_contract_inherit.group_vit_contract_vendor"/>
+                </xpath>
+
+                <xpath expr="//field[@name='actual_output']" position="replace">
+                    <field name="actual_output" invisible="type_kontrak != 'non_fisik'" readonly="1" groups="base.group_user,!vit_contract_inherit.group_vit_contract_vendor"/>
+                        
+                    <field name="actual_output" invisible="type_kontrak != 'non_fisik'" groups="vit_contract_inherit.group_vit_contract_vendor"/>
+                </xpath>
+
+                                
 
 
                 <xpath expr="//field[@name='syarat_termin_ids']/tree/field[@name='name']" position="replace"/>

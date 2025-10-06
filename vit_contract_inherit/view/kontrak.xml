@@ -7,6 +7,17 @@
             <field name="inherit_id" ref="vit_contract.view_vit_kontrak_form"/>
             <field name="arch" type="xml">
 
+                <xpath expr="//sheet" position="after">
+                    <div class="oe_chatter"
+                        options="{'display_log_button': False, 'display_log_note_button': False, 'display_activity_button': False}">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </xpath>
+
+
+
+
                 <xpath expr="//header/button[@name='action_confirm']" position="attributes">
                     <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager</attribute>
                 </xpath>
@@ -186,9 +197,7 @@
                 <xpath expr="//page[@name='termin_ids']/field[@name='termin_ids']/tree" position="attributes">
                     <attribute name="delete">false</attribute>
                 </xpath>
-
-
-                <xpath expr="//field[@name='termin_ids']/tree/field[@name='is_droping_done']" position="after">
+                <xpath expr="//field[@name='termin_ids']/tree/field[@name='actual_output']" position="after">
                     <field name="stage_is_draft" column_invisible="1"/>
                     <button name="action_delete_line"
                             string="Delete"
