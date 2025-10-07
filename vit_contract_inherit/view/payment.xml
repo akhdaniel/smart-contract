@@ -10,6 +10,7 @@
 
                 <xpath expr="//tree/field[@name='kanwil_id']" position="replace"/>
                 <xpath expr="//tree/field[@name='master_budget_id']" position="replace"/>
+                <xpath expr="//tree/field[@name='persentase']" position="replace"/>
                 <xpath expr="//tree/field[@name='amount']" position="replace"/>
                 <xpath expr="//tree/field[@name='amount_budget_rkap']" position="replace"/>
                 <xpath expr="//tree/field[@name='amount_izin_prinsip']" position="replace"/>
@@ -19,6 +20,7 @@
                     <field name="kanwil_id"/>
                     <field name="master_budget_id"/>
                     <field name="master_nama_termin_id"/>
+                    <field name="persentase"/>
                     <field name="amount"/>
                     <field name="amount_budget_rkap"/>
                     <field name="amount_izin_prinsip"/>
