@@ -55,8 +55,11 @@
                 <xpath expr="//field[@name='amount_izin_prinsip']" position="replace"/>
                 <xpath expr="//field[@name='amount_kontrak']" position="replace"/>
                 <xpath expr="//field[@name='amount_denda']" position="replace"/>
+                <xpath expr="//field[@name='persentase']" position="replace"/>
                 <xpath expr="//field[@name='syarat_progress']" position="replace"/>
                 <xpath expr="//field[@name='actual_progress']" position="replace"/>
+                <xpath expr="//field[@name='syarat_output']" position="replace"/>
+                <xpath expr="//field[@name='actual_output']" position="replace"/>
                 <xpath expr="//field[@name='partner_id']" position="replace"/>
                 <xpath expr="//field[@name='termin_id']" position="replace"/>
                 <xpath expr="//field[@name='amount']" position="after">
@@ -64,8 +67,11 @@
                     <field name="amount_izin_prinsip" readonly="1"/>
                     <field name="amount_kontrak" readonly="1"/>
                     <field name="amount_denda" readonly="1"/>
+                    <field name="persentase" readonly="1"/>
                     <field name="syarat_progress" readonly="1"/>
                     <field name="actual_progress" readonly="1"/>
+                    <field name="syarat_output" readonly="1"/>
+                    <field name="actual_output" readonly="1"/>
                     <field name="partner_id" readonly="1"/>
                     <field name="termin_id" readonly="1"/>
                 </xpath>

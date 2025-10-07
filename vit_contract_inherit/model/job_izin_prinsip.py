@@ -9,6 +9,7 @@ class job_izin_prinsip(models.Model):
     kanca_id = fields.Many2one(
         comodel_name="vit.kanca",
         string="Kanca",
+        required=True,
         domain="[('kanwil_id', '=', parent.kanwil_id)]",
     )
 

@@ -24,7 +24,6 @@ class syarat_termin(models.Model):
 
     due_date = fields.Date( 
         string=_("Due Date"),
-        required=True,    
     )
 
     upload_date = fields.Date(

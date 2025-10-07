@@ -122,6 +122,9 @@
                                         <field name="master_nama_termin_id" /> <!-- 108-->
                                         <field name="actual_progress" /> <!-- 109-->
                                         <field name="izin_prinsip_id" /> <!-- 109-->
+                                        <field name="syarat_output" /> <!-- 110-->
+                                        <field name="actual_output" /> <!-- 111-->
+                                        <field name="persentase" /> <!-- 112-->
                                     </tree>
                                 </field>
                             </page>

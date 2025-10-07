@@ -165,16 +165,17 @@
                     <field name="syarat_progress" invisible="type_kontrak != 'fisik'" readonly="1" groups="vit_contract_inherit.group_vit_contract_vendor"/>
                 </xpath>
 
+
                 <xpath expr="//field[@name='actual_progress']" position="replace">
-                    <field name="actual_progress" invisible="type_kontrak != 'non_fisik'" groups="base.group_user,!vit_contract_inherit.group_vit_contract_vendor"/>
+                    <field name="actual_progress" invisible="type_kontrak != 'fisik'" readonly="1" groups="base.group_user,!vit_contract_inherit.group_vit_contract_vendor"/>
                         
-                    <field name="actual_progress" invisible="type_kontrak != 'non_fisik'" readonly="1" groups="vit_contract_inherit.group_vit_contract_vendor"/>
+                    <field name="actual_progress" invisible="type_kontrak != 'fisik'" groups="vit_contract_inherit.group_vit_contract_vendor"/>
                 </xpath>
 
                 <xpath expr="//field[@name='syarat_output']" position="replace">
-                    <field name="syarat_output" invisible="type_kontrak != 'fisik'" readonly="1" groups="base.group_user,!vit_contract_inherit.group_vit_contract_vendor"/>
+                    <field name="syarat_output" invisible="type_kontrak != 'non_fisik'" groups="base.group_user,!vit_contract_inherit.group_vit_contract_vendor"/>
                         
-                    <field name="syarat_output" invisible="type_kontrak != 'fisik'" groups="vit_contract_inherit.group_vit_contract_vendor"/>
+                    <field name="syarat_output" invisible="type_kontrak != 'non_fisik'" readonly="1" groups="vit_contract_inherit.group_vit_contract_vendor"/>
                 </xpath>
 
                 <xpath expr="//field[@name='actual_output']" position="replace">

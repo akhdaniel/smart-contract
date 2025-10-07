@@ -304,7 +304,15 @@ class kontrak(models.Model):
                     raise UserError(_("Kontrak tidak bisa langsung masuk ke Done. "
                                     "Masih ada Termin yang belum selesai."))
 
-        return super(kontrak, self).action_confirm() 
+            total_persen = sum(rec.termin_ids.mapped('persentase'))
+            if total_persen < 100:
+                raise UserError(_("Total persentase semua termin dalam kontrak harus 100%%. "
+                                "Saat ini baru mencapai %.2f%%") % total_persen)
+            elif total_persen > 100:
+                raise UserError(_("Total persentase semua termin dalam kontrak tidak boleh lebih dari 100%%."))
+
+        return super(kontrak, self).action_confirm()
+
     
 
     def action_cancel(self):
