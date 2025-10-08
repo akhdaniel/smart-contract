@@ -1,22 +1,5 @@
 <odoo>
     <data>
-
-        <menuitem id="vit_contract.vit_contract_top_menu"
-                  name="Smart Contract"
-                  sequence="20"
-                  web_icon="vit_contract,static/description/icon.png"/>
-
-        <menuitem id="vit_contract.vit_contract_config_menu"
-                  name="Configurations"
-                  sequence="1000"
-                  parent="vit_contract.vit_contract_top_menu"
-                  groups="vit_contract.group_vit_contract_manager"/>
-
-        <menuitem id="vit_contract_sub_menu"
-                  name="Operations"
-                  sequence="40"
-                  parent="vit_contract.vit_contract_top_menu"
-                  groups="vit_contract.group_vit_contract_manager,group_vit_contract_kanwil,group_vit_contract_kanca,group_vit_contract_vendor,group_vit_contract_allowed_kanca,group_vit_contract_allowed_kanwil"/>
-
+        <menuitem id="vit_contract.vit_contract_config_menu" name="Configurations" sequence="1000" parent="vit_contract.vit_contract_top_menu" groups="vit_contract.group_vit_contract_manager"/>
     </data>
 </odoo>
