@@ -18,3 +18,4 @@ from . import master_budget
 from . import kontrak_state
 from . import state_termin
 from . import droping
+from . import res_users
