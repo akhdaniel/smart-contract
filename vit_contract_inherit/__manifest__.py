@@ -25,6 +25,8 @@
         'security/ir.model.access.csv',
         "view/menu.xml",
         "view/menu_operation.xml",
+        'view/record_rule_kanwil.xml',
+        'view/record_rule_kanca.xml',
         'view/record_rule_vendor.xml',
 		"view/izin_prinsip.xml",
         "view/job_izin_prinsip.xml",
