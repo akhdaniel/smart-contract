@@ -5,7 +5,7 @@
             <field name="tag">vit_dashboard.KermaDashboard</field>
         </record>
 
-        <menuitem id="menu_kerma_dashboard" name="Dashboard Utama"
+        <menuitem id="menu_kerma_dashboard" name="Dashboard Kanwil"
             action="action_kerma_dashboard"
             parent="vit_contract.vit_contract_config_menu"
             sequence="1"/>
