@@ -6,9 +6,12 @@
             <!-- filter-->
             <div class="row px-3 py-2">
                 <div class="col-12 col-md-3">
-                    <h1>Dashboard
-                        <t t-if="state.selectedUnit">
-                            <t t-esc="state.selectedUnit.name"/>
+                    <h1>
+                        <t t-if="state.selectedKanwil">
+                            Dashboard <t t-esc="state.selectedKanwil.name"/>
+                        </t>
+                        <t t-else="">
+                            Dashboard
                         </t>
                     </h1>
                     <h3>
