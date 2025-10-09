@@ -17,7 +17,7 @@
                         </t>
                     </h3>
                 </div>
-                <div class="col-12 col-md-3">
+                <!-- <div class="col-12 col-md-3">
                     <div class="form-control px-1 m-0">
                         <UnitSelector
                             id="'unit_selector'"
@@ -25,7 +25,7 @@
                             onUnitSelected.bind="onUnitChange"
                         />
                     </div>
-                </div>
+                </div> -->
 
 
 
@@ -48,7 +48,7 @@
 
 
 
-                <div class="col-12 col-md-3">
+                <!-- <div class="col-12 col-md-3">
                     <LocationSearch
                         value="state.location || ''"
                         onLocationSearchEnter.bind="onLocationSearchEnter"/>
@@ -62,7 +62,7 @@
                     <button class="btn btn-secondary" t-on-click="clearSavedState">
                         Reset
                     </button>
-                </div>
+                </div> -->
             </div>
 
             <!-- content scrollable-->
