@@ -1,5 +1,5 @@
 /** @odoo-module */
-const { Component, onMounted, useState } = owl;
+const { Component, onMounted, onWillDestroy, useState } = owl;
 import { useService } from "@web/core/utils/hooks";
 
 export class NumberCard extends Component {
@@ -29,6 +29,10 @@ export class NumberCard extends Component {
             this.props.onReload((domain) => this.reload(domain));
         }
 
+        onWillDestroy(() => {
+            this.isDestroyed = true;
+        });
+
 
         onMounted(async () => {
             this.reload();
@@ -40,21 +44,31 @@ export class NumberCard extends Component {
     }
 
     async reload(domain = []) {
+        if (this.isDestroyed) {
+            console.warn("⚠️ Skip reload karena komponen sudah dihancurkan");
+            return;
+        }
+
         const savedState = this.loadState();
-        
-        // 🔹 Domain utama diambil dari parameter (kalau dikirim dari dashboard)
+
         const combinedDomain = domain.length
             ? domain
             : this.props.domain
                 ? [...this.props.domain, ...(savedState.domain || [])]
                 : (savedState.domain || []);
-        
-        this.state.domain = combinedDomain || [];
 
+        this.state.domain = combinedDomain || [];
         console.log("🔥 Reload NumberCard dengan domain:", combinedDomain);
 
-        await this.getStatistics(combinedDomain);
+        try {
+            await this.getStatistics(combinedDomain);
+        } catch (err) {
+            if (!this.isDestroyed) {
+                console.error("❌ Error saat reload NumberCard:", err);
+            }
+        }
     }
+
 
 
     async getStatistics(domain = []) {

@@ -267,7 +267,6 @@ export class KermaDashboard extends Component {
 
         this.saveState();
 
-        // 🟢 ini dua baris tambahan biar data langsung refresh
         this.render(true);
         this.env.bus.trigger('reload_dashboard');
     }
