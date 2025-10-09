@@ -51,9 +51,12 @@ class BudgetRkap(models.Model):
             return {
                 'kanwil_name': record.kanwil_id.name if record else '',
                 'amount': amount,
+                'amount_formatted': "{:,.0f}".format(amount).replace(",", "."),
                 'total_realisasi': total_realisasi,
+                'total_realisasi_formatted': "{:,.0f}".format(total_realisasi).replace(",", "."),
                 'persentasi': round(persentasi, 2),
             }
+
 
 
         if field == 'master_budget_summary':
@@ -79,15 +82,20 @@ class BudgetRkap(models.Model):
 
                 master_summaries.append({
                     "master_budget": mb.name,
-                    "remaining": sum(mb_budgets.mapped("remaining")) if mb_budgets else 0,
+                    "remaining": total_pagu - total_kontrak,  # tetap hitung biasa
+                    "remaining_formatted": "{:,.0f}".format(total_pagu - total_kontrak).replace(",", "."),
                     "total_qty_izin_prinsip": sum(mb_budgets.mapped("total_qty_izin_prinsip")) if mb_budgets else 0,
                     "total_pagu_izin_prinsip": total_pagu,
+                    "total_pagu_izin_prinsip_formatted": "{:,.0f}".format(total_pagu).replace(",", "."),
                     "total_qty_kontrak": sum(mb_budgets.mapped("total_qty_kontrak")) if mb_budgets else 0,
                     "total_amount_kontrak": total_kontrak,
+                    "total_amount_kontrak_formatted": "{:,.0f}".format(total_kontrak).replace(",", "."),
                     "total_amount_droping": total_droping,
+                    "total_amount_droping_formatted": "{:,.0f}".format(total_droping).replace(",", "."),
                     "persen_kontrak": round(persen_kontrak, 2),
                     "persen_droping": round(persen_droping, 2),
                 })
+
 
             return {
                 'master_summaries': master_summaries,

@@ -46,13 +46,13 @@
                         <t t-if="'amount' in state.val">
                             <div class="d-flex justify-content-between">
                                 <div class="fs-5 fw-bold">Amount Budget</div>
-                                <div class="fs-5 fw-bold"><t t-out="state.val.amount || 0"/></div>
+                                <div class="fs-5 fw-bold"><t t-out="state.val.amount_formatted or state.val.amount || 0"/></div>
                             </div>
                         </t>
                         <t t-if="'total_realisasi' in state.val">
                             <div class="d-flex justify-content-between">
                                 <div class="fs-5 fw-bold">Total Realisasi</div>
-                                <div class="fs-5 fw-bold"><t t-out="state.val.total_realisasi || 0"/></div>
+                                <div class="fs-5 fw-bold"><t t-out="state.val.total_realisasi_formatted or state.val.total_realisasi || 0"/></div>
                             </div>
                         </t>
 
@@ -60,12 +60,12 @@
                             <t t-set="current" t-value="state.val.master_summaries.find(ms => ms.master_budget == props.title)"/>
                             <t t-if="current">
                                 <div>
-                                    <div class="d-flex justify-content-between"><span>Sisa</span><span><t t-out="current.remaining"/></span></div>
+                                    <div class="d-flex justify-content-between"><span>Sisa</span><span><t t-out="current.remaining_formatted or current.remaining"/></span></div>
                                     <div class="d-flex justify-content-between"><span>Total Qty Izin Prinsip</span><span><t t-out="current.total_qty_izin_prinsip"/></span></div>
-                                    <div class="d-flex justify-content-between"><span>Total Pagu Izin Prinsip</span><span><t t-out="current.total_pagu_izin_prinsip"/></span></div>
+                                    <div class="d-flex justify-content-between"><span>Total Pagu Izin Prinsip</span><span><t t-out="current.total_pagu_izin_prinsip_formatted or current.total_pagu_izin_prinsip"/></span></div>
                                     <div class="d-flex justify-content-between"><span>Total Qty Kontrak</span><span><t t-out="current.total_qty_kontrak"/></span></div>
-                                    <div class="d-flex justify-content-between"><span>Total Amount Kontrak</span><span><t t-out="current.total_amount_kontrak"/></span></div>
-                                    <div class="d-flex justify-content-between"><span>Total Amount Droping</span><span><t t-out="current.total_amount_droping"/></span></div>
+                                    <div class="d-flex justify-content-between"><span>Total Amount Kontrak</span><span><t t-out="current.total_amount_kontrak_formatted or current.total_amount_kontrak"/></span></div>
+                                    <div class="d-flex justify-content-between"><span>Total Amount Droping</span><span><t t-out="current.total_amount_droping_formatted or current.total_amount_droping"/></span></div>
 
                                     <div class="d-flex justify-content-around mt-2">
                                         <div class="badge bg-primary text-white p-2 d-flex flex-column align-items-center" style="min-width: 120px;">
