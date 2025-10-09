@@ -26,6 +26,28 @@
                         />
                     </div>
                 </div>
+
+
+
+                <div class="col-12 col-md-3">
+                    <div class="form-control px-1 m-0">
+                        <select
+                            t-on-change="onKanwilChange"
+                            class="form-select border-0"
+                        >
+
+                            <option value="">-- Pilih Kanwil --</option>
+                            <t t-foreach="state.kanwils" t-as="kw" t-key="kw.id">
+                                <option t-att-value="kw.id" t-esc="kw.name"/>
+                            </t>
+
+
+                        </select>
+                    </div>
+                </div>
+
+
+
                 <div class="col-12 col-md-3">
                     <LocationSearch
                         value="state.location || ''"

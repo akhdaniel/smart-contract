@@ -16,6 +16,9 @@
                     <div class="col">
                         <div class="row">
                             <div class="col">
+
+
+
                                 <div class="fs-5 fw-bold">
                                     <t t-out="props.title"/>
                                 </div>
@@ -25,6 +28,10 @@
                                         <t t-out="state.val.kanwil_name"/>
                                     </div>
                                 </t>
+
+
+
+                                
                             </div>
                         </div>
                         <t t-if="props.title == 'Kanwil'">

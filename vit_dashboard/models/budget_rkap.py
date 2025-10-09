@@ -15,18 +15,33 @@ class BudgetRkap(models.Model):
         Sekarang kanwil_id diambil dari izin_prinsip (bukan dari budget_rkap langsung).
         """
         domain = domain or []
+        _logger.info("📊 DASHBOARD DOMAIN MASUK: %s", domain)
 
-        if field == 'total_budget_realisasi':
+        # ambil domain dari dashboard (misal [('kanwil_id', '=', 5)])
+        domain_ip = []
+        for cond in domain:
+            if cond[0] == 'kanwil_id':
+                domain_ip.append(('kanwil_id', '=', cond[2]))
+            else:
+                domain_ip.append(cond)
+
+        # fallback kalau belum ada pilihan kanwil
+        if not domain_ip:
             record = self.env['vit.izin_prinsip'].search([], limit=1)
-            domain_ip = []
-            if record.kanwil_id:
+            if record and record.kanwil_id:
                 domain_ip = [('kanwil_id', '=', record.kanwil_id.id)]
 
+        if field == 'total_budget_realisasi':
+            # 🔹 Ambil data izin_prinsip sesuai domain yang dikirim dari dashboard
             izin_prinsip_list = self.env['vit.izin_prinsip'].search(domain_ip)
-            # ambil semua master_budget yang dipakai izin_prinsip tsb
+
+            # 🔹 Ambil satu record pertama dari hasil search untuk dapetin nama kanwil
+            record = izin_prinsip_list[:1]
+
+            # 🔹 Ambil semua master_budget_id dari izin_prinsip yang cocok
             master_ids = izin_prinsip_list.mapped('master_budget_id').ids
 
-            # filter budget_rkap berdasarkan master_budget_id
+            # 🔹 Filter budget_rkap berdasarkan master_budget_id tersebut
             budgets = self.env['vit.budget_rkap'].search([('master_budget_id', 'in', master_ids)])
 
             amount = sum(budgets.mapped('amount'))
@@ -34,19 +49,16 @@ class BudgetRkap(models.Model):
             persentasi = (total_realisasi / amount * 100) if amount > 0 else 0
 
             return {
-                'kanwil_name': record.kanwil_id.name if record.kanwil_id else '',
+                'kanwil_name': record.kanwil_id.name if record else '',
                 'amount': amount,
                 'total_realisasi': total_realisasi,
                 'persentasi': round(persentasi, 2),
             }
 
-        if field == 'master_budget_summary':
-            record = self.env['vit.izin_prinsip'].search([], limit=1)
-            domain_ip = []
-            if record.kanwil_id:
-                domain_ip = [('kanwil_id', '=', record.kanwil_id.id)]
 
+        if field == 'master_budget_summary':
             izin_prinsip_list = self.env['vit.izin_prinsip'].search(domain_ip)
+
             master_ids = izin_prinsip_list.mapped('master_budget_id').ids
 
             # ambil semua master budget di sistem (bukan cuma yang ada di izin_prinsip / budget)

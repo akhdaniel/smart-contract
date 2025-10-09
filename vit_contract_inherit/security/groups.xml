@@ -1,6 +1,5 @@
 <odoo>
     <data>
-        
 
         <record model="ir.module.category" id="vit_contract.module_category_vit_contract">
 			<field name="name">Smart Contract</field>

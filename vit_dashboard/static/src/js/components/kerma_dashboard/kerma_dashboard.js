@@ -32,11 +32,18 @@ export class KermaDashboard extends Component {
             location: savedState.location || '',
             domain: savedState.domain || [],
             unitDomain: savedState.selectedUnit ? [['operating_unit_id', '=', savedState.selectedUnit.id]] : [],
+
+            selectedKanwil: savedState.selectedKanwil || null,
+            kanwilDomain: savedState.selectedKanwil ? [['kanwil_id', '=', savedState.selectedKanwil.id]] : [],
+
+
+
             locationDomain: savedState.location ? [['mitra_location', 'ilike', savedState.location]] : [],
             keywordDomain: savedState.keyword ? [['keyword', 'ilike', savedState.keyword]] : [],
             resModelDescription: '',
             mapKey: Date.now(), // Add this to force remount of GoogleMap
         });
+        this.state.kanwils = [];
 
         this.mitraNumberCardReload = null; // Placeholder for the reload method
         this.kerjasamaNumberCardReload = null; // Placeholder for the reload method
@@ -60,10 +67,19 @@ export class KermaDashboard extends Component {
         this.mitraListCardReload = null; // Placeholder for the reload method
 
 
-        onWillStart(() => {
+        onWillStart(async () => {
             console.log("onWillStart...KermaDashboard", this.state.domain);
+
+            // 🟢 ambil semua data Kanwil
+            this.state.kanwils = await this.orm.searchRead(
+                "vit.kanwil",
+                [],
+                ["id", "name"]
+            );
+
             this.reloadNumberCard();
-        })
+        });
+
     }
     saveState() {
         try {
@@ -234,6 +250,30 @@ export class KermaDashboard extends Component {
         this.reloadNumberCard();
     }
 
+    onKanwilChange(ev) {
+        const selectedId = parseInt(ev.target.value);
+        const selectedName = ev.target.options[ev.target.selectedIndex].text;
+
+        if (!selectedId) {
+            this.state.selectedKanwil = null;
+            this.state.kanwilDomain = [];
+        } else {
+            this.state.selectedKanwil = { id: selectedId, name: selectedName };
+            this.state.kanwilDomain = [['kanwil_id', '=', selectedId]];
+        }
+
+        console.log("✅ Selected Kanwil:", this.state.selectedKanwil);
+        console.log("📦 Domain:", this.state.kanwilDomain);
+
+        this.saveState();
+
+        // 🟢 ini dua baris tambahan biar data langsung refresh
+        this.render(true);
+        this.env.bus.trigger('reload_dashboard');
+    }
+
+
+
     onLocationSearchEnter(e) {
         console.log("onLocationSearchEnter....", e);
         this.state.location = e
@@ -261,82 +301,96 @@ export class KermaDashboard extends Component {
     }
 
     combineDomain(){
-        this.state.domain = [...(this.state.unitDomain || []), ...(this.state.keywordDomain || []), ...(this.state.locationDomain || [])];
+        this.state.domain = [...(this.state.unitDomain || []), ...(this.state.keywordDomain || []), ...(this.state.locationDomain || []), ...(this.state.kanwilDomain || []),];
     }
 
     reloadNumberCard() {
-        console.log("reloadNumberCard...domain=", this.state.domain);
-        // this.combineDomain();
+        this.combineDomain();
+        const domain = this.state.domain;
 
-        // Call the reload method if it exists
+        console.log("🔥 Reload Dashboard dengan domain:", domain);
+
+        // cukup panggil 1 kali aja, karena semua NumberCard pakai handler yg sama
         if (this.mitraNumberCardReload) {
-            this.mitraNumberCardReload();
-        }
-        // Call the reload method if it exists
-        if (this.kerjasamaNumberCardReload) {
-            this.kerjasamaNumberCardReload();
-        }
-        // Call the reload method if it exists
-        if (this.inboundNumberCardReload) {
-            this.inboundNumberCardReload();
-        }
-        // Call the reload method if it exists
-        if (this.outboundNumberCardReload) {
-            this.outboundNumberCardReload();
-        }
-        if (this.mouNumberCardReload) {
-            this.mouNumberCardReload();
-        }
-        if (this.moaNumberCardReload) {
-            this.moaNumberCardReload();
-        }
-        if (this.iaNumberCardReload) {
-            this.iaNumberCardReload();
-        }
-        if (this.mahasiswaInboundNumberCardReload) {
-            this.mahasiswaInboundNumberCardReload();
-        }
-        if (this.mahasiswaOutboundNumberCardReload) {
-            this.mahasiswaOutboundNumberCardReload();
-        }
-        if (this.kunjunganEksekutifNumberCardReload) {
-            this.kunjunganEksekutifNumberCardReload();
-        }
-        if (this.kunjunganMitraNumberCardReload) {
-            this.kunjunganMitraNumberCardReload();
-        }
-        // Call the reload method if it exists
-        if (this.pieChartReload1) {
-            this.pieChartReload1();
-        }
-    
-        if (this.pieChartReload2) {
-            this.pieChartReload2();
-        }
-    
-        if (this.pieChartReload3) {
-            this.pieChartReload3();
-        }    
-        if (this.pieChartReload4) {
-            this.pieChartReload4();
-        }
-        if (this.pieChartReload5) {
-            this.pieChartReload5();
-        }
-        if (this.pieChartReload6) {
-            this.pieChartReload6();
-        }
-        if (this.pieChartReload7) {
-            this.pieChartReload7();
-        }
-
-        if (this.googleMapReload) {
-            this.googleMapReload();
-        }
-        if (this.mitraListCardReload) {
-            this.mitraListCardReload();
+            this.mitraNumberCardReload(domain);
         }
     }
+
+
+    // reloadNumberCard() {
+    //     this.combineDomain();
+    //     console.log("reloadNumberCard...domain=", this.state.domain);
+    //     // this.combineDomain();
+
+    //     // Call the reload method if it exists
+    //     if (this.mitraNumberCardReload) {
+    //         this.mitraNumberCardReload();
+    //     }
+    //     // Call the reload method if it exists
+    //     if (this.kerjasamaNumberCardReload) {
+    //         this.kerjasamaNumberCardReload();
+    //     }
+    //     // Call the reload method if it exists
+    //     if (this.inboundNumberCardReload) {
+    //         this.inboundNumberCardReload();
+    //     }
+    //     // Call the reload method if it exists
+    //     if (this.outboundNumberCardReload) {
+    //         this.outboundNumberCardReload();
+    //     }
+    //     if (this.mouNumberCardReload) {
+    //         this.mouNumberCardReload();
+    //     }
+    //     if (this.moaNumberCardReload) {
+    //         this.moaNumberCardReload();
+    //     }
+    //     if (this.iaNumberCardReload) {
+    //         this.iaNumberCardReload();
+    //     }
+    //     if (this.mahasiswaInboundNumberCardReload) {
+    //         this.mahasiswaInboundNumberCardReload();
+    //     }
+    //     if (this.mahasiswaOutboundNumberCardReload) {
+    //         this.mahasiswaOutboundNumberCardReload();
+    //     }
+    //     if (this.kunjunganEksekutifNumberCardReload) {
+    //         this.kunjunganEksekutifNumberCardReload();
+    //     }
+    //     if (this.kunjunganMitraNumberCardReload) {
+    //         this.kunjunganMitraNumberCardReload();
+    //     }
+    //     // Call the reload method if it exists
+    //     if (this.pieChartReload1) {
+    //         this.pieChartReload1();
+    //     }
+    
+    //     if (this.pieChartReload2) {
+    //         this.pieChartReload2();
+    //     }
+    
+    //     if (this.pieChartReload3) {
+    //         this.pieChartReload3();
+    //     }    
+    //     if (this.pieChartReload4) {
+    //         this.pieChartReload4();
+    //     }
+    //     if (this.pieChartReload5) {
+    //         this.pieChartReload5();
+    //     }
+    //     if (this.pieChartReload6) {
+    //         this.pieChartReload6();
+    //     }
+    //     if (this.pieChartReload7) {
+    //         this.pieChartReload7();
+    //     }
+
+    //     if (this.googleMapReload) {
+    //         this.googleMapReload();
+    //     }
+    //     if (this.mitraListCardReload) {
+    //         this.mitraListCardReload();
+    //     }
+    // }
 
 }
 
