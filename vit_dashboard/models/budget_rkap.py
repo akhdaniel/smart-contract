@@ -17,7 +17,6 @@ class BudgetRkap(models.Model):
         domain = domain or []
         _logger.info("📊 DASHBOARD DOMAIN MASUK: %s", domain)
 
-        # ambil domain dari dashboard (misal [('kanwil_id', '=', 5)])
         domain_ip = []
         for cond in domain:
             if cond[0] == 'kanwil_id':
@@ -25,28 +24,22 @@ class BudgetRkap(models.Model):
             else:
                 domain_ip.append(cond)
 
-        # fallback kalau belum ada pilihan kanwil
         if not domain_ip:
             record = self.env['vit.izin_prinsip'].search([], limit=1)
             if record and record.kanwil_id:
                 domain_ip = [('kanwil_id', '=', record.kanwil_id.id)]
 
         if field == 'total_budget_realisasi':
-            # 🔹 Ambil data izin_prinsip sesuai domain yang dikirim dari dashboard
             izin_prinsip_list = self.env['vit.izin_prinsip'].search(domain_ip)
 
-            # 🔹 Ambil satu record pertama dari hasil search untuk dapetin nama kanwil
             record = izin_prinsip_list[:1]
 
-            # 🔹 Ambil semua master_budget_id dari izin_prinsip yang cocok
             master_ids = izin_prinsip_list.mapped('master_budget_id').ids
 
-            # 🔹 Filter budget_rkap berdasarkan master_budget_id tersebut
             budgets = self.env['vit.budget_rkap'].search([('master_budget_id', 'in', master_ids)])
 
             amount = sum(budgets.mapped('amount'))
             total_realisasi = sum(budgets.mapped('total_amount_payment'))
-            persentasi = (total_realisasi / amount * 100) if amount > 0 else 0
 
             return {
                 'kanwil_name': record.kanwil_id.name if record else '',
@@ -54,8 +47,28 @@ class BudgetRkap(models.Model):
                 'amount_formatted': "{:,.0f}".format(amount).replace(",", "."),
                 'total_realisasi': total_realisasi,
                 'total_realisasi_formatted': "{:,.0f}".format(total_realisasi).replace(",", "."),
-                'persentasi': round(persentasi, 2),
             }
+
+                    
+
+        if field == 'persentase_tl_droping':
+            izin_prinsip_list = self.env['vit.izin_prinsip'].search(domain_ip)
+            record = izin_prinsip_list[:1]
+            master_ids = izin_prinsip_list.mapped('master_budget_id').ids
+            budgets = self.env['vit.budget_rkap'].search([('master_budget_id', 'in', master_ids)])
+
+            amount = sum(budgets.mapped('amount'))
+            total_realisasi = sum(budgets.mapped('total_amount_payment'))
+            total_droping = sum(budgets.mapped('total_amount_droping'))
+
+            persentasi_tl = (total_realisasi / amount * 100) if amount > 0 else 0
+            persentasi_droping = (total_realisasi / total_droping * 100) if total_droping > 0 else 0
+
+            return {
+                'persentasi_tl': round(persentasi_tl, 2),
+                'persentasi_droping': round(persentasi_droping, 2),
+            }
+
         
 
         if field == 'master_budget_list':

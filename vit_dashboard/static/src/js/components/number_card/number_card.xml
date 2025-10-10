@@ -7,9 +7,11 @@
            onmouseover="this.classList.add('shadow-lg')"
            onmouseout="this.classList.remove('shadow-lg')">
             <!-- Icon Section -->
-            <div class="me-3 w-25 text-center">
-                <i t-att-class="props.icon || 'fa fa-info-circle'" t-att-style="'font-size: 2rem;'"></i>
-            </div>
+            <t t-if="props.field != 'persentase_tl_droping'">
+                <div class="me-3 w-25 text-center">
+                    <i t-att-class="props.icon || 'fa fa-info-circle'" t-att-style="'font-size: 2rem;'"></i>
+                </div>
+            </t>
             <!-- Text Section -->
             <div class="flex-grow-1 w-75">
                 <div class="row">
@@ -34,7 +36,7 @@
                                 
                             </div>
                         </div>
-                        <t t-if="props.title == 'Kanwil'">
+                        <!-- <t t-if="props.title == 'Kanwil'">
                             <div class="row">
                                 <div class="col">
                                     <div class="fs-2 fw-bold">
@@ -42,7 +44,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </t>
+                        </t> -->
                         <t t-if="'amount' in state.val">
                             <div class="d-flex justify-content-between">
                                 <div class="fs-5 fw-bold">Amount Budget</div>
@@ -55,6 +57,21 @@
                                 <div class="fs-5 fw-bold"><t t-out="state.val.total_realisasi_formatted or state.val.total_realisasi || 0"/></div>
                             </div>
                         </t>
+
+                        <t t-if="props.field == 'persentase_tl_droping'">
+                            <div class="w-100 h-100 d-flex flex-column justify-content-center align-items-center text-center">
+                                <div class="fs-1 fw-bold text-white">
+                                    <t t-out="state.val.persentasi_tl"/>%
+                                </div>
+                                <div class="fs-6 text-white mb-2">% TL PAKET</div>
+                                <div class="fs-1 fw-bold text-white">
+                                    <t t-out="state.val.persentasi_droping"/>%
+                                </div>
+                                <div class="fs-6 text-white">% DROPPING/RELOK</div>
+                            </div>
+                        </t>
+
+
 
                         <t t-if="props.title != 'Kanwil' and 'master_summaries' in state.val">
                             <t t-set="current" t-value="state.val.master_summaries.find(ms => ms.master_budget == props.title)"/>
