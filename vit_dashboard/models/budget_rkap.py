@@ -56,6 +56,13 @@ class BudgetRkap(models.Model):
                 'total_realisasi_formatted': "{:,.0f}".format(total_realisasi).replace(",", "."),
                 'persentasi': round(persentasi, 2),
             }
+        
+
+        if field == 'master_budget_list':
+            masters = self.env['vit.master_budget'].search([], order="sequence, name")
+            return {
+                'master_list': [{'id': mb.id, 'name': mb.name} for mb in masters]
+            }
 
 
 

@@ -42,6 +42,7 @@ export class KermaDashboard extends Component {
             keywordDomain: savedState.keyword ? [['keyword', 'ilike', savedState.keyword]] : [],
             resModelDescription: '',
             mapKey: Date.now(), // Add this to force remount of GoogleMap
+            masterBudgets: [],
         });
         this.state.kanwils = [];
 
@@ -76,6 +77,14 @@ export class KermaDashboard extends Component {
                 [],
                 ["id", "name"]
             );
+
+            const result = await this.orm.call(
+                "vit.budget_rkap",
+                "get_statistics",
+                [],
+                { field: "master_budget_list" }
+            );
+            this.state.masterBudgets = result.master_list || [];
 
             this.reloadNumberCard();
         });

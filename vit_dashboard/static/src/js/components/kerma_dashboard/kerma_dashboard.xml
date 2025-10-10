@@ -85,20 +85,20 @@
                             onReload.bind="onMitraNumberCardReload"
                         />
                     </div>
+                    <t t-foreach="state.masterBudgets" t-as="mb" t-key="mb.id">
+                        <div class="col-3" style="margin-bottom:20px;">
+                            <NumberCard 
+                                title="mb.name"
+                                bgColor="'bg-itb-light-blue'"
+                                field="'master_budget_summary'"
+                                model="'vit.budget_rkap'"
+                                domain="[]"
+                                onReload.bind="onMitraNumberCardReload"
+                            />
+                        </div>
+                    </t>
                     <div class="col-3" style="margin-bottom:20px;">
-                        <NumberCard 
-                            title="'RR Gudang'" 
-                            bgColor="'bg-itb-light-blue'" 
-                            field="'master_budget_summary'"
-                            model="'vit.budget_rkap'"
-                            domain="[]"
-                            context="{'search_default_group_by_name': 1}"
-                            icon="'fa fa-users'"
-                            onReload.bind="onMitraNumberCardReload"
-                        />
-                    </div>
-                    <div class="col-3" style="margin-bottom:20px;">
-                        <NumberCard 
+                        <!-- <NumberCard 
                             title="'Pembangunan Gudang'" 
                             bgColor="'bg-itb-light-blue'" 
                             field="'master_budget_summary'"
@@ -107,10 +107,10 @@
                             context="{'search_default_group_by_name': 1}"
                             icon="'fa fa-users'"
                             onReload.bind="onMitraNumberCardReload"
-                        />
+                        /> -->
                     </div>
                     <div class="col-3" style="margin-bottom:20px;">
-                        <NumberCard 
+                        <!-- <NumberCard 
                             title="'Renov Gudang'" 
                             bgColor="'bg-itb-light-blue'" 
                             field="'master_budget_summary'"
@@ -119,10 +119,10 @@
                             context="{'search_default_group_by_name': 1}"
                             icon="'fa fa-users'"
                             onReload.bind="onMitraNumberCardReload"
-                        />
+                        /> -->
                     </div>
                     <div class="col-3" style="margin-bottom:20px;">
-                        <NumberCard 
+                        <!-- <NumberCard 
                             title="'Sapra Gudang'" 
                             bgColor="'bg-itb-light-blue'" 
                             field="'master_budget_summary'"
@@ -131,10 +131,10 @@
                             context="{'search_default_group_by_name': 1}"
                             icon="'fa fa-users'"
                             onReload.bind="onMitraNumberCardReload"
-                        />
+                        /> -->
                     </div>
                     <div class="col-3" style="margin-bottom:20px;">
-                        <NumberCard 
+                        <!-- <NumberCard 
                             title="'Sapra Investasi'" 
                             bgColor="'bg-itb-light-blue'" 
                             field="'master_budget_summary'"
@@ -143,10 +143,10 @@
                             context="{'search_default_group_by_name': 1}"
                             icon="'fa fa-users'"
                             onReload.bind="onMitraNumberCardReload"
-                        />
+                        /> -->
                     </div>
                     <div class="col-3" style="margin-bottom:20px;">
-                        <NumberCard 
+                        <!-- <NumberCard 
                             title="'RR Kantor'" 
                             bgColor="'bg-itb-light-blue'" 
                             field="'master_budget_summary'"
@@ -155,10 +155,10 @@
                             context="{'search_default_group_by_name': 1}"
                             icon="'fa fa-users'"
                             onReload.bind="onMitraNumberCardReload"
-                        />
+                        /> -->
                     </div>
                     <div class="col-3" style="margin-bottom:20px;">
-                        <NumberCard 
+                        <!-- <NumberCard 
                             title="'Pembangunan Kantor'" 
                             bgColor="'bg-itb-light-blue'" 
                             field="'master_budget_summary'"
@@ -167,10 +167,10 @@
                             context="{'search_default_group_by_name': 1}"
                             icon="'fa fa-users'"
                             onReload.bind="onMitraNumberCardReload"
-                        />
+                        /> -->
                     </div>
                     <div class="col-3" style="margin-bottom:20px;">
-                        <NumberCard 
+                        <!-- <NumberCard 
                             title="'Renov Kantor'" 
                             bgColor="'bg-itb-light-blue'" 
                             field="'master_budget_summary'"
@@ -179,10 +179,10 @@
                             context="{'search_default_group_by_name': 1}"
                             icon="'fa fa-users'"
                             onReload.bind="onMitraNumberCardReload"
-                        />
+                        /> -->
                     </div>
                     <div class="col-3" style="margin-bottom:20px;">
-                        <NumberCard 
+                        <!-- <NumberCard 
                             title="'Sapra Kantor'" 
                             bgColor="'bg-itb-light-blue'" 
                             field="'master_budget_summary'"
@@ -191,7 +191,7 @@
                             context="{'search_default_group_by_name': 1}"
                             icon="'fa fa-users'"
                             onReload.bind="onMitraNumberCardReload"
-                        />
+                        /> -->
                     </div>
                     <div class="col"> <!-- Kept the second NumberCard in the same row -->
                         <!-- <NumberCard 

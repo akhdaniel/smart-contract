@@ -25,6 +25,10 @@
                             <strong>Jenis Penugasan</strong>
                             <p class="m-0" t-field="doc.jenis_penugasan" />
                         </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Sequence</strong>
+                            <p class="m-0" t-field="doc.sequence" />
+                        </div>
                     </div>
                 </div>
                 <div class="oe_structure"/>

@@ -9,6 +9,7 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <tree string="Master Budget">
+                    <field name="sequence"  widget='handle'/>
                     <field name="name" /> <!-- 100-->
                     <field name="jenis_penugasan" /> <!-- 101-->
                 </tree>
@@ -39,6 +40,7 @@
                         <group>
                             <group> <!-- left -->
                                 <field name="jenis_penugasan"  />
+                                <field name="sequence"  />
                             </group>
                             <group> <!-- right -->
                             </group>
@@ -65,8 +67,10 @@
 
                     <filter string="Name" name="filter_by_name" domain="[('name','=','')]" />
                     <filter string="Jenis Penugasan" name="filter_by_jenis_penugasan" domain="[('jenis_penugasan','=','')]" />
+                    <filter string="Sequence" name="filter_by_sequence" domain="[('sequence','=','')]" />
                     <field name="name" select="True"/>
                     <field name="jenis_penugasan" select="True"/>
+                    <field name="sequence" select="True"/>
                     <group string="Group By..">
                         <filter string="Jenis Penugasan" domain="[]" name="group_by_jenis_penugasan" context="{'group_by':'jenis_penugasan'}"/>
                     </group>
