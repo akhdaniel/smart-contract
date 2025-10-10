@@ -17,14 +17,12 @@ class ResUsers(models.Model):
     is_kanca_group = fields.Boolean(
         string='Is Kanca Group',
         compute='_compute_is_kanca_group',
-        store=True,
     )
 
 
     is_kanwil_group = fields.Boolean(
         string='Is Kanwil Group', 
-        compute='_compute_is_kanwil_group',
-        store=True,
+        compute='_compute_is_kanwil_group'
     )
 
     @api.depends('groups_id')
