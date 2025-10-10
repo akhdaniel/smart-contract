@@ -49,7 +49,7 @@ class budget_rkap(models.Model):
     total_amount_droping = fields.Float(
         string="Total Amount Droping",
         compute="_compute_totals",
-        store=True,
+        store=False,
     )
 
 
@@ -72,18 +72,21 @@ class budget_rkap(models.Model):
             kontrak_done = rec.kontrak_ids.filtered(lambda k: k.stage_is_done)
             payment_done = rec.payment_ids.filtered(lambda p: p.stage_is_done)
 
-            dropings = Droping.search([
-                ("master_budget_id", "=", rec.master_budget_id.id),
-            ])
+            total_droping = 0
+            if rec.master_budget_id:
+                dropings = Droping.search([("master_budget_id", "=", rec.master_budget_id.id)])
+                total_droping = sum(dropings.mapped("jumlah"))
 
             rec.total_pagu_izin_prinsip = sum(izin_done.mapped("total_pagu"))
             rec.total_amount_kontrak = sum(kontrak_done.mapped("amount_kontrak"))
             rec.total_amount_payment = sum(payment_done.mapped("amount"))
-            rec.total_amount_droping = sum(dropings.mapped("jumlah"))
+            rec.total_amount_droping = total_droping
 
             rec.total_qty_izin_prinsip = len(izin_done)
             rec.total_qty_kontrak = len(kontrak_done)
             rec.total_qty_payment = len(payment_done)
+
+
 
 
 
