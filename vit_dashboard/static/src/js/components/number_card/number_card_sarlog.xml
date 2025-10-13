@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="vit_dashboard.NumberCardSarlog" owl="1">
+        <div class="p-3 text-white shadow bg-itb-light-blue"
+             style="border-radius:10px;min-height:150px;">
+            <div class="fw-bold fs-5 mb-2 text-center">
+                <t t-out="props.title"/>
+            </div>
+
+            <t t-if="state.val.master_list &amp;&amp; state.val.master_list.length">
+                <t t-foreach="state.val.master_list" t-as="item" t-key="item.id">
+                    <t t-if="item.name == props.title">
+                        <div class="d-flex justify-content-between">
+                            <span>Total Pagu Izin Prinsip</span>
+                            <span><t t-out="(item.pagu_izin_prinsip || 0).toLocaleString()"/></span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>Realisasi</span>
+                            <span>
+                                <span><t t-out="(item.realisasi || 0).toLocaleString()"/></span>
+                            </span>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-3 align-items-center">
+                            <span>%</span>
+                            <div style="position: relative; width: 60px; height: 60px;">
+                                <svg width="60" height="60">
+                                    
+                                    <circle cx="30" cy="30" r="25" stroke="#ddd" stroke-width="5" fill="none"/>
+                                    
+                                    <circle
+                                        cx="30"
+                                        cy="30"
+                                        r="25"
+                                        stroke="#ff8800"
+                                        stroke-width="5"
+                                        fill="none"
+                                        stroke-dasharray="157"
+                                        t-att-stroke-dashoffset="157 - (item.persen_realisasi * 157 / 100)"
+                                        stroke-linecap="round"
+                                        transform="rotate(-90 30 30)"
+                                    />
+                                </svg>
+                                <div style="
+                                    position:absolute;
+                                    top:50%;
+                                    left:50%;
+                                    transform:translate(-50%,-50%);
+                                    font-size:12px;
+                                    font-weight:bold;
+                                    color:white;">
+                                    <t t-esc="item.persen_realisasi"/>%
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </t>
+                </t>
+            </t>
+
+            <t t-if="!state.val.master_list || !state.val.master_list.length">
+                <div class="text-center mt-3">
+                    <small>Tidak ada data tersedia</small>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

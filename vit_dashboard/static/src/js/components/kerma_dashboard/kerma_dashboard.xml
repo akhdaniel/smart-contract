@@ -74,17 +74,20 @@
                 <!-- numer cards -->
                 <div class="row">
                     <!-- 🟦 Baris 1: Kanwil di kiri + sebagian master budget -->
-                    <div class="col-3" style="margin-top:20px; margin-bottom:20px;">
-                        <NumberCard 
-                            title="'Kanwil'" 
-                            bgColor="'bg-itb-light-blue'" 
-                            field="'total_budget_realisasi'"
-                            model="'vit.budget_rkap'"
-                            domain="[]"
-                            icon="'fa fa-users'"
-                            onReload.bind="onMitraNumberCardReload"
-                        />
+                    <div class="col-3 d-flex align-items-center" style="margin-top:20px; margin-bottom:20px;">
+                        <div class="w-100">
+                            <NumberCard 
+                                title="'Kanwil'" 
+                                bgColor="'bg-itb-light-blue'" 
+                                field="'total_budget_realisasi'"
+                                model="'vit.budget_rkap'"
+                                domain="[]"
+                                icon="'fa fa-users'"
+                                onReload.bind="onMitraNumberCardReload"
+                            />
+                        </div>
                     </div>
+
 
                     <t t-foreach="state.masterBudgets.slice(0, 3)" t-as="mb" t-key="mb.id">
                         <div class="col-3" style="margin-top:20px; margin-bottom:20px;">
@@ -103,14 +106,17 @@
 
                 <!-- 🟦 Baris 2: TL Paket & Dropping di kiri + sisa master budget -->
                 <div class="row">
-                    <div class="col-3" style="margin-bottom:20px;">
-                        <NumberCard
-                            bgColor="'bg-itb-light-blue'"
-                            field="'persentase_tl_droping'"
-                            model="'vit.budget_rkap'"
-                            domain="[]"
-                            onReload.bind="onMitraNumberCardReload"
-                        />
+                    <div class="col-3 d-flex align-items-center" style="margin-top:20px; margin-bottom:20px;">
+                        <div class="w-100">
+                            <NumberCard
+                                title="''"
+                                bgColor="'bg-itb-light-blue'"
+                                field="'persentase_tl_droping'"
+                                model="'vit.budget_rkap'"
+                                domain="[]"
+                                onReload.bind="onMitraNumberCardReload"
+                            />
+                        </div>
                     </div>
                     <t t-foreach="state.masterBudgets.slice(3)" t-as="mb" t-key="mb.id">
                         <div class="col-3" style="margin-bottom:20px;">
