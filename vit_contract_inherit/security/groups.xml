@@ -38,7 +38,7 @@
         </record>
 
         <record id="group_vit_contract_allowed_kanwil" model="res.groups">
-            <field name="name">Allowed Kanwil</field>
+            <field name="name">Alllowed Kanwil</field>
             <field name="category_id" ref="vit_contract.module_category_vit_contract"/>
         </record>
 
