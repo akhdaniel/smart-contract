@@ -45,25 +45,29 @@ class kontrak(models.Model):
     budget_rkap_id = fields.Many2one(
         comodel_name="vit.budget_rkap",  
         related="izin_prinsip_id.budget_id", 
-        string=_("Budget Rkap")
+        string=_("Budget Rkap"),
+        store=True,
     )
 
     master_budget_id = fields.Many2one(
         comodel_name="vit.master_budget",  
         related="izin_prinsip_id.master_budget_id", 
-        string=_("Master Budget")
+        string=_("Master Budget"),
+        store=True,
     )
 
     kanwil_id = fields.Many2one(
         comodel_name="vit.kanwil",  
         related="izin_prinsip_id.kanwil_id", 
-        string=_("Kanwil")
+        string=_("Kanwil"),
+        store=True,
     )
 
     kanca_id = fields.Many2one(
         comodel_name="vit.kanca",
         string="Kanca",
         related="job_izin_prinsip_id.kanca_id",
+        store=True,
     )
     
 
