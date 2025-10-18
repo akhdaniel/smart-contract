@@ -8,7 +8,8 @@ from odoo.exceptions import ValidationError
 _logger = logging.getLogger(__name__)
 
 class kontrak(models.Model):
-    _inherit = "vit.kontrak"
+    _name = "vit.kontrak"
+    _inherit = ["vit.kontrak", "mail.thread", "mail.activity.mixin"]
 
     active = fields.Boolean(default=True)
 
@@ -44,25 +45,29 @@ class kontrak(models.Model):
     budget_rkap_id = fields.Many2one(
         comodel_name="vit.budget_rkap",  
         related="izin_prinsip_id.budget_id", 
-        string=_("Budget Rkap")
+        string=_("Budget Rkap"),
+        store=True,
     )
 
     master_budget_id = fields.Many2one(
         comodel_name="vit.master_budget",  
         related="izin_prinsip_id.master_budget_id", 
-        string=_("Master Budget")
+        string=_("Master Budget"),
+        store=True,
     )
 
     kanwil_id = fields.Many2one(
         comodel_name="vit.kanwil",  
         related="izin_prinsip_id.kanwil_id", 
-        string=_("Kanwil")
+        string=_("Kanwil"),
+        store=True,
     )
 
     kanca_id = fields.Many2one(
         comodel_name="vit.kanca",
         string="Kanca",
         related="job_izin_prinsip_id.kanca_id",
+        store=True,
     )
     
 
@@ -303,7 +308,15 @@ class kontrak(models.Model):
                     raise UserError(_("Kontrak tidak bisa langsung masuk ke Done. "
                                     "Masih ada Termin yang belum selesai."))
 
-        return super(kontrak, self).action_confirm() 
+            total_persen = sum(rec.termin_ids.mapped('persentase'))
+            if total_persen < 100:
+                raise UserError(_("Total persentase semua termin dalam kontrak harus 100%%. "
+                                "Saat ini baru mencapai %.2f%%") % total_persen)
+            elif total_persen > 100:
+                raise UserError(_("Total persentase semua termin dalam kontrak tidak boleh lebih dari 100%%."))
+
+        return super(kontrak, self).action_confirm()
+
     
 
     def action_cancel(self):

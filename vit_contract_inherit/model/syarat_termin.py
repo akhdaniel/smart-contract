@@ -9,7 +9,7 @@ _logger = logging.getLogger(__name__)
 
 class syarat_termin(models.Model):
     _name = "vit.syarat_termin"
-    _inherit = "vit.syarat_termin"
+    _inherit = ["vit.syarat_termin", "mail.thread", "mail.activity.mixin"]
 
 
     verified = fields.Boolean(
@@ -24,7 +24,6 @@ class syarat_termin(models.Model):
 
     due_date = fields.Date( 
         string=_("Due Date"),
-        required=True,    
     )
 
     upload_date = fields.Date(
@@ -108,12 +107,50 @@ class syarat_termin(models.Model):
         return super().create(vals)
 
     def write(self, vals):
+        user_name = self.env.user.name or "Unknown User"
+
         if "document" in vals and "upload_date" not in vals:
             if vals.get("document"):
                 vals["upload_date"] = fields.Date.context_today(self)
             else:
                 vals["upload_date"] = False
-        return super().write(vals)
+
+        res = super().write(vals)
+
+        for rec in self:
+            kontrak = rec.termin_id.kontrak_id 
+            termin = rec.termin_id
+
+            if 'document' in vals and vals.get('document'):
+                if kontrak:
+                    kontrak.message_post(
+                        body=_("📎 Dokumen '%s' telah diupload oleh %s.") % (
+                            rec.name or "Tanpa Nama", user_name),
+                        message_type='comment'
+                    )
+                if termin:
+                    termin.message_post(
+                        body=_("📎 Dokumen '%s' telah diupload oleh %s.") % (
+                            rec.name or "Tanpa Nama", user_name),
+                        message_type='comment'
+                    )
+
+            if 'verified' in vals and vals.get('verified'):
+                if kontrak:
+                    kontrak.message_post(
+                        body=_("✅ Dokumen '%s' telah diverifikasi oleh %s.") % (
+                            rec.name or "Tanpa Nama", user_name),
+                        message_type='comment'
+                    )
+                if termin:
+                    termin.message_post(
+                        body=_("✅ Dokumen '%s' telah diverifikasi oleh %s.") % (
+                            rec.name or "Tanpa Nama", user_name),
+                        message_type='comment'
+                    )
+
+        return res
+
 
 
     @api.onchange('document')

@@ -7,15 +7,20 @@
            onmouseover="this.classList.add('shadow-lg')"
            onmouseout="this.classList.remove('shadow-lg')">
             <!-- Icon Section -->
-            <div class="me-3 w-25 text-center">
-                <i t-att-class="props.icon || 'fa fa-info-circle'" t-att-style="'font-size: 2rem;'"></i>
-            </div>
+            <t t-if="props.field != 'persentase_tl_droping'">
+                <div class="me-3 w-25 text-center">
+                    <i t-att-class="props.icon || 'fa fa-info-circle'" t-att-style="'font-size: 2rem;'"></i>
+                </div>
+            </t>
             <!-- Text Section -->
             <div class="flex-grow-1 w-75">
                 <div class="row">
                     <div class="col">
                         <div class="row">
                             <div class="col">
+
+
+
                                 <div class="fs-5 fw-bold">
                                     <t t-out="props.title"/>
                                 </div>
@@ -25,9 +30,13 @@
                                         <t t-out="state.val.kanwil_name"/>
                                     </div>
                                 </t>
+
+
+
+                                
                             </div>
                         </div>
-                        <t t-if="props.title == 'Kanwil'">
+                        <!-- <t t-if="props.title == 'Kanwil'">
                             <div class="row">
                                 <div class="col">
                                     <div class="fs-2 fw-bold">
@@ -35,30 +44,45 @@
                                     </div>
                                 </div>
                             </div>
-                        </t>
+                        </t> -->
                         <t t-if="'amount' in state.val">
                             <div class="d-flex justify-content-between">
                                 <div class="fs-5 fw-bold">Amount Budget</div>
-                                <div class="fs-5 fw-bold"><t t-out="state.val.amount || 0"/></div>
+                                <div class="fs-5 fw-bold"><t t-out="state.val.amount_formatted or state.val.amount || 0"/></div>
                             </div>
                         </t>
                         <t t-if="'total_realisasi' in state.val">
                             <div class="d-flex justify-content-between">
                                 <div class="fs-5 fw-bold">Total Realisasi</div>
-                                <div class="fs-5 fw-bold"><t t-out="state.val.total_realisasi || 0"/></div>
+                                <div class="fs-5 fw-bold"><t t-out="state.val.total_realisasi_formatted or state.val.total_realisasi || 0"/></div>
                             </div>
                         </t>
+
+                        <t t-if="props.field == 'persentase_tl_droping'">
+                            <div class="w-100 h-100 d-flex flex-column justify-content-center align-items-center text-center">
+                                <div class="fs-1 fw-bold text-white">
+                                    <t t-out="state.val.persentasi_tl"/>%
+                                </div>
+                                <div class="fs-6 text-white mb-2">% TL Paket</div>
+                                <div class="fs-1 fw-bold text-white">
+                                    <t t-out="state.val.persentasi_droping"/>%
+                                </div>
+                                <div class="fs-6 text-white">% Dropping/Relok</div>
+                            </div>
+                        </t>
+
+
 
                         <t t-if="props.title != 'Kanwil' and 'master_summaries' in state.val">
                             <t t-set="current" t-value="state.val.master_summaries.find(ms => ms.master_budget == props.title)"/>
                             <t t-if="current">
                                 <div>
-                                    <div class="d-flex justify-content-between"><span>Sisa</span><span><t t-out="current.remaining"/></span></div>
+                                    <div class="d-flex justify-content-between"><span>Sisa</span><span><t t-out="current.remaining_formatted or current.remaining"/></span></div>
                                     <div class="d-flex justify-content-between"><span>Total Qty Izin Prinsip</span><span><t t-out="current.total_qty_izin_prinsip"/></span></div>
-                                    <div class="d-flex justify-content-between"><span>Total Pagu Izin Prinsip</span><span><t t-out="current.total_pagu_izin_prinsip"/></span></div>
+                                    <div class="d-flex justify-content-between"><span>Total Pagu Izin Prinsip</span><span><t t-out="current.total_pagu_izin_prinsip_formatted or current.total_pagu_izin_prinsip"/></span></div>
                                     <div class="d-flex justify-content-between"><span>Total Qty Kontrak</span><span><t t-out="current.total_qty_kontrak"/></span></div>
-                                    <div class="d-flex justify-content-between"><span>Total Amount Kontrak</span><span><t t-out="current.total_amount_kontrak"/></span></div>
-                                    <div class="d-flex justify-content-between"><span>Total Amount Droping</span><span><t t-out="current.total_amount_droping"/></span></div>
+                                    <div class="d-flex justify-content-between"><span>Total Amount Kontrak</span><span><t t-out="current.total_amount_kontrak_formatted or current.total_amount_kontrak"/></span></div>
+                                    <div class="d-flex justify-content-between"><span>Total Amount Droping</span><span><t t-out="current.total_amount_droping_formatted or current.total_amount_droping"/></span></div>
 
                                     <div class="d-flex justify-content-around mt-2">
                                         <div class="badge bg-primary text-white p-2 d-flex flex-column align-items-center" style="min-width: 120px;">

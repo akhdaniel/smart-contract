@@ -167,6 +167,11 @@
                             <td>Amount Budget Rkap</td>
                             <td>Amount Izin Prinsip</td>
                             <td>Amount Kontrak</td>
+                            <td>Syarat Progress</td>
+                            <td>Actual Progress</td>
+                            <td>Syarat Output</td>
+                            <td>Actual Output</td>
+                            <td>Persentase</td>
                             <td>Partner</td>
                             <td>Budget Rkap</td>
                             <td>Stage</td>
@@ -194,6 +199,11 @@
                             <td><span t-field="line.amount_budget_rkap" /></td>
                             <td><span t-field="line.amount_izin_prinsip" /></td>
                             <td><span t-field="line.amount_kontrak" /></td>
+                            <td><span t-field="line.syarat_progress" /></td>
+                            <td><span t-field="line.actual_progress" /></td>
+                            <td><span t-field="line.syarat_output" /></td>
+                            <td><span t-field="line.actual_output" /></td>
+                            <td><span t-field="line.persentase" /></td>
                             <td><span t-field="line.partner_id" /></td>
                             <td><span t-field="line.budget_rkap_id" /></td>
                             <td><span t-field="line.stage_id" /></td>

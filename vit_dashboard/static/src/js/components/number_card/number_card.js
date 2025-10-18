@@ -1,5 +1,5 @@
 /** @odoo-module */
-const { Component, onMounted, useState } = owl;
+const { Component, onMounted, onWillDestroy, useState } = owl;
 import { useService } from "@web/core/utils/hooks";
 
 export class NumberCard extends Component {
@@ -26,31 +26,59 @@ export class NumberCard extends Component {
 
         // Expose the reload method through the onReload prop
         if (this.props.onReload) {
-            this.props.onReload(this.reload.bind(this));
+            this.props.onReload((domain) => this.reload(domain));
         }
+
+        onWillDestroy(() => {
+            this.isDestroyed = true;
+        });
+
 
         onMounted(async () => {
             this.reload();
         });
+
+        this.env.bus.addEventListener('reload_dashboard', () => {
+            this.reload();
+        });
     }
 
-    async reload() {
-        const savedState = this.loadState()
-        // console.log("reload NumberCard savedState", savedState);
-        const combinedDomain = this.props.domain ? [...this.props.domain, ...(savedState.domain || [])] : (savedState.domain || []);
+    async reload(domain = []) {
+        if (this.isDestroyed) {
+            console.warn("⚠️ Skip reload karena komponen sudah dihancurkan");
+            return;
+        }
+
+        const savedState = this.loadState();
+
+        const combinedDomain = domain.length
+            ? domain
+            : this.props.domain
+                ? [...this.props.domain, ...(savedState.domain || [])]
+                : (savedState.domain || []);
+
         this.state.domain = combinedDomain || [];
-        // console.log("reload NumberCard with domain:", this.props.field, this.state.domain);
-        await this.getStatistics();
+        console.log("🔥 Reload NumberCard dengan domain:", combinedDomain);
+
+        try {
+            await this.getStatistics(combinedDomain);
+        } catch (err) {
+            if (!this.isDestroyed) {
+                console.error("❌ Error saat reload NumberCard:", err);
+            }
+        }
     }
 
-    async getStatistics() {
-        const domain = this.state.domain || [];
-        this.state.domain = domain;
-        // console.log("getStatistics NumberCard with domain:", this.state.domain);
+
+
+    async getStatistics(domain = []) {
         const field = this.props.field || "count";
-        const res = await this.orm.call(this.props.model, 
-            "get_statistics", [domain, field]);
-        this.state.val = res;
+        const result = await this.orm.call(
+            this.props.model,
+            "get_statistics",
+            [domain, field]
+        );
+        this.state.val = result;
     }
 
     openRecord() {

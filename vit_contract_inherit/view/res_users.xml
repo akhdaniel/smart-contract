@@ -1,0 +1,32 @@
+<odoo>
+    <data>
+
+        <record id="view_users_form_inherit_kanca" model="ir.ui.view">
+            <field name="name">res.users.form.inherit.kanca</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                
+                <xpath expr="//div[@class='oe_title']//group/field[@name='partner_id']" position="after">
+                    <field name="is_kanwil_group" invisible="1"/>
+                    <field name="kanwil_id" invisible="not is_kanwil_group"/>
+
+                    <field name="is_kanca_group" invisible="1"/>
+                    <field name="kanca_id" invisible="not is_kanca_group"/>
+
+                    <field name="is_allowed_kanwil_group" invisible="1"/>
+                    <field name="allowed_kanwil_id" invisible="not is_allowed_kanwil_group"/>
+
+                    <field name="allowed_kanca_domain_ids" invisible="1"/>
+                    <field name="is_allowed_kanca_group" invisible="1"/>
+                    <field name="allowed_kanca_id" invisible="not is_allowed_kanca_group" domain="[('id', 'in', allowed_kanca_domain_ids)]"/>
+                    
+
+                </xpath>
+
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

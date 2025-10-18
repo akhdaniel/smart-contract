@@ -1,8 +1,47 @@
 <odoo>
     <data>
+
+        <record model="ir.module.category" id="vit_contract.module_category_vit_contract">
+			<field name="name">Smart Contract</field>
+			<field name="description">Smart Contract Groups</field>
+			<field name="sequence">10</field>
+		</record>
+
+        <record id="vit_contract.group_vit_contract_manager" model="res.groups">
+			<field name="name">Pusat</field>
+			<field name="category_id" ref="vit_contract.module_category_vit_contract"/>
+		</record>
+
+        <record id="vit_contract.group_vit_contract_user" model="res.groups">
+			<field name="name">User</field>
+			<field name="category_id" ref="vit_contract.module_category_vit_contract"/>
+		</record>
+
         <record id="group_vit_contract_vendor" model="res.groups">
             <field name="name">Vendor</field>
             <field name="category_id" ref="vit_contract.module_category_vit_contract"/>
         </record>
+
+        <record id="group_vit_contract_kanca" model="res.groups">
+            <field name="name">Kanca</field>
+            <field name="category_id" ref="vit_contract.module_category_vit_contract"/>
+        </record>
+
+        <record id="group_vit_contract_kanwil" model="res.groups">
+            <field name="name">Kanwil</field>
+            <field name="category_id" ref="vit_contract.module_category_vit_contract"/>
+        </record>
+
+        <record id="group_vit_contract_allowed_kanca" model="res.groups">
+            <field name="name">Allowed Kanca</field>
+            <field name="category_id" ref="vit_contract.module_category_vit_contract"/>
+        </record>
+
+        <record id="group_vit_contract_allowed_kanwil" model="res.groups">
+            <field name="name">Allowed Kanwil</field>
+            <field name="category_id" ref="vit_contract.module_category_vit_contract"/>
+        </record>
+
+        
     </data>
 </odoo>

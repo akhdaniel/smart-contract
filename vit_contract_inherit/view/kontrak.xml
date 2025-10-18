@@ -7,6 +7,30 @@
             <field name="inherit_id" ref="vit_contract.view_vit_kontrak_form"/>
             <field name="arch" type="xml">
 
+
+                <sheet position="before">
+                    <field name="is_late_upload" invisible="1"/>
+                    <field name="late_termin_names" invisible="1"/>
+                    <div class="alert alert-warning o_form_label"
+                        invisible="not is_late_upload">
+                        ⚠ Data ini ada keterlambatan pada:
+                        <field name="late_termin_names" nolabel="1" readonly="1"/>
+                        , maka akan dikenakan denda.
+                    </div>
+                </sheet>
+                
+
+                <xpath expr="//sheet" position="after">
+                    <div class="oe_chatter"
+                        options="{'display_log_button': False, 'display_log_note_button': False, 'display_activity_button': False}">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </xpath>
+
+
+
+
                 <xpath expr="//header/button[@name='action_confirm']" position="attributes">
                     <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager</attribute>
                 </xpath>
@@ -23,18 +47,6 @@
                 <xpath expr="//form/sheet" position="before">
                     <field name="is_addendum" invisible="1"/>
                 </xpath>
-
-
-                <sheet position="before">
-                    <field name="is_late_upload" invisible="1"/>
-                    <field name="late_termin_names" invisible="1"/>
-                    <div class="alert alert-warning o_form_label"
-                        invisible="not is_late_upload">
-                        ⚠ Data ini ada keterlambatan pada:
-                        <field name="late_termin_names" nolabel="1" readonly="1"/>
-                        , maka akan dikenakan denda.
-                    </div>
-                </sheet>
 
                 <!-- <xpath expr="//div[@class='oe_button_box']" position="inside">
                     <button name="action_view_addendums" type="object"
@@ -102,18 +114,22 @@
 
                 <xpath expr="//field[@name='budget_rkap_id']" position="attributes">
                     <attribute name="readonly">1</attribute>
+                    <attribute name="force_save">1</attribute>
                 </xpath>
 
                 <xpath expr="//field[@name='kanwil_id']" position="attributes">
                     <attribute name="readonly">1</attribute>
+                    <attribute name="force_save">1</attribute>
                 </xpath>
 
                 <xpath expr="//field[@name='kanca_id']" position="attributes">
                     <attribute name="readonly">1</attribute>
+                    <attribute name="force_save">1</attribute>
                 </xpath>
 
                 <xpath expr="//field[@name='master_budget_id']" position="attributes">
                     <attribute name="readonly">1</attribute>
+                    <attribute name="force_save">1</attribute>
                 </xpath>
 
 
@@ -186,9 +202,7 @@
                 <xpath expr="//page[@name='termin_ids']/field[@name='termin_ids']/tree" position="attributes">
                     <attribute name="delete">false</attribute>
                 </xpath>
-
-
-                <xpath expr="//field[@name='termin_ids']/tree/field[@name='is_droping_done']" position="after">
+                <xpath expr="//field[@name='termin_ids']/tree/field[@name='actual_output']" position="after">
                     <field name="stage_is_draft" column_invisible="1"/>
                     <button name="action_delete_line"
                             string="Delete"

@@ -6,9 +6,12 @@
             <!-- filter-->
             <div class="row px-3 py-2">
                 <div class="col-12 col-md-3">
-                    <h1>Dashboard
-                        <t t-if="state.selectedUnit">
-                            <t t-esc="state.selectedUnit.name"/>
+                    <h1>
+                        <t t-if="state.selectedKanwil">
+                            Dashboard <t t-esc="state.selectedKanwil.name"/>
+                        </t>
+                        <t t-else="">
+                            Dashboard
                         </t>
                     </h1>
                     <h3>
@@ -17,75 +20,79 @@
                         </t>
                     </h3>
                 </div>
+
                 <div class="col-12 col-md-3">
                     <div class="form-control px-1 m-0">
-                        <UnitSelector
-                            id="'unit_selector'"
-                            value="state.selectedUnit?.name || ''"
-                            onUnitSelected.bind="onUnitChange"
-                        />
+                        <select
+                            t-on-change="onKanwilChange"
+                            class="form-select border-0"
+                        >
+
+                            <option value="">-- Pilih Kanwil --</option>
+                            <t t-foreach="state.kanwils" t-as="kw" t-key="kw.id">
+                                <option t-att-value="kw.id" t-esc="kw.name"/>
+                            </t>
+
+
+                        </select>
                     </div>
-                </div>
-                <div class="col-12 col-md-3">
-                    <LocationSearch
-                        value="state.location || ''"
-                        onLocationSearchEnter.bind="onLocationSearchEnter"/>
-                </div>
-                <div class="col-12 col-md-3">
-                    <KeywordSearch
-                        value="state.keyword || ''"
-                        onKeywordSearchEnter.bind="onKeywordSearchEnter"/>
-                </div>
-                <div class="col-12 col-md-1">
-                    <button class="btn btn-secondary" t-on-click="clearSavedState">
-                        Reset
-                    </button>
                 </div>
             </div>
 
-            <!-- content scrollable-->
             <div class="row mx-3 scrollable-row">
 
-                <!-- numer cards -->
                 <div class="row">
-                    <div class="col-3" style="margin-top:20px; margin-bottom:20px;">
+                <!-- 🟦 Kolom kiri: Kanwil + Persentase -->
+                <div class="col-3 d-flex flex-column align-items-stretch"
+                    style="margin-top:70px; gap:130px; padding-right:10px;">
+                    
+                    <!-- Kartu Kanwil -->
+                    <div class="w-100">
                         <NumberCard 
                             title="'Kanwil'" 
                             bgColor="'bg-itb-light-blue'" 
                             field="'total_budget_realisasi'"
                             model="'vit.budget_rkap'"
                             domain="[]"
-                            context="{'search_default_group_by_name': 1}"
                             icon="'fa fa-users'"
                             onReload.bind="onMitraNumberCardReload"
                         />
                     </div>
-                    <div class="col-3" style="margin-bottom:20px;">
-                        <NumberCard 
-                            title="'RR Gudang'" 
-                            bgColor="'bg-itb-light-blue'" 
-                            field="'master_budget_summary'"
+
+                    <!-- Kartu Persentase TL Paket -->
+                    <div class="w-100">
+                        <NumberCard
+                            title="''"
+                            bgColor="'bg-itb-light-blue'"
+                            field="'persentase_tl_droping'"
                             model="'vit.budget_rkap'"
                             domain="[]"
-                            context="{'search_default_group_by_name': 1}"
-                            icon="'fa fa-users'"
                             onReload.bind="onMitraNumberCardReload"
                         />
                     </div>
-                    <div class="col-3" style="margin-bottom:20px;">
-                        <NumberCard 
-                            title="'Pembangunan Gudang'" 
-                            bgColor="'bg-itb-light-blue'" 
-                            field="'master_budget_summary'"
-                            model="'vit.budget_rkap'"
-                            domain="[]"
-                            context="{'search_default_group_by_name': 1}"
-                            icon="'fa fa-users'"
-                            onReload.bind="onMitraNumberCardReload"
-                        />
+                </div>
+
+                <!-- 🟦 Kolom kanan: Semua Master Budget -->
+                <div class="col-9">
+                    <div class="row">
+                        <t t-foreach="state.masterBudgets" t-as="mb" t-key="mb.id">
+                            <div class="col-4" style="margin-top:20px; margin-bottom:20px;">
+                                <NumberCard 
+                                    title="mb.name"
+                                    bgColor="'bg-itb-light-blue'"
+                                    field="'master_budget_summary'"
+                                    model="'vit.budget_rkap'"
+                                    icon="'fa fa-building'"
+                                    domain="[]"
+                                    onReload.bind="onMitraNumberCardReload"
+                                />
+                            </div>
+                        </t>
                     </div>
+                </div>
+
                     <div class="col-3" style="margin-bottom:20px;">
-                        <NumberCard 
+                        <!-- <NumberCard 
                             title="'Renov Gudang'" 
                             bgColor="'bg-itb-light-blue'" 
                             field="'master_budget_summary'"
@@ -94,10 +101,10 @@
                             context="{'search_default_group_by_name': 1}"
                             icon="'fa fa-users'"
                             onReload.bind="onMitraNumberCardReload"
-                        />
+                        /> -->
                     </div>
                     <div class="col-3" style="margin-bottom:20px;">
-                        <NumberCard 
+                        <!-- <NumberCard 
                             title="'Sapra Gudang'" 
                             bgColor="'bg-itb-light-blue'" 
                             field="'master_budget_summary'"
@@ -106,10 +113,10 @@
                             context="{'search_default_group_by_name': 1}"
                             icon="'fa fa-users'"
                             onReload.bind="onMitraNumberCardReload"
-                        />
+                        /> -->
                     </div>
                     <div class="col-3" style="margin-bottom:20px;">
-                        <NumberCard 
+                        <!-- <NumberCard 
                             title="'Sapra Investasi'" 
                             bgColor="'bg-itb-light-blue'" 
                             field="'master_budget_summary'"
@@ -118,10 +125,10 @@
                             context="{'search_default_group_by_name': 1}"
                             icon="'fa fa-users'"
                             onReload.bind="onMitraNumberCardReload"
-                        />
+                        /> -->
                     </div>
                     <div class="col-3" style="margin-bottom:20px;">
-                        <NumberCard 
+                        <!-- <NumberCard 
                             title="'RR Kantor'" 
                             bgColor="'bg-itb-light-blue'" 
                             field="'master_budget_summary'"
@@ -130,10 +137,10 @@
                             context="{'search_default_group_by_name': 1}"
                             icon="'fa fa-users'"
                             onReload.bind="onMitraNumberCardReload"
-                        />
+                        /> -->
                     </div>
                     <div class="col-3" style="margin-bottom:20px;">
-                        <NumberCard 
+                        <!-- <NumberCard 
                             title="'Pembangunan Kantor'" 
                             bgColor="'bg-itb-light-blue'" 
                             field="'master_budget_summary'"
@@ -142,10 +149,10 @@
                             context="{'search_default_group_by_name': 1}"
                             icon="'fa fa-users'"
                             onReload.bind="onMitraNumberCardReload"
-                        />
+                        /> -->
                     </div>
                     <div class="col-3" style="margin-bottom:20px;">
-                        <NumberCard 
+                        <!-- <NumberCard 
                             title="'Renov Kantor'" 
                             bgColor="'bg-itb-light-blue'" 
                             field="'master_budget_summary'"
@@ -154,10 +161,10 @@
                             context="{'search_default_group_by_name': 1}"
                             icon="'fa fa-users'"
                             onReload.bind="onMitraNumberCardReload"
-                        />
+                        /> -->
                     </div>
                     <div class="col-3" style="margin-bottom:20px;">
-                        <NumberCard 
+                        <!-- <NumberCard 
                             title="'Sapra Kantor'" 
                             bgColor="'bg-itb-light-blue'" 
                             field="'master_budget_summary'"
@@ -166,7 +173,7 @@
                             context="{'search_default_group_by_name': 1}"
                             icon="'fa fa-users'"
                             onReload.bind="onMitraNumberCardReload"
-                        />
+                        /> -->
                     </div>
                     <div class="col"> <!-- Kept the second NumberCard in the same row -->
                         <!-- <NumberCard 

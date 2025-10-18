@@ -1,0 +1,75 @@
+<odoo>
+    <data noupdate="0">
+
+        <!-- BUDGET RKAP -->
+        <record id="vit_budget_rkap_allowed_kanwil_rule" model="ir.rule">
+            <field name="name">Budget RKAP – Allowed Kanwil Only</field>
+            <field name="model_id" ref="vit_contract.model_vit_budget_rkap"/>
+            <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_allowed_kanwil'))]"/>
+            <field name="domain_force">
+                [('izin_prinsip_ids.kanwil_id', '=', user.allowed_kanwil_id.id)]
+            </field>
+        </record>
+
+        <!-- IZIN PRINSIP -->
+        <record id="vit_izin_prinsip_allowed_kanwil_rule" model="ir.rule">
+            <field name="name">Izin Prinsip – Allowed Kanwil Only</field>
+            <field name="model_id" ref="vit_contract.model_vit_izin_prinsip"/>
+            <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_allowed_kanwil'))]"/>
+            <field name="domain_force">
+                [('kanwil_id', '=', user.allowed_kanwil_id.id)]
+            </field>
+        </record>
+
+        <!-- JOB IZIN PRINSIP -->
+        <record id="vit_job_izin_prinsip_allowed_kanwil_rule" model="ir.rule">
+            <field name="name">Job Izin Prinsip – Allowed Kanwil Only</field>
+            <field name="model_id" ref="vit_contract.model_vit_job_izin_prinsip"/>
+            <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_allowed_kanwil'))]"/>
+            <field name="domain_force">
+                [('izin_prinsip_id.kanwil_id', '=', user.allowed_kanwil_id.id)]
+            </field>
+        </record>
+
+        <!-- KONTRAK -->
+        <record id="vit_kontrak_allowed_kanwil_rule" model="ir.rule">
+            <field name="name">Kontrak – Allowed Kanwil Only</field>
+            <field name="model_id" ref="vit_contract.model_vit_kontrak"/>
+            <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_allowed_kanwil'))]"/>
+            <field name="domain_force">
+                [('izin_prinsip_id.kanwil_id', '=', user.allowed_kanwil_id.id)]
+            </field>
+        </record>
+
+        <!-- TERMIN -->
+        <record id="vit_termin_allowed_kanwil_rule" model="ir.rule">
+            <field name="name">Termin – Allowed Kanwil Only</field>
+            <field name="model_id" ref="vit_contract.model_vit_termin"/>
+            <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_allowed_kanwil'))]"/>
+            <field name="domain_force">
+                [('kontrak_id.izin_prinsip_id.kanwil_id', '=', user.allowed_kanwil_id.id)]
+            </field>
+        </record>
+
+        <!-- PAYMENT -->
+        <record id="vit_payment_allowed_kanwil_rule" model="ir.rule">
+            <field name="name">Payment – Allowed Kanwil Only</field>
+            <field name="model_id" ref="vit_contract.model_vit_payment"/>
+            <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_allowed_kanwil'))]"/>
+            <field name="domain_force">
+                [('termin_id.kontrak_id.izin_prinsip_id.kanwil_id', '=', user.allowed_kanwil_id.id)]
+            </field>
+        </record>
+
+        <!-- DROPING -->
+        <record id="vit_droping_allowed_kanwil_rule" model="ir.rule">
+            <field name="name">Droping – Allowed Kanwil Only</field>
+            <field name="model_id" ref="vit_contract.model_vit_droping"/>
+            <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_allowed_kanwil'))]"/>
+            <field name="domain_force">
+                [('termin_kontrak_ids.kontrak_id.izin_prinsip_id.kanwil_id', '=', user.allowed_kanwil_id.id)]
+            </field>
+        </record>
+
+    </data>
+</odoo>

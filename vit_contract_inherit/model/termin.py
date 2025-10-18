@@ -5,10 +5,19 @@ import logging
 _logger = logging.getLogger(__name__)
 
 class termin(models.Model):
-    _inherit = "vit.termin"
+    _name = "vit.termin"
+    _inherit = ["vit.termin", "mail.thread", "mail.activity.mixin"]
 
 
     name = fields.Char( required=True, copy=False, string=_("Name"))
+
+    type_kontrak = fields.Selection(
+        selection=[('fisik', 'Fisik'), ('non_fisik', 'Non Fisik')],
+        related='kontrak_id.jenis_kontrak_id.type',
+        store=True,
+        string='Tipe Kontrak'
+    )
+
 
 
     partner_id = fields.Many2one(
@@ -25,7 +34,6 @@ class termin(models.Model):
     )
 
     due_date = fields.Date(
-        required=True,
         string=_("Due Date"),
     )
 
@@ -38,14 +46,16 @@ class termin(models.Model):
             rec.unlink()
         return True
 
-    @api.constrains("due_date", "kontrak_id")
+    @api.constrains("due_date", "kontrak_id", "master_nama_termin_id")
     def _check_due_date_vs_end_date(self):
         for rec in self:
             if rec.kontrak_id and rec.kontrak_id.end_date and rec.due_date:
-                if rec.due_date > rec.kontrak_id.end_date:
-                    raise ValidationError(_(
-                        "Due Date (%s) tidak boleh melebihi End Date Kontrak (%s)."
-                    ) % (rec.due_date, rec.kontrak_id.end_date))
+                if not rec.master_nama_termin_id or rec.master_nama_termin_id.type != 'is_retensi':
+                    if rec.due_date > rec.kontrak_id.end_date:
+                        raise ValidationError(_(
+                            "Due Date (%s) tidak boleh melebihi End Date Kontrak (%s)."
+                        ) % (rec.due_date, rec.kontrak_id.end_date))
+
 
     def write(self, vals):
         if "is_droping_done" in vals and vals["is_droping_done"] is False:
@@ -87,10 +97,8 @@ class termin(models.Model):
     @api.constrains('persentase', 'kontrak_id')
     def _check_persentase_total(self):
         for rec in self:
-            # per termin
             if rec.persentase < 0 or rec.persentase > 100:
                 raise ValidationError("Persentase per termin harus antara 0 sampai 100%.")
-            # total semua termin
             if rec.kontrak_id:
                 total = sum(rec.kontrak_id.termin_ids.mapped('persentase'))
                 if total > 100:
@@ -208,6 +216,11 @@ class termin(models.Model):
                     'amount_budget_rkap': kontrak.budget_rkap_id.amount or 0.0,
                     'amount_izin_prinsip': kontrak.izin_prinsip_id.total_pagu or 0.0,
                     'amount_kontrak': kontrak.amount_kontrak or 0.0,
+                    'persentase': rec.persentase or 0.0,
+                    'syarat_progress': rec.syarat_progress or 0.0,
+                    'actual_progress': rec.actual_progress or 0.0,
+                    'syarat_output': rec.syarat_output or "",
+                    'actual_output': rec.actual_output or "",
                     'partner_id': kontrak.partner_id.id,
                     'budget_rkap_id': kontrak.budget_rkap_id.id,
                     'kanwil_id': kontrak.kanwil_id.id,
@@ -216,7 +229,7 @@ class termin(models.Model):
                     'kontrak_id': kontrak.id, 
                     'master_nama_termin_id': rec.master_nama_termin_id.id,
                     'izin_prinsip_id': kontrak.izin_prinsip_id.id,
-                    'payment_date': fields.Date.context_today(self),
+                    'request_date': fields.Date.context_today(self),
                 })
 
                 all_done = all(k.stage_id.done for k in kontrak.termin_ids)
@@ -231,31 +244,6 @@ class termin(models.Model):
             else:
                 payments = self.env['vit.payment'].search([('termin_id', '=', rec.id)])
                 payments.unlink()
-
-
-
-    # def action_cancel(self):
-    #     for rec in self:
-    #         kontrak = rec.kontrak_id
-
-    #         payments = self.env['vit.payment'].search([('termin_id', '=', rec.id)])
-    #         payments.unlink()
-
-    #         old_stage = rec.stage_id
-
-    #         cancel_stage = self.env['vit.state_termin'].search([('draft', '=', True)], limit=1)
-    #         if cancel_stage:
-    #             rec.stage_id = cancel_stage.id
-
-    #         progress_stage = self.env['vit.kontrak_state'].search([('on_progress', '=', True)], limit=1)
-    #         if not progress_stage:
-    #             raise UserError(_("Stage On Progress untuk Kontrak tidak ditemukan!"))
-    #         kontrak.write({'stage_id': progress_stage.id})
-
-    #         if old_stage.done and rec.stage_id == cancel_stage:
-    #             return {'type': 'ir.actions.client', 'tag': 'reload'}
-
-    #     return True
 
 
 
@@ -293,40 +281,12 @@ class termin(models.Model):
         return True
 
 
-
-
-
-
-
-
-    # @api.onchange('persentase', 'kontrak_id')
-    # def _onchange_persentase(self):
-    #     if self.kontrak_id and self.kontrak_id.amount_kontrak and self.persentase:
-    #         self.nilai = (self.kontrak_id.amount_kontrak * self.persentase) / 100
-    #     else:
-    #         self.nilai = 0.0
-
-
-    # @api.constrains('persentase', 'kontrak_id')
-    # def _check_persentase_total(self):
-    #     for rec in self:
-    #         if rec.persentase < 0 or rec.persentase > 100:
-    #             raise ValidationError("Persentase per termin harus antara 0 sampai 100.")
-
-    #         if rec.kontrak_id:
-    #             total = sum(rec.kontrak_id.termin_ids.mapped('persentase'))
-    #             if total > 100:
-    #                 raise ValidationError("Total semua persentase termin pada kontrak ini tidak boleh lebih dari 100%.")
-
-
-
 class TerminInherit(models.Model):
     _inherit = "vit.termin"
 
     def copy(self, default=None):
         default = dict(default or {})
 
-        # Kalau sudah dikasih name (misal dari addendum kontrak), pakai langsung
         if default.get("name"):
             return models.BaseModel.copy(self, default)
 

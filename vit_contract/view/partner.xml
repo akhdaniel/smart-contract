@@ -33,6 +33,11 @@
                                         <field name="amount_budget_rkap"/>
                                         <field name="amount_izin_prinsip"/>
                                         <field name="amount_kontrak"/>
+                                        <field name="syarat_progress"/>
+                                        <field name="actual_progress"/>
+                                        <field name="syarat_output"/>
+                                        <field name="actual_output"/>
+                                        <field name="persentase"/>
                                         <field name="stage_id"/>
                                         <field name="termin_id"/>
                                         <field name="master_budget_id"/>

@@ -5,6 +5,7 @@
 	"version": "1.0",
 	"depends": [
 		"base",
+        'mail',
 		"vit_contract",
         "ps_m2m_field_attachment_preview",
 	],
@@ -22,9 +23,12 @@
 	"data": [
         'security/groups.xml',
         'security/ir.model.access.csv',
+        'view/res_users.xml',
+        'view/record_rule_kanwil.xml',
+        'view/record_rule_kanca.xml',
+        'view/record_rule_vendor.xml',
         "view/menu.xml",
         "view/menu_operation.xml",
-        'view/record_rule_vendor.xml',
 		"view/izin_prinsip.xml",
         "view/job_izin_prinsip.xml",
         "view/budget_rkap.xml",

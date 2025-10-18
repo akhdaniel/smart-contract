@@ -30,6 +30,11 @@ class payment(models.Model):
     amount_budget_rkap = fields.Float( string=_("Amount Budget Rkap"))
     amount_izin_prinsip = fields.Float( string=_("Amount Izin Prinsip"))
     amount_kontrak = fields.Float( string=_("Amount Kontrak"))
+    syarat_progress = fields.Float( string=_("Syarat Progress"))
+    actual_progress = fields.Float( string=_("Actual Progress"))
+    syarat_output = fields.Text( string=_("Syarat Output"))
+    actual_output = fields.Text( string=_("Actual Output"))
+    persentase = fields.Float( string=_("Persentase"))
 
 
     @api.model_create_multi

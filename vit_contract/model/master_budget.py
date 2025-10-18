@@ -9,12 +9,14 @@ class master_budget(models.Model):
     _name = "vit.master_budget"
     _description = "vit.master_budget"
 
+    _order = "sequence asc"
 
     def action_reload_view(self):
         pass
 
     name = fields.Char( required=True, copy=False, string=_("Name"))
     jenis_penugasan = fields.Selection(selection=[('pso', 'Pso'),('kom', 'Kom')],  string=_("Jenis Penugasan"))
+    sequence = fields.Integer( string=_("Sequence"))
 
 
     def copy(self, default=None):
