@@ -1,10 +1,10 @@
 <template>
   <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
         <a class="navbar-brand" href="/contracts"><i class="fa-solid fa-house me-2"></i>SmartContract Vendor Portal</a>
         <div v-if="authStore.isLoggedIn" class="d-flex align-items-center">
-          <span class="me-3">Welcome, {{ authStore.user.name }}</span>
+          <span class="me-3 fg-white">Welcome, {{ authStore.user.name }}</span>
           <button @click="logout" class="btn btn-outline-secondary">Logout</button>
         </div>
       </div>
