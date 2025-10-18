@@ -19,10 +19,10 @@
   background-color: rgb(207, 207, 207) !important
 }
 .btn-info{
-  color: #fff;
+  color: #fff !important;
 }
 a{
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 body{
@@ -41,24 +41,24 @@ h2, h3, h4 {
 }
 
 .btn-primary{
-  background-color: #3e5c76;
+  background-color: #3e5c76 !important;
 }
 
 .accordion-button {
-    color:  #748cab;
-    background-color: #eee;
+    color:  #748cab !important;
+    background-color: #eee !important;
 }
 .accordion-button:not(.collapsed) {
-    color:  #748cab;
-    background-color: #f0ebd8;
+    color:  #748cab !important;
+    background-color: #f0ebd8 !important;
 }
 input[readonly].form-control {
   background-color: #efefef; /* or any other color you prefer */
 }
 .navbar{
-  background-color: #1d2d44;
+  background-color: #1d2d44 !important;
 }
 
 .card-header{
-  background-color: #f0ebd8;
+  background-color: #f0ebd8 !important;
 }
