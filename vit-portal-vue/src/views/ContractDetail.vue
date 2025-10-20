@@ -7,7 +7,7 @@
     </div>
     <div v-else-if="error" class="alert alert-danger">{{ error }}</div>
     <div v-else-if="contract">
-      <h3>Kontrak: {{ contract.name }}</h3>
+      <h4>Kontrak: {{ contract.name }}</h4>
 
       <div class="card mt-4">
         <div class="card-header">Detail Kontrak</div>
@@ -31,9 +31,9 @@
         </div>
       </div>
 
-      <h4 class="mt-5">Syarat Dokumen Penagihan</h4>
+      <h4 class="mt-4">Syarat Dokumen Penagihan</h4>
       <div v-if="uploadError" class="alert alert-danger mt-3">{{ uploadError }}</div>
-      <div class="accordion" id="terminAccordion">
+      <div class="accordion mt-4" id="terminAccordion">
         <div v-for="(termin, index) in termins" :key="termin.id" class="accordion-item">
           <h2 class="accordion-header" :id="`heading${termin.id}`">
             <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse${termin.id}`" :aria-expanded="index === 0 ? 'true' : 'false'" :aria-controls="`collapse${termin.id}`">
@@ -47,6 +47,39 @@
             </button>
           </h2>
           <div :id="`collapse${termin.id}`" class="accordion-collapse collapse" :class="{ show: index === 0 }" :aria-labelledby="`heading${termin.id}`" data-bs-parent="#terminAccordion">
+            <div class="accordion-body">
+              <div class="card mt-5">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-4 col-sm-12" v-if="contract.jenis_kontrak_id.type === 'fisik'">
+                      <label for="syarat_progress" class="form-label">Syarat Progress (%)</label>
+                      <input type="text" class="form-control" id="syarat_progress" v-model="termin.syarat_progress" readonly>
+                    </div>
+                    <div class="col-md-4 col-sm-12" v-if="contract.jenis_kontrak_id.type === 'fisik'">
+                      <label for="actual_progress" class="form-label">Actual Progress (%)</label>
+                      <input type="text" class="form-control" id="actual_progress" v-model="termin.actual_progress" required>
+                    </div>
+
+                    <div v-if="contract.jenis_kontrak_id.type === 'non_fisik'">
+                      <label for="syarat_output" class="form-label">Syarat Output (%)</label>
+                      <input type="text" class="form-control" id="syarat_progress" v-model="termin.syarat_output" readonly>
+                    </div>
+
+                    <div v-if="contract.jenis_kontrak_id.type === 'non_fisik'">
+                      <label for="actual_output" class="form-label">Actual Output (%)</label>
+                      <input type="text" class="form-control" id="actual_progress" v-model="termin.actual_output" required>
+                    </div>
+
+                    <div class="col-md-4 col-sm-12">
+                      <div class="form-label">&nbsp;</div>
+                      <button class="form-control btn btn-primary" @click="updateProgress(termin.id)">Save</button>
+                    </div>   
+
+                  </div>          
+                </div>
+              </div>
+            </div>
+
             <div class="accordion-body">
               <ul class="list-group">
                 <li v-for="syarat in termin.syarat_termin_ids" :key="syarat.id" class="list-group-item position-relative">
@@ -71,7 +104,7 @@
                   <div class="px-1 fs-6">Due date: {{ syarat.due_date }}</div>
                   <form v-if="!syarat.document" @submit.prevent="uploadDocument(syarat.id, $event)" class="d-flex mt-2">
                     <input type="file" class="form-control form-control-sm me-2" required>
-                    <button type="submit" class="btn btn-sm btn-primary">Upload</button>
+                    <button type="submit" class="btn btn-sm btn-secondary">Upload</button>
                   </form>
                 </li>
               </ul>
@@ -80,37 +113,42 @@
         </div>
       </div>
 
-      <h4 class="mt-5">Status Pembayaran</h4>
-       <table class="table table-striped mt-3">
-        <thead>
-            <tr>
-                <th>Number</th>
-                <th>Request Date</th>
-                <th>Payment Date</th>
-                <th class="text-end">Amount</th>
-                <th class="text-center">Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="payment in payments" :key="payment.id">
-                <td>{{ payment.name }}</td>
-                <td>{{ payment.request_date?payment.request_date:"" }}</td>
-                <td>{{ payment.payment_date }}</td>
-                <td class="text-end">{{ formatCurrency(payment.amount) }}</td>
-                <td class="text-center">
-                  
-                  <span class="badge" :class="{
-                    'bg-info': payment.stage_id.display_name === 'On Progress',
-                    'bg-secondary': payment.stage_id.display_name === 'Draft',
-                    'bg-success': payment.stage_id.display_name === 'Done'
-                  }">
-                    {{ payment.stage_id.display_name }}
-                  </span>
+      <h4 class="mt-4">Status Pembayaran</h4>
+      <div class="card mt-4 mb-4">
+        <div class="card-header">Daftar Pembayaran dan history status pembayaran</div>
+        <div class="card-body">
+          <table class="table table-striped mt-3">
+            <thead>
+                <tr>
+                    <th>Number</th>
+                    <th>Request Date</th>
+                    <th>Payment Date</th>
+                    <th class="text-end">Amount</th>
+                    <th class="text-center">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="payment in payments" :key="payment.id">
+                    <td>{{ payment.name }}</td>
+                    <td>{{ payment.request_date?payment.request_date:"" }}</td>
+                    <td>{{ payment.payment_date }}</td>
+                    <td class="text-end">{{ formatCurrency(payment.amount) }}</td>
+                    <td class="text-center">
+                      
+                      <span class="badge" :class="{
+                        'bg-info': payment.stage_id.display_name === 'On Progress',
+                        'bg-secondary': payment.stage_id.display_name === 'Draft',
+                        'bg-success': payment.stage_id.display_name === 'Done'
+                      }">
+                        {{ payment.stage_id.display_name }}
+                      </span>
 
-                </td>
-            </tr>
-        </tbody>
-       </table>
+                    </td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
     <PdfViewerModal :pdfUrl="currentPdfUrl" :show="showPdfModal" @update:show="showPdfModal = $event" />
   </div>
@@ -129,7 +167,6 @@ const payments = ref([])
 const loading = ref(true)
 const error = ref('')
 const uploadError = ref('')
-
 const currentPdfUrl = ref(null);
 const showPdfModal = ref(false);
 
@@ -148,7 +185,7 @@ const fetchData = async () => {
       end_date:{},
       amount_kontrak:{},
       jenis_kontrak_id:{
-        fields:{display_name:{}}
+        fields:{display_name:{}, type:{}}
       },
       budget_rkap_id:{
         fields:{display_name:{}}
@@ -172,6 +209,10 @@ const fetchData = async () => {
         fields:{
           name:{},
           nilai:{},
+          syarat_progress:{},
+          actual_progress:{},
+          syarat_output:{},
+          actual_output:{},
           master_nama_termin_id:{
             fields:{
               display_name:{}
@@ -292,6 +333,53 @@ const deleteDocument = async (syaratId) => {
   }
 }
 
+const updateProgress = async (terminId) =>{
+  console.log('terminId',terminId)
+  const targetTermin = termins.value.find(s => s.id === terminId);
+  console.log(contract.value.jenis_kontrak_id.type)
+  if (contract.value.jenis_kontrak_id.type=='fisik'){
+    if (targetTermin.syarat_progress<100){ // termin 1,2...
+      if (targetTermin.actual_progress <= targetTermin.syarat_progress) 
+      {
+        alert('Untuk jenis kontrak Fisik, actual progres harus lebih besar dari syarat progress penagihan.')
+      }
+    }
+    else // termin terakhir
+    {
+      if (targetTermin.actual_progress != 100) 
+      {
+        alert('Untuk jenis kontrak Fisik, actual progres termin terakhir harus 100%.')
+      }      
+    }
+
+  }
+
+  try {
+    const keysToKeep = ["actual_progress", "actual_output"];
+    const filtered = Object.keys(targetTermin)
+      .filter(key => keysToKeep.includes(key))
+      .reduce((acc, key) => ({ ...acc, [key]: targetTermin[key] }), {});
+    console.log(filtered); 
+
+    const specification = {
+      name:{},
+      actual_progress:{},
+      actual_output:{}
+    }  
+    const response = await odooService.write('vit.termin', terminId, filtered, specification);
+    console.log(response)
+    if (response.error){
+      uploadError.value = `An error occurred during update. ${response.message}`;
+      console.error(response);
+    }
+    else{
+      uploadError.value = null
+    }
+  } catch (err) {
+      uploadError.value = `An error occurred during update. ${err}`;
+      console.error(err);
+  }    
+}
 
 const getDownloadUrl = (syaratId, syaratName) => {
     // Odoo's default URL for downloading binary field content
@@ -326,16 +414,3 @@ const formatCurrency = (amount) => {
 };
 
 </script>
-
-<style scoped>
-.accordion-button:not(.collapsed) {
-    color: #0c63e4;
-    background-color: #e7f1ff;
-}
-
-.accordion-button {
-    color: #0c63e4;
-    background-color: #eee;
-}
-
-</style>
