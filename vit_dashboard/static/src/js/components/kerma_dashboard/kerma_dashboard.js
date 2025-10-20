@@ -35,6 +35,10 @@ export class KermaDashboard extends Component {
 
             selectedKanwil: savedState.selectedKanwil || null,
             kanwilDomain: savedState.selectedKanwil ? [['kanwil_id', '=', savedState.selectedKanwil.id]] : [],
+            selectedYear: savedState.selectedYear || null,
+            yearDomain: savedState.yearDomain || [],
+            availableYears: Array.from({ length: 6 }, (_, i) => new Date().getFullYear() - 5 + i),
+
 
 
 
@@ -102,6 +106,8 @@ export class KermaDashboard extends Component {
                 selectedMitra: this.state.selectedMitra,
                 location: this.state.location,
                 keyword: this.state.keyword,
+                selectedYear: this.state.selectedYear,
+                yearDomain: this.state.yearDomain,
                 // Save domain states
                 unitDomain: this.state.unitDomain,
                 locationDomain: this.state.locationDomain,
@@ -281,6 +287,31 @@ export class KermaDashboard extends Component {
     }
 
 
+    onYearChange(ev) {
+        const selectedYear = parseInt(ev.target.value);
+        const selectedName = ev.target.options[ev.target.selectedIndex].text;
+
+        if (!selectedYear) {
+            this.state.selectedYear = null;
+            this.state.yearDomain = [];
+        } else {
+            this.state.selectedYear = { id: selectedYear, name: selectedName };
+            // filter budget_date to the selected year
+            this.state.yearDomain = [['budget_date', '>=', selectedYear + '-01-01'], ['budget_date', '<=', selectedYear + '-12-31']];
+        }
+
+        console.log("📅 Selected Year:", this.state.selectedYear);
+        console.log("📦 Domain Tahun:", this.state.yearDomain);
+
+        this.saveState();
+        this.render(true);
+        // immediately reload NumberCard with new year + kanwil domain
+        this.reloadNumberCard();
+        this.env.bus.trigger('reload_dashboard');
+    }
+
+
+
 
     onLocationSearchEnter(e) {
         console.log("onLocationSearchEnter....", e);
@@ -309,7 +340,13 @@ export class KermaDashboard extends Component {
     }
 
     combineDomain(){
-        this.state.domain = [...(this.state.unitDomain || []), ...(this.state.keywordDomain || []), ...(this.state.locationDomain || []), ...(this.state.kanwilDomain || []),];
+        this.state.domain = [
+            ...(this.state.unitDomain || []),
+            ...(this.state.keywordDomain || []),
+            ...(this.state.locationDomain || []),
+            ...(this.state.kanwilDomain || []),
+            ...(this.state.yearDomain || []),
+        ];
     }
 
     reloadNumberCard() {

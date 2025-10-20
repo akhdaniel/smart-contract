@@ -54,6 +54,10 @@
                             <p class="m-0" t-field="doc.total_amount_droping" />
                         </div>
                         <div class="col-auto mw-100 mb-2">
+                            <strong>Budget Date</strong>
+                            <p class="m-0" t-field="doc.budget_date" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
                             <strong>Master Budget</strong>
                             <p class="m-0" t-field="doc.master_budget_id"/>
                         </div>

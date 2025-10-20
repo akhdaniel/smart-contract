@@ -26,6 +26,7 @@ class budget_rkap(models.Model):
     total_qty_izin_prinsip = fields.Integer( string=_("Total Qty Izin Prinsip"))
     total_qty_kontrak = fields.Integer( string=_("Total Qty Kontrak"))
     total_amount_droping = fields.Float( string=_("Total Amount Droping"))
+    budget_date = fields.Date( string=_("Budget Date"))
 
 
     def copy(self, default=None):

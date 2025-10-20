@@ -18,9 +18,14 @@ class BudgetRkap(models.Model):
         _logger.info("📊 DASHBOARD DOMAIN MASUK: %s", domain)
 
         domain_ip = []
+        # collect budget_date filters (range) to apply when searching budget_rkap
+        budget_date_domain = []
         for cond in domain:
             if cond[0] == 'kanwil_id':
                 domain_ip.append(('kanwil_id', '=', cond[2]))
+            elif cond[0] == 'budget_date' or cond[0] == 'year':
+                # keep budget_date related conditions to apply later to budgets search
+                budget_date_domain.append(cond)
             else:
                 domain_ip.append(cond)
 
@@ -36,7 +41,8 @@ class BudgetRkap(models.Model):
 
             master_ids = izin_prinsip_list.mapped('master_budget_id').ids
 
-            budgets = self.env['vit.budget_rkap'].search([('master_budget_id', 'in', master_ids)])
+            budgets_domain = [('master_budget_id', 'in', master_ids)] + budget_date_domain
+            budgets = self.env['vit.budget_rkap'].search(budgets_domain)
 
             amount = sum(budgets.mapped('amount'))
             total_realisasi = sum(budgets.mapped('total_amount_payment'))
@@ -49,25 +55,6 @@ class BudgetRkap(models.Model):
                 'total_realisasi_formatted': "{:,.0f}".format(total_realisasi).replace(",", "."),
             }
 
-                    
-
-        # if field == 'persentase_tl_droping':
-        #     izin_prinsip_list = self.env['vit.izin_prinsip'].search(domain_ip)
-        #     record = izin_prinsip_list[:1]
-        #     master_ids = izin_prinsip_list.mapped('master_budget_id').ids
-        #     budgets = self.env['vit.budget_rkap'].search([('master_budget_id', 'in', master_ids)])
-
-        #     amount = sum(budgets.mapped('amount'))
-        #     total_realisasi = sum(budgets.mapped('total_amount_payment'))
-        #     total_droping = sum(budgets.mapped('total_amount_droping'))
-
-        #     persentasi_tl = (total_realisasi / amount * 100) if amount > 0 else 0
-        #     persentasi_droping = (total_realisasi / total_droping * 100) if total_droping > 0 else 0
-
-        #     return {
-        #         'persentasi_tl': round(persentasi_tl, 2),
-        #         'persentasi_droping': round(persentasi_droping, 2),
-        #     }
 
 
         if field == 'persentase_tl_droping':
@@ -76,9 +63,8 @@ class BudgetRkap(models.Model):
             master_ids = izin_prinsip_list.mapped('master_budget_id').ids
             kanwil_id = record.kanwil_id.id if record else False
 
-            budgets = self.env['vit.budget_rkap'].search([
-                ('master_budget_id', 'in', master_ids)
-            ])
+            budgets_domain = [('master_budget_id', 'in', master_ids)] + budget_date_domain
+            budgets = self.env['vit.budget_rkap'].search(budgets_domain)
 
             amount = sum(budgets.mapped('amount'))
             total_realisasi = sum(budgets.mapped('total_amount_payment'))
@@ -109,49 +95,6 @@ class BudgetRkap(models.Model):
 
 
 
-        # if field == 'master_budget_summary':
-        #     izin_prinsip_list = self.env['vit.izin_prinsip'].search(domain_ip)
-
-        #     master_ids = izin_prinsip_list.mapped('master_budget_id').ids
-
-        #     # ambil semua master budget di sistem (bukan cuma yang ada di izin_prinsip / budget)
-        #     master_budgets = self.env['vit.master_budget'].search([])
-
-        #     budgets = self.env['vit.budget_rkap'].search([('master_budget_id', 'in', master_ids)])
-
-        #     master_summaries = []
-        #     for mb in master_budgets:
-        #         mb_budgets = budgets.filtered(lambda b: b.master_budget_id == mb)
-
-        #         total_pagu = sum(mb_budgets.mapped("total_pagu_izin_prinsip")) if mb_budgets else 0
-        #         total_kontrak = sum(mb_budgets.mapped("total_amount_kontrak")) if mb_budgets else 0
-        #         total_droping = sum(mb_budgets.mapped("total_amount_droping")) if mb_budgets else 0
-
-        #         persen_kontrak = (total_kontrak / total_pagu * 100) if total_pagu > 0 else 0
-        #         persen_droping = (total_droping / total_pagu * 100) if total_pagu > 0 else 0
-
-        #         master_summaries.append({
-        #             "master_budget": mb.name,
-        #             "remaining": total_pagu - total_kontrak,  # tetap hitung biasa
-        #             "remaining_formatted": "{:,.0f}".format(total_pagu - total_kontrak).replace(",", "."),
-        #             "total_qty_izin_prinsip": sum(mb_budgets.mapped("total_qty_izin_prinsip")) if mb_budgets else 0,
-        #             "total_pagu_izin_prinsip": total_pagu,
-        #             "total_pagu_izin_prinsip_formatted": "{:,.0f}".format(total_pagu).replace(",", "."),
-        #             "total_qty_kontrak": sum(mb_budgets.mapped("total_qty_kontrak")) if mb_budgets else 0,
-        #             "total_amount_kontrak": total_kontrak,
-        #             "total_amount_kontrak_formatted": "{:,.0f}".format(total_kontrak).replace(",", "."),
-        #             "total_amount_droping": total_droping,
-        #             "total_amount_droping_formatted": "{:,.0f}".format(total_droping).replace(",", "."),
-        #             "persen_kontrak": round(persen_kontrak, 2),
-        #             "persen_droping": round(persen_droping, 2),
-        #         })
-
-
-        #     return {
-        #         'master_summaries': master_summaries,
-        #     }
-
-
 
         if field == 'master_budget_summary':
             izin_prinsip_list = self.env['vit.izin_prinsip'].search(domain_ip)
@@ -159,7 +102,8 @@ class BudgetRkap(models.Model):
             kanwil_id = izin_prinsip_list[:1].kanwil_id.id if izin_prinsip_list else False
 
             master_budgets = self.env['vit.master_budget'].search([])
-            budgets = self.env['vit.budget_rkap'].search([('master_budget_id', 'in', master_ids)])
+            budgets_domain = [('master_budget_id', 'in', master_ids)] + budget_date_domain
+            budgets = self.env['vit.budget_rkap'].search(budgets_domain)
 
             master_summaries = []
             for mb in master_budgets:
@@ -175,12 +119,32 @@ class BudgetRkap(models.Model):
                     ('kanwil_id', '=', kanwil_id)
                 ])
 
-                droping_filtered = self.env['vit.droping'].search([
-                    ('master_budget_id', '=', mb.id),
-                    ('kanwil_id', '=', kanwil_id)
-                ])
 
-                total_pagu = sum(izin_prinsip_filtered.mapped('total_pagu'))
+                if budget_date_domain:
+                    allowed_master_ids = budgets.mapped('master_budget_id').ids if budgets else []
+                    if allowed_master_ids:
+                        izin_filtered_for_year = izin_prinsip_filtered.filtered(lambda ip: ip.master_budget_id and ip.master_budget_id.id in allowed_master_ids)
+                        total_pagu = sum(izin_filtered_for_year.mapped('total_pagu'))
+                    else:
+                        total_pagu = 0
+                else:
+                    total_pagu = sum(izin_prinsip_filtered.mapped('total_pagu'))
+
+
+                if budget_date_domain:
+                    allowed_master_ids = budgets.mapped('master_budget_id').ids if budgets else []
+                    if mb.id in allowed_master_ids:
+                        droping_filtered = self.env['vit.droping'].search([
+                            ('master_budget_id', '=', mb.id),
+                            ('kanwil_id', '=', kanwil_id)
+                        ])
+                    else:
+                        droping_filtered = self.env['vit.droping'].browse()
+                else:
+                    droping_filtered = self.env['vit.droping'].search([
+                        ('master_budget_id', '=', mb.id),
+                        ('kanwil_id', '=', kanwil_id)
+                    ])
                 total_kontrak = sum(kontrak_ids.mapped('amount_kontrak'))
                 total_droping = sum(droping_filtered.mapped('jumlah'))
 
@@ -207,10 +171,6 @@ class BudgetRkap(models.Model):
                 })
 
             return {'master_summaries': master_summaries}
-
-
-
-
 
 
 

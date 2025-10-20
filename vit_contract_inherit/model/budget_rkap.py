@@ -9,6 +9,10 @@ _logger = logging.getLogger(__name__)
 class budget_rkap(models.Model):
     _inherit = "vit.budget_rkap"
 
+    budget_date = fields.Date(
+        string='Budget Date',
+    )
+
     remaining = fields.Float(
         string="Remaining",
         compute="_compute_remaining",
@@ -53,6 +57,16 @@ class budget_rkap(models.Model):
     )
 
 
+    @api.model
+    def create(self, vals):
+        if not vals.get('budget_date'):
+            vals['budget_date'] = fields.Date.today()
+        return super(budget_rkap, self).create(vals)
+    
+    def write(self, vals):
+        if 'budget_date' in vals:
+            vals.pop('budget_date')
+        return super(budget_rkap, self).write(vals)
 
 
 

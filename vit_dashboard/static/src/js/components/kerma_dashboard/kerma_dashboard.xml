@@ -21,6 +21,11 @@
                     </h3>
                 </div>
 
+
+
+
+
+
                 <div class="col-12 col-md-3">
                     <div class="form-control px-1 m-0">
                         <select
@@ -37,6 +42,29 @@
                         </select>
                     </div>
                 </div>
+
+
+                <div class="col-12 col-md-2">
+                    <div class="form-control px-1 m-0">
+                        <select
+                            t-on-change="onYearChange"
+                            class="form-select border-0"
+                        >
+                            <option value="">-- Pilih Tahun --</option>
+                            <t t-foreach="state.availableYears" t-as="th" t-key="th">
+                                <option 
+                                    t-att-value="th"
+                                    t-att-selected="state.selectedYear &amp;&amp; state.selectedYear.id == th ? true : undefined"
+                                    t-esc="th"/>
+                            </t>
+                        </select>
+                    </div>
+                </div>
+
+
+
+
+
             </div>
 
             <div class="row mx-3 scrollable-row">

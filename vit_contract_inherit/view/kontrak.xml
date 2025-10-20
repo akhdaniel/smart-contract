@@ -191,10 +191,10 @@
                 </xpath>
 
 
-                <!-- <xpath expr="//field[@name='termin_ids']" position="attributes">
-                    <attribute name="readonly">stage_is_draft==True or stage_is_done==True</attribute>
+                <xpath expr="//field[@name='termin_ids']" position="attributes">
+                    <attribute name="readonly">stage_is_done==True</attribute>
                     <attribute name="force_save">1</attribute>
-                </xpath> -->
+                </xpath>
 
 
 
