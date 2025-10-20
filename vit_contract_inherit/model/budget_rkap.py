@@ -63,10 +63,10 @@ class budget_rkap(models.Model):
             vals['budget_date'] = fields.Date.today()
         return super(budget_rkap, self).create(vals)
     
-    def write(self, vals):
-        if 'budget_date' in vals:
-            vals.pop('budget_date')
-        return super(budget_rkap, self).write(vals)
+    # def write(self, vals):
+    #     if 'budget_date' in vals:
+    #         vals.pop('budget_date')
+    #     return super(budget_rkap, self).write(vals)
 
 
 
