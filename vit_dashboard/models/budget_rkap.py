@@ -209,9 +209,18 @@ class BudgetRkap(models.Model):
 
 
                 if budget_date_domain:
+                    tahun_rkap = False
+                    if budgets:
+                        tahun_rkap = budgets[0].budget_date.year 
+
                     allowed_master_ids = budgets.mapped('master_budget_id').ids if budgets else []
                     if allowed_master_ids:
-                        izin_filtered_for_year = izin_prinsip_filtered.filtered(lambda ip: ip.master_budget_id and ip.master_budget_id.id in allowed_master_ids)
+                        izin_filtered_for_year = izin_prinsip_filtered.filtered(
+                            lambda ip: ip.master_budget_id 
+                            and ip.master_budget_id.id in allowed_master_ids
+                            and any(b.master_budget_id.id == ip.master_budget_id.id and 
+                                    b.budget_date.year == tahun_rkap for b in budgets)
+                        )
                         total_pagu = sum(izin_filtered_for_year.mapped('total_pagu'))
                     else:
                         total_pagu = 0
@@ -219,13 +228,23 @@ class BudgetRkap(models.Model):
                     total_pagu = sum(izin_prinsip_filtered.mapped('total_pagu'))
 
 
+
                 if budget_date_domain:
+                    tahun_rkap = False
+                    if budgets:
+                        tahun_rkap = budgets[0].budget_date.year
+
                     allowed_master_ids = budgets.mapped('master_budget_id').ids if budgets else []
-                    if mb.id in allowed_master_ids:
-                        droping_filtered = self.env['vit.droping'].search([
+
+                    if allowed_master_ids and mb.id in allowed_master_ids:
+                        droping_all = self.env['vit.droping'].search([
                             ('master_budget_id', '=', mb.id),
                             ('kanwil_id', '=', kanwil_id)
                         ])
+
+                        droping_filtered = droping_all.filtered(
+                            lambda d: d.budget_date and d.budget_date.year == tahun_rkap
+                        )
                     else:
                         droping_filtered = self.env['vit.droping'].browse()
                 else:
@@ -233,6 +252,7 @@ class BudgetRkap(models.Model):
                         ('master_budget_id', '=', mb.id),
                         ('kanwil_id', '=', kanwil_id)
                     ])
+
 
                     
                 if mb_budgets:
