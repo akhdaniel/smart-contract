@@ -29,6 +29,7 @@ class termin(models.Model):
     actual_progress = fields.Float( string=_("Actual Progress"))
     syarat_output = fields.Text( string=_("Syarat Output"))
     actual_output = fields.Text( string=_("Actual Output"))
+    verifikasi_syarat = fields.Boolean( string=_("Verifikasi Syarat"))
 
 
     @api.model_create_multi

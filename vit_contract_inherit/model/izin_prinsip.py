@@ -27,6 +27,28 @@ class izin_prinsip(models.Model):
         store=True,
     )
 
+    total_payment = fields.Float(
+        string="Total Payment",
+        compute="_compute_total_payment",
+        store=True,
+    )
+
+    @api.depends("kontrak_ids.payment_ids.amount", "kanwil_id")
+    def _compute_total_payment(self):
+        for rec in self:
+            total = 0.0
+            if rec.kanwil_id and rec.kontrak_ids:
+                # ambil semua payment dari kontrak terkait
+                payments = rec.mapped("kontrak_ids.payment_ids")
+
+                # filter payment berdasarkan kanwil yang sama
+                filtered = payments.filtered(lambda p: p.kanwil_id == rec.kanwil_id)
+
+                # jumlahkan amount-nya
+                total = sum(filtered.mapped("amount"))
+
+            rec.total_payment = total
+
     @api.depends("job_izin_prinsip_ids.total_pagu_job")
     def _compute_total_pagu(self):
         for rec in self:

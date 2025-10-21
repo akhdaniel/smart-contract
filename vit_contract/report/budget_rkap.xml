@@ -50,6 +50,10 @@
                             <p class="m-0" t-field="doc.total_qty_kontrak" />
                         </div>
                         <div class="col-auto mw-100 mb-2">
+                            <strong>Total Qty Termin</strong>
+                            <p class="m-0" t-field="doc.total_qty_termin" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
                             <strong>Total Amount Droping</strong>
                             <p class="m-0" t-field="doc.total_amount_droping" />
                         </div>
@@ -58,8 +62,36 @@
                             <p class="m-0" t-field="doc.budget_date" />
                         </div>
                         <div class="col-auto mw-100 mb-2">
+                            <strong>Previous Remaining</strong>
+                            <p class="m-0" t-field="doc.previous_remaining" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Stage Is Draft</strong>
+                            <p class="m-0" t-field="doc.stage_is_draft" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Stage Is Done</strong>
+                            <p class="m-0" t-field="doc.stage_is_done" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Allow Confirm</strong>
+                            <p class="m-0" t-field="doc.allow_confirm" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Allow Cancel</strong>
+                            <p class="m-0" t-field="doc.allow_cancel" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Stage Name</strong>
+                            <p class="m-0" t-field="doc.stage_name" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
                             <strong>Master Budget</strong>
                             <p class="m-0" t-field="doc.master_budget_id"/>
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Stage</strong>
+                            <p class="m-0" t-field="doc.stage_id"/>
                         </div>
                     </div>
                 </div>
@@ -75,6 +107,7 @@
                             <td>Allow Confirm</td>
                             <td>Allow Cancel</td>
                             <td>Stage Name</td>
+                            <td>Total Payment</td>
                             <td>Budget</td>
                             <td>Stage</td>
                             <td>Master Budget</td>
@@ -90,6 +123,7 @@
                             <td><span t-field="line.allow_confirm" /></td>
                             <td><span t-field="line.allow_cancel" /></td>
                             <td><span t-field="line.stage_name" /></td>
+                            <td><span t-field="line.total_payment" /></td>
                             <td><span t-field="line.budget_id" /></td>
                             <td><span t-field="line.stage_id" /></td>
                             <td><span t-field="line.master_budget_id" /></td>

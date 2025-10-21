@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates xml:space="preserve">
     <t t-name="vit_dashboard.NumberCard" owl="1">
-        <div t-on-click="openRecord"
+        <!-- <div t-on-click="openRecord"
            t-att-class="'p-3 text-center text-white shadow d-flex align-items-center cursor-pointer ' + (props.bgColor || 'bg-primary')"
            t-att-style="'border-radius: 5px; transition: box-shadow 0.3s ease;'"
            onmouseover="this.classList.add('shadow-lg')"
-           onmouseout="this.classList.remove('shadow-lg')">
+           onmouseout="this.classList.remove('shadow-lg')"> -->
+
+        <div t-on-click="openRecord"
+            t-att-class="'p-3 text-center shadow d-flex align-items-center cursor-pointer ' 
+                        + (props.bgColor || 'bg-primary') + ' ' 
+                        + (props.textColor || 'text-white')"
+            t-att-style="'border-radius: 5px; transition: box-shadow 0.3s ease;'"
+            onmouseover="this.classList.add('shadow-lg')"
+            onmouseout="this.classList.remove('shadow-lg')">
+
             <!-- Icon Section -->
             <t t-if="props.field != 'persentase_tl_droping'">
                 <div class="me-3 w-25 text-center">
@@ -76,7 +85,7 @@
                         <t t-if="props.title != 'Kanwil' and 'master_summaries' in state.val">
                             <t t-set="current" t-value="state.val.master_summaries.find(ms => ms.master_budget == props.title)"/>
                             <t t-if="current">
-                                <div>
+                                <div class="p-3" style="background-color: white; color: black; border-radius: 8px;">
                                     <div class="d-flex justify-content-between"><span>Sisa</span><span><t t-out="current.remaining_formatted or current.remaining"/></span></div>
                                     <div class="d-flex justify-content-between"><span>Total Qty Izin Prinsip</span><span><t t-out="current.total_qty_izin_prinsip"/></span></div>
                                     <div class="d-flex justify-content-between"><span>Total Pagu Izin Prinsip</span><span><t t-out="current.total_pagu_izin_prinsip_formatted or current.total_pagu_izin_prinsip"/></span></div>
@@ -84,24 +93,38 @@
                                     <div class="d-flex justify-content-between"><span>Total Amount Kontrak</span><span><t t-out="current.total_amount_kontrak_formatted or current.total_amount_kontrak"/></span></div>
                                     <div class="d-flex justify-content-between"><span>Total Amount Droping</span><span><t t-out="current.total_amount_droping_formatted or current.total_amount_droping"/></span></div>
 
-                                    <div class="d-flex justify-content-around mt-2">
-                                        <div class="badge bg-primary text-white p-2 d-flex flex-column align-items-center" style="min-width: 120px;">
+                                    <div class="d-flex justify-content-around mt-3">
+                                        <div class="badge p-2 d-flex flex-column align-items-center" 
+                                            style="background-color: #007bff; color: white; min-width: 120px;">
                                             <div class="fs-4 fw-bold">
                                                 <t t-out="current.persen_kontrak.toFixed(2)"/>%
                                             </div>
                                             <small>% TL Paket</small>
                                         </div>
-                                        <div class="badge bg-warning text-dark p-2 d-flex flex-column align-items-center" style="min-width: 120px;">
+                                        <div class="badge p-2 d-flex flex-column align-items-center" 
+                                            style="background-color: #ffc107; color: black; min-width: 120px;">
                                             <div class="fs-4 fw-bold">
                                                 <t t-out="current.persen_droping.toFixed(2)"/>%
                                             </div>
                                             <small>% Dropping/Relok</small>
                                         </div>
                                     </div>
-
                                 </div>
                             </t>
                         </t>
+
+
+
+
+                        <!-- <div style="border-top:1px solid white; padding-top:8px; padding-bottom:15px; margin-top:15px;">
+                                        <div class="fw-bold text-center text-white" style="margin-bottom:6px;">Termin</div>
+                                        <div class="text-white" style="text-align:left; max-width:600px; margin:0 auto;">Total Qty Termin<br/>belum Verified</div>
+                                    </div>
+
+                                    <div style="padding:8px 0; border-top:1px solid white;">
+                                        <div class="fw-bold text-center text-white" style="margin-bottom:6px;">Payment</div>
+                                        <div class="text-white" style="text-align:left; max-width:600px; margin:0 auto;">Draft<br/>On Progress<br/>Done</div>
+                                    </div> -->
 
 
 

@@ -46,6 +46,10 @@
                             <p class="m-0" t-field="doc.stage_name" />
                         </div>
                         <div class="col-auto mw-100 mb-2">
+                            <strong>Total Payment</strong>
+                            <p class="m-0" t-field="doc.total_payment" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
                             <strong>Budget</strong>
                             <p class="m-0" t-field="doc.budget_id"/>
                         </div>

@@ -91,6 +91,7 @@
                                         <field name="actual_progress" /> <!-- 108-->
                                         <field name="syarat_output" /> <!-- 109-->
                                         <field name="actual_output" /> <!-- 110-->
+                                        <field name="verifikasi_syarat" /> <!-- 111-->
                                     </tree>
                                 </field>
                             </page>

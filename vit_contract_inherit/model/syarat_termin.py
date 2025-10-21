@@ -31,6 +31,15 @@ class syarat_termin(models.Model):
         readonly=True,
     )
 
+
+    def write(self, vals):
+        res = super(syarat_termin, self).write(vals)
+        if "verified" in vals:
+            for rec in self:
+                if rec.termin_id:
+                    rec.termin_id._compute_verifikasi_syarat()
+        return res
+
     @api.constrains('due_date', 'termin_id')
     def _check_due_date_not_exceed_termin(self):
         for rec in self:

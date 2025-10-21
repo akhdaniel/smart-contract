@@ -7,13 +7,54 @@
             <field name="model">vit.budget_rkap</field>
             <field name="inherit_id" ref="vit_contract.view_vit_budget_rkap_form"/>
             <field name="arch" type="xml">
-                
+                <xpath expr="//field[@name='name']" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                    <attribute name="force_save">1</attribute>
+                </xpath>
+
+
+                <xpath expr="//field[@name='previous_remaining']" position="replace"/>
+                <xpath expr="//field[@name='amount']" position="before">
+                    <field name="previous_remaining" readonly="1"/>
+                </xpath>
+
+                <xpath expr="//field[@name='remaining']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                    <attribute name="force_save">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='total_pagu_izin_prinsip']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                    <attribute name="force_save">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='total_amount_kontrak']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                    <attribute name="force_save">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='total_amount_payment']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                    <attribute name="force_save">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='total_amount_droping']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                    <attribute name="force_save">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='budget_date']" position="after">
+                    <field name="budget_year" readonly="1"/>
+                </xpath>
+
 
                 <xpath expr="//field[@name='total_qty_izin_prinsip']" position="replace"/>
                 <xpath expr="//field[@name='total_qty_kontrak']" position="replace"/>
+                <xpath expr="//field[@name='total_qty_termin']" position="replace"/>
                 <xpath expr="//field[@name='master_budget_id']" position="after">
                     <field name="total_qty_izin_prinsip"/>
-                    <field name="total_qty_izin_prinsip"/>
+                    <field name="total_qty_kontrak"/>
+                    <field name="total_qty_termin" invisible="1"/>
                 </xpath>
 
                 <xpath expr="//page[@name='payment_ids']//tree/field[@name='amount']" position="replace"/>
@@ -58,9 +99,11 @@
 
 
                 <xpath expr="//field[@name='total_qty_kontrak']" position="replace"/>
+                <xpath expr="//field[@name='total_qty_termin']" position="replace"/>
                 <xpath expr="//field[@name='total_amount_kontrak']" position="after">
                     <field name="total_qty_kontrak"/>
                     <field name="total_qty_payment"/>
+                    <field name="total_qty_termin"/>
                 </xpath>
 
 

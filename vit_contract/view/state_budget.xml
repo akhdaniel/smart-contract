@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- tree view -->
+        <record id="view_vit_state_budget_tree" model="ir.ui.view">
+            <field name="name">vit_state_budget_tree</field>
+            <field name="model">vit.state_budget</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="State Budget">
+                    <field name="sequence"  widget='handle'/>
+                    <field name="name" /> <!-- 100-->
+                    <field name="draft" /> <!-- 102-->
+                    <field name="done" /> <!-- 103-->
+                    <field name="open" /> <!-- 104-->
+                    <field name="fold" /> <!-- 105-->
+                    <field name="allow_confirm" /> <!-- 106-->
+                    <field name="allow_cancel" /> <!-- 107-->
+                    <field name="execute_enter" /> <!-- 108-->
+                    <field name="confirmation" /> <!-- 109-->
+                    <field name="on_progress" /> <!-- 110-->
+                </tree>
+            </field>
+        </record>
+        <!-- form view -->
+        <record id="view_vit_state_budget_form" model="ir.ui.view">
+            <field name="name">vit_state_budget_form</field>
+            <field name="model">vit.state_budget</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="State Budget">
+                    <header>
+                        <button string="Reload" type="object" name="action_reload_view" icon="fa-refresh"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <!--button type="object" name="action_view_detail" class="oe_stat_button" icon="fa-pencil-square-o"-->
+                                <!--field name="detail_count" widget="statinfo" string="Detail(s)"/-->
+                                <!--field name="detail_ids" invisible="1"/-->
+                            <!--/button-->
+                        </div>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" string="State Budget Name"/>
+                            <h1><field name="name" /></h1>
+                        </div>
+                        <group>
+                            <group> <!-- left -->
+                                <field name="sequence"  />
+                                <field name="draft"  />
+                                <field name="done"  />
+                                <field name="open"  />
+                                <field name="fold"  />
+                                <field name="allow_confirm"  />
+                                <field name="allow_cancel"  />
+                                <field name="execute_enter"  />
+                                <field name="confirmation"  />
+                                <field name="on_progress"  />
+                            </group>
+                            <group> <!-- right -->
+                            </group>
+                        </group>
+                        <notebook>
+                        </notebook>
+                        <group name="note_group" col="6" class="mt-2 mt-md-0">
+                            <group colspan="4">
+                            </group>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                            </group>
+                            <div class="clearfix"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- search -->
+        <record id="view_vit_state_budget_search" model="ir.ui.view">
+            <field name="name">vit_state_budget</field>
+            <field name="model">vit.state_budget</field>
+            <field name="arch" type="xml">
+                <search string="State Budget">
+
+                    <filter string="Name" name="filter_by_name" domain="[('name','=','')]" />
+                    <filter string="Sequence" name="filter_by_sequence" domain="[('sequence','=','')]" />
+                    <filter string="Draft" name="filter_by_draft" domain="[('draft','=','')]" />
+                    <filter string="Done" name="filter_by_done" domain="[('done','=','')]" />
+                    <filter string="Open" name="filter_by_open" domain="[('open','=','')]" />
+                    <filter string="Fold" name="filter_by_fold" domain="[('fold','=','')]" />
+                    <filter string="Allow Confirm" name="filter_by_allow_confirm" domain="[('allow_confirm','=','')]" />
+                    <filter string="Allow Cancel" name="filter_by_allow_cancel" domain="[('allow_cancel','=','')]" />
+                    <filter string="Execute Enter" name="filter_by_execute_enter" domain="[('execute_enter','=','')]" />
+                    <filter string="Confirmation" name="filter_by_confirmation" domain="[('confirmation','=','')]" />
+                    <filter string="On Progress" name="filter_by_on_progress" domain="[('on_progress','=','')]" />
+                    <field name="name" select="True"/>
+                    <field name="sequence" select="True"/>
+                    <field name="draft" select="True"/>
+                    <field name="done" select="True"/>
+                    <field name="open" select="True"/>
+                    <field name="fold" select="True"/>
+                    <field name="allow_confirm" select="True"/>
+                    <field name="allow_cancel" select="True"/>
+                    <field name="execute_enter" select="True"/>
+                    <field name="confirmation" select="True"/>
+                    <field name="on_progress" select="True"/>
+                    <group string="Group By..">
+                    </group>
+                </search>
+            </field>
+        </record>
+        <!-- kanban , to show image, please add image, image_512, image_1920, or image_small in the model -->
+        <record id="view_vit_state_budget_kanban" model="ir.ui.view" >
+            <field name="name">vit_state_budget</field>
+            <field name="model">vit.state_budget</field>
+            <field name="arch" type="xml">
+                <kanban version="7.0">
+                    <field name="id" />
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_details">
+                                <h4>
+                                    <a type="open"><field name="name"/></a>
+                                </h4>
+                            </div> <!--oe_kanban_details-->
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <!-- action window -->
+        <record id="action_state_budget" model="ir.actions.act_window">
+            <field name="name">State Budget</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vit.state_budget</field>
+            <field name="view_mode">tree,form,kanban,pivot</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a new State Budget
+                </p><p>
+
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_state_budget" name="State Budget" parent="vit_contract_config_menu" action="action_state_budget" sequence="240"/>
+    </data>
+</odoo>

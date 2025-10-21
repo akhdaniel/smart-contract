@@ -82,6 +82,10 @@
                             <p class="m-0" t-field="doc.actual_output" />
                         </div>
                         <div class="col-auto mw-100 mb-2">
+                            <strong>Verifikasi Syarat</strong>
+                            <p class="m-0" t-field="doc.verifikasi_syarat" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
                             <strong>Master Nama Termin</strong>
                             <p class="m-0" t-field="doc.master_nama_termin_id"/>
                         </div>

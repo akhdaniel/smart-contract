@@ -20,6 +20,7 @@ class izin_prinsip(models.Model):
     allow_confirm = fields.Boolean(related="stage_id.allow_confirm", store=True,  string=_("Allow Confirm"))
     allow_cancel = fields.Boolean(related="stage_id.allow_cancel", store=True,  string=_("Allow Cancel"))
     stage_name = fields.Char(related="stage_id.name", store=True,  string=_("Stage Name"))
+    total_payment = fields.Float( string=_("Total Payment"))
 
 
     @api.model_create_multi

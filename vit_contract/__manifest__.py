@@ -26,6 +26,7 @@
 		"data/sequence_izin_prinsip.xml",
 		"view/budget_rkap.xml",
 		"report/budget_rkap.xml",
+		"data/sequence_budget_rkap.xml",
 		"view/kanwil.xml",
 		"report/kanwil.xml",
 		"view/kontrak.xml",
@@ -74,7 +75,10 @@
 		"report/job_izin_prinsip.xml",
 		"view/state_payment.xml",
 		"report/state_payment.xml",
-		"data/vit.state_payment.csv"
+		"data/vit.state_payment.csv",
+		"view/state_budget.xml",
+		"report/state_budget.xml",
+		"data/vit.state_budget.csv"
 	],
 	"installable": True,
 	"auto_install": False,

@@ -100,17 +100,17 @@
                     </div>
                 </div>
 
-                <!-- 🟦 Kolom kanan: Semua Master Budget -->
                 <div class="col-9">
                     <div class="row">
                         <t t-foreach="state.masterBudgets" t-as="mb" t-key="mb.id">
                             <div class="col-4" style="margin-top:20px; margin-bottom:20px;">
                                 <NumberCard 
                                     title="mb.name"
-                                    bgColor="'bg-itb-light-blue'"
+                                    bgColor="'bg-white'"
+                                    textColor="'text-dark'"
                                     field="'master_budget_summary'"
                                     model="'vit.budget_rkap'"
-                                    icon="'fa fa-building'"
+                                    icon="'fa fa-building text-dark'"
                                     domain="[]"
                                     onReload.bind="onMitraNumberCardReload"
                                 />
@@ -118,6 +118,7 @@
                         </t>
                     </div>
                 </div>
+
 
                     <div class="col-3" style="margin-bottom:20px;">
                         <!-- <NumberCard 

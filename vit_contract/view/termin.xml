@@ -25,6 +25,7 @@
                     <field name="actual_progress" /> <!-- 108-->
                     <field name="syarat_output" /> <!-- 109-->
                     <field name="actual_output" /> <!-- 110-->
+                    <field name="verifikasi_syarat" /> <!-- 111-->
                 </tree>
             </field>
         </record>
@@ -85,6 +86,7 @@
                                 <field name="actual_progress"  readonly="stage_is_draft==False"/>
                                 <field name="syarat_output"  readonly="stage_is_draft==False"/>
                                 <field name="actual_output"  readonly="stage_is_draft==False"/>
+                                <field name="verifikasi_syarat"  readonly="stage_is_draft==False"/>
                             </group>
                             <group> <!-- right -->
                                 <field name="master_nama_termin_id"  readonly="stage_is_draft==False"/>
@@ -141,6 +143,7 @@
                     <filter string="Actual Progress" name="filter_by_actual_progress" domain="[('actual_progress','=','')]" />
                     <filter string="Syarat Output" name="filter_by_syarat_output" domain="[('syarat_output','=','')]" />
                     <filter string="Actual Output" name="filter_by_actual_output" domain="[('actual_output','=','')]" />
+                    <filter string="Verifikasi Syarat" name="filter_by_verifikasi_syarat" domain="[('verifikasi_syarat','=','')]" />
                     <field name="name" select="True"/>
                     <field name="nilai" select="True"/>
                     <field name="persentase" select="True"/>
@@ -157,6 +160,7 @@
                     <field name="actual_progress" select="True"/>
                     <field name="syarat_output" select="True"/>
                     <field name="actual_output" select="True"/>
+                    <field name="verifikasi_syarat" select="True"/>
                     <field name="master_nama_termin_id" select="True"/>
                     <field name="stage_id" select="True"/>
                     <field name="droping_id" select="True"/>

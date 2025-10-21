@@ -18,7 +18,12 @@ class termin(models.Model):
         string='Tipe Kontrak'
     )
 
-
+    verifikasi_syarat = fields.Boolean(
+        string="Verifikasi Syarat",
+        compute="_compute_verifikasi_syarat",
+        store=True,
+        readonly=True,
+    )
 
     partner_id = fields.Many2one(
         comodel_name="res.partner",
@@ -45,6 +50,14 @@ class termin(models.Model):
         for rec in self:
             rec.unlink()
         return True
+    
+    @api.depends("syarat_termin_ids.verified")
+    def _compute_verifikasi_syarat(self):
+        for rec in self:
+            if rec.syarat_termin_ids:
+                rec.verifikasi_syarat = all(line.verified for line in rec.syarat_termin_ids)
+            else:
+                rec.verifikasi_syarat = False
 
     @api.constrains("due_date", "kontrak_id", "master_nama_termin_id")
     def _check_due_date_vs_end_date(self):
@@ -55,12 +68,6 @@ class termin(models.Model):
                         raise ValidationError(_(
                             "Due Date (%s) tidak boleh melebihi End Date Kontrak (%s)."
                         ) % (rec.due_date, rec.kontrak_id.end_date))
-
-
-    def write(self, vals):
-        if "is_droping_done" in vals and vals["is_droping_done"] is False:
-            vals["droping_id"] = False
-        return super(termin, self).write(vals)
 
 
     @api.onchange('persentase', 'kontrak_id')
@@ -103,6 +110,11 @@ class termin(models.Model):
                 total = sum(rec.kontrak_id.termin_ids.mapped('persentase'))
                 if total > 100:
                     raise ValidationError("Total persentase semua termin dalam kontrak tidak boleh lebih dari 100%.")
+                
+    def write(self, vals):
+        if "is_droping_done" in vals and vals["is_droping_done"] is False:
+            vals["droping_id"] = False
+        return super(termin, self).write(vals)
 
 
     # def action_confirm(self):

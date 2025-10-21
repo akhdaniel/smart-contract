@@ -12,15 +12,9 @@
                     <attribute name="readonly">1</attribute>
                 </xpath>
 
-
-                <xpath expr="//field[@name='total_pagu']" position="after">
-                    <field name="attachments" widget="many2many_binary_preview" string="Attachments"/>
+                <xpath expr="//field[@name='total_payment']" position="attributes">
+                    <attribute name="readonly">1</attribute>
                 </xpath>
-
-                <!-- <xpath expr="//field[@name='droping_id']" position="attributes">
-                    <attribute name="invisible">1</attribute>
-                </xpath> -->
-
 
                 <xpath expr="//field[@name='kontrak_ids']/tree/field[@name='amount_izin_prinsip']" position="attributes">
                     <attribute name="force_save">1</attribute>
@@ -37,7 +31,6 @@
 
 
                 <xpath expr="//page[@name='job_izin_prinsip_ids']" position="replace"/>
-
                 <xpath expr="//page[@name='kontrak_ids']" position="before">
                     <page name="job_izin_prinsip_ids" string="Job Izin Prinsip">
                         <field name="job_izin_prinsip_ids" readonly="stage_is_draft==False">
@@ -49,6 +42,14 @@
                         </field>
                     </page>
                 </xpath>
+
+
+                <xpath expr="//page[@name='kontrak_ids']" position="after">
+                    <page name="attachments_tab" string="Attachments">
+                        <field name="attachments" widget="many2many_binary_preview" string="Upload"/>
+                    </page>
+                </xpath>
+
 
             </field>
         </record>
