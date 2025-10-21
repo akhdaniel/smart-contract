@@ -209,9 +209,10 @@ class BudgetRkap(models.Model):
 
 
                 if budget_date_domain:
+                    # Ambil tahun dari salah satu budget RKAP yang sesuai domain
                     tahun_rkap = False
                     if budgets:
-                        tahun_rkap = budgets[0].budget_date.year 
+                        tahun_rkap = budgets[0].budget_date.year  # contoh: 2024 atau 2025
 
                     allowed_master_ids = budgets.mapped('master_budget_id').ids if budgets else []
                     if allowed_master_ids:
@@ -230,21 +231,12 @@ class BudgetRkap(models.Model):
 
 
                 if budget_date_domain:
-                    tahun_rkap = False
-                    if budgets:
-                        tahun_rkap = budgets[0].budget_date.year
-
                     allowed_master_ids = budgets.mapped('master_budget_id').ids if budgets else []
-
-                    if allowed_master_ids and mb.id in allowed_master_ids:
-                        droping_all = self.env['vit.droping'].search([
+                    if mb.id in allowed_master_ids:
+                        droping_filtered = self.env['vit.droping'].search([
                             ('master_budget_id', '=', mb.id),
                             ('kanwil_id', '=', kanwil_id)
                         ])
-
-                        droping_filtered = droping_all.filtered(
-                            lambda d: d.budget_date and d.budget_date.year == tahun_rkap
-                        )
                     else:
                         droping_filtered = self.env['vit.droping'].browse()
                 else:
@@ -252,7 +244,6 @@ class BudgetRkap(models.Model):
                         ('master_budget_id', '=', mb.id),
                         ('kanwil_id', '=', kanwil_id)
                     ])
-
 
                     
                 if mb_budgets:
