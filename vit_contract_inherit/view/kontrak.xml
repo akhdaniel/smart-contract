@@ -159,8 +159,17 @@
                 </xpath>
 
 
+                <xpath expr="//field[@name='persentasi_denda']" position="replace"/>
+                <xpath expr="//field[@name='amount_denda']" position="after">
+                    <field name="persentasi_denda" string="Denda per mil"/>
+                </xpath>
 
-                <!-- <xpath expr="//field[@name='budget_rkap_id']" position="replace"/>
+                <xpath expr="//field[@name='amount_kontrak']" position="replace"/>
+                <xpath expr="//field[@name='amount_izin_prinsip']" position="after">
+                    <field name="amount_kontrak"/>
+                </xpath>
+
+                <xpath expr="//field[@name='budget_rkap_id']" position="replace"/>
                 <xpath expr="//field[@name='master_budget_id']" position="replace"/>
                 <xpath expr="//field[@name='kanwil_id']" position="replace"/>
                 <xpath expr="//field[@name='kanca_id']" position="replace"/>
@@ -169,7 +178,7 @@
                     <field name="master_budget_id"/>
                     <field name="kanwil_id"/>
                     <field name="kanca_id"/>
-                </xpath> -->
+                </xpath>
 
 
                 <xpath expr="//page[@name='termin_ids']//tree/field[@name='master_nama_termin_id']" position="attributes">
