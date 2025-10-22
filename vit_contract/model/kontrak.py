@@ -28,7 +28,7 @@ class kontrak(models.Model):
     amount_izin_prinsip = fields.Float(readonly=True,  string=_("Amount Izin Prinsip"))
     amount_kontrak = fields.Float( string=_("Amount Kontrak"))
     amount_denda = fields.Float( string=_("Amount Denda"))
-    persentasi_denda = fields.Float( string=_("Persentasi Denda"))
+    persentasi_denda = fields.Float(string="Denda per Mil")
     overdue_days = fields.Integer( string=_("Overdue Days"))
 
 

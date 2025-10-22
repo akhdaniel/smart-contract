@@ -14,6 +14,7 @@
                     <field name="kanwil_id" /> <!-- 101-->
                     <field name="date" /> <!-- 102-->
                     <field name="stage_id" /> <!-- 102-->
+                    <field name="droping_date" /> <!-- 103-->
                     <field name="master_budget_id" /> <!-- 103-->
                 </tree>
             </field>
@@ -66,6 +67,7 @@
                                 <field name="stage_name" invisible="True" readonly="stage_is_draft==False"/>
                                 <field name="jumlah"  readonly="stage_is_draft==False"/>
                                 <field name="date"  readonly="stage_is_draft==False"/>
+                                <field name="droping_date"  readonly="stage_is_draft==False"/>
                             </group>
                             <group> <!-- right -->
                                 <field name="kanwil_id"  readonly="stage_is_draft==False"/>
@@ -122,6 +124,7 @@
                     <filter string="Allow Cancel" name="filter_by_allow_cancel" domain="[('allow_cancel','=','')]" />
                     <filter string="Stage Name" name="filter_by_stage_name" domain="[('stage_name','=','')]" />
                     <filter string="Date" name="filter_by_date" domain="[('date','=','')]" />
+                    <filter string="Droping Date" name="filter_by_droping_date" domain="[('droping_date','=','')]" />
                     <field name="name" select="True"/>
                     <field name="jumlah" select="True"/>
                     <field name="stage_is_draft" select="True"/>
@@ -130,6 +133,7 @@
                     <field name="allow_cancel" select="True"/>
                     <field name="stage_name" select="True"/>
                     <field name="date" select="True"/>
+                    <field name="droping_date" select="True"/>
                     <field name="kanwil_id" select="True"/>
                     <field name="stage_id" select="True"/>
                     <field name="master_budget_id" select="True"/>
@@ -154,7 +158,7 @@
                                 <h4>
                                     <a type="open"><field name="name"/></a>
                                 </h4>
-                                <span class="text-muted">Date</span> <field name="date"></field>
+                                <span class="text-muted">Droping Date</span> <field name="droping_date"></field>
                             </div> <!--oe_kanban_details-->
                         </t>
                     </templates>
@@ -166,7 +170,7 @@
             <field name="name">vit_droping_cal</field>
             <field name="model">vit.droping</field>
             <field name="arch" type="xml">
-                <calendar string="Droping" date_start="date">
+                <calendar string="Droping" date_start="droping_date">
                     <field name="name" />
                 </calendar>
             </field>

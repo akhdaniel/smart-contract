@@ -96,6 +96,6 @@ class budget_rkap(models.Model):
 
     izin_prinsip_ids = fields.One2many(comodel_name="vit.izin_prinsip",  inverse_name="budget_id",  string=_("Izin Prinsip"))
     master_budget_id = fields.Many2one(comodel_name="vit.master_budget",  string=_("Master Budget"))
+    stage_id = fields.Many2one(comodel_name="vit.state_budget",  default=_get_first_stage, copy=False, group_expand="_group_expand_states",  string=_("Stage"))
     kontrak_ids = fields.One2many(comodel_name="vit.kontrak",  inverse_name="budget_rkap_id",  string=_("Kontrak"))
     payment_ids = fields.One2many(comodel_name="vit.payment",  inverse_name="budget_rkap_id",  string=_("Payment"))
-    stage_id = fields.Many2one(comodel_name="vit.state_budget",  default=_get_first_stage, copy=False, group_expand="_group_expand_states",  string=_("Stage"))

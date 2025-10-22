@@ -25,6 +25,7 @@ class droping(models.Model):
     allow_cancel = fields.Boolean(related="stage_id.allow_cancel", store=True,  string=_("Allow Cancel"))
     stage_name = fields.Char(related="stage_id.name", store=True,  string=_("Stage Name"))
     date = fields.Date( string=_("Date"))
+    droping_date = fields.Date( string=_("Droping Date"))
 
 
     @api.model_create_multi
