@@ -74,6 +74,10 @@
                      <attribute name="force_save">1</attribute>
                 </xpath>
 
+                <xpath expr="//form" position="attributes">
+                    <attribute name="edit">stage_is_done==Done</attribute>
+                </xpath>
+
                 <!-- <xpath expr="//field[@name='syarat_termin_ids']" position="attributes">
                     <attribute name="readonly">stage_is_draft==True or stage_is_done==True</attribute>
                     <attribute name="force_save">1</attribute>
