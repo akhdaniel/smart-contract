@@ -9,23 +9,18 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <tree string="Kontrak">
-                    <field name="name" /> <!-- 100-->
-                    <field name="izin_prinsip_id" /> <!-- 100-->
-                    <field name="start_date" /> <!-- 101-->
-                    <field name="budget_rkap_id" /> <!-- 101-->
-                    <field name="end_date" /> <!-- 102-->
-                    <field name="stage_id" /> <!-- 102-->
-                    <field name="amount_izin_prinsip" /> <!-- 103-->
-                    <field name="jenis_kontrak_id" /> <!-- 103-->
-                    <field name="amount_kontrak" /> <!-- 104-->
-                    <field name="master_budget_id" /> <!-- 104-->
-                    <field name="amount_denda" /> <!-- 105-->
-                    <field name="kanca_id" /> <!-- 105-->
-                    <field name="persentasi_denda" /> <!-- 106-->
-                    <field name="kanwil_id" /> <!-- 106-->
-                    <field name="overdue_days" /> <!-- 107-->
-                    <field name="partner_id" /> <!-- 107-->
-                    <field name="job_izin_prinsip_id" /> <!-- 108-->
+                    <field name="name" /> <!-- 10-->
+                    <field name="izin_prinsip_id" /> <!-- 20-->
+                    <field name="budget_rkap_id" /> <!-- 30-->
+                    <field name="job_izin_prinsip_id" /> <!-- 40-->
+                    <field name="kanwil_id" /> <!-- 50-->
+                    <field name="kanca_id" /> <!-- 60-->
+                    <field name="start_date" /> <!-- 70-->
+                    <field name="end_date" /> <!-- 80-->
+                    <field name="jenis_kontrak_id" /> <!-- 100-->
+                    <field name="partner_id" /> <!-- 102-->
+                    <field name="amount_kontrak" /> <!-- 200-->
+                    <field name="stage_id" /> <!-- 1000-->
                 </tree>
             </field>
         </record>
@@ -84,20 +79,20 @@
                                 <field name="start_date"  readonly="stage_is_draft==False"/>
                                 <field name="end_date"  readonly="stage_is_draft==False"/>
                                 <field name="amount_izin_prinsip"  readonly="stage_is_draft==False"/>
-                                <field name="amount_kontrak"  readonly="stage_is_draft==False"/>
                                 <field name="amount_denda"  readonly="stage_is_draft==False"/>
                                 <field name="persentasi_denda"  readonly="stage_is_draft==False"/>
                                 <field name="overdue_days"  readonly="stage_is_draft==False"/>
+                                <field name="amount_kontrak"  readonly="stage_is_draft==False"/>
                             </group>
                             <group> <!-- right -->
                                 <field name="izin_prinsip_id"  readonly="stage_is_draft==False"/>
                                 <field name="budget_rkap_id"  readonly="stage_is_draft==False"/>
+                                <field name="job_izin_prinsip_id"  readonly="stage_is_draft==False"/>
+                                <field name="kanwil_id"  readonly="stage_is_draft==False"/>
+                                <field name="kanca_id"  readonly="stage_is_draft==False"/>
                                 <field name="jenis_kontrak_id"  readonly="stage_is_draft==False"/>
                                 <field name="master_budget_id"  readonly="stage_is_draft==False"/>
-                                <field name="kanca_id"  readonly="stage_is_draft==False"/>
-                                <field name="kanwil_id"  readonly="stage_is_draft==False"/>
                                 <field name="partner_id"  readonly="stage_is_draft==False"/>
-                                <field name="job_izin_prinsip_id"  readonly="stage_is_draft==False"/>
                             </group>
                         </group>
                         <notebook>
