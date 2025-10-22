@@ -37,7 +37,7 @@
                             <tree>
                                 <field name="kanca_id"/>
                                 <field name="name" string="Uraian Pekerjaan"/>
-                                <field name="total_pagu_job" string="Pagu Biaya"/>
+                                <field name="total_pagu_job" string="Jumlah Pagu"/>
                             </tree>
                         </field>
                     </page>
