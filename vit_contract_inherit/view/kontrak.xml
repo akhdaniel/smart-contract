@@ -158,15 +158,14 @@
                     <attribute name="required">1</attribute>
                 </xpath>
 
+                <xpath expr="//field[@name='amount_kontrak']" position="replace"/>
+                <xpath expr="//field[@name='amount_izin_prinsip']" position="after">
+                    <field name="amount_kontrak" readonly="stage_is_draft==False"/>
+                </xpath>
 
                 <xpath expr="//field[@name='persentasi_denda']" position="replace"/>
                 <xpath expr="//field[@name='amount_denda']" position="after">
                     <field name="persentasi_denda" string="Denda per mil"/>
-                </xpath>
-
-                <xpath expr="//field[@name='amount_kontrak']" position="replace"/>
-                <xpath expr="//field[@name='amount_izin_prinsip']" position="after">
-                    <field name="amount_kontrak"/>
                 </xpath>
 
                 <xpath expr="//field[@name='budget_rkap_id']" position="replace"/>
