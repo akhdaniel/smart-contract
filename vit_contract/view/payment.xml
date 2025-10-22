@@ -9,29 +9,19 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <tree string="Payment">
-                    <field name="name" /> <!-- 100-->
-                    <field name="partner_id" /> <!-- 100-->
-                    <field name="amount" /> <!-- 101-->
-                    <field name="budget_rkap_id" /> <!-- 101-->
-                    <field name="request_date" /> <!-- 102-->
-                    <field name="stage_id" /> <!-- 102-->
-                    <field name="payment_date" /> <!-- 103-->
-                    <field name="termin_id" /> <!-- 103-->
-                    <field name="amount_denda" /> <!-- 104-->
-                    <field name="master_budget_id" /> <!-- 104-->
-                    <field name="amount_budget_rkap" /> <!-- 105-->
-                    <field name="kanwil_id" /> <!-- 105-->
-                    <field name="amount_izin_prinsip" /> <!-- 106-->
-                    <field name="kontrak_id" /> <!-- 106-->
-                    <field name="amount_kontrak" /> <!-- 107-->
-                    <field name="stage_id" /> <!-- 107-->
-                    <field name="syarat_progress" /> <!-- 108-->
-                    <field name="master_nama_termin_id" /> <!-- 108-->
-                    <field name="actual_progress" /> <!-- 109-->
-                    <field name="izin_prinsip_id" /> <!-- 109-->
-                    <field name="syarat_output" /> <!-- 110-->
-                    <field name="actual_output" /> <!-- 111-->
-                    <field name="persentase" /> <!-- 112-->
+                    <field name="name" /> <!-- 10-->
+                    <field name="partner_id" /> <!-- 20-->
+                    <field name="budget_rkap_id" /> <!-- 30-->
+                    <field name="kanwil_id" /> <!-- 40-->
+                    <field name="master_nama_termin_id" /> <!-- 50-->
+                    <field name="request_date" /> <!-- 60-->
+                    <field name="payment_date" /> <!-- 70-->
+                    <field name="termin_id" /> <!-- 80-->
+                    <field name="kontrak_id" /> <!-- 90-->
+                    <field name="persentase" /> <!-- 480-->
+                    <field name="amount" /> <!-- 490-->
+                    <field name="amount_kontrak" /> <!-- 500-->
+                    <field name="stage_id" /> <!-- 2000-->
                 </tree>
             </field>
         </record>
@@ -44,14 +34,13 @@
                 <pivot string="Payment">
                     <field name="partner_id" type="row"/>
                     <field name="budget_rkap_id" type="row"/>
-                    <field name="stage_id" type="row"/>
                     <field name="termin_id" type="row"/>
                     <field name="master_budget_id" type="row"/>
                     <field name="kanwil_id" type="row"/>
                     <field name="kontrak_id" type="row"/>
-                    <field name="stage_id" type="row"/>
                     <field name="master_nama_termin_id" type="row"/>
                     <field name="izin_prinsip_id" type="row"/>
+                    <field name="stage_id" type="row"/>
                 </pivot>
             </field>
         </record>
@@ -87,27 +76,27 @@
                                 <field name="allow_confirm" invisible="True" readonly="stage_is_draft==False"/>
                                 <field name="allow_cancel" invisible="True" readonly="stage_is_draft==False"/>
                                 <field name="stage_name" invisible="True" readonly="stage_is_draft==False"/>
-                                <field name="amount"  readonly="stage_is_draft==False"/>
                                 <field name="request_date"  readonly="stage_is_draft==False"/>
                                 <field name="payment_date"  readonly="stage_is_draft==False"/>
                                 <field name="amount_denda"  readonly="stage_is_draft==False"/>
                                 <field name="amount_budget_rkap"  readonly="stage_is_draft==False"/>
                                 <field name="amount_izin_prinsip"  readonly="stage_is_draft==False"/>
-                                <field name="amount_kontrak"  readonly="stage_is_draft==False"/>
                                 <field name="syarat_progress"  readonly="stage_is_draft==False"/>
                                 <field name="actual_progress"  readonly="stage_is_draft==False"/>
                                 <field name="syarat_output"  readonly="stage_is_draft==False"/>
                                 <field name="actual_output"  readonly="stage_is_draft==False"/>
                                 <field name="persentase"  readonly="stage_is_draft==False"/>
+                                <field name="amount"  readonly="stage_is_draft==False"/>
+                                <field name="amount_kontrak"  readonly="stage_is_draft==False"/>
                             </group>
                             <group> <!-- right -->
                                 <field name="partner_id"  readonly="stage_is_draft==False"/>
                                 <field name="budget_rkap_id"  readonly="stage_is_draft==False"/>
-                                <field name="termin_id"  readonly="stage_is_draft==False"/>
-                                <field name="master_budget_id"  readonly="stage_is_draft==False"/>
                                 <field name="kanwil_id"  readonly="stage_is_draft==False"/>
-                                <field name="kontrak_id"  readonly="stage_is_draft==False"/>
                                 <field name="master_nama_termin_id"  readonly="stage_is_draft==False"/>
+                                <field name="termin_id"  readonly="stage_is_draft==False"/>
+                                <field name="kontrak_id"  readonly="stage_is_draft==False"/>
+                                <field name="master_budget_id"  readonly="stage_is_draft==False"/>
                                 <field name="izin_prinsip_id"  readonly="stage_is_draft==False"/>
                             </group>
                         </group>
@@ -169,25 +158,23 @@
                     <field name="persentase" select="True"/>
                     <field name="partner_id" select="True"/>
                     <field name="budget_rkap_id" select="True"/>
-                    <field name="stage_id" select="True"/>
                     <field name="termin_id" select="True"/>
                     <field name="master_budget_id" select="True"/>
                     <field name="kanwil_id" select="True"/>
                     <field name="kontrak_id" select="True"/>
-                    <field name="stage_id" select="True"/>
                     <field name="master_nama_termin_id" select="True"/>
                     <field name="izin_prinsip_id" select="True"/>
+                    <field name="stage_id" select="True"/>
                     <group string="Group By..">
                         <filter string="Partner" domain="[]" name="group_by_partner_id" context="{'group_by':'partner_id'}"/>
                         <filter string="Budget Rkap" domain="[]" name="group_by_budget_rkap_id" context="{'group_by':'budget_rkap_id'}"/>
-                        <filter string="Stage" domain="[]" name="group_by_stage_id" context="{'group_by':'stage_id'}"/>
                         <filter string="Termin" domain="[]" name="group_by_termin_id" context="{'group_by':'termin_id'}"/>
                         <filter string="Master Budget" domain="[]" name="group_by_master_budget_id" context="{'group_by':'master_budget_id'}"/>
                         <filter string="Kanwil" domain="[]" name="group_by_kanwil_id" context="{'group_by':'kanwil_id'}"/>
                         <filter string="Kontrak" domain="[]" name="group_by_kontrak_id" context="{'group_by':'kontrak_id'}"/>
-                        <filter string="Stage" domain="[]" name="group_by_stage_id" context="{'group_by':'stage_id'}"/>
                         <filter string="Master Nama Termin" domain="[]" name="group_by_master_nama_termin_id" context="{'group_by':'master_nama_termin_id'}"/>
                         <filter string="Izin Prinsip" domain="[]" name="group_by_izin_prinsip_id" context="{'group_by':'izin_prinsip_id'}"/>
+                        <filter string="Stage" domain="[]" name="group_by_stage_id" context="{'group_by':'stage_id'}"/>
                     </group>
                 </search>
             </field>

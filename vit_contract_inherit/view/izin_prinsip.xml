@@ -30,18 +30,18 @@
                 </xpath>
 
 
-                <!-- <xpath expr="//page[@name='job_izin_prinsip_ids']" position="replace"/>
+                <xpath expr="//page[@name='job_izin_prinsip_ids']" position="replace"/>
                 <xpath expr="//page[@name='kontrak_ids']" position="before">
-                    <page name="job_izin_prinsip_ids" string="Job Izin Prinsip">
+                    <page name="job_izin_prinsip_ids" string="Detail Kegiatan">
                         <field name="job_izin_prinsip_ids" readonly="stage_is_draft==False">
                             <tree>
-                                <field name="name"/>
                                 <field name="kanca_id"/>
-                                <field name="total_pagu_job"/>
+                                <field name="name" string="Uraian Pekerjaan"/>
+                                <field name="total_pagu_job" string="Pagu Biaya"/>
                             </tree>
                         </field>
                     </page>
-                </xpath> -->
+                </xpath>
 
 
                 <xpath expr="//page[@name='kontrak_ids']" position="after">

@@ -9,20 +9,17 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <tree string="Budget Rkap">
-                    <field name="name" /> <!-- 100-->
-                    <field name="amount" /> <!-- 101-->
-                    <field name="master_budget_id" /> <!-- 101-->
-                    <field name="remaining" /> <!-- 102-->
-                    <field name="stage_id" /> <!-- 102-->
-                    <field name="total_pagu_izin_prinsip" /> <!-- 103-->
-                    <field name="total_amount_kontrak" /> <!-- 104-->
-                    <field name="total_amount_payment" /> <!-- 105-->
-                    <field name="total_qty_izin_prinsip" /> <!-- 106-->
-                    <field name="total_qty_kontrak" /> <!-- 107-->
-                    <field name="total_qty_termin" /> <!-- 108-->
-                    <field name="total_amount_droping" /> <!-- 109-->
-                    <field name="budget_date" /> <!-- 110-->
-                    <field name="previous_remaining" /> <!-- 111-->
+                    <field name="name" /> <!-- 10-->
+                    <field name="amount" /> <!-- 20-->
+                    <field name="remaining" /> <!-- 40-->
+                    <field name="total_pagu_izin_prinsip" /> <!-- 50-->
+                    <field name="total_qty_izin_prinsip" /> <!-- 60-->
+                    <field name="total_amount_kontrak" /> <!-- 70-->
+                    <field name="total_qty_kontrak" /> <!-- 80-->
+                    <field name="total_amount_payment" /> <!-- 90-->
+                    <field name="total_amount_droping" /> <!-- 100-->
+                    <field name="previous_remaining" /> <!-- 110-->
+                    <field name="stage_id" /> <!-- 2000-->
                 </tree>
             </field>
         </record>
@@ -73,10 +70,10 @@
                                 <field name="amount"  readonly="stage_is_draft==False"/>
                                 <field name="remaining"  readonly="stage_is_draft==False"/>
                                 <field name="total_pagu_izin_prinsip"  readonly="stage_is_draft==False"/>
-                                <field name="total_amount_kontrak"  readonly="stage_is_draft==False"/>
-                                <field name="total_amount_payment"  readonly="stage_is_draft==False"/>
                                 <field name="total_qty_izin_prinsip"  readonly="stage_is_draft==False"/>
+                                <field name="total_amount_kontrak"  readonly="stage_is_draft==False"/>
                                 <field name="total_qty_kontrak"  readonly="stage_is_draft==False"/>
+                                <field name="total_amount_payment"  readonly="stage_is_draft==False"/>
                                 <field name="total_qty_termin"  readonly="stage_is_draft==False"/>
                                 <field name="total_amount_droping"  readonly="stage_is_draft==False"/>
                                 <field name="budget_date"  readonly="stage_is_draft==False"/>
@@ -90,12 +87,11 @@
                             <page name="izin_prinsip_ids" string="Izin Prinsip">
                                 <field name="izin_prinsip_ids" readonly="stage_is_draft==False">
                                     <tree >
-                                        <field name="name" /> <!-- 100-->
-                                        <field name="total_pagu" /> <!-- 101-->
-                                        <field name="stage_id" /> <!-- 101-->
-                                        <field name="total_payment" /> <!-- 102-->
-                                        <field name="master_budget_id" /> <!-- 102-->
-                                        <field name="kanwil_id" /> <!-- 103-->
+                                        <field name="name" /> <!-- 10-->
+                                        <field name="kanwil_id" /> <!-- 30-->
+                                        <field name="total_pagu" /> <!-- 500-->
+                                        <field name="total_payment" /> <!-- 510-->
+                                        <field name="stage_id" /> <!-- 2000-->
                                     </tree>
                                 </field>
                             </page>
@@ -117,26 +113,16 @@
                             <page name="payment_ids" string="Payment">
                                 <field name="payment_ids" readonly="stage_is_draft==False">
                                     <tree >
-                                        <field name="name" /> <!-- 100-->
-                                        <field name="amount" /> <!-- 101-->
-                                        <field name="request_date" /> <!-- 102-->
-                                        <field name="stage_id" /> <!-- 102-->
-                                        <field name="payment_date" /> <!-- 103-->
-                                        <field name="termin_id" /> <!-- 103-->
-                                        <field name="amount_denda" /> <!-- 104-->
-                                        <field name="master_budget_id" /> <!-- 104-->
-                                        <field name="amount_budget_rkap" /> <!-- 105-->
-                                        <field name="kanwil_id" /> <!-- 105-->
-                                        <field name="amount_izin_prinsip" /> <!-- 106-->
-                                        <field name="amount_kontrak" /> <!-- 107-->
-                                        <field name="stage_id" /> <!-- 107-->
-                                        <field name="syarat_progress" /> <!-- 108-->
-                                        <field name="master_nama_termin_id" /> <!-- 108-->
-                                        <field name="actual_progress" /> <!-- 109-->
-                                        <field name="izin_prinsip_id" /> <!-- 109-->
-                                        <field name="syarat_output" /> <!-- 110-->
-                                        <field name="actual_output" /> <!-- 111-->
-                                        <field name="persentase" /> <!-- 112-->
+                                        <field name="name" /> <!-- 10-->
+                                        <field name="kanwil_id" /> <!-- 40-->
+                                        <field name="master_nama_termin_id" /> <!-- 50-->
+                                        <field name="request_date" /> <!-- 60-->
+                                        <field name="payment_date" /> <!-- 70-->
+                                        <field name="termin_id" /> <!-- 80-->
+                                        <field name="persentase" /> <!-- 480-->
+                                        <field name="amount" /> <!-- 490-->
+                                        <field name="amount_kontrak" /> <!-- 500-->
+                                        <field name="stage_id" /> <!-- 2000-->
                                     </tree>
                                 </field>
                             </page>

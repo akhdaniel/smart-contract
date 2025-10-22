@@ -2,34 +2,26 @@
 <odoo>
     <data>
 
-        <record id="view_vit_payment_tree_inherit" model="ir.ui.view">
+        <!-- <record id="view_vit_payment_tree_inherit" model="ir.ui.view">
             <field name="name">view.vit.payment.tree.inherit</field>
             <field name="model">vit.payment</field>
             <field name="inherit_id" ref="vit_contract.view_vit_payment_tree"/>
             <field name="arch" type="xml">
 
                 <xpath expr="//tree/field[@name='kanwil_id']" position="replace"/>
-                <xpath expr="//tree/field[@name='master_budget_id']" position="replace"/>
                 <xpath expr="//tree/field[@name='master_nama_termin_id']" position="replace"/>
                 <xpath expr="//tree/field[@name='persentase']" position="replace"/>
                 <xpath expr="//tree/field[@name='amount']" position="replace"/>
-                <xpath expr="//tree/field[@name='amount_budget_rkap']" position="replace"/>
-                <xpath expr="//tree/field[@name='amount_izin_prinsip']" position="replace"/>
                 <xpath expr="//tree/field[@name='amount_kontrak']" position="replace"/>
-                <xpath expr="//tree/field[@name='amount_denda']" position="replace"/>
                 <xpath expr="//tree/field[@name='budget_rkap_id']" position="after">
                     <field name="kanwil_id"/>
-                    <field name="master_budget_id"/>
                     <field name="master_nama_termin_id"/>
                     <field name="persentase"/>
                     <field name="amount"/>
-                    <field name="amount_budget_rkap"/>
-                    <field name="amount_izin_prinsip"/>
                     <field name="amount_kontrak"/>
-                    <field name="amount_denda"/>
                 </xpath>
             </field>
-        </record>
+        </record> -->
 
 
         <record id="view_vit_payment_form_inherit" model="ir.ui.view">

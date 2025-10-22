@@ -80,18 +80,18 @@
         </record>
 
 
-        <record id="view_budget_rkap_tree" model="ir.ui.view">
+        <!-- <record id="view_budget_rkap_tree" model="ir.ui.view">
             <field name="name">budget_rkap_tree</field>
             <field name="model">vit.budget_rkap</field>
             <field name="type">tree</field>
             <field name="inherit_id" ref="vit_contract.view_vit_budget_rkap_tree"/>
             <field name="arch" type="xml">
-                <!-- <xpath expr="//field[@name='amount']" position="replace"/>
+                <xpath expr="//field[@name='amount']" position="replace"/>
                 <xpath expr="//field[@name='remaining']" position="replace"/>
                 <xpath expr="//field[@name='kanwil_id']" position="after">
                     <field name="amount"/>
                     <field name="remaining"/>
-                </xpath> -->
+                </xpath>
 
 
                 <xpath expr="//field[@name='total_qty_izin_prinsip']" position="replace"/>
@@ -110,7 +110,7 @@
 
 
             </field>
-        </record>
+        </record> -->
 
 
 

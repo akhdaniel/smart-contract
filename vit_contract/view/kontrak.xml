@@ -99,26 +99,16 @@
                             <page name="payment_ids" string="Payment">
                                 <field name="payment_ids" readonly="stage_is_draft==False">
                                     <tree >
-                                        <field name="name" /> <!-- 100-->
-                                        <field name="amount" /> <!-- 101-->
-                                        <field name="request_date" /> <!-- 102-->
-                                        <field name="stage_id" /> <!-- 102-->
-                                        <field name="payment_date" /> <!-- 103-->
-                                        <field name="termin_id" /> <!-- 103-->
-                                        <field name="amount_denda" /> <!-- 104-->
-                                        <field name="master_budget_id" /> <!-- 104-->
-                                        <field name="amount_budget_rkap" /> <!-- 105-->
-                                        <field name="kanwil_id" /> <!-- 105-->
-                                        <field name="amount_izin_prinsip" /> <!-- 106-->
-                                        <field name="amount_kontrak" /> <!-- 107-->
-                                        <field name="stage_id" /> <!-- 107-->
-                                        <field name="syarat_progress" /> <!-- 108-->
-                                        <field name="master_nama_termin_id" /> <!-- 108-->
-                                        <field name="actual_progress" /> <!-- 109-->
-                                        <field name="izin_prinsip_id" /> <!-- 109-->
-                                        <field name="syarat_output" /> <!-- 110-->
-                                        <field name="actual_output" /> <!-- 111-->
-                                        <field name="persentase" /> <!-- 112-->
+                                        <field name="name" /> <!-- 10-->
+                                        <field name="kanwil_id" /> <!-- 40-->
+                                        <field name="master_nama_termin_id" /> <!-- 50-->
+                                        <field name="request_date" /> <!-- 60-->
+                                        <field name="payment_date" /> <!-- 70-->
+                                        <field name="termin_id" /> <!-- 80-->
+                                        <field name="persentase" /> <!-- 480-->
+                                        <field name="amount" /> <!-- 490-->
+                                        <field name="amount_kontrak" /> <!-- 500-->
+                                        <field name="stage_id" /> <!-- 2000-->
                                     </tree>
                                 </field>
                             </page>

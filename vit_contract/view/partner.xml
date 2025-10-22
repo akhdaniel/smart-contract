@@ -38,7 +38,6 @@
                                         <field name="syarat_output"/>
                                         <field name="actual_output"/>
                                         <field name="persentase"/>
-                                        <field name="stage_id"/>
                                         <field name="termin_id"/>
                                         <field name="master_budget_id"/>
                                         <field name="kanwil_id"/>

@@ -132,14 +132,13 @@
                             <td>Persentase</td>
                             <td>Partner</td>
                             <td>Budget Rkap</td>
-                            <td>Stage</td>
                             <td>Termin</td>
                             <td>Master Budget</td>
                             <td>Kanwil</td>
                             <td>Kontrak</td>
-                            <td>Stage</td>
                             <td>Master Nama Termin</td>
                             <td>Izin Prinsip</td>
+                            <td>Stage</td>
                         </tr>
                     </thead>
                     <tbody class="payment_ids_tbody">
@@ -164,14 +163,13 @@
                             <td><span t-field="line.persentase" /></td>
                             <td><span t-field="line.partner_id" /></td>
                             <td><span t-field="line.budget_rkap_id" /></td>
-                            <td><span t-field="line.stage_id" /></td>
                             <td><span t-field="line.termin_id" /></td>
                             <td><span t-field="line.master_budget_id" /></td>
                             <td><span t-field="line.kanwil_id" /></td>
                             <td><span t-field="line.kontrak_id" /></td>
-                            <td><span t-field="line.stage_id" /></td>
                             <td><span t-field="line.master_nama_termin_id" /></td>
                             <td><span t-field="line.izin_prinsip_id" /></td>
+                            <td><span t-field="line.stage_id" /></td>
                         </tr> <!-- foreach-->
                     </tbody>
                 </table>
