@@ -202,31 +202,11 @@ class BudgetRkap(models.Model):
                     ('kanwil_id', '=', kanwil_id)
                 ])
 
-                izin_prinsip_filtered = self.env['vit.izin_prinsip'].search([
-                    ('master_budget_id', '=', mb.id),
-                    ('kanwil_id', '=', kanwil_id)
-                ])
+                izin_prinsip_from_rkap = mb_budgets.mapped('izin_prinsip_ids')
+                if kanwil_id:
+                    izin_prinsip_from_rkap = izin_prinsip_from_rkap.filtered(lambda ip: ip.kanwil_id.id == kanwil_id)
 
-
-                if budget_date_domain:
-                    # Ambil tahun dari salah satu budget RKAP yang sesuai domain
-                    tahun_rkap = False
-                    if budgets:
-                        tahun_rkap = budgets[0].budget_date.year  # contoh: 2024 atau 2025
-
-                    allowed_master_ids = budgets.mapped('master_budget_id').ids if budgets else []
-                    if allowed_master_ids:
-                        izin_filtered_for_year = izin_prinsip_filtered.filtered(
-                            lambda ip: ip.master_budget_id 
-                            and ip.master_budget_id.id in allowed_master_ids
-                            and any(b.master_budget_id.id == ip.master_budget_id.id and 
-                                    b.budget_date.year == tahun_rkap for b in budgets)
-                        )
-                        total_pagu = sum(izin_filtered_for_year.mapped('total_pagu'))
-                    else:
-                        total_pagu = 0
-                else:
-                    total_pagu = sum(izin_prinsip_filtered.mapped('total_pagu'))
+                total_pagu = sum(izin_prinsip_from_rkap.mapped('total_pagu')) if izin_prinsip_from_rkap else 0
 
 
 
