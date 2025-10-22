@@ -65,13 +65,11 @@
                 <xpath expr="//page[@name='payment_ids']//tree/field[@name='kanwil_id']" position="after">
                     <field name="amount"/>
                 </xpath>
-
-                <xpath expr="//field[@name='kontrak_ids']/tree/field[@name='amount_izin_prinsip']" position="replace"/>
                 
-                <xpath expr="//field[@name='kontrak_ids']/tree/field[@name='amount_kontrak']" position="replace"/>
+                <!-- <xpath expr="//field[@name='kontrak_ids']/tree/field[@name='amount_kontrak']" position="replace"/>
                 <xpath expr="//field[@name='kontrak_ids']/tree/field[@name='master_budget_id']" position="after">
                     <field name="amount_kontrak"/>
-                </xpath>
+                </xpath> -->
 
                 <xpath expr="//field[@name='izin_prinsip_ids']/tree/field[@name='total_pagu']" position="replace"/>
                 <xpath expr="//field[@name='izin_prinsip_ids']/tree/field[@name='kanwil_id']" position="after">
