@@ -107,10 +107,10 @@
                     <attribute name="required">1</attribute>
                 </xpath>
 
-                <!-- <xpath expr="//field[@name='amount_izin_prinsip']" position="attributes">
+                <xpath expr="//field[@name='amount_izin_prinsip']" position="attributes">
                     <attribute name="readonly">1</attribute>
                     <attribute name="force_save">1</attribute>
-                </xpath> -->
+                </xpath>
 
                 <xpath expr="//field[@name='budget_rkap_id']" position="attributes">
                     <attribute name="readonly">1</attribute>
