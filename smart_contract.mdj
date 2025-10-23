@@ -20955,7 +20955,7 @@
 								"$ref": "AAAAAAGZVsgRSeGXNnE="
 							},
 							"name": "document",
-							"documentation": "{\n\"xml:filename\":\"document_filename\",\n\"tree:invisible\":true\n}",
+							"documentation": "{\n\"filename\":\"document_filename\",\n\"xml:filename\":\"document_filename\",\n\"tree:invisible\":true\n}",
 							"type": "Binary"
 						},
 						{
@@ -20965,7 +20965,6 @@
 								"$ref": "AAAAAAGZVsgRSeGXNnE="
 							},
 							"name": "document_filename",
-							"documentation": "{\n\"xml:invisible\":\"True\"\n}",
 							"type": "Char"
 						},
 						{
