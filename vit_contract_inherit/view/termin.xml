@@ -50,9 +50,9 @@
                      <attribute name="force_save">1</attribute>
                 </xpath>
 
-                <xpath expr="//field[@name='document']" position="attributes">
+                <!-- <xpath expr="//field[@name='document']" position="attributes">
                     <attribute name="column_invisible">1</attribute>
-                </xpath>
+                </xpath> -->
 
                 <xpath expr="//field[@name='verifikasi_syarat']" position="replace"/>
                 <xpath expr="//field[@name='deskripsi']" position="replace"/>
