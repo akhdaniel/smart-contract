@@ -62,20 +62,15 @@ class BudgetRkap(models.Model):
 
             master_ids = izin_prinsip_list.mapped('master_budget_id').ids
 
-            if budget_date_domain:
-                allowed_master_ids = master_ids
-                if allowed_master_ids:
-                    izin_filtered_for_year = izin_prinsip_list.filtered(
-                        lambda ip: ip.master_budget_id
-                        and ip.master_budget_id.id in allowed_master_ids
-                        and ip.kanwil_id.id == kanwil_id
-                    )
-                    total_pagu = sum(izin_filtered_for_year.mapped('total_pagu'))
-                else:
-                    total_pagu = 0
-            else:
-                izin_filtered = izin_prinsip_list.filtered(lambda ip: ip.kanwil_id.id == kanwil_id)
-                total_pagu = sum(izin_filtered.mapped('total_pagu'))
+            budgets_domain = [('master_budget_id', 'in', master_ids)] + budget_date_domain
+            budgets = self.env['vit.budget_rkap'].search(budgets_domain)
+
+            izin_prinsip_from_rkap = budgets.mapped('izin_prinsip_ids')
+            if kanwil_id:
+                izin_prinsip_from_rkap = izin_prinsip_from_rkap.filtered(lambda ip: ip.kanwil_id.id == kanwil_id)
+
+            total_pagu = sum(izin_prinsip_from_rkap.mapped('total_pagu')) if izin_prinsip_from_rkap else 0
+
 
             budgets_domain = [('master_budget_id', 'in', master_ids)] + budget_date_domain
             budgets = self.env['vit.budget_rkap'].search(budgets_domain)
@@ -210,20 +205,14 @@ class BudgetRkap(models.Model):
 
 
 
-                if budget_date_domain:
-                    allowed_master_ids = budgets.mapped('master_budget_id').ids if budgets else []
-                    if mb.id in allowed_master_ids:
-                        droping_filtered = self.env['vit.droping'].search([
-                            ('master_budget_id', '=', mb.id),
-                            ('kanwil_id', '=', kanwil_id)
-                        ])
-                    else:
-                        droping_filtered = self.env['vit.droping'].browse()
-                else:
-                    droping_filtered = self.env['vit.droping'].search([
-                        ('master_budget_id', '=', mb.id),
-                        ('kanwil_id', '=', kanwil_id)
-                    ])
+                termins = self.env['vit.termin'].search([
+                    ('kontrak_id', 'in', mb_budgets.mapped('kontrak_ids').ids),
+                    ('droping_id', '!=', False),
+                    ('kontrak_id.kanwil_id', '=', kanwil_id),
+                ])
+
+                droping_filtered = termins.mapped('droping_id')
+
 
                     
                 if mb_budgets:
