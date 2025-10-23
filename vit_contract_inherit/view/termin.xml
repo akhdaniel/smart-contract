@@ -54,20 +54,19 @@
                     <attribute name="column_invisible">1</attribute>
                 </xpath>
 
-                <xpath expr="//field[@name='is_droping_done']" position="replace"/>
                 <xpath expr="//field[@name='verifikasi_syarat']" position="replace"/>
                 <xpath expr="//field[@name='deskripsi']" position="replace"/>
                 <xpath expr="//field[@name='kontrak_id']" position="after">
-                    <field name="is_droping_done"/>
                     <field name="verifikasi_syarat"/>
                     <field name="deskripsi"/>
                 </xpath>
 
 
-                <xpath expr="//field[@name='is_droping_done']" position="attributes">
+                <!-- <xpath expr="//field[@name='is_droping_done']" position="attributes">
                     <attribute name="readonly">1</attribute>
                      <attribute name="force_save">1</attribute>
-                </xpath>
+                     <attribute name="invisible">1</attribute>
+                </xpath> -->
 
                 <xpath expr="//field[@name='verifikasi_syarat']" position="attributes">
                     <attribute name="readonly">1</attribute>

@@ -125,7 +125,6 @@
                                         <field name="due_date" /> <!-- 104-->
                                         <field name="partner_id" /> <!-- 104-->
                                         <field name="verification_date" /> <!-- 105-->
-                                        <field name="is_droping_done" /> <!-- 106-->
                                         <field name="syarat_progress" /> <!-- 107-->
                                         <field name="actual_progress" /> <!-- 108-->
                                         <field name="syarat_output" /> <!-- 109-->
