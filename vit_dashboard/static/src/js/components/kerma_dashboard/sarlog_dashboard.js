@@ -24,8 +24,10 @@ export class SarlogDashboard extends Component {
             const result = await this.orm.call(
                 "vit.budget_rkap",
                 "get_statistics_sarlog",
-                []
+                [this.state.selectedYear || new Date().getFullYear()]
             );
+
+
             this.state.masterBudgets = result.master_list || [];
             this.state.totalSummary = result.total_summary || {};
 
@@ -65,10 +67,12 @@ export class SarlogDashboard extends Component {
     async getstatistics() {
         try {
             const result = await this.orm.call(
-                this.props.model,
+                "vit.budget_rkap",
                 "get_statistics_sarlog",
-                []
+                [this.state.selectedYear || new Date().getFullYear()]
             );
+
+
 
             this.state.masterBudgets = result.master_list || [];
             this.state.totalSummary = result.total_summary || {};
@@ -130,14 +134,44 @@ export class SarlogDashboard extends Component {
 
 
 
-    onYearChange(ev) {
+    async onYearChange(ev) {
         const year = ev.target.value;
         this.state.selectedYear = year || null;
 
-        // panggil ulang data droping & realisasi pakai tahun ini
-        this.loadDropingByKanwil(year);
-        this.loadRealisasiByKanwil(year);
+        // ⏳ Nandain lagi loading biar gak render dulu
+        this.state.isLoading = true;
+
+        try {
+            // Ambil semua data secara paralel biar cepat
+            const [statResult, dropingData, realisasiData] = await Promise.all([
+                this.orm.call("vit.budget_rkap", "get_statistics_sarlog", [year ? parseInt(year) : false]),
+                this.orm.call("vit.budget_rkap", "get_droping_by_kanwil", [year ? parseInt(year) : false]),
+                this.orm.call("vit.budget_rkap", "get_realisasi_by_kanwil", [year ? parseInt(year) : false]),
+            ]);
+
+            // Update semua state sekaligus (biar rerender cuma sekali)
+            this.state.masterBudgets = statResult.master_list || [];
+            this.state.totalSummary = statResult.total_summary || {};
+            this.state.kanwilDroping = dropingData || [];
+            this.state.kanwilRealisasi = realisasiData || [];
+
+        } catch (e) {
+            console.error("❌ Failed to reload data:", e);
+            this.state.masterBudgets = [];
+            this.state.totalSummary = {};
+            this.state.kanwilDroping = [];
+            this.state.kanwilRealisasi = [];
+        } finally {
+            // ✅ Baru render setelah semuanya ready
+            this.state.isLoading = false;
+            this.render(true);
+        }
     }
+
+
+
+
+
 
     async loadRealisasiByKanwil(year) {
         try {

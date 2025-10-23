@@ -60,6 +60,7 @@
                                 title="mb.name"
                                 bgColor="'bg-white'"
                                 model="'vit.budget_rkap'"
+                                selectedYear="state.selectedYear"
                                 field="'master_budget_summary'"
                                 domain="[]"
                             />

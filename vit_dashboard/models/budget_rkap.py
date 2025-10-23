@@ -549,15 +549,31 @@ class BudgetRkap(models.Model):
 
 
     @api.model
-    def get_statistics_sarlog(self):
+    def get_statistics_sarlog(self, year=False):
+        """
+        Ambil statistik total per master budget,
+        dengan filter tahun berdasarkan budget_date (jika dikirim).
+        """
+        if not year:
+            year = date.today().year
+
         master_budgets = self.env["vit.master_budget"].search([])
         result = []
 
         total_all_pagu = 0
         total_all_realisasi = 0
 
+        start_date = f"{year}-01-01"
+        end_date = f"{year}-12-31"
+        budget_date_domain = [
+            ('budget_date', '>=', start_date),
+            ('budget_date', '<=', end_date)
+        ]
+
         for mb in master_budgets:
-            budgets = self.search([("master_budget_id", "=", mb.id)])
+            budgets = self.search([
+                ("master_budget_id", "=", mb.id)
+            ] + budget_date_domain)
 
             pagu = sum(budgets.mapped("total_pagu_izin_prinsip")) if "total_pagu_izin_prinsip" in budgets._fields else 0
             realisasi = sum(budgets.mapped("total_amount_payment")) if "total_amount_payment" in budgets._fields else 0
@@ -585,6 +601,7 @@ class BudgetRkap(models.Model):
                 "persen": round(total_persen, 2),
             },
         }
+
 
 
     @api.model

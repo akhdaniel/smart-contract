@@ -7,6 +7,8 @@
                 <t t-out="props.title"/>
             </div>
 
+            
+
             <t t-if="state.val.master_list &amp;&amp; state.val.master_list.length">
                 <t t-foreach="state.val.master_list" t-as="item" t-key="item.id">
                     <t t-if="item.name == props.title">

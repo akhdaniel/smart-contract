@@ -1,5 +1,5 @@
 /** @odoo-module **/
-const { Component, onMounted, onWillDestroy, useState } = owl;
+const { Component, onMounted, onWillDestroy, useState, onWillUpdateProps } = owl;
 import { useService } from "@web/core/utils/hooks";
 
 export class NumberCardSarlog extends Component {
@@ -12,8 +12,8 @@ export class NumberCardSarlog extends Component {
         field: { type: String, optional: true },
         domain: { type: Array, optional: true },
         data: { type: Object, optional: true },
+        selectedYear: { type: String, optional: true },
     };
-
 
     setup() {
         this.orm = useService("orm");
@@ -26,17 +26,23 @@ export class NumberCardSarlog extends Component {
             await this.reload();
         });
 
+        onWillUpdateProps(async (nextProps) => {
+            if (nextProps.selectedYear !== this.props.selectedYear) {
+                await this.reload(nextProps.selectedYear);
+            }
+        });
+
         onWillDestroy(() => {
             this.isDestroyed = true;
         });
     }
 
-    async reload() {
+    async reload(year = false) {
         try {
             const result = await this.orm.call(
                 this.props.model,
-                "get_statistics_sarlog", 
-                []
+                "get_statistics_sarlog",
+                [year ? parseInt(year) : (this.props.selectedYear ? parseInt(this.props.selectedYear) : false)]
             );
 
             this.state.val = result || { master_list: [] };
