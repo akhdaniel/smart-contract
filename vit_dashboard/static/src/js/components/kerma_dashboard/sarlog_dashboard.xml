@@ -38,7 +38,7 @@
                         <div class="col-4" style="margin-top:20px; margin-bottom:10px;">
                             <NumberCardSarlog 
                                 title="mb.name"
-                                bgColor="'bg-itb-light-blue'"
+                                bgColor="'bg-white'"
                                 model="'vit.budget_rkap'"
                                 field="'master_budget_summary'"
                                 domain="[]"

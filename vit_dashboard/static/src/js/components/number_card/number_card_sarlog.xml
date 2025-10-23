@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
     <t t-name="vit_dashboard.NumberCardSarlog" owl="1">
-        <div class="p-3 text-white shadow bg-itb-light-blue"
+        <div t-att-class="'p-3 shadow ' + (props.bgColor || 'bg-itb-light-blue') + ' text-dark'"
              style="border-radius:10px;min-height:150px;">
             <div class="fw-bold fs-5 mb-2 text-center">
                 <t t-out="props.title"/>
@@ -26,7 +26,7 @@
                             <div style="position: relative; width: 60px; height: 60px;">
                                 <svg width="60" height="60">
                                     
-                                    <circle cx="30" cy="30" r="25" stroke="#ddd" stroke-width="5" fill="none"/>
+                                    <circle cx="30" cy="30" r="25" stroke="black" stroke-width="5" fill="none"/>
                                     
                                     <circle
                                         cx="30"
@@ -48,7 +48,7 @@
                                     transform:translate(-50%,-50%);
                                     font-size:12px;
                                     font-weight:bold;
-                                    color:white;">
+                                    color:black;">
                                     <t t-esc="item.persen_realisasi"/>%
                                 </div>
                             </div>
