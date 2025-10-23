@@ -2,6 +2,7 @@
 
 from odoo import models, api
 import logging
+from datetime import date
 _logger = logging.getLogger(__name__)
 from .tools import domain_to_sql, process_domain
 
@@ -34,26 +35,7 @@ class BudgetRkap(models.Model):
             if record and record.kanwil_id:
                 domain_ip = [('kanwil_id', '=', record.kanwil_id.id)]
 
-        # if field == 'total_budget_realisasi':
-        #     izin_prinsip_list = self.env['vit.izin_prinsip'].search(domain_ip)
 
-        #     record = izin_prinsip_list[:1]
-
-        #     master_ids = izin_prinsip_list.mapped('master_budget_id').ids
-
-        #     budgets_domain = [('master_budget_id', 'in', master_ids)] + budget_date_domain
-        #     budgets = self.env['vit.budget_rkap'].search(budgets_domain)
-
-        #     amount = sum(budgets.mapped('amount'))
-        #     total_realisasi = sum(budgets.mapped('total_amount_payment'))
-
-        #     return {
-        #         'kanwil_name': record.kanwil_id.name if record else '',
-        #         'amount': amount,
-        #         'amount_formatted': "{:,.0f}".format(amount).replace(",", "."),
-        #         'total_realisasi': total_realisasi,
-        #         'total_realisasi_formatted': "{:,.0f}".format(total_realisasi).replace(",", "."),
-        #     }
 
         if field == 'total_budget_realisasi':
             izin_prinsip_list = self.env['vit.izin_prinsip'].search(domain_ip)
@@ -96,67 +78,29 @@ class BudgetRkap(models.Model):
 
 
 
-
-
-
-
-        # if field == 'persentase_tl_droping':
-        #     izin_prinsip_list = self.env['vit.izin_prinsip'].search(domain_ip)
-        #     record = izin_prinsip_list[:1]
-        #     master_ids = izin_prinsip_list.mapped('master_budget_id').ids
-        #     kanwil_id = record.kanwil_id.id if record else False
-
-        #     budgets_domain = [('master_budget_id', 'in', master_ids)] + budget_date_domain
-        #     budgets = self.env['vit.budget_rkap'].search(budgets_domain)
-
-        #     amount = sum(budgets.mapped('amount'))
-        #     total_realisasi = sum(budgets.mapped('total_amount_payment'))
-
-        #     droping_domain = [('master_budget_id', 'in', master_ids)]
-        #     if kanwil_id:
-        #         droping_domain.append(('kanwil_id', '=', kanwil_id))
-
-        #     droping_filtered = self.env['vit.droping'].search(droping_domain)
-        #     total_droping = sum(droping_filtered.mapped('jumlah'))
-
-        #     persentasi_tl = (total_realisasi / amount * 100) if amount > 0 else 0
-        #     persentasi_droping = (total_realisasi / total_droping * 100) if total_droping > 0 else 0
-
-        #     return {
-        #         'persentasi_tl': round(persentasi_tl, 2),
-        #         'persentasi_droping': round(persentasi_droping, 2),
-        #     }
-
-
         if field == 'persentase_tl_droping':
             izin_prinsip_list = self.env['vit.izin_prinsip'].search(domain_ip)
             record = izin_prinsip_list[:1]
             kanwil_id = record.kanwil_id.id if record else False
 
-            # Ambil semua master budget dari izin prinsip
             master_ids = izin_prinsip_list.mapped('master_budget_id').ids
 
-            # Ambil semua budget RKAP yang terkait
             budgets_domain = [('master_budget_id', 'in', master_ids)] + budget_date_domain
             budgets = self.env['vit.budget_rkap'].search(budgets_domain)
 
-            # --- Hitung total qty izin prinsip & kontrak (SEMUA master_budget) ---
             total_qty_izin_prinsip = sum(budgets.mapped('total_qty_izin_prinsip'))
             total_qty_kontrak = sum(budgets.mapped('total_qty_kontrak'))
 
-            # --- Hitung total droping (SEMUA master_budget) ---
             droping_domain = [('master_budget_id', 'in', master_ids)]
             if kanwil_id:
                 droping_domain.append(('kanwil_id', '=', kanwil_id))
             droping_filtered = self.env['vit.droping'].search(droping_domain)
             total_droping = sum(droping_filtered.mapped('jumlah'))
 
-            # --- Hitung total_pagu & previous_remaining GLOBAL (bukan per master) ---
             total_pagu = sum(budgets.mapped('total_pagu_izin_prinsip'))
             total_remaining = sum(budgets.mapped('previous_remaining'))
             total_base = total_remaining + total_pagu
 
-            # --- Rumus ---
             persentasi_tl = (total_qty_kontrak / total_qty_izin_prinsip * 100) if total_qty_izin_prinsip > 0 else 0
             persentasi_droping = (total_droping / total_base * 100) if total_base > 0 else 0
 
@@ -641,59 +585,39 @@ class BudgetRkap(models.Model):
                 "persen": round(total_persen, 2),
             },
         }
-    
-    # @api.model
-    # def get_droping_by_kanwil(self):
-    #     """
-    #     Ambil data persentase droping per kanwil
-    #     untuk ditampilkan di bar chart dashboard Sarlog.
-    #     """
-    #     kanwils = self.env["vit.kanwil"].search([])
-    #     result = []
-
-    #     for kw in kanwils:
-    #         izin_prinsip_list = self.env['vit.izin_prinsip'].search([('kanwil_id', '=', kw.id)])
-    #         master_ids = izin_prinsip_list.mapped('master_budget_id').ids
-    #         budgets = self.search([('master_budget_id', 'in', master_ids)])
-
-    #         total_pagu = sum(budgets.mapped('total_pagu_izin_prinsip')) or 0
-    #         total_droping = sum(budgets.mapped('total_amount_droping')) or 0
-    #         persen_droping = (total_droping / total_pagu * 100) if total_pagu > 0 else 0
-
-    #         result.append({
-    #             "kanwil_name": kw.name,
-    #             "persen_droping": round(persen_droping, 2),
-    #         })
-
-    #     return result
-
 
 
     @api.model
-    def get_droping_by_kanwil(self):
+    def get_droping_by_kanwil(self, year=False):
         """
-        Ambil data persentase droping per kanwil
-        PAKAI logika yang sama seperti field 'persentase_tl_droping'
+        Ambil data persentase droping per kanwil.
+        PAKAI logika yang sama seperti field 'persentase_tl_droping'.
         """
         kanwils = self.env["vit.kanwil"].search([])
         result = []
+
+        budget_date_domain = []
+        if year:
+            start_date = f"{year}-01-01"
+            end_date = f"{year}-12-31"
+            budget_date_domain = [('budget_date', '>=', start_date), ('budget_date', '<=', end_date)]
 
         for kw in kanwils:
             izin_prinsip_list = self.env['vit.izin_prinsip'].search([('kanwil_id', '=', kw.id)])
             master_ids = izin_prinsip_list.mapped('master_budget_id').ids
 
-            budgets = self.env['vit.budget_rkap'].search([
-                ('master_budget_id', 'in', master_ids)
-            ])
+            budgets_domain = [('master_budget_id', 'in', master_ids)] + budget_date_domain
+            budgets = self.env['vit.budget_rkap'].search(budgets_domain)
 
-            amount = sum(budgets.mapped('amount')) or 0
-            total_realisasi = sum(budgets.mapped('total_amount_payment')) or 0
+            total_pagu = sum(budgets.mapped('total_pagu_izin_prinsip')) or 0
+            total_remaining = sum(budgets.mapped('previous_remaining')) or 0
+            total_base = total_pagu + total_remaining
 
             droping_domain = [('master_budget_id', 'in', master_ids), ('kanwil_id', '=', kw.id)]
             droping_filtered = self.env['vit.droping'].search(droping_domain)
             total_droping = sum(droping_filtered.mapped('jumlah')) or 0
 
-            persentasi_droping = (total_realisasi / total_droping * 100) if total_droping > 0 else 0
+            persentasi_droping = (total_droping / total_base * 100) if total_base > 0 else 0
 
             result.append({
                 "kanwil_name": kw.name,
@@ -701,45 +625,57 @@ class BudgetRkap(models.Model):
             })
 
         return result
+
+
     
 
 
     @api.model
-    def get_realisasi_by_kanwil(self):
+    def get_realisasi_by_kanwil(self, year=False):
         """
-        Ambil data persentase realisasi (TL) per kanwil
-        PAKAI logika yang sama seperti field 'persentase_tl_droping'
-        yaitu: persentase_tl = total_realisasi / total_amount_budget * 100
+        Ambil data persentase TL (Total Kontrak / Total Izin Prinsip * 100)
+        per Kanwil, dengan filter berdasarkan tahun budget_date (jika dikirim).
         """
+        if not year:
+            year = date.today().year
+
+
         kanwils = self.env["vit.kanwil"].search([])
         result = []
 
+        budget_date_domain = []
+        if year:
+            start_date = f"{year}-01-01"
+            end_date = f"{year}-12-31"
+            budget_date_domain = [('budget_date', '>=', start_date), ('budget_date', '<=', end_date)]
+
         for kw in kanwils:
             izin_prinsip_list = self.env['vit.izin_prinsip'].search([('kanwil_id', '=', kw.id)])
-            record = izin_prinsip_list[:1]
+            if not izin_prinsip_list:
+                result.append({
+                    "kanwil_name": kw.name,
+                    "persen_realisasi": 0.0,
+                })
+                continue
+
             master_ids = izin_prinsip_list.mapped('master_budget_id').ids
-            kanwil_id = record.kanwil_id.id if record else False
 
-            budgets = self.env['vit.budget_rkap'].search([
-                ('master_budget_id', 'in', master_ids)
-            ])
-            amount = sum(budgets.mapped('amount'))
-            total_realisasi = sum(budgets.mapped('total_amount_payment'))
+            budgets_domain = [('master_budget_id', 'in', master_ids)] + budget_date_domain
+            budgets = self.env['vit.budget_rkap'].search(budgets_domain)
 
-            droping_domain = [('master_budget_id', 'in', master_ids)]
-            if kanwil_id:
-                droping_domain.append(('kanwil_id', '=', kanwil_id))
-            droping_filtered = self.env['vit.droping'].search(droping_domain)
-            total_droping = sum(droping_filtered.mapped('jumlah'))
+            total_qty_izin_prinsip = sum(budgets.mapped('total_qty_izin_prinsip'))
+            total_qty_kontrak = sum(budgets.mapped('total_qty_kontrak'))
 
-            persentase_tl = (total_realisasi / amount * 100) if amount > 0 else 0
+            persentasi_tl = (total_qty_kontrak / total_qty_izin_prinsip * 100) if total_qty_izin_prinsip > 0 else 0
 
             result.append({
                 "kanwil_name": kw.name,
-                "persen_realisasi": round(persentase_tl, 2),
+                "persen_realisasi": round(persentasi_tl, 2),
             })
 
         return result
+
+
 
 
 

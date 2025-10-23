@@ -131,10 +131,44 @@ export class SarlogDashboard extends Component {
 
 
     onYearChange(ev) {
-        const selectedYear = parseInt(ev.target.value);
-        this.state.selectedYear = selectedYear;
-        console.log("📅 Tahun dipilih:", selectedYear);
+        const year = ev.target.value;
+        this.state.selectedYear = year || null;
+
+        // panggil ulang data droping & realisasi pakai tahun ini
+        this.loadDropingByKanwil(year);
+        this.loadRealisasiByKanwil(year);
     }
+
+    async loadRealisasiByKanwil(year) {
+        try {
+            const realisasiData = await this.orm.call(
+                "vit.budget_rkap",
+                "get_realisasi_by_kanwil",
+                [year ? parseInt(year) : false]
+            );
+            this.state.kanwilRealisasi = realisasiData || [];
+        } catch (e) {
+            console.warn("❌ Failed to fetch realisasi by kanwil:", e);
+            this.state.kanwilRealisasi = [];
+        }
+    }
+
+    async loadDropingByKanwil(year) {
+        try {
+            const dropingData = await this.orm.call(
+                "vit.budget_rkap",
+                "get_droping_by_kanwil",
+                [year ? parseInt(year) : false]
+            );
+            this.state.kanwilDroping = dropingData || [];
+            this.renderChart();
+        } catch (e) {
+            console.warn("❌ Failed to fetch droping by kanwil:", e);
+            this.state.kanwilDroping = [];
+        }
+    }
+
+
 
 }
 
