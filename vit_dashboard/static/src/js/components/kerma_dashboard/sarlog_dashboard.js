@@ -128,6 +128,14 @@ export class SarlogDashboard extends Component {
         }
     }
 
+
+
+    onYearChange(ev) {
+        const selectedYear = parseInt(ev.target.value);
+        this.state.selectedYear = selectedYear;
+        console.log("📅 Tahun dipilih:", selectedYear);
+    }
+
 }
 
 SarlogDashboard.template = "vit_dashboard.SarlogDashboard";

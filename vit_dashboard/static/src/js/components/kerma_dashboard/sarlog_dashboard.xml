@@ -2,6 +2,26 @@
     <div class="p-4" style="max-height:100vh; overflow-y:auto;">
         <h2 class="fw-bold text-center text-primary mb-4">Dashboard Sarlog</h2>
 
+
+
+        <!-- <div class="col-12 col-md-2" style="width:200px; float:right; margin-top:-55px; margin-right:100px;">
+            <div class="form-control px-1 m-0">
+                <select
+                    t-on-change="onYearChange"
+                    class="form-select border-0">
+                    <option value=""> Pilih Tahun</option>
+                    <t t-set="currentYear" t-value="new Date().getFullYear()"/>
+                    <t t-foreach="[currentYear - 5, currentYear - 4, currentYear - 3, currentYear - 2, currentYear - 1, currentYear]" t-as="th" t-key="th">
+                        <option 
+                            t-att-value="th"
+                            t-att-selected="state.selectedYear == th ? true : undefined"
+                            t-esc="th"/>
+                    </t>
+                </select>
+            </div>
+        </div> -->
+
+
         <div class="row mx-3">
 
             <!-- KIRI: Total & Persentase -->
@@ -98,7 +118,27 @@
             </div>
 
             <!-- KANAN: Persentase Realisasi per Kanwil -->
-            <div class="col-2" style="margin-top:20px; margin-bottom:20px;">
+            <div class="col-2" style="margin-top:-50px; margin-bottom:20px;">
+
+                <div class="form-control px-1 m-0 mb-3">
+                    <select
+                        t-on-change="onYearChange"
+                        class="form-select border-0"
+                    >
+                        <option value="">-- Pilih Tahun --</option>
+                        <t t-set="currentYear" t-value="new Date().getFullYear()"/>
+                        <t t-foreach="[currentYear - 5, currentYear - 4, currentYear - 3, currentYear - 2, currentYear - 1, currentYear]" t-as="th" t-key="th">
+                            <option 
+                                t-att-value="th"
+                                t-att-selected="state.selectedYear == th ? true : undefined"
+                                t-esc="th"
+                            />
+                        </t>
+                    </select>
+                </div>
+
+
+
                 <h5 class="fw-bold text-primary mb-3 text-center">Persentase Realisasi per Kanwil</h5>
 
                 <div style="max-height: 700px; overflow-y: auto; padding-right: 5px;">
