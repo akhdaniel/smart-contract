@@ -16,7 +16,7 @@
             onmouseout="this.classList.remove('shadow-lg')">
 
             <!-- Icon Section -->
-            <t t-if="props.field != 'persentase_tl_droping'">
+            <t t-if="props.title == 'Kanwil'">
                 <div class="me-3 w-25 text-center">
                     <i t-att-class="props.icon || 'fa fa-info-circle'" t-att-style="'font-size: 2rem;'"></i>
                 </div>
