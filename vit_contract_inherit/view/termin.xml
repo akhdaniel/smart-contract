@@ -62,11 +62,11 @@
                 </xpath>
 
 
-                <!-- <xpath expr="//field[@name='is_droping_done']" position="attributes">
+                <xpath expr="//field[@name='is_droping_done']" position="attributes">
                     <attribute name="readonly">1</attribute>
                      <attribute name="force_save">1</attribute>
                      <attribute name="invisible">1</attribute>
-                </xpath> -->
+                </xpath>
 
                 <xpath expr="//field[@name='verifikasi_syarat']" position="attributes">
                     <attribute name="readonly">1</attribute>
