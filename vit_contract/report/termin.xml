@@ -116,6 +116,7 @@
                             <td>Verified</td>
                             <td>Due Date</td>
                             <td>Document</td>
+                            <td>Document Filename</td>
                             <td>Upload Date</td>
                             <td>Termin</td>
                             <td>Master Syarat Termin</td>
@@ -127,6 +128,7 @@
                             <td><span t-field="line.verified" /></td>
                             <td><span t-field="line.due_date" /></td>
                             <td><span t-field="line.document" /></td>
+                            <td><span t-field="line.document_filename" /></td>
                             <td><span t-field="line.upload_date" /></td>
                             <td><span t-field="line.termin_id" /></td>
                             <td><span t-field="line.master_syarat_termin_id" /></td>

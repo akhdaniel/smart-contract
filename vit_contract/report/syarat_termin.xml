@@ -33,6 +33,10 @@
                             <strong>Document</strong>
                         </div>
                         <div class="col-auto mw-100 mb-2">
+                            <strong>Document Filename</strong>
+                            <p class="m-0" t-field="doc.document_filename" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
                             <strong>Upload Date</strong>
                             <p class="m-0" t-field="doc.upload_date" />
                         </div>

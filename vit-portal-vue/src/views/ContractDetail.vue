@@ -84,7 +84,7 @@
               <ul class="list-group">
                 <li v-for="syarat in termin.syarat_termin_ids" :key="syarat.id" class="list-group-item position-relative">
                   <div class="d-flex justify-content-between align-items-start">
-                    <div class="px-1 fs-5" v-if="!syarat.document" >
+                    <div class="px-1 fs-5" v-if="!syarat.document_filename" >
                       <div>{{ syarat.name }}</div>
                     </div>
                     <div class="px-1 fs-5" v-else >
@@ -92,17 +92,17 @@
                         <a class="" href="#" @click="openPdfViewer(syarat.id, syarat.name)">{{ syarat.name }}
                         <i class="px-2 fa-regular fa-eye"></i>
                         </a>
-                        <i v-if="syarat.document && !syarat.verified" class="px-2 fa-regular fa-trash-can text-danger" @click="deleteDocument(syarat.id)" style="cursor: pointer;"></i>
+                        <i v-if="syarat.document_filename && !syarat.verified" class="px-2 fa-regular fa-trash-can text-danger" @click="deleteDocument(syarat.id)" style="cursor: pointer;"></i>
                       </div>
                     </div>
                   </div>
 
 
 
-                  <div v-if="syarat.document && !syarat.verified" class="syarat-ribbon bg-warning">Uploaded</div>
-                  <div v-if="syarat.document && syarat.verified" class="syarat-ribbon bg-success">Verified</div>
+                  <div v-if="syarat.document_filename && !syarat.verified" class="syarat-ribbon bg-warning">Uploaded</div>
+                  <div v-if="syarat.document_filename && syarat.verified" class="syarat-ribbon bg-success">Verified</div>
                   <div class="px-1 fs-6">Due date: {{ syarat.due_date }}</div>
-                  <form v-if="!syarat.document" @submit.prevent="uploadDocument(syarat.id, $event)" class="d-flex mt-2">
+                  <form v-if="!syarat.document_filename" @submit.prevent="uploadDocument(syarat.id, $event)" class="d-flex mt-2">
                     <input type="file" class="form-control form-control-sm me-2" required>
                     <button type="submit" class="btn btn-sm btn-secondary">Upload</button>
                   </form>
@@ -223,8 +223,9 @@ const fetchData = async () => {
             fields:{
               name:{},
               due_date:{},
-              document:{},
-              verified:{}
+              // document:{},
+              verified:{},
+              stage:{fields:{display_name:{}}}
             }
           },
         }

@@ -17,6 +17,7 @@ class syarat_termin(models.Model):
     verified = fields.Boolean( string=_("Verified"))
     due_date = fields.Date( string=_("Due Date"))
     document = fields.Binary( string=_("Document"))
+    document_filename = fields.Char( string=_("Document Filename"))
     upload_date = fields.Date( string=_("Upload Date"))
 
 
