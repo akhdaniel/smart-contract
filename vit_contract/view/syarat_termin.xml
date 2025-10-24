@@ -14,7 +14,7 @@
                     <field name="verified" /> <!-- 101-->
                     <field name="master_syarat_termin_id" /> <!-- 101-->
                     <field name="due_date" /> <!-- 102-->
-                    <field name="document_filename" /> <!-- 104-->
+                    <field name="document_filename" invisible="1"/> <!-- 104-->
                     <field name="upload_date" /> <!-- 105-->
                 </tree>
             </field>
@@ -58,7 +58,7 @@
                                 <field name="verified"  />
                                 <field name="due_date"  />
                                 <field name="document" filename="document_filename" />
-                                <field name="document_filename"  />
+                                <field name="document_filename" invisible="1" />
                                 <field name="upload_date"  />
                             </group>
                             <group> <!-- right -->

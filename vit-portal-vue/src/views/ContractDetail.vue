@@ -37,12 +37,13 @@
         <div v-for="(termin, index) in termins" :key="termin.id" class="accordion-item">
           <h2 class="accordion-header" :id="`heading${termin.id}`">
             <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse${termin.id}`" :aria-expanded="index === 0 ? 'true' : 'false'" :aria-controls="`collapse${termin.id}`">
-              <div>
-              <div style="font-weight:bold">{{ termin.master_nama_termin_id.display_name }},
-              {{ termin.persentase }}%,
-              {{ formatCurrency(termin.nilai) }}
-              </div>
-              <div style="font-size:9pt; ">{{ termin.name }}</div>
+              <div class="d-flex justify-content-between align-items-center">
+                <div style="font-weight:bold">{{ termin.master_nama_termin_id.display_name }},
+                {{ termin.persentase }}%,
+                {{ formatCurrency(termin.nilai) }}
+                </div>
+                <div style="font-size:9pt; ">{{ termin.name }}</div>
+                <div style="font-size:9pt; ">{{ termin.stage_id.display_name }}</div>
               </div>
             </button>
           </h2>
@@ -84,7 +85,7 @@
               <ul class="list-group">
                 <li v-for="syarat in termin.syarat_termin_ids" :key="syarat.id" class="list-group-item position-relative">
                   <div class="d-flex justify-content-between align-items-start">
-                    <div class="px-1 fs-5" v-if="!syarat.document_filename" >
+                    <div class="px-1 fs-5" v-if="!syarat.upload_date" >
                       <div>{{ syarat.name }}</div>
                     </div>
                     <div class="px-1 fs-5" v-else >
@@ -92,17 +93,17 @@
                         <a class="" href="#" @click="openPdfViewer(syarat.id, syarat.name)">{{ syarat.name }}
                         <i class="px-2 fa-regular fa-eye"></i>
                         </a>
-                        <i v-if="syarat.document_filename && !syarat.verified" class="px-2 fa-regular fa-trash-can text-danger" @click="deleteDocument(syarat.id)" style="cursor: pointer;"></i>
+                        <i v-if="syarat.upload_date && !syarat.verified" class="px-2 fa-regular fa-trash-can text-danger" @click="deleteDocument(syarat.id)" style="cursor: pointer;"></i>
                       </div>
                     </div>
                   </div>
 
 
 
-                  <div v-if="syarat.document_filename && !syarat.verified" class="syarat-ribbon bg-warning">Uploaded</div>
-                  <div v-if="syarat.document_filename && syarat.verified" class="syarat-ribbon bg-success">Verified</div>
+                  <div v-if="syarat.upload_date && !syarat.verified" class="syarat-ribbon bg-warning">Uploaded</div>
+                  <div v-if="syarat.upload_date && syarat.verified" class="syarat-ribbon bg-success">Verified</div>
                   <div class="px-1 fs-6">Due date: {{ syarat.due_date }}</div>
-                  <form v-if="!syarat.document_filename" @submit.prevent="uploadDocument(syarat.id, $event)" class="d-flex mt-2">
+                  <form v-if="!syarat.upload_date" @submit.prevent="uploadDocument(syarat.id, $event)" class="d-flex mt-2">
                     <input type="file" class="form-control form-control-sm me-2" required>
                     <button type="submit" class="btn btn-sm btn-secondary">Upload</button>
                   </form>
@@ -219,13 +220,14 @@ const fetchData = async () => {
             }
           },
           persentase:{},
+          stage_id:{fields:{display_name:{}}},
           syarat_termin_ids:{
             fields:{
               name:{},
               due_date:{},
               // document:{},
               verified:{},
-              stage:{fields:{display_name:{}}}
+              upload_date:{},
             }
           },
         }
