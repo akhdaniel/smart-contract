@@ -36,52 +36,64 @@
       <div class="accordion mt-4" id="terminAccordion">
         <div v-for="(termin, index) in termins" :key="termin.id" class="accordion-item">
           <h2 class="accordion-header" :id="`heading${termin.id}`">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse${termin.id}`" :aria-expanded="index === 0 ? 'true' : 'false'" :aria-controls="`collapse${termin.id}`">
-              <div class="d-flex justify-content-between align-items-center">
-                <div style="font-weight:bold">{{ termin.master_nama_termin_id.display_name }},
-                {{ termin.persentase }}%,
-                {{ formatCurrency(termin.nilai) }}
-                </div>
-                <div style="font-size:9pt; ">{{ termin.name }}</div>
-                <div style="font-size:9pt; ">{{ termin.stage_id.display_name }}</div>
-              </div>
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse${termin.id}`" 
+              :aria-expanded="index === 0 ? 'true' : 'false'" :aria-controls="`collapse${termin.id}`">
+              {{ termin.master_nama_termin_id.display_name }}
             </button>
           </h2>
-          <div :id="`collapse${termin.id}`" class="accordion-collapse collapse" :class="{ show: index === 0 }" :aria-labelledby="`heading${termin.id}`" data-bs-parent="#terminAccordion">
+          <div :id="`collapse${termin.id}`" class="accordion-collapse collapse" :class="{ show: index === 0 }" 
+            :aria-labelledby="`heading${termin.id}`" data-bs-parent="#terminAccordion">
+
             <div class="accordion-body">
-              <div class="card mt-5">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div style="font-weight:bold">
+                      {{ termin.persentase }}%
+                      {{ formatCurrency(termin.nilai) }}
+                    </div>
+                    <div>{{ termin.name }}</div>
+                    <div></div>
+                    <div></div>
+                    <div class="syarat-ribbon p-2" :class="{ 'bg-warning': termin.stage_id.display_name.toLowerCase() === 'draft', 'bg-success': termin.stage_id.display_name.toLowerCase() === 'on progress', 'bg-secondary': termin.stage_id.display_name.toLowerCase() === 'done' }">
+                      {{ termin.stage_id.display_name }}
+                    </div>
+                </div>
+             
                 <div class="card-body">
                   <div class="row">
                     <div class="col-md-4 col-sm-12" v-if="contract.jenis_kontrak_id.type === 'fisik'">
                       <label for="syarat_progress" class="form-label">Syarat Progress (%)</label>
-                      <input type="text" class="form-control" id="syarat_progress" v-model="termin.syarat_progress" readonly>
+                      <input type="text" class="form-control" id="syarat_progress" v-model="termin.syarat_progress" disabled>
                     </div>
                     <div class="col-md-4 col-sm-12" v-if="contract.jenis_kontrak_id.type === 'fisik'">
                       <label for="actual_progress" class="form-label">Actual Progress (%)</label>
-                      <input type="text" class="form-control" id="actual_progress" v-model="termin.actual_progress" required>
+                      <input type="text" class="form-control" id="actual_progress" v-model="termin.actual_progress" required="required" :disabled="termin.stage_id.display_name !== 'On Progress'">
                     </div>
 
                     <div v-if="contract.jenis_kontrak_id.type === 'non_fisik'">
                       <label for="syarat_output" class="form-label">Syarat Output (%)</label>
-                      <input type="text" class="form-control" id="syarat_progress" v-model="termin.syarat_output" readonly>
+                      <input type="text" class="form-control" id="syarat_progress" v-model="termin.syarat_output" disabled>
                     </div>
 
                     <div v-if="contract.jenis_kontrak_id.type === 'non_fisik'">
                       <label for="actual_output" class="form-label">Actual Output (%)</label>
-                      <input type="text" class="form-control" id="actual_progress" v-model="termin.actual_output" required>
+                      <input type="text" class="form-control" id="actual_progress" v-model="termin.actual_output" required :disabled="termin.stage_id.display_name !== 'On Progress'">
                     </div>
 
                     <div class="col-md-4 col-sm-12">
                       <div class="form-label">&nbsp;</div>
-                      <button class="form-control btn btn-primary" @click="updateProgress(termin.id)">Save</button>
+                      <button class="form-control btn btn-primary" @click="updateProgress(termin.id)" :disabled="termin.stage_id.display_name !== 'On Progress'">Save</button>
                     </div>   
 
                   </div>          
+                </div>
                 </div>
               </div>
             </div>
 
             <div class="accordion-body">
+              <h6>Syarat Penagihan</h6>
               <ul class="list-group">
                 <li v-for="syarat in termin.syarat_termin_ids" :key="syarat.id" class="list-group-item position-relative">
                   <div class="d-flex justify-content-between align-items-start">
@@ -104,8 +116,8 @@
                   <div v-if="syarat.upload_date && syarat.verified" class="syarat-ribbon bg-success">Verified</div>
                   <div class="px-1 fs-6">Due date: {{ syarat.due_date }}</div>
                   <form v-if="!syarat.upload_date" @submit.prevent="uploadDocument(syarat.id, $event)" class="d-flex mt-2">
-                    <input type="file" class="form-control form-control-sm me-2" required>
-                    <button type="submit" class="btn btn-sm btn-secondary">Upload</button>
+                    <input type="file" class="form-control form-control-sm me-2" required :disabled="termin.stage_id.display_name !== 'On Progress'">
+                    <button type="submit" class="btn btn-sm btn-secondary" :disabled="termin.stage_id.display_name !== 'On Progress'">Upload</button>
                   </form>
                 </li>
               </ul>
@@ -122,6 +134,7 @@
             <thead>
                 <tr>
                     <th>Number</th>
+                    <th>Termin</th>
                     <th>Request Date</th>
                     <th>Payment Date</th>
                     <th class="text-end">Amount</th>
@@ -131,6 +144,7 @@
             <tbody>
                 <tr v-for="payment in payments" :key="payment.id">
                     <td>{{ payment.name }}</td>
+                    <td>{{ payment.termin_id.master_nama_termin_id.display_name }}</td>
                     <td>{{ payment.request_date?payment.request_date:"" }}</td>
                     <td>{{ payment.payment_date }}</td>
                     <td class="text-end">{{ formatCurrency(payment.amount) }}</td>
@@ -242,10 +256,17 @@ const fetchData = async () => {
           payment_date:{},
           amount:{},
           termin_id:{
-            fields:{display_name:{}}
+            fields:{
+              display_name:{},
+              master_nama_termin_id:{
+                fields:{display_name:{}}
+              },
+            }
           },
           stage_id:{
-            fields:{display_name:{}}
+            fields:{
+              display_name:{}, 
+            }
           },
         }
       }
@@ -281,19 +302,23 @@ const uploadDocument = async (syaratId, event) => {
     if (!file) return;
     const specification = {
       name:{},
+      upload_date:{}
     }
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = async () => {
         const base64File = reader.result.split(',')[1];
         try {
-            const success = await odooService.write('vit.syarat_termin', syaratId, { document: base64File }, specification);
+            const success = await odooService.write('vit.syarat_termin', syaratId, { 
+              document: base64File, 
+              upload_date: new Date() }, 
+            specification);
             if (success) {
                 // Find the specific syarat_termin and update its document property
                 for (const termin of termins.value) {
-                    const targetSyarat = termin.syarat_termin_ids.find(s => s.id === syaratId);
+                    let targetSyarat = termin.syarat_termin_ids.find(s => s.id === syaratId);
                     if (targetSyarat) {
-                        targetSyarat.document = base64File; // Update the document
+                        targetSyarat.upload_date = new Date(); // date Update the document
                         break;
                     }
                 }
@@ -315,15 +340,19 @@ const deleteDocument = async (syaratId) => {
   if (!confirm('Are you sure you want to delete this document?')) {
     return;
   }
+  const specification = {
+      name:{},
+      upload_date:{}
+    }
   uploadError.value = ''; // Clear previous errors
   try {
-    const success = await odooService.write('vit.syarat_termin', syaratId, { document: false });
+    const success = await odooService.write('vit.syarat_termin', syaratId, { document: false , upload_date:false}, specification);
     if (success) {
       // Find the specific syarat_termin and update its document property
       for (const termin of termins.value) {
         const targetSyarat = termin.syarat_termin_ids.find(s => s.id === syaratId);
         if (targetSyarat) {
-          targetSyarat.document = false; // Update the document
+          targetSyarat.upload_date = false; // Update the document
           break;
         }
       }
