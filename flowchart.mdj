@@ -953,19 +953,19 @@
 									},
 									"font": "Roboto;13;0",
 									"parentStyle": true,
-									"left": 1482,
+									"left": 1410,
 									"top": 898,
-									"width": 72.185546875,
-									"height": 52,
+									"width": 144.185546875,
+									"height": 26,
 									"text": "10 Mengupload Syarat Pembayaran",
 									"wordWrap": true
 								}
 							],
 							"font": "Roboto;13;0",
 							"parentStyle": false,
-							"left": 1472,
+							"left": 1400,
 							"top": 888,
-							"width": 92.185546875,
+							"width": 164.185546875,
 							"height": 72,
 							"nameLabel": {
 								"$ref": "AAAAAAGaFD3XELgMnfY="
@@ -993,7 +993,7 @@
 									"visible": false,
 									"font": "Roboto;13;0",
 									"parentStyle": false,
-									"left": 1145,
+									"left": 1109,
 									"top": 899,
 									"height": 13,
 									"alpha": 1.5707963267948966,
@@ -1013,7 +1013,7 @@
 								"$ref": "AAAAAAGaFQJihblDL68="
 							},
 							"lineStyle": 2,
-							"points": "818:920;1472:920",
+							"points": "818:920;1400:920",
 							"nameLabel": {
 								"$ref": "AAAAAAGaFD4BYLgVbJ8="
 							}
@@ -1036,20 +1036,20 @@
 									},
 									"font": "Roboto;13;0",
 									"parentStyle": true,
-									"left": 722,
-									"top": 978,
-									"width": 100,
-									"height": 52,
-									"text": "11 Mem-verifikasi Syarat Pembayaran",
+									"left": 706,
+									"top": 994,
+									"width": 140,
+									"height": 26,
+									"text": "11. Mem-verifikasi Syarat Pembayaran",
 									"wordWrap": true
 								}
 							],
 							"font": "Roboto;13;0",
 							"parentStyle": false,
-							"left": 712,
-							"top": 968,
-							"width": 120,
-							"height": 72,
+							"left": 696,
+							"top": 984,
+							"width": 160,
+							"height": 46,
 							"nameLabel": {
 								"$ref": "AAAAAAGaFD5CnrghTDE="
 							}
@@ -1076,7 +1076,7 @@
 									"visible": false,
 									"font": "Roboto;13;0",
 									"parentStyle": false,
-									"left": 1519,
+									"left": 1479,
 									"top": 1006,
 									"height": 13,
 									"alpha": 1.5707963267948966,
@@ -1096,7 +1096,7 @@
 								"$ref": "AAAAAAGaFD3XELgL0+4="
 							},
 							"lineStyle": 2,
-							"points": "1520:960;1520:997;832:997",
+							"points": "1480:960;1480:997;856:997",
 							"nameLabel": {
 								"$ref": "AAAAAAGaFD6EJrgsrFU="
 							}
@@ -1160,7 +1160,7 @@
 									"font": "Roboto;13;0",
 									"parentStyle": false,
 									"left": 786,
-									"top": 1045,
+									"top": 1040,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -1179,7 +1179,7 @@
 								"$ref": "AAAAAAGaFD5CnrggHbo="
 							},
 							"lineStyle": 2,
-							"points": "772:1040;772:1064",
+							"points": "772:1030;772:1064",
 							"nameLabel": {
 								"$ref": "AAAAAAGaFD8VnLhEuB0="
 							}
@@ -1203,18 +1203,19 @@
 									"model": {
 										"$ref": "AAAAAAGaFD9mi7hV9fU="
 									},
-									"visible": false,
 									"font": "Roboto;13;0",
 									"parentStyle": false,
-									"left": 790,
+									"left": 787,
 									"top": 1135,
+									"width": 6.15087890625,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
 									"hostEdge": {
 										"$ref": "AAAAAAGaFD9mi7hX9lg="
 									},
-									"edgePosition": 1
+									"edgePosition": 1,
+									"text": "y"
 								}
 							],
 							"font": "Roboto;13;0",
@@ -1601,7 +1602,7 @@
 							"left": 640,
 							"top": 64,
 							"width": 296,
-							"height": 38,
+							"height": 25,
 							"text": "Kanwil / Kanca (Smart Contract)"
 						},
 						{
@@ -1629,7 +1630,7 @@
 							"left": 344,
 							"top": 64,
 							"width": 296,
-							"height": 38,
+							"height": 25,
 							"text": "Kantor Pusat (Keuangan)"
 						},
 						{
@@ -2197,7 +2198,7 @@
 					"_parent": {
 						"$ref": "AAAAAAGaFDmNrrcqcaw="
 					},
-					"name": "11 Mem-verifikasi Syarat Pembayaran",
+					"name": "11. Mem-verifikasi Syarat Pembayaran",
 					"ownedElements": [
 						{
 							"_type": "FCFlow",
@@ -2228,6 +2229,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGaFD7Vgrg2JCk="
 							},
+							"name": "y",
 							"source": {
 								"$ref": "AAAAAAGaFD7Vgrg2JCk="
 							},
