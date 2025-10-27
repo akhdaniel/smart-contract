@@ -630,7 +630,10 @@ class BudgetRkap(models.Model):
             total_remaining = sum(budgets.mapped('previous_remaining')) or 0
             total_base = total_pagu + total_remaining
 
-            droping_domain = [('master_budget_id', 'in', master_ids), ('kanwil_id', '=', kw.id)]
+            droping_domain = [
+                ('master_budget_id', 'in', master_ids),
+                ('kanwil_id', '=', kw.id),
+            ] + budget_date_domain
             droping_filtered = self.env['vit.droping'].search(droping_domain)
             total_droping = sum(droping_filtered.mapped('jumlah')) or 0
 
