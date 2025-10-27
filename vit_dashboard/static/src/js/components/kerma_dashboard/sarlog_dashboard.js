@@ -59,9 +59,9 @@ export class SarlogDashboard extends Component {
         });
 
         // render chart setelah component mounted
-        onMounted(() => {
-            setTimeout(() => this.renderChart(), 400);
-        });
+        // onMounted(() => {
+        //     setTimeout(() => this.renderChart(), 400);
+        // });
     }
 
     async getstatistics() {
@@ -83,54 +83,109 @@ export class SarlogDashboard extends Component {
         }
     }
 
-    renderChart() {
-        if (!this.state.kanwilDroping.length) return;
-        const el = document.getElementById("dropingChart");
-        if (!el) return;
-        const ctx = el.getContext("2d");
+    // renderChart() {
+    //     if (!this.state.kanwilDroping.length) return;
+    //     const el = document.getElementById("dropingChart");
+    //     if (!el) return;
+    //     const ctx = el.getContext("2d");
 
+    //     const labels = this.state.kanwilDroping.map(d => d.kanwil_name);
+    //     const data = this.state.kanwilDroping.map(d => d.persen_droping);
+
+    //     if (window.Chart) {
+    //         new window.Chart(ctx, {
+    //             type: "bar",
+    //             data: {
+    //                 labels,
+    //                 datasets: [{
+    //                     label: "Persentase Droping (%)",
+    //                     data,
+    //                     backgroundColor: "#007bff",
+    //                 }],
+    //             },
+    //             options: {
+    //                 responsive: true,
+    //                 maintainAspectRatio: false,
+    //                 scales: {
+    //                     x: {
+    //                         ticks: {
+    //                             autoSkip: false,
+    //                             maxRotation: 45,
+    //                             minRotation: 45,
+    //                             font: { size: 10 },
+    //                         },
+    //                     },
+    //                     y: {
+    //                         beginAtZero: true,
+    //                         max: 100,
+    //                     },
+    //                 },
+    //                 plugins: {
+    //                     legend: {
+    //                         display: true,
+    //                         position: "top",
+    //                         align: "center",
+    //                     },
+    //                 },
+    //             },
+    //         });
+    //     }
+    // }
+
+
+    renderChart() {
+        const el = document.getElementById("dropingChart");
+        if (!el || !this.state.kanwilDroping.length) return;
+
+        const existing = window.Chart.getChart("dropingChart");
+        if (existing) {
+            existing.destroy();
+        }
+
+        const ctx = el.getContext("2d");
         const labels = this.state.kanwilDroping.map(d => d.kanwil_name);
         const data = this.state.kanwilDroping.map(d => d.persen_droping);
 
-        if (window.Chart) {
-            new window.Chart(ctx, {
-                type: "bar",
-                data: {
-                    labels,
-                    datasets: [{
+        this.chartInstance = new window.Chart(ctx, {
+            type: "bar",
+            data: {
+                labels,
+                datasets: [
+                    {
                         label: "Persentase Droping (%)",
                         data,
                         backgroundColor: "#007bff",
-                    }],
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            ticks: {
-                                autoSkip: false,
-                                maxRotation: 45,
-                                minRotation: 45,
-                                font: { size: 10 },
-                            },
-                        },
-                        y: {
-                            beginAtZero: true,
-                            max: 100,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        ticks: {
+                            autoSkip: false,
+                            maxRotation: 45,
+                            minRotation: 45,
+                            font: { size: 10 },
                         },
                     },
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: "top",
-                            align: "center",
-                        },
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
                     },
                 },
-            });
-        }
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: "top",
+                        align: "center",
+                    },
+                },
+            },
+        });
     }
+
 
 
 
@@ -154,6 +209,9 @@ export class SarlogDashboard extends Component {
             this.state.totalSummary = statResult.total_summary || {};
             this.state.kanwilDroping = dropingData || [];
             this.state.kanwilRealisasi = realisasiData || [];
+            
+            // Render chart setelah data droping diupdate
+            setTimeout(() => this.renderChart(), 300);
 
         } catch (e) {
             console.error("❌ Failed to reload data:", e);

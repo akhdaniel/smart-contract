@@ -604,11 +604,52 @@ class BudgetRkap(models.Model):
 
 
 
+    # @api.model
+    # def get_droping_by_kanwil(self, year=False):
+    #     """
+    #     Ambil data persentase droping per kanwil.
+    #     PAKAI logika yang sama seperti field 'persentase_tl_droping'.
+    #     """
+    #     kanwils = self.env["vit.kanwil"].search([])
+    #     result = []
+
+    #     budget_date_domain = []
+    #     if year:
+    #         start_date = f"{year}-01-01"
+    #         end_date = f"{year}-12-31"
+    #         budget_date_domain = [('budget_date', '>=', start_date), ('budget_date', '<=', end_date)]
+
+    #     for kw in kanwils:
+    #         izin_prinsip_list = self.env['vit.izin_prinsip'].search([('kanwil_id', '=', kw.id)])
+    #         master_ids = izin_prinsip_list.mapped('master_budget_id').ids
+
+    #         budgets_domain = [('master_budget_id', 'in', master_ids)] + budget_date_domain
+    #         budgets = self.env['vit.budget_rkap'].search(budgets_domain)
+
+    #         total_pagu = sum(budgets.mapped('total_pagu_izin_prinsip')) or 0
+    #         total_remaining = sum(budgets.mapped('previous_remaining')) or 0
+    #         total_base = total_pagu + total_remaining
+
+    #         droping_domain = [('master_budget_id', 'in', master_ids), ('kanwil_id', '=', kw.id)]
+    #         droping_filtered = self.env['vit.droping'].search(droping_domain)
+    #         total_droping = sum(droping_filtered.mapped('jumlah')) or 0
+
+    #         persentasi_droping = (total_droping / total_base * 100) if total_base > 0 else 0
+
+    #         result.append({
+    #             "kanwil_name": kw.name,
+    #             "persen_droping": round(persentasi_droping, 2),
+    #         })
+
+    #     return result
+
+
     @api.model
     def get_droping_by_kanwil(self, year=False):
         """
         Ambil data persentase droping per kanwil.
-        PAKAI logika yang sama seperti field 'persentase_tl_droping'.
+        PAKAI logika yang sama seperti field 'persentase_tl_droping',
+        tapi filter tahunnya diambil dari budget yang udah ke-filter.
         """
         kanwils = self.env["vit.kanwil"].search([])
         result = []
@@ -626,12 +667,16 @@ class BudgetRkap(models.Model):
             budgets_domain = [('master_budget_id', 'in', master_ids)] + budget_date_domain
             budgets = self.env['vit.budget_rkap'].search(budgets_domain)
 
+            droping_domain = [
+                ('master_budget_id', 'in', budgets.mapped('master_budget_id').ids),
+                ('kanwil_id', '=', kw.id)
+            ]
+            droping_filtered = self.env['vit.droping'].search(droping_domain)
+
             total_pagu = sum(budgets.mapped('total_pagu_izin_prinsip')) or 0
             total_remaining = sum(budgets.mapped('previous_remaining')) or 0
             total_base = total_pagu + total_remaining
 
-            droping_domain = [('master_budget_id', 'in', master_ids), ('kanwil_id', '=', kw.id)]
-            droping_filtered = self.env['vit.droping'].search(droping_domain)
             total_droping = sum(droping_filtered.mapped('jumlah')) or 0
 
             persentasi_droping = (total_droping / total_base * 100) if total_base > 0 else 0
@@ -644,6 +689,8 @@ class BudgetRkap(models.Model):
         return result
 
 
+
+
     
 
 
@@ -653,7 +700,7 @@ class BudgetRkap(models.Model):
         Ambil data persentase TL (Total Kontrak / Total Izin Prinsip * 100)
         per Kanwil, dengan filter berdasarkan tahun budget_date (jika dikirim).
         """
-        if not year:
+        if not year: 
             year = date.today().year
 
 
