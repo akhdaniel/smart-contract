@@ -88,7 +88,11 @@
 
 
 
-
+                <xpath expr="//field[@name='name']" position="attributes">
+                    <attribute name="force_save">1</attribute>
+                    <attribute name="required">1</attribute>
+                    <attribute name="readonly">stage_is_draft==False</attribute>
+                </xpath>
 
 
                 <xpath expr="//field[@name='start_date']" position="attributes">

@@ -7,12 +7,13 @@ export class NumberCard extends Component {
     static props = {
         title: { type: String },
         bgColor: { type: String, optional: true },
+        textColor: { type: String, optional: true },
         icon: { type: String, optional: true },
         field: { type: String, optional: true },
         model: { type: String, optional: true },
         context: { type: Object, optional: true },
         domain: { type: Object, optional: true },
-        onReload: { type: Function, optional: true }, // Add onReload as an optional prop
+        onReload: { type: Function, optional: true },
     };
 
     setup() {

@@ -13,6 +13,8 @@ class kontrak(models.Model):
 
     active = fields.Boolean(default=True)
 
+    name = fields.Char(required=True, copy=False, string="Name", default=False)
+
     attachments = fields.Many2many(
         'ir.attachment',
         string='Upload'
@@ -191,6 +193,8 @@ class kontrak(models.Model):
     #         self.job_izin_prinsip_id = False
     #         self.jenis_kontrak_id = False
     #         self.jenis_kontrak_many = [(5, 0, 0)]
+
+
 
     @api.onchange('izin_prinsip_id')
     def _onchange_izin_prinsip_id(self):

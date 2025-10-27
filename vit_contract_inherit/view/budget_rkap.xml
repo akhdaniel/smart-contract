@@ -8,7 +8,7 @@
             <field name="inherit_id" ref="vit_contract.view_vit_budget_rkap_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='name']" position="attributes">
-                    <attribute name="readonly">0</attribute>
+                    <attribute name="readonly">stage_is_draft==False</attribute>
                     <attribute name="force_save">1</attribute>
                 </xpath>
 
@@ -43,9 +43,9 @@
                     <attribute name="force_save">1</attribute>
                 </xpath>
 
-                <!-- <xpath expr="//field[@name='budget_date']" position="attributes">
+                <xpath expr="//field[@name='budget_date']" position="attributes">
                     <attribute name="invisible">1</attribute>
-                </xpath> -->
+                </xpath>
 
                 <xpath expr="//field[@name='budget_date']" position="after">
                     <field name="budget_year" readonly="1"/>
