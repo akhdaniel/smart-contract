@@ -18,50 +18,82 @@ export class SarlogDashboard extends Component {
             kanwilRealisasi: [],
         });
 
+        // onWillStart(async () => {
+        //     await loadJS("/web/static/lib/Chart/Chart.js");
+
+        //     const result = await this.orm.call(
+        //         "vit.budget_rkap",
+        //         "get_statistics_sarlog",
+        //         [this.state.selectedYear || new Date().getFullYear()]
+        //     );
+
+
+        //     this.state.masterBudgets = result.master_list || [];
+        //     this.state.totalSummary = result.total_summary || {};
+
+        //     // ambil data droping per kanwil
+        //     try {
+        //         const dropingData = await this.orm.call(
+        //             "vit.budget_rkap",
+        //             "get_droping_by_kanwil",
+        //             []
+        //         );
+        //         this.state.kanwilDroping = dropingData || [];
+        //     } catch (e) {
+        //         console.warn("Failed to fetch droping data:", e);
+        //         this.state.kanwilDroping = [];
+        //     }
+
+
+        //     try {
+        //         const realisasiData = await this.orm.call(
+        //             "vit.budget_rkap",
+        //             "get_realisasi_by_kanwil",
+        //             []
+        //         );
+        //         this.state.kanwilRealisasi = realisasiData || [];
+        //     } catch (e) {
+        //         console.warn("Failed to fetch realisasi data:", e);
+        //         this.state.kanwilRealisasi = [];
+        //     }
+        // });
+
+        // // render chart setelah component mounted
+        // // onMounted(() => {
+        // //     setTimeout(() => this.renderChart(), 400);
+        // // });
+
         onWillStart(async () => {
             await loadJS("/web/static/lib/Chart/Chart.js");
+
+            const currentYear = new Date().getFullYear();
 
             const result = await this.orm.call(
                 "vit.budget_rkap",
                 "get_statistics_sarlog",
-                [this.state.selectedYear || new Date().getFullYear()]
+                [currentYear]
             );
-
 
             this.state.masterBudgets = result.master_list || [];
             this.state.totalSummary = result.total_summary || {};
 
-            // ambil data droping per kanwil
             try {
-                const dropingData = await this.orm.call(
-                    "vit.budget_rkap",
-                    "get_droping_by_kanwil",
-                    []
-                );
+                const [dropingData, realisasiData] = await Promise.all([
+                    this.orm.call("vit.budget_rkap", "get_droping_by_kanwil", [currentYear]),
+                    this.orm.call("vit.budget_rkap", "get_realisasi_by_kanwil", [currentYear]),
+                ]);
+
                 this.state.kanwilDroping = dropingData || [];
-            } catch (e) {
-                console.warn("Failed to fetch droping data:", e);
-                this.state.kanwilDroping = [];
-            }
-
-
-            try {
-                const realisasiData = await this.orm.call(
-                    "vit.budget_rkap",
-                    "get_realisasi_by_kanwil",
-                    []
-                );
                 this.state.kanwilRealisasi = realisasiData || [];
             } catch (e) {
-                console.warn("Failed to fetch realisasi data:", e);
+                console.warn("Failed to fetch initial data:", e);
+                this.state.kanwilDroping = [];
                 this.state.kanwilRealisasi = [];
             }
+
+            setTimeout(() => this.renderChart(), 400);
         });
 
-        // render chart setelah component mounted
-        // onMounted(() => {
-        //     setTimeout(() => this.renderChart(), 400);
-        // });
     }
 
     async getstatistics() {
