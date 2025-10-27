@@ -651,6 +651,10 @@ class BudgetRkap(models.Model):
         PAKAI logika yang sama seperti field 'persentase_tl_droping',
         tapi filter tahunnya diambil dari budget yang udah ke-filter.
         """
+        if not year: 
+            year = date.today().year
+
+            
         kanwils = self.env["vit.kanwil"].search([])
         result = []
 
