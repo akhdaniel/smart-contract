@@ -30,3 +30,4 @@ class syarat_termin(models.Model):
 
     termin_id = fields.Many2one(comodel_name="vit.termin",  string=_("Termin"))
     master_syarat_termin_id = fields.Many2one(comodel_name="vit.master_syarat_termin",  string=_("Master Syarat Termin"))
+    kontrak_id = fields.Many2one(comodel_name="vit.kontrak", related="termin_id.kontrak_id", store=True,  string=_("Kontrak"))

@@ -67,6 +67,27 @@
                             </div>
                         </t>
 
+
+
+
+                        <t t-if="props.field == 'total_qty_termin'">
+                            <div class="w-100 h-100 d-flex flex-column justify-content-center align-items-center text-center">
+                                <t t-if="state.val.total_qty_termin">
+                                    <div class="fs-1 fw-bold text-white">
+                                        <t t-esc="state.val.total_qty_termin"/>
+                                    </div>
+                                </t>
+                                <t t-else="">
+                                    <div class="fs-1 fw-bold text-white">0</div>
+                                </t>
+                            </div>
+                        </t>
+
+
+
+
+
+
                         <t t-if="props.field == 'persentase_tl_droping'">
                             <div class="w-100 h-100 d-flex flex-column justify-content-center align-items-center text-center">
                                 <div class="fs-1 fw-bold text-white">
@@ -116,7 +137,7 @@
 
 
 
-                        <!-- <div style="border-top:1px solid white; padding-top:8px; padding-bottom:15px; margin-top:15px;">
+                                <!-- <div style="border-top:1px solid white; padding-top:8px; padding-bottom:15px; margin-top:15px;">
                                         <div class="fw-bold text-center text-white" style="margin-bottom:6px;">Termin</div>
                                         <div class="text-white" style="text-align:left; max-width:600px; margin:0 auto;">Total Qty Termin<br/>belum Verified</div>
                                     </div>

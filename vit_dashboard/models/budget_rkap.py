@@ -108,6 +108,47 @@ class BudgetRkap(models.Model):
                 'persentasi_tl': "{:.2f}".format(persentasi_tl),
                 'persentasi_droping': "{:.2f}".format(persentasi_droping),
             }
+        
+
+        if field == 'total_qty_termin':
+            izin_prinsip_list = self.env['vit.izin_prinsip'].search(domain_ip)
+            record = izin_prinsip_list[:1]
+            kanwil_id = record.kanwil_id.id if record else False
+
+            # ambil master budget & apply filter tanggal
+            master_ids = izin_prinsip_list.mapped('master_budget_id').ids
+            budgets_domain = [('master_budget_id', 'in', master_ids)] + budget_date_domain
+            budgets = self.env['vit.budget_rkap'].search(budgets_domain)
+
+            # ambil semua kontrak yang terhubung ke budget itu
+            kontrak_ids = budgets.mapped('kontrak_ids').ids
+            kontrak_domain = [('id', 'in', kontrak_ids)]
+            if kanwil_id:
+                kontrak_domain.append(('kanwil_id', '=', kanwil_id))
+
+            kontrak_list = self.env['vit.kontrak'].search(kontrak_domain)
+            kontrak_ids_filtered = kontrak_list.ids
+
+            # domain termin
+            termin_domain = [
+                ('kontrak_id', 'in', kontrak_ids_filtered),
+                ('verified', '=', False),
+                ('document', '!=', False),
+            ]
+
+            total_qty_termin = self.env['vit.syarat_termin'].search_count(termin_domain)
+
+            _logger.info("📦 TOTAL QTY TERMIN DOMAIN: %s", termin_domain)
+            _logger.info("📦 TOTAL QTY TERMIN COUNT: %s", total_qty_termin)
+
+            return {
+                'total_qty_termin': total_qty_termin,
+            }
+
+
+
+
+
 
 
 

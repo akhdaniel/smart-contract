@@ -48,6 +48,10 @@
                             <strong>Master Syarat Termin</strong>
                             <p class="m-0" t-field="doc.master_syarat_termin_id"/>
                         </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Kontrak</strong>
+                            <p class="m-0" t-field="doc.kontrak_id"/>
+                        </div>
                     </div>
                 </div>
                 <div class="oe_structure"/>

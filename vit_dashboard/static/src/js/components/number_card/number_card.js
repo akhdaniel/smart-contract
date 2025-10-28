@@ -82,20 +82,142 @@ export class NumberCard extends Component {
         this.state.val = result;
     }
 
+    // async getStatistics(domain = []) {
+    //     const field = this.props.field || "count";
+    //     let result = {};
+
+    //     try {
+    //         result = await this.orm.call(
+    //             this.props.model,
+    //             "get_statistics",
+    //             [domain, field]
+    //         );
+    //         console.log("🧮 RESULT DARI BACKEND:", field, result);
+    //         this.state.val = { ...result };
+    //     } catch (e) {
+    //         console.error("❌ Error get_statistics:", field, e);
+    //     }
+    // }
+
+
+
+
+
+    // openRecord() {
+    //     const domain = this.state.domain;
+    //     const context = this.props.context || {};
+    //     // console.log("openRecord NumberCard with domain, conntext:", domain, context);
+    //     this.env.services.action.doAction({
+    //         type: 'ir.actions.act_window',
+    //         name: this.props.title,
+    //         res_model: this.props.model,
+    //         domain: domain ,
+    //         context: context,
+    //         views: [[false, 'list'], [false, 'form']],
+    //         target: 'current',
+    //     });
+    // }
+
+    // openRecord() {
+    //     const domain = this.state.domain;
+    //     const context = this.props.context || {};
+    //     const field = this.props.field;
+
+    //     // 🔹 Kalau kartu yang diklik adalah "Total Qty Termin"
+    //     if (field === 'total_qty_termin') {
+    //         this.env.services.action.doAction({
+    //             type: 'ir.actions.act_window',
+    //             name: 'Syarat Termin Belum Diverifikasi',
+    //             res_model: 'vit.syarat_termin',
+    //             views: [[false, 'list'], [false, 'form']],
+    //             target: 'current',
+
+    //             // 🔸 Filter: Verified = False DAN Document tidak null
+    //             domain: [
+    //                 ['verified', '=', false],
+    //                 ['document', '!=', false],
+    //             ],
+
+    //             // 🔸 Group by Kontrak biar tampil kayak gambar pertama
+    //             context: {
+    //                 group_by: ['kontrak_id'],
+    //             },
+    //         });
+    //         return;
+    //     }
+
+    //     // 🔸 Default behavior buat kartu lainnya
+    //     this.env.services.action.doAction({
+    //         type: 'ir.actions.act_window',
+    //         name: this.props.title,
+    //         res_model: this.props.model,
+    //         domain: domain,
+    //         context: context,
+    //         views: [[false, 'list'], [false, 'form']],
+    //         target: 'current',
+    //     });
+    // }
+
+
     openRecord() {
         const domain = this.state.domain;
         const context = this.props.context || {};
-        // console.log("openRecord NumberCard with domain, conntext:", domain, context);
+        const field = this.props.field;
+
+        if (field === 'total_qty_termin') {
+            // Ambil filter Kanwil dan Budget Date dari domain dashboard
+            const kanwilFilter = domain.find(d => d[0] === 'kanwil_id');
+            const budgetDateFilter = domain.find(d => d[0] === 'budget_date');
+
+            const terminDomain = [
+                ['verified', '=', false],
+                ['document', '!=', false],
+            ];
+
+            if (kanwilFilter) {
+                terminDomain.push(['kontrak_id.kanwil_id', '=', kanwilFilter[2]]);
+            }
+            if (budgetDateFilter) {
+                const selectedYear = new Date(budgetDateFilter[2]).getFullYear();
+
+                const startDate = `${selectedYear}-01-01`;
+                const endDate = `${selectedYear}-12-31`;
+
+                terminDomain.push(['kontrak_id.budget_rkap_id.budget_date', '>=', startDate]);
+                terminDomain.push(['kontrak_id.budget_rkap_id.budget_date', '<=', endDate]);
+            }
+
+
+            console.log("🟣 DOMAIN FINAL OPEN RECORD:", terminDomain);
+
+            this.env.services.action.doAction({
+                type: 'ir.actions.act_window',
+                name: 'Syarat Termin Belum Diverifikasi',
+                res_model: 'vit.syarat_termin',
+                views: [[false, 'list'], [false, 'form']],
+                target: 'current',
+                domain: terminDomain,
+                context: { group_by: ['kontrak_id'] },
+            });
+            return;
+        }
+
+        // Default behaviour
         this.env.services.action.doAction({
             type: 'ir.actions.act_window',
             name: this.props.title,
             res_model: this.props.model,
-            domain: domain ,
+            domain: domain,
             context: context,
             views: [[false, 'list'], [false, 'form']],
             target: 'current',
         });
     }
+
+
+
+
+
 
     loadState() {
         try {

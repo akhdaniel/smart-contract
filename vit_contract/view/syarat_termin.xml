@@ -14,6 +14,7 @@
                     <field name="verified" /> <!-- 101-->
                     <field name="master_syarat_termin_id" /> <!-- 101-->
                     <field name="due_date" /> <!-- 102-->
+                    <field name="kontrak_id" /> <!-- 102-->
                     <field name="document_filename" invisible="1"/> <!-- 104-->
                     <field name="upload_date" /> <!-- 105-->
                 </tree>
@@ -28,6 +29,7 @@
                 <pivot string="Syarat Termin">
                     <field name="termin_id" type="row"/>
                     <field name="master_syarat_termin_id" type="row"/>
+                    <field name="kontrak_id" type="row"/>
                 </pivot>
             </field>
         </record>
@@ -64,6 +66,7 @@
                             <group> <!-- right -->
                                 <field name="termin_id"  />
                                 <field name="master_syarat_termin_id"  />
+                                <field name="kontrak_id"  />
                             </group>
                         </group>
                         <notebook>
@@ -100,9 +103,11 @@
                     <field name="upload_date" select="True"/>
                     <field name="termin_id" select="True"/>
                     <field name="master_syarat_termin_id" select="True"/>
+                    <field name="kontrak_id" select="True"/>
                     <group string="Group By..">
                         <filter string="Termin" domain="[]" name="group_by_termin_id" context="{'group_by':'termin_id'}"/>
                         <filter string="Master Syarat Termin" domain="[]" name="group_by_master_syarat_termin_id" context="{'group_by':'master_syarat_termin_id'}"/>
+                        <filter string="Kontrak" domain="[]" name="group_by_kontrak_id" context="{'group_by':'kontrak_id'}"/>
                     </group>
                 </search>
             </field>
