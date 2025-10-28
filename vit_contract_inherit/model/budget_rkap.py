@@ -193,8 +193,9 @@ class budget_rkap(models.Model):
         "payment_ids.stage_is_done",
     )
     def _compute_totals(self):
-        Droping = self.env["vit.droping"].sudo()
-        for rec in self.sudo():
+        Droping = self.env["vit.droping"]
+
+        for rec in self:
             izin_done = rec.izin_prinsip_ids.filtered(lambda i: i.stage_is_done)
             kontrak_done = rec.kontrak_ids.filtered(lambda k: k.stage_is_done)
             payment_done = rec.payment_ids.filtered(lambda p: p.stage_is_done)

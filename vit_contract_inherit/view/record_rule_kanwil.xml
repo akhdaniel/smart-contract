@@ -15,5 +15,12 @@
             <field name="domain_force">[('kontrak_id.kanwil_id', '=', user.kanwil_id.id)]</field>
         </record>
 
+        <record id="vit_payment_kanwil_rule" model="ir.rule">
+            <field name="name">Payment - Kanwil Only</field>
+            <field name="model_id" ref="vit_contract.model_vit_payment"/>
+            <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_kanwil'))]"/>
+            <field name="domain_force">[('termin_id.kontrak_id.kanwil_id', '=', user.kanwil_id.id)]</field>
+        </record>
+
     </data>
 </odoo>
