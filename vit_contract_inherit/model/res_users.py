@@ -40,14 +40,6 @@ class ResUsers(models.Model):
     )
 
 
-
-
-
-
-
-
-
-
     # allowed_kanwil_id = fields.Many2one(
     #     'vit.kanwil', 
     #     string='Allowed Kanwil',
@@ -79,13 +71,13 @@ class ResUsers(models.Model):
 
 
 
-
     @api.depends('groups_id')
     def _compute_is_kanca_group(self):
         for rec in self:
             rec.is_kanca_group = rec.has_group('vit_contract_inherit.group_vit_contract_kanca')
             if not rec.is_kanca_group:
                 rec.kanca_id = False
+
 
     @api.depends('groups_id')
     def _compute_is_kanwil_group(self):
@@ -95,19 +87,12 @@ class ResUsers(models.Model):
                 rec.kanwil_id = False
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @api.depends('groups_id')
+    def _compute_is_kanwil_keuangan_group(self):
+        for rec in self:
+            rec.is_kanwil_keuangan_group = rec.has_group('vit_contract_inherit.group_vit_contract_kanwil_keuangan')
+            if not rec.is_kanwil_keuangan_group:
+                rec.kanwil_keuangan_id = False
 
 
 
@@ -172,10 +157,6 @@ class ResUsers(models.Model):
     #             domain = [('id', '=', 0)] 
 
     #         rec.allowed_kanca_domain_ids = self.env['vit.kanca'].search(domain)
-
-
-
-
 
 
     # @api.constrains('groups_id')
