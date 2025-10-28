@@ -1,0 +1,21 @@
+<odoo>
+    <data noupdate="0">
+
+        <!-- Payment rule -->
+        <record id="vit_payment_kanwil_keuangan_rule" model="ir.rule">
+            <field name="name">Payment - Kanwil Keuangan Only</field>
+            <field name="model_id" ref="vit_contract.model_vit_payment"/>
+            <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_kanwil_keuangan'))]"/>
+            <field name="domain_force">[('termin_id.kontrak_id.kanwil_id', '=', user.kanwil_keuangan_id.id)]</field>
+        </record>
+
+        <!-- Droping rule -->
+        <record id="vit_droping_kanwil_keuangan_rule" model="ir.rule">
+            <field name="name">Droping - Kanwil Keuangan Only</field>
+            <field name="model_id" ref="vit_contract.model_vit_droping"/>
+            <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_kanwil_keuangan'))]"/>
+            <field name="domain_force">[('kanwil_id', '=', user.kanwil_keuangan_id.id)]</field>
+        </record>
+
+    </data>
+</odoo>
