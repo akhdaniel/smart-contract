@@ -202,7 +202,47 @@ export class NumberCard extends Component {
             return;
         }
 
-        // Default behaviour
+
+        if (field === 'total_qty_payment') {
+            const kanwilFilter = domain.find(d => d[0] === 'kanwil_id');
+            const budgetDateFilter = domain.find(d => d[0] === 'budget_date');
+
+            const paymentDomain = [
+                ['stage_is_draft', '=', true], // hanya yang draft
+            ];
+
+            // 🔹 Filter berdasarkan Kanwil dari kontrak
+            if (kanwilFilter) {
+                paymentDomain.push(['kontrak_id.kanwil_id', '=', kanwilFilter[2]]);
+            }
+
+            // 🔹 Filter berdasarkan tahun dari Budget RKAP
+            if (budgetDateFilter) {
+                const selectedYear = new Date(budgetDateFilter[2]).getFullYear();
+                const startDate = `${selectedYear}-01-01`;
+                const endDate = `${selectedYear}-12-31`;
+                paymentDomain.push(['kontrak_id.budget_rkap_id.budget_date', '>=', startDate]);
+                paymentDomain.push(['kontrak_id.budget_rkap_id.budget_date', '<=', endDate]);
+            }
+
+            console.log("💰 DOMAIN FINAL OPEN RECORD PAYMENT:", paymentDomain);
+
+            this.env.services.action.doAction({
+                type: 'ir.actions.act_window',
+                name: 'Pengajuan Pembayaran (Draft)',
+                res_model: 'vit.payment',
+                views: [[false, 'list'], [false, 'form']],
+                target: 'current',
+
+                // 🔹 Tambahan biar langsung group by kontrak
+                domain: paymentDomain,
+                context: { group_by: ['kontrak_id'] },
+            });
+            return;
+        }
+
+
+
         this.env.services.action.doAction({
             type: 'ir.actions.act_window',
             name: this.props.title,

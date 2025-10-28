@@ -100,6 +100,20 @@
                     </div>
 
 
+                    <div class="w-100">
+                        <NumberCard
+                            title="'Total Pengajuan Pembayaran'"
+                            bgColor="'bg-itb-light-blue'"
+                            field="'total_qty_payment'"
+                            model="'vit.budget_rkap'"
+                            domain="[]"
+                            icon="'fa fa-credit-card'"
+                            onReload.bind="onMitraNumberCardReload"
+                        />
+                    </div>
+
+
+
 
                     <!-- Kartu Persentase TL Paket -->
                     <div class="w-100">

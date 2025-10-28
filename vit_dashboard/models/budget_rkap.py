@@ -144,6 +144,42 @@ class BudgetRkap(models.Model):
             return {
                 'total_qty_termin': total_qty_termin,
             }
+        
+
+        if field == 'total_qty_payment':
+            izin_prinsip_list = self.env['vit.izin_prinsip'].search(domain_ip)
+            record = izin_prinsip_list[:1]
+            kanwil_id = record.kanwil_id.id if record else False
+
+            # Ambil master budget dari izin prinsip
+            master_ids = izin_prinsip_list.mapped('master_budget_id').ids
+
+            # Cari budget_rkap yang sesuai + filter tanggal
+            budgets_domain = [('master_budget_id', 'in', master_ids)] + budget_date_domain
+            budgets = self.env['vit.budget_rkap'].search(budgets_domain)
+
+            # Ambil semua kontrak terkait budget tersebut
+            kontrak_ids = budgets.mapped('kontrak_ids').ids
+
+            # 🔹 Domain payment: ambil yang masih draft
+            payment_domain = [
+                ('kontrak_id', 'in', kontrak_ids),
+                ('stage_is_draft', '=', True),
+            ]
+            if kanwil_id:
+                payment_domain.append(('kontrak_id.kanwil_id', '=', kanwil_id))
+
+            total_qty_payment = self.env['vit.payment'].search_count(payment_domain)
+
+            _logger.info("💰 TOTAL QTY PAYMENT DOMAIN: %s", payment_domain)
+            _logger.info("💰 TOTAL QTY PAYMENT COUNT: %s", total_qty_payment)
+
+            return {
+                'total_qty_payment': total_qty_payment,
+            }
+
+
+
 
 
 
