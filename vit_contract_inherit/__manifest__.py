@@ -27,6 +27,7 @@
         'view/record_rule_kanwil.xml',
         'view/record_rule_kanca.xml',
         'view/record_rule_vendor.xml',
+        'view/record_rule_kanwil_keuangan.xml',
         "view/menu.xml",
         "view/menu_operation.xml",
 		"view/izin_prinsip.xml",
