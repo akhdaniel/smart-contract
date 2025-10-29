@@ -2,17 +2,17 @@
     <data noupdate="0">
 
         <record id="vit_kontrak_kanwil_rule" model="ir.rule">
-            <field name="name">Kontrak - Kanwil Only</field>
+            <field name="name">Kontrak - Multi Kanwil Only</field>
             <field name="model_id" ref="vit_contract.model_vit_kontrak"/>
             <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_kanwil'))]"/>
-            <field name="domain_force">[('kanwil_id', '=', user.kanwil_id.id)]</field>
+            <field name="domain_force">[('kanwil_id', 'in', user.multi_kanwil.ids)]</field>
         </record>
 
         <record id="vit_termin_kanwil_rule" model="ir.rule">
-            <field name="name">Termin - Kanwil Only</field>
+            <field name="name">Termin - Multi Kanwil Only</field>
             <field name="model_id" ref="vit_contract.model_vit_termin"/>
             <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_kanwil'))]"/>
-            <field name="domain_force">[('kontrak_id.kanwil_id', '=', user.kanwil_id.id)]</field>
+            <field name="domain_force">[('kontrak_id.kanwil_id', 'in', user.multi_kanwil.ids)]</field>
         </record>
 
     </data>

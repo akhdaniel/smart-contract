@@ -8,7 +8,13 @@
             <field name="arch" type="xml">
                 
                 <xpath expr="//div[@class='oe_title']//group/field[@name='partner_id']" position="after">
-                    <field name="is_kanwil_group" invisible="1"/>
+
+                    <field name="multi_kanca_domain_ids" invisible="1"/>
+                    <field name="multi_kanwil" widget="many2many_tags"/>
+                    <field name="multi_kanca" widget="many2many_tags"/>
+
+
+                    <!-- <field name="is_kanwil_group" invisible="1"/>
                     <field name="kanwil_id" invisible="not is_kanwil_group"/>
 
                     <field name="is_kanca_group" invisible="1"/>
@@ -23,9 +29,7 @@
 
                     <field name="allowed_kanca_domain_ids" invisible="1"/>
                     <field name="is_allowed_kanca_group" invisible="1"/>
-                    <field name="allowed_kanca_id" invisible="not is_allowed_kanca_group" domain="[('id', 'in', allowed_kanca_domain_ids)]"/>
-                    
-
+                    <field name="allowed_kanca_id" invisible="not is_allowed_kanca_group" domain="[('id', 'in', allowed_kanca_domain_ids)]"/> -->
                 </xpath>
 
 

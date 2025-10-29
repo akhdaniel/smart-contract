@@ -18,6 +18,19 @@
                   parent="vit_contract.vit_contract_top_menu"
                   groups="vit_contract.group_vit_contract_manager,group_vit_contract_kanwil,group_vit_contract_kanca,group_vit_contract_vendor,group_vit_contract_pusat_keuangan,group_vit_contract_kanwil_keuangan,group_vit_contract_pusat_umum"/>
 
+        <menuitem id="vit_contract.menu_payment"
+                  name="Payment"
+                  parent="vit_contract.vit_contract_sub_menu"
+                  action="vit_contract.action_payment"
+                  sequence="70"
+                  groups="vit_contract.group_vit_contract_manager,vit_contract.group_vit_contract_user,group_vit_contract_vendor,group_vit_contract_pusat_keuangan,group_vit_contract_kanwil_keuangan"/>
+
+        <menuitem id="vit_contract.menu_droping"
+                  name="Droping"
+                  parent="vit_contract.vit_contract_sub_menu"
+                  action="vit_contract.action_droping"
+                  sequence="180"
+                  groups="vit_contract.group_vit_contract_manager,vit_contract.group_vit_contract_user,group_vit_contract_vendor,group_vit_contract_pusat_keuangan,group_vit_contract_kanwil_keuangan"/>
 
 
     </data>
