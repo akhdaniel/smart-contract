@@ -44,7 +44,7 @@
                 </xpath>
 
                 <xpath expr="//field[@name='budget_date']" position="attributes">
-                    <attribute name="invisible">0</attribute>
+                    <attribute name="invisible">1</attribute>
                 </xpath>
 
                 <xpath expr="//field[@name='budget_date']" position="after">
