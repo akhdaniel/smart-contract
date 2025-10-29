@@ -32,16 +32,6 @@
             <field name="category_id" ref="vit_contract.module_category_vit_contract"/>
         </record>
 
-        <record id="group_vit_contract_allowed_kanwil" model="res.groups">
-            <field name="name">Allowed Kanwil</field>
-            <field name="category_id" ref="vit_contract.module_category_vit_contract"/>
-        </record>
-
-        <record id="group_vit_contract_allowed_kanca" model="res.groups">
-            <field name="name">Allowed Kanca</field>
-            <field name="category_id" ref="vit_contract.module_category_vit_contract"/>
-        </record>
-
         <record id="group_vit_contract_pusat_umum" model="res.groups">
             <field name="name">Pusat Umum</field>
             <field name="category_id" ref="vit_contract.module_category_vit_contract"/>
