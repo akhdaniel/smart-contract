@@ -218,6 +218,10 @@
                     <attribute name="column_invisible">1</attribute>
                 </xpath>
 
+                <xpath expr="//tree/field[@name='verifikasi_syarat']" position="attributes">
+                    <attribute name="column_invisible">1</attribute>
+                </xpath>
+
 
                 <xpath expr="//tree/field[@name='persentase']" position="replace"/>
                 <xpath expr="//tree/field[@name='nilai']" position="replace"/>

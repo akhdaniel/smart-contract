@@ -202,6 +202,8 @@
                     <field name="nilai"/>
                 </xpath>
 
+                <xpath expr="//page[@name='termin_ids']//tree/field[@name='verifikasi_syarat']" position="replace"/>
+
 
                 <!-- <xpath expr="//field[@name='termin_ids']" position="attributes">
                     <attribute name="readonly">stage_is_done==True</attribute>
