@@ -57,7 +57,7 @@
                 <xpath expr="//field[@name='verifikasi_syarat']" position="replace"/>
                 <xpath expr="//field[@name='deskripsi']" position="replace"/>
                 <xpath expr="//field[@name='kontrak_id']" position="after">
-                    <field name="verifikasi_syarat"/>
+                    <field name="verifikasi_syarat" invisible="1"/>
                     <field name="deskripsi"/>
                 </xpath>
 
@@ -146,9 +146,13 @@
                 </xpath>
 
                 <!-- Verification Date -->
-                <xpath expr="//field[@name='verification_date']" position="replace">
+                <!-- <xpath expr="//field[@name='verification_date']" position="replace">
                     <field name="verification_date" groups="base.group_user,!vit_contract_inherit.group_vit_contract_vendor"/>
                     <field name="verification_date" readonly="1" groups="vit_contract_inherit.group_vit_contract_vendor"/>
+                </xpath> -->
+
+                <xpath expr="//field[@name='verification_date']" position="replace">
+                    <field name="verification_date" invisible="1"/>
                 </xpath>
 
                 <!-- Deskripsi -->

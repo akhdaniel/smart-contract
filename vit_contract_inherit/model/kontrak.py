@@ -258,7 +258,6 @@ class kontrak(models.Model):
                     s.upload_date and s.due_date and s.upload_date > s.due_date
                     for s in t.syarat_termin_ids
                 ):
-                    # pakai nama master termin biar jelas
                     late_termins.append(t.master_nama_termin_id.name or t.name)
             rec.is_late_upload = bool(late_termins)
             rec.late_termin_names = ", ".join(late_termins) if late_termins else ""
