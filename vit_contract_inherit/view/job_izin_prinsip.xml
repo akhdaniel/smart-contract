@@ -21,6 +21,11 @@
             <field name="inherit_id" ref="vit_contract.view_vit_job_izin_prinsip_form"/>
             <field name="arch" type="xml">
 
+                <xpath expr="//label[@for='name']" position="attributes">
+                    <attribute name="string">Uraian Pekerjaan</attribute>
+                </xpath>
+
+
                 <xpath expr="//field[@name='izin_prinsip_id']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
