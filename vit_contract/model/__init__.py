@@ -22,4 +22,5 @@ from . import job_izin_prinsip
 from . import state_payment
 from . import state_budget
 from . import state_droping
-from . import master_nama_partner
+from . import master_users
+from . import users

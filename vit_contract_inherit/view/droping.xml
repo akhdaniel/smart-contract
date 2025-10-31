@@ -5,6 +5,10 @@
       <field name="model">vit.droping</field>
       <field name="inherit_id" ref="vit_contract.view_vit_droping_form"/>
       <field name="arch" type="xml">
+      
+        <xpath expr="//header/button[@name='action_confirm']" position="attributes">
+          <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager,vit_contract_inherit.group_vit_contract_kanwil,vit_contract_inherit.group_vit_contract_kanca</attribute>
+        </xpath>
 
         <xpath expr="//field[@name='jumlah']" position="attributes">
           <attribute name="readonly">1</attribute>

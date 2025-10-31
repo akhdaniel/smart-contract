@@ -2,36 +2,36 @@
 <odoo>
     <data>
         <!-- tree view -->
-        <record id="view_vit_master_nama_partner_tree" model="ir.ui.view">
-            <field name="name">vit_master_nama_partner_tree</field>
-            <field name="model">vit.master_nama_partner</field>
+        <record id="view_vit_master_users_tree" model="ir.ui.view">
+            <field name="name">vit_master_users_tree</field>
+            <field name="model">vit.master_users</field>
             <field name="type">tree</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
-                <tree string="Master Nama Partner">
-                    <field name="partner_id" /> <!-- 100-->
+                <tree string="Master Users">
+                    <field name="users_id" /> <!-- 100-->
                 </tree>
             </field>
         </record>
         <!-- pivot view -->
-        <record id="view_vit_master_nama_partner_pivot" model="ir.ui.view">
-            <field name="name">vit_master_nama_partner_tree</field>
-            <field name="model">vit.master_nama_partner</field>
+        <record id="view_vit_master_users_pivot" model="ir.ui.view">
+            <field name="name">vit_master_users_tree</field>
+            <field name="model">vit.master_users</field>
             <field name="type">pivot</field>
             <field name="arch" type="xml">
-                <pivot string="Master Nama Partner">
-                    <field name="partner_id" type="row"/>
+                <pivot string="Master Users">
+                    <field name="users_id" type="row"/>
                 </pivot>
             </field>
         </record>
         <!-- form view -->
-        <record id="view_vit_master_nama_partner_form" model="ir.ui.view">
-            <field name="name">vit_master_nama_partner_form</field>
-            <field name="model">vit.master_nama_partner</field>
+        <record id="view_vit_master_users_form" model="ir.ui.view">
+            <field name="name">vit_master_users_form</field>
+            <field name="model">vit.master_users</field>
             <field name="type">form</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
-                <form string="Master Nama Partner">
+                <form string="Master Users">
                     <header>
                         <button string="Reload" type="object" name="action_reload_view" icon="fa-refresh"/>
                     </header>
@@ -43,14 +43,14 @@
                             <!--/button-->
                         </div>
                         <div class="oe_title">
-                            <label for="name" class="oe_edit_only" string="Master Nama Partner Name"/>
+                            <label for="name" class="oe_edit_only" string="Master Users Name"/>
                             <h1><field name="name" /></h1>
                         </div>
                         <group>
                             <group> <!-- left -->
                             </group>
                             <group> <!-- right -->
-                                <field name="partner_id"  />
+                                <field name="users_id"  />
                             </group>
                         </group>
                         <notebook>
@@ -67,25 +67,25 @@
             </field>
         </record>
         <!-- search -->
-        <record id="view_vit_master_nama_partner_search" model="ir.ui.view">
-            <field name="name">vit_master_nama_partner</field>
-            <field name="model">vit.master_nama_partner</field>
+        <record id="view_vit_master_users_search" model="ir.ui.view">
+            <field name="name">vit_master_users</field>
+            <field name="model">vit.master_users</field>
             <field name="arch" type="xml">
-                <search string="Master Nama Partner">
+                <search string="Master Users">
 
                     <filter string="Name" name="filter_by_name" domain="[('name','=','')]" />
                     <field name="name" select="True"/>
-                    <field name="partner_id" select="True"/>
+                    <field name="users_id" select="True"/>
                     <group string="Group By..">
-                        <filter string="Partner" domain="[]" name="group_by_partner_id" context="{'group_by':'partner_id'}"/>
+                        <filter string="Users" domain="[]" name="group_by_users_id" context="{'group_by':'users_id'}"/>
                     </group>
                 </search>
             </field>
         </record>
         <!-- kanban , to show image, please add image, image_512, image_1920, or image_small in the model -->
-        <record id="view_vit_master_nama_partner_kanban" model="ir.ui.view" >
-            <field name="name">vit_master_nama_partner</field>
-            <field name="model">vit.master_nama_partner</field>
+        <record id="view_vit_master_users_kanban" model="ir.ui.view" >
+            <field name="name">vit_master_users</field>
+            <field name="model">vit.master_users</field>
             <field name="arch" type="xml">
                 <kanban version="7.0">
                     <field name="id" />
@@ -102,30 +102,30 @@
             </field>
         </record>
         <!-- graph -->
-        <record id="view_vit_master_nama_partner_graph" model="ir.ui.view">
-            <field name="name">vit_master_nama_partner</field>
-            <field name="model">vit.master_nama_partner</field>
+        <record id="view_vit_master_users_graph" model="ir.ui.view">
+            <field name="name">vit_master_users</field>
+            <field name="model">vit.master_users</field>
             <field name="arch" type="xml">
-                <graph string="Master Nama Partner" type="bar">
-                    <field name="partner_id"/>
+                <graph string="Master Users" type="bar">
+                    <field name="users_id"/>
                 </graph>
             </field>
         </record>
         <!-- action window -->
-        <record id="action_master_nama_partner" model="ir.actions.act_window">
-            <field name="name">Master Nama Partner</field>
+        <record id="action_master_users" model="ir.actions.act_window">
+            <field name="name">Master Users</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">vit.master_nama_partner</field>
+            <field name="res_model">vit.master_users</field>
             <field name="view_mode">tree,form,kanban,pivot,graph</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
-                Click to add a new Master Nama Partner
+                Click to add a new Master Users
                 </p><p>
 
                 </p>
             </field>
         </record>
 
-        <menuitem id="menu_master_nama_partner" name="Master Nama Partner" parent="vit_contract_config_menu" action="action_master_nama_partner" sequence="250"/>
+        <menuitem id="menu_master_users" name="Master Users" parent="vit_contract_config_menu" action="action_master_users" sequence="250"/>
     </data>
 </odoo>

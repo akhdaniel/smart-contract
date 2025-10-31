@@ -8,11 +8,11 @@ import logging
 _logger = logging.getLogger(__name__)
 
 @tagged('post_install', '-at_install')
-class MasterNamaPartnerTestCase(VitContractCommon):
+class MasterUsersTestCase(VitContractCommon):
 
-	def test_vit_master_nama_partner_count(cls):
+	def test_vit_master_users_count(cls):
 		_logger.info(' -------------------- test record count -----------------------------------------')
 		cls.assertEqual(
 		    4,
-		    len(cls.master_nama_partners)
+		    len(cls.master_userses)
 		)

@@ -79,8 +79,9 @@
 		"view/state_droping.xml",
 		"report/state_droping.xml",
 		"data/vit.state_droping.csv",
-		"view/master_nama_partner.xml",
-		"report/master_nama_partner.xml"
+		"view/master_users.xml",
+		"report/master_users.xml",
+		"view/users.xml"
 	],
 	"installable": True,
 	"auto_install": False,

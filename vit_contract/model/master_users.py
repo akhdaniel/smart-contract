@@ -4,10 +4,10 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
-class master_nama_partner(models.Model):
+class master_users(models.Model):
 
-    _name = "vit.master_nama_partner"
-    _description = "vit.master_nama_partner"
+    _name = "vit.master_users"
+    _description = "vit.master_users"
 
 
     def action_reload_view(self):
@@ -21,6 +21,6 @@ class master_nama_partner(models.Model):
         default.update({
             'name': self.name + ' (Copy)'
         })
-        return super(master_nama_partner, self).copy(default)
+        return super(master_users, self).copy(default)
 
-    partner_id = fields.Many2one(comodel_name="res.partner",  string=_("Partner"))
+    users_id = fields.Many2one(comodel_name="res.users",  string=_("Users"))

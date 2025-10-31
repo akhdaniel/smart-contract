@@ -36,7 +36,7 @@
         "view/job_izin_prinsip.xml",
         "view/budget_rkap.xml",
 		"view/kontrak.xml",
-        'view/master_nama_partner.xml',
+        'view/master_users.xml',
         "view/izin_prinsip.xml",
         "view/izin_prinsip_line.xml",
 		"view/payment.xml",

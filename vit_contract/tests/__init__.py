@@ -21,4 +21,4 @@ from . import test_job_izin_prinsip
 from . import test_state_payment
 from . import test_state_budget
 from . import test_state_droping
-from . import test_master_nama_partner
+from . import test_master_users
