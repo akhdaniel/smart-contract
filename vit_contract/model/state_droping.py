@@ -8,9 +8,10 @@ class state_droping(models.Model):
     """
     {
     "is_a_stage":true,
-    "data":[{"name":"Draft","sequence":20,"draft":true, "on_progress":false, "done":false, "fold":false, "allow_confirm":true},
-            {"name":"On Progress", "sequence":30,"draft":false, "on_progress":true, "done":false, "fold":false, "allow_confirm":true},
-            {"name":"Done", "sequence":40,"draft":false, "on_progress":false, "done":true, "fold":false}]
+    "data":[{"name":"Draft","sequence":20,"draft":true, "confirmed":false, "on_progress":false, "done":false, "fold":false, "allow_confirm":true},
+            {"name":"Confirmed", "sequence":30,"draft":false, "confirmed":true, "on_progress":false, "done":false, "fold":false, "allow_confirm":true},
+            {"name":"On Progress", "sequence":40,"draft":false, "confirmed":false, "on_progress":true, "done":false, "fold":false, "allow_confirm":true},
+            {"name":"Done", "sequence":50,"draft":false, "confirmed":false, "on_progress":false, "done":true, "fold":false}]
     }
     """
 
@@ -33,6 +34,7 @@ class state_droping(models.Model):
     execute_enter = fields.Char( string=_("Execute Enter"))
     confirmation = fields.Char( string=_("Confirmation"))
     on_progress = fields.Boolean( string=_("On Progress"))
+    confirmed = fields.Boolean( string=_("Confirmed"))
 
 
     def copy(self, default=None):

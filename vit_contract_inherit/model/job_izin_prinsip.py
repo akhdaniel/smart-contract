@@ -6,12 +6,43 @@ class job_izin_prinsip(models.Model):
     _name = "vit.job_izin_prinsip"
     _inherit = "vit.job_izin_prinsip"
 
-    kanca_id = fields.Many2one(
-        comodel_name="vit.kanca",
-        string="Lokasi",
-        required=True,
-        domain="[('kanwil_id', '=', parent.kanwil_id)]",
+    kanwil_id = fields.Many2one(
+        'vit.kanwil',
+        string='Kanwil',
+        domain=lambda self: self._domain_user("kanwil_id"),
     )
+
+    kanca_id = fields.Many2one(
+        "vit.kanca",
+        string="Kanca",
+        domain=lambda self: self._domain_user("kanca_id"),
+    )
+
+
+    @api.model
+    def _domain_user(self, field_name):
+        user = self.env.user
+
+        # --- Kanwil ---
+        if field_name == "kanwil_id":
+            if user.multi_kanwil:
+                return [("id", "in", user.multi_kanwil.ids)]
+            return []
+
+        # --- Kanca ---
+        elif field_name == "kanca_id":
+            if user.multi_kanca:
+                # ✅ Kalau user punya multi_kanca → filter sesuai itu
+                return [("id", "in", user.multi_kanca.ids)]
+            else:
+                # ✅ Kalau multi_kanca kosong (baik multi_kanwil isi atau enggak)
+                # ikut parent.kanwil_id aja
+                return "[('kanwil_id', '=', parent.kanwil_id)]"
+
+        return []
+
+
+
 
 
     total_pagu_job = fields.Float(

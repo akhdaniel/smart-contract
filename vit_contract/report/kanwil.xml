@@ -86,32 +86,32 @@
                         <tr>
                             <td>Name</td>
                             <td>Jumlah</td>
+                            <td>Date</td>
+                            <td>Droping Date</td>
                             <td>Stage Is Draft</td>
                             <td>Stage Is Done</td>
                             <td>Allow Confirm</td>
                             <td>Allow Cancel</td>
                             <td>Stage Name</td>
-                            <td>Date</td>
-                            <td>Droping Date</td>
                             <td>Kanwil</td>
-                            <td>Stage</td>
                             <td>Master Budget</td>
+                            <td>Stage</td>
                         </tr>
                     </thead>
                     <tbody class="droping_ids_tbody">
                         <tr t-foreach="doc.droping_ids" t-as="line">
                             <td><span t-field="line.name" /></td>
                             <td><span t-field="line.jumlah" /></td>
+                            <td><span t-field="line.date" /></td>
+                            <td><span t-field="line.droping_date" /></td>
                             <td><span t-field="line.stage_is_draft" /></td>
                             <td><span t-field="line.stage_is_done" /></td>
                             <td><span t-field="line.allow_confirm" /></td>
                             <td><span t-field="line.allow_cancel" /></td>
                             <td><span t-field="line.stage_name" /></td>
-                            <td><span t-field="line.date" /></td>
-                            <td><span t-field="line.droping_date" /></td>
                             <td><span t-field="line.kanwil_id" /></td>
-                            <td><span t-field="line.stage_id" /></td>
                             <td><span t-field="line.master_budget_id" /></td>
+                            <td><span t-field="line.stage_id" /></td>
                         </tr> <!-- foreach-->
                     </tbody>
                 </table>

@@ -147,6 +147,6 @@
             </field>
         </record>
 
-        <menuitem id="menu_job_izin_prinsip" name="Job Izin Prinsip" parent="vit_contract_config_menu" action="action_job_izin_prinsip" sequence="220"/>
+        <menuitem id="menu_job_izin_prinsip" name="Job Izin Prinsip" parent="vit_contract_config_menu" action="action_job_izin_prinsip" sequence="210"/>
     </data>
 </odoo>

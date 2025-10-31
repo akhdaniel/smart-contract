@@ -18,19 +18,51 @@
                   parent="vit_contract.vit_contract_top_menu"
                   groups="vit_contract.group_vit_contract_manager,group_vit_contract_kanwil,group_vit_contract_kanca,group_vit_contract_vendor,group_vit_contract_pusat_keuangan,group_vit_contract_kanwil_keuangan,group_vit_contract_pusat_umum"/>
 
+        <menuitem id="vit_contract.menu_budget_rkap"
+                  name="Budget Rkap"
+                  parent="vit_contract.vit_contract_sub_menu"
+                  action="vit_contract.action_budget_rkap"
+                  sequence="10"
+                  groups="vit_contract.group_vit_contract_manager,vit_contract.group_vit_contract_user,group_vit_contract_pusat_umum"/>
+
+
+        <menuitem id="vit_contract.menu_izin_prinsip"
+                  name="Izin Prinsip"
+                  parent="vit_contract.vit_contract_sub_menu"
+                  action="vit_contract.action_izin_prinsip"
+                  sequence="20"
+                  groups="vit_contract.group_vit_contract_manager,vit_contract.group_vit_contract_user,group_vit_contract_kanwil,group_vit_contract_kanca"/>
+
+
+        <menuitem id="vit_contract.menu_kontrak"
+                  name="Kontrak"
+                  parent="vit_contract.vit_contract_sub_menu"
+                  action="vit_contract.action_kontrak"
+                  sequence="30"
+                  groups="vit_contract.group_vit_contract_manager,vit_contract.group_vit_contract_user,group_vit_contract_kanwil,group_vit_contract_kanca"/>
+
+
+        <menuitem id="vit_contract.menu_termin"
+                  name="Termin"
+                  parent="vit_contract.vit_contract_sub_menu"
+                  action="vit_contract.action_termin"
+                  sequence="40"
+                  groups="vit_contract.group_vit_contract_manager,vit_contract.group_vit_contract_user,group_vit_contract_kanwil,group_vit_contract_kanca"/>
+
+
         <menuitem id="vit_contract.menu_payment"
                   name="Payment"
                   parent="vit_contract.vit_contract_sub_menu"
                   action="vit_contract.action_payment"
-                  sequence="70"
+                  sequence="50"
                   groups="vit_contract.group_vit_contract_manager,vit_contract.group_vit_contract_user,group_vit_contract_vendor,group_vit_contract_pusat_keuangan,group_vit_contract_kanwil_keuangan"/>
 
         <menuitem id="vit_contract.menu_droping"
                   name="Droping"
                   parent="vit_contract.vit_contract_sub_menu"
                   action="vit_contract.action_droping"
-                  sequence="180"
-                  groups="vit_contract.group_vit_contract_manager,vit_contract.group_vit_contract_user,group_vit_contract_vendor,group_vit_contract_pusat_keuangan,group_vit_contract_kanwil_keuangan"/>
+                  sequence="60"
+                  groups="vit_contract.group_vit_contract_manager,vit_contract.group_vit_contract_user,group_vit_contract_kanwil,group_vit_contract_kanca,group_vit_contract_kanca,group_vit_contract_vendor,group_vit_contract_pusat_keuangan,group_vit_contract_kanwil_keuangan"/>
 
 
     </data>

@@ -14,6 +14,10 @@
           <attribute name="readonly">1</attribute>
           <attribute name="invisible">1</attribute>
         </xpath>
+
+        <xpath expr="//field[@name='droping_date']" position="attributes">
+          <attribute name="readonly">1</attribute>
+        </xpath>
         
 
         <xpath expr="//page[@name='termin_kontrak_ids']" position="after">

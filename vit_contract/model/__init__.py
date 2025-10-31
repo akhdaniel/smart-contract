@@ -17,8 +17,9 @@ from . import state_izin_prinsip
 from . import master_budget
 from . import droping
 from . import state_termin
-from . import state_droping
 from . import kanca
 from . import job_izin_prinsip
 from . import state_payment
 from . import state_budget
+from . import state_droping
+from . import master_nama_partner

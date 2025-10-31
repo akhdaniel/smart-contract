@@ -61,6 +61,10 @@
                             <strong>On Progress</strong>
                             <p class="m-0" t-field="doc.on_progress" />
                         </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Confirmed</strong>
+                            <p class="m-0" t-field="doc.confirmed" />
+                        </div>
                     </div>
                 </div>
                 <div class="oe_structure"/>

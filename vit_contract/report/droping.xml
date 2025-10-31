@@ -26,6 +26,14 @@
                             <p class="m-0" t-field="doc.jumlah" />
                         </div>
                         <div class="col-auto mw-100 mb-2">
+                            <strong>Date</strong>
+                            <p class="m-0" t-field="doc.date" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Droping Date</strong>
+                            <p class="m-0" t-field="doc.droping_date" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
                             <strong>Stage Is Draft</strong>
                             <p class="m-0" t-field="doc.stage_is_draft" />
                         </div>
@@ -46,24 +54,16 @@
                             <p class="m-0" t-field="doc.stage_name" />
                         </div>
                         <div class="col-auto mw-100 mb-2">
-                            <strong>Date</strong>
-                            <p class="m-0" t-field="doc.date" />
-                        </div>
-                        <div class="col-auto mw-100 mb-2">
-                            <strong>Droping Date</strong>
-                            <p class="m-0" t-field="doc.droping_date" />
-                        </div>
-                        <div class="col-auto mw-100 mb-2">
                             <strong>Kanwil</strong>
                             <p class="m-0" t-field="doc.kanwil_id"/>
                         </div>
                         <div class="col-auto mw-100 mb-2">
-                            <strong>Stage</strong>
-                            <p class="m-0" t-field="doc.stage_id"/>
-                        </div>
-                        <div class="col-auto mw-100 mb-2">
                             <strong>Master Budget</strong>
                             <p class="m-0" t-field="doc.master_budget_id"/>
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Stage</strong>
+                            <p class="m-0" t-field="doc.stage_id"/>
                         </div>
                     </div>
                 </div>

@@ -1,0 +1,53 @@
+<odoo>
+    <data>
+        <record id="view_inherit_vit_master_nama_partner_form_invisible_name" model="ir.ui.view">
+            <field name="name">vit.master_nama_partner.form.inherit.invisible.name</field>
+            <field name="model">vit.master_nama_partner</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_master_nama_partner_form"/>
+            <field name="arch" type="xml">
+
+
+                <xpath expr="//field[@name='partner_id']" position="replace"/>
+                <xpath expr="//field[@name='name']" position="before">
+                    <field name="partner_id"/>
+                </xpath>
+
+                <xpath expr="//field[@name='name']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+
+                <xpath expr="//label[@for='name']" position="attributes">
+                    <attribute name="string">Nama Vendor</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+
+        <record id="view_inherit_vit_master_nama_partner_tree_vendor" model="ir.ui.view">
+            <field name="name">vit.master_nama_partner.tree.inherit.vendor</field>
+            <field name="model">vit.master_nama_partner</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_master_nama_partner_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="string">Nama Vendor</attribute>
+                </xpath>
+            </field>
+        </record>
+
+
+        <menuitem id="vit_contract_vendor_menu"
+                  name="Data Vendor"
+                  parent="vit_contract.vit_contract_top_menu"
+                  sequence="50"
+                  groups="vit_contract.group_vit_contract_manager,vit_contract.group_vit_contract_user,group_vit_contract_kanwil,group_vit_contract_kanca"
+                  action="vit_contract.action_master_nama_partner"/>
+
+        <menuitem id="vit_contract.menu_master_nama_partner"
+                  name="List Nama Vendor"
+                  parent="vit_contract_vendor_menu"
+                  action="vit_contract.action_master_nama_partner"
+                  sequence="1"/>
+    </data>
+</odoo>

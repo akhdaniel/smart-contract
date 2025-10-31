@@ -8,8 +8,6 @@
             <field name="inherit_id" ref="vit_contract.view_vit_syarat_termin_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='master_syarat_termin_id']" position="replace"/>
-                    
-
                 <xpath expr="//field[@name='name']" position="before">
                     <field name="master_syarat_termin_id"/>
                 </xpath>

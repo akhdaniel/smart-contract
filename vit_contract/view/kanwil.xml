@@ -63,9 +63,9 @@
                                         <field name="name" /> <!-- 100-->
                                         <field name="jumlah" /> <!-- 101-->
                                         <field name="date" /> <!-- 102-->
-                                        <field name="stage_id" /> <!-- 102-->
+                                        <field name="master_budget_id" /> <!-- 102-->
                                         <field name="droping_date" /> <!-- 103-->
-                                        <field name="master_budget_id" /> <!-- 103-->
+                                        <field name="stage_id" /> <!-- 103-->
                                     </tree>
                                 </field>
                             </page>

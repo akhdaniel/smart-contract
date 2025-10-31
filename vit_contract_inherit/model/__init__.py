@@ -9,6 +9,7 @@ from . import kanwil
 from . import kanca
 from . import kontrak
 from . import kontrak_state
+from . import master_nama_partner
 from . import partner
 from . import payment
 from . import state_payment

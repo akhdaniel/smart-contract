@@ -26,6 +26,38 @@ class Droping(models.Model):
         readonly=True,
     )
 
+    kanwil_id = fields.Many2one(
+        'vit.kanwil',
+        string='Kanwil',
+        domain=lambda self: self._domain_user("kanwil_id"),
+    )
+
+    kanca_id = fields.Many2one(
+        "vit.kanca",
+        string="Kanca",
+        domain=lambda self: self._domain_user("kanca_id"),
+    )
+
+
+    @api.model
+    def _domain_user(self, field_name):
+        user = self.env.user
+
+        if field_name == "kanwil_id":
+            if user.multi_kanwil:
+                return [("id", "in", user.multi_kanwil.ids)]
+            else:
+                return []
+
+        elif field_name == "kanca_id":
+            if user.multi_kanca:
+                return [("id", "in", user.multi_kanca.ids)]
+            else:
+                return [] 
+
+        return []
+
+
 
 
 
@@ -37,6 +69,37 @@ class Droping(models.Model):
             end_of_year = dt(today.year, 12, 31)
             vals["date"] = end_of_year
         return super(Droping, self).create(vals)
+
+
+    # @api.model
+    # def create(self, vals):
+    #     user = self.env.user
+
+    #     if not vals.get("kanwil_id") and user.multi_kanwil:
+    #         if len(user.multi_kanwil) == 1:
+    #             vals["kanwil_id"] = user.multi_kanwil.id
+
+    #     if not vals.get("date"):
+    #         today = fields.Date.context_today(self)
+    #         end_of_year = dt(today.year, 12, 31)
+    #         vals["date"] = end_of_year
+
+    #     return super(Droping, self).create(vals)
+    
+
+    # @api.model
+    # def create(self, vals):
+    #     user = self.env.user
+
+    #     if not vals.get("kanwil_id"):
+    #         if user.multi_kanwil and len(user.multi_kanwil) == 1:
+    #             vals["kanwil_id"] = user.multi_kanwil.id
+    #     if not vals.get("date"):
+    #         today = fields.Date.context_today(self)
+    #         end_of_year = dt(today.year, 12, 31)
+    #         vals["date"] = end_of_year
+
+    #     return super(Droping, self).create(vals)
 
 
 

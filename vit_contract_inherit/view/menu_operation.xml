@@ -2,10 +2,26 @@
 <odoo>
   <data noupdate="0">
 
-    <record id="vit_contract.menu_budget_rkap" model="ir.ui.menu">
+    <!-- <record id="vit_contract.menu_budget_rkap" model="ir.ui.menu">
       <field name="parent_id" ref="vit_contract.vit_contract_sub_menu"/>
       <field name="sequence">10</field>
     </record>
+
+    <menuitem id="vit_contract.menu_budget_rkap"
+                  name="Budget Rkap"
+                  parent="vit_contract.vit_contract_sub_menu"
+                  action="vit_contract.action_budget_rkap"
+                  sequence="30"
+                  groups="vit_contract.group_vit_contract_manager,vit_contract.group_vit_contract_user,group_vit_contract_pusat_umum"/> -->
+
+    <!-- <menuitem 
+      id="vit_contract.menu_budget_rkap"
+      name="Budget Rkap"
+      parent="vit_contract.vit_contract_sub_menu"
+      action="vit_contract.action_budget_rkap"
+      sequence="30"
+      groups="vit_contract.group_vit_contract_manager, vit_contract.group_vit_contract_user, vit_contract_inherit.group_vit_contract_pusat_umum"/> -->
+
 
   </data>
 </odoo>

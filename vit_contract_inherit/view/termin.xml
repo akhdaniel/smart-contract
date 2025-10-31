@@ -16,11 +16,11 @@
                 </xpath>
 
                 <xpath expr="//header/button[@name='action_confirm']" position="attributes">
-                    <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager</attribute>
+                    <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager,vit_contract_inherit.group_vit_contract_kanwil,vit_contract_inherit.group_vit_contract_kanca</attribute>
                 </xpath>
 
                 <xpath expr="//header/button[@name='action_cancel']" position="attributes">
-                    <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager</attribute>
+                    <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager,vit_contract_inherit.group_vit_contract_kanwil,vit_contract_inherit.group_vit_contract_kanca</attribute>
                 </xpath>
 
 
@@ -54,10 +54,10 @@
                     <attribute name="column_invisible">1</attribute>
                 </xpath> -->
 
-                <xpath expr="//field[@name='verifikasi_syarat']" position="replace"/>
+                <!-- <xpath expr="//field[@name='verifikasi_syarat']" position="replace"/> -->
                 <xpath expr="//field[@name='deskripsi']" position="replace"/>
                 <xpath expr="//field[@name='kontrak_id']" position="after">
-                    <field name="verifikasi_syarat" invisible="1"/>
+                    <!-- <field name="verifikasi_syarat" invisible="1"/> -->
                     <field name="deskripsi"/>
                 </xpath>
 
@@ -68,9 +68,13 @@
                      <attribute name="invisible">1</attribute>
                 </xpath>
 
-                <xpath expr="//field[@name='verifikasi_syarat']" position="attributes">
+                <!-- <xpath expr="//field[@name='verifikasi_syarat']" position="attributes">
                     <attribute name="readonly">1</attribute>
                      <attribute name="force_save">1</attribute>
+                </xpath> -->
+
+                <xpath expr="//field[@name='verifikasi_syarat']" position="attributes">
+                    <attribute name="invisible">1</attribute>
                 </xpath>
 
                 <!-- <xpath expr="//form" position="attributes">
@@ -151,8 +155,8 @@
                     <field name="verification_date" readonly="1" groups="vit_contract_inherit.group_vit_contract_vendor"/>
                 </xpath> -->
 
-                <xpath expr="//field[@name='verification_date']" position="replace">
-                    <field name="verification_date" invisible="1"/>
+                <xpath expr="//field[@name='verification_date']" position="attributes">
+                    <attribute name="invisible">1</attribute>
                 </xpath>
 
                 <!-- Deskripsi -->
@@ -215,10 +219,6 @@
             <field name="arch" type="xml">
 
                 <xpath expr="//tree/field[@name='deskripsi']" position="attributes">
-                    <attribute name="column_invisible">1</attribute>
-                </xpath>
-
-                <xpath expr="//tree/field[@name='verifikasi_syarat']" position="attributes">
                     <attribute name="column_invisible">1</attribute>
                 </xpath>
 

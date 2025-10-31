@@ -142,6 +142,6 @@
             </field>
         </record>
 
-        <menuitem id="menu_state_payment" name="State Payment" parent="vit_contract_config_menu" action="action_state_payment" sequence="230"/>
+        <menuitem id="menu_state_payment" name="State Payment" parent="vit_contract_config_menu" action="action_state_payment" sequence="220"/>
     </data>
 </odoo>

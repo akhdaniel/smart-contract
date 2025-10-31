@@ -32,11 +32,11 @@
 
 
                 <xpath expr="//header/button[@name='action_confirm']" position="attributes">
-                    <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager</attribute>
+                    <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager,vit_contract_inherit.group_vit_contract_kanwil,vit_contract_inherit.group_vit_contract_kanca</attribute>
                 </xpath>
 
                 <xpath expr="//header/button[@name='action_cancel']" position="attributes">
-                    <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager</attribute>
+                    <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager,vit_contract_inherit.group_vit_contract_kanwil,vit_contract_inherit.group_vit_contract_kanca</attribute>
                 </xpath>
 
 
@@ -201,8 +201,6 @@
                     <field name="persentase"/>
                     <field name="nilai"/>
                 </xpath>
-
-                <xpath expr="//page[@name='termin_ids']//tree/field[@name='verifikasi_syarat']" position="replace"/>
 
 
                 <!-- <xpath expr="//field[@name='termin_ids']" position="attributes">

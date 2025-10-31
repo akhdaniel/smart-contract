@@ -66,9 +66,6 @@
 		"view/state_termin.xml",
 		"report/state_termin.xml",
 		"data/vit.state_termin.csv",
-		"view/state_droping.xml",
-		"report/state_droping.xml",
-		"data/vit.state_droping.csv",
 		"view/kanca.xml",
 		"report/kanca.xml",
 		"view/job_izin_prinsip.xml",
@@ -78,7 +75,12 @@
 		"data/vit.state_payment.csv",
 		"view/state_budget.xml",
 		"report/state_budget.xml",
-		"data/vit.state_budget.csv"
+		"data/vit.state_budget.csv",
+		"view/state_droping.xml",
+		"report/state_droping.xml",
+		"data/vit.state_droping.csv",
+		"view/master_nama_partner.xml",
+		"report/master_nama_partner.xml"
 	],
 	"installable": True,
 	"auto_install": False,
