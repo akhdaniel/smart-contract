@@ -55,8 +55,8 @@
                 <xpath expr="//field[@name='actual_progress']" position="replace"/>
                 <xpath expr="//field[@name='syarat_output']" position="replace"/>
                 <xpath expr="//field[@name='actual_output']" position="replace"/>
-                <xpath expr="//field[@name='partner_id']" position="replace"/>
-                <xpath expr="//field[@name='termin_id']" position="replace"/>
+                <xpath expr="//field[@name='request_date']" position="replace"/>
+                <xpath expr="//field[@name='payment_date']" position="replace"/>
                 <xpath expr="//field[@name='amount']" position="after">
                     <field name="amount_budget_rkap" readonly="1"/>
                     <field name="amount_izin_prinsip" readonly="1"/>
@@ -67,9 +67,18 @@
                     <field name="actual_progress" readonly="1"/>
                     <field name="syarat_output" readonly="1"/>
                     <field name="actual_output" readonly="1"/>
+                    <field name="request_date" readonly="1"/>
+                    <field name="payment_date" readonly="1"/>
+                </xpath>
+
+
+                <xpath expr="//field[@name='partner_id']" position="replace"/>
+                <xpath expr="//field[@name='termin_id']" position="replace"/>
+                <xpath expr="//field[@name='izin_prinsip_id']" position="after">
                     <field name="partner_id" readonly="1"/>
                     <field name="termin_id" readonly="1"/>
                 </xpath>
+
 
                 <xpath expr="//field[@name='amount']" position="attributes">
                     <attribute name="readonly">1</attribute>
@@ -107,9 +116,9 @@
                     <attribute name="readonly">1</attribute>
                 </xpath>
 
-                <xpath expr="//field[@name='request_date']" position="attributes">
+                <!-- <xpath expr="//field[@name='request_date']" position="attributes">
                     <attribute name="readonly">1</attribute>
-                </xpath>
+                </xpath> -->
 
                 <xpath expr="//field[@name='payment_date']" position="after">
                     <field name="attachments" widget="many2many_binary_preview" string="Attachments"/>
