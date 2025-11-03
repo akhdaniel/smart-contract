@@ -210,6 +210,7 @@
                             <td>Syarat Output</td>
                             <td>Actual Output</td>
                             <td>Persentase</td>
+                            <td>Stage Is On Progress</td>
                             <td>Partner</td>
                             <td>Budget Rkap</td>
                             <td>Termin</td>
@@ -241,6 +242,7 @@
                             <td><span t-field="line.syarat_output" /></td>
                             <td><span t-field="line.actual_output" /></td>
                             <td><span t-field="line.persentase" /></td>
+                            <td><span t-field="line.stage_is_on_progress" /></td>
                             <td><span t-field="line.partner_id" /></td>
                             <td><span t-field="line.budget_rkap_id" /></td>
                             <td><span t-field="line.termin_id" /></td>

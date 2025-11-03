@@ -38,12 +38,56 @@
                     </div>
                 </xpath>
 
-                <xpath expr="//header/button[@name='action_confirm']" position="attributes">
-                    <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager,vit_contract_inherit.group_vit_contract_kanwil_keuangan,vit_contract_inherit.group_vit_contract_pusat_keuangan</attribute>
+                <xpath expr="//header/button[@name='action_confirm']" position="replace">
+                    <button name="action_confirm"
+                            string="Confirm"
+                            type="object"
+                            class="oe_highlight"
+                            icon="fa-check-circle"
+                            groups="vit_contract.group_vit_contract_user,
+                                    vit_contract.group_vit_contract_manager,
+                                    vit_contract_inherit.group_vit_contract_kanwil_keuangan"
+                            invisible="stage_is_draft==False or stage_is_on_progress==True"/>
+
+                    <button name="action_confirm"
+                            string="Confirm"
+                            type="object"
+                            class="oe_highlight"
+                            icon="fa-check-circle"
+                            groups="vit_contract.group_vit_contract_user,
+                                    vit_contract.group_vit_contract_manager,
+                                    vit_contract_inherit.group_vit_contract_pusat_keuangan"
+                            invisible="stage_is_draft==True or stage_is_on_progress==False"/>
                 </xpath>
 
-                <xpath expr="//header/button[@name='action_cancel']" position="attributes">
-                    <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager,vit_contract_inherit.group_vit_contract_kanwil_keuangan,vit_contract_inherit.group_vit_contract_pusat_keuangan</attribute>
+
+                <xpath expr="//header/button[@name='action_cancel']" position="replace">
+                    <button name="action_cancel"
+                            string="Cancel"
+                            type="object"
+                            icon="fa-times-circle"
+                            groups="vit_contract.group_vit_contract_user,
+                                    vit_contract.group_vit_contract_manager,
+                                    vit_contract_inherit.group_vit_contract_kanwil_keuangan"
+                            invisible="stage_is_draft==True or stage_is_on_progress==True"/>
+
+                    <button name="action_cancel"
+                            string="Cancel"
+                            type="object"
+                            icon="fa-times-circle"
+                            groups="vit_contract.group_vit_contract_user,
+                                    vit_contract.group_vit_contract_manager,
+                                    vit_contract_inherit.group_vit_contract_pusat_keuangan"
+                            invisible="stage_is_draft==True or stage_is_on_progress==False"/>
+
+                    <button name="action_cancel"
+                            string="Cancel"
+                            type="object"
+                            icon="fa-times-circle"
+                            groups="vit_contract.group_vit_contract_user,
+                                    vit_contract.group_vit_contract_manager,
+                                    vit_contract_inherit.group_vit_contract_pusat_keuangan"
+                            invisible="stage_is_draft==True or stage_is_on_progress==True or stage_is_done==False"/>
                 </xpath>
 
                 <xpath expr="//field[@name='amount_budget_rkap']" position="replace"/>
