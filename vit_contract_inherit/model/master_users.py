@@ -42,7 +42,7 @@ class master_users(models.Model):
                 "password": record.password,
             }
 
-            user = self.env["res.users"].create(user_vals)
+            user = self.env["res.users"].sudo().create(user_vals)
             user.write({"groups_id": [(4, vendor_group.id)]})
 
             record.created_user_id = user.id
