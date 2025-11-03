@@ -9,19 +9,12 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <tree string="Master Users">
-                    <field name="users_id" /> <!-- 100-->
+                    <field name="users_name" /> <!-- 101-->
+                    <field name="email" /> <!-- 102-->
+                    <field name="street" /> <!-- 103-->
+                    <field name="phone" /> <!-- 104-->
+                    <field name="password" /> <!-- 105-->
                 </tree>
-            </field>
-        </record>
-        <!-- pivot view -->
-        <record id="view_vit_master_users_pivot" model="ir.ui.view">
-            <field name="name">vit_master_users_tree</field>
-            <field name="model">vit.master_users</field>
-            <field name="type">pivot</field>
-            <field name="arch" type="xml">
-                <pivot string="Master Users">
-                    <field name="users_id" type="row"/>
-                </pivot>
             </field>
         </record>
         <!-- form view -->
@@ -48,9 +41,13 @@
                         </div>
                         <group>
                             <group> <!-- left -->
+                                <field name="users_name"  />
+                                <field name="email"  />
+                                <field name="street"  />
+                                <field name="phone"  />
+                                <field name="password"  />
                             </group>
                             <group> <!-- right -->
-                                <field name="users_id"  />
                             </group>
                         </group>
                         <notebook>
@@ -74,10 +71,18 @@
                 <search string="Master Users">
 
                     <filter string="Name" name="filter_by_name" domain="[('name','=','')]" />
+                    <filter string="Users Name" name="filter_by_users_name" domain="[('users_name','=','')]" />
+                    <filter string="Email" name="filter_by_email" domain="[('email','=','')]" />
+                    <filter string="Street" name="filter_by_street" domain="[('street','=','')]" />
+                    <filter string="Phone" name="filter_by_phone" domain="[('phone','=','')]" />
+                    <filter string="Password" name="filter_by_password" domain="[('password','=','')]" />
                     <field name="name" select="True"/>
-                    <field name="users_id" select="True"/>
+                    <field name="users_name" select="True"/>
+                    <field name="email" select="True"/>
+                    <field name="street" select="True"/>
+                    <field name="phone" select="True"/>
+                    <field name="password" select="True"/>
                     <group string="Group By..">
-                        <filter string="Users" domain="[]" name="group_by_users_id" context="{'group_by':'users_id'}"/>
                     </group>
                 </search>
             </field>
@@ -101,22 +106,12 @@
                 </kanban>
             </field>
         </record>
-        <!-- graph -->
-        <record id="view_vit_master_users_graph" model="ir.ui.view">
-            <field name="name">vit_master_users</field>
-            <field name="model">vit.master_users</field>
-            <field name="arch" type="xml">
-                <graph string="Master Users" type="bar">
-                    <field name="users_id"/>
-                </graph>
-            </field>
-        </record>
         <!-- action window -->
         <record id="action_master_users" model="ir.actions.act_window">
             <field name="name">Master Users</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">vit.master_users</field>
-            <field name="view_mode">tree,form,kanban,pivot,graph</field>
+            <field name="view_mode">tree,form,kanban,pivot</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                 Click to add a new Master Users

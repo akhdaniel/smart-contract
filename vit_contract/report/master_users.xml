@@ -22,8 +22,24 @@
                     </h2>
                     <div class="row mt32 mb32">
                         <div class="col-auto mw-100 mb-2">
-                            <strong>Users</strong>
-                            <p class="m-0" t-field="doc.users_id"/>
+                            <strong>Users Name</strong>
+                            <p class="m-0" t-field="doc.users_name" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Email</strong>
+                            <p class="m-0" t-field="doc.email" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Street</strong>
+                            <p class="m-0" t-field="doc.street" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Phone</strong>
+                            <p class="m-0" t-field="doc.phone" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Password</strong>
+                            <p class="m-0" t-field="doc.password" />
                         </div>
                     </div>
                 </div>

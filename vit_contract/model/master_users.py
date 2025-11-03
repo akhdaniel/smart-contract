@@ -14,6 +14,11 @@ class master_users(models.Model):
         pass
 
     name = fields.Char( required=True, copy=False, string=_("Name"))
+    users_name = fields.Char( string=_("Users Name"))
+    email = fields.Char( string=_("Email"))
+    street = fields.Char( string=_("Street"))
+    phone = fields.Char( string=_("Phone"))
+    password = fields.Char( string=_("Password"))
 
 
     def copy(self, default=None):
@@ -23,4 +28,3 @@ class master_users(models.Model):
         })
         return super(master_users, self).copy(default)
 
-    users_id = fields.Many2one(comodel_name="res.users",  string=_("Users"))

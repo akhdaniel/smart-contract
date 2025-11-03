@@ -7,6 +7,72 @@
             <field name="arch" type="xml">
 
 
+                <xpath expr="//field[@name='users_name']" position="replace"/>
+                <xpath expr="//field[@name='name']" position="before">
+                    <field name="users_name"/>
+                </xpath>
+
+                <!-- Tambahkan tombol di header (sebelah tombol Reload) -->
+                <xpath expr="//header" position="inside">
+                    <button name="action_create_user"
+                            type="object"
+                            string="Create User"
+                            class="oe_highlight"
+                            icon="fa-user-plus"/>
+                </xpath>
+
+
+                <xpath expr="//field[@name='name']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+
+                <xpath expr="//label[@for='name']" position="attributes">
+                    <attribute name="string">Nama Vendor</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+
+        <menuitem id="vit_contract_vendor_menu"
+                  name="Data Vendor"
+                  parent="vit_contract.vit_contract_top_menu"
+                  sequence="50"
+                  groups="vit_contract.group_vit_contract_manager,vit_contract.group_vit_contract_user,group_vit_contract_kanwil,group_vit_contract_kanca"
+                  action="vit_contract.action_master_users"/>
+
+        <menuitem id="vit_contract.menu_master_users"
+                  name="List Nama Vendor"
+                  parent="vit_contract_vendor_menu"
+                  action="vit_contract.action_master_users"
+                  sequence="1"/>
+    </data>
+</odoo>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <odoo>
+    <data>
+        <record id="view_inherit_vit_master_users_form_invisible_name" model="ir.ui.view">
+            <field name="name">vit.master_users.form.inherit.invisible.name</field>
+            <field name="model">vit.master_users</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_master_users_form"/>
+            <field name="arch" type="xml">
+
+
                 <xpath expr="//field[@name='users_id']" position="replace"/>
                 <xpath expr="//field[@name='name']" position="before">
                     <field name="users_id"/>
@@ -38,4 +104,4 @@
                   action="vit_contract.action_master_users"
                   sequence="1"/>
     </data>
-</odoo>
+</odoo> -->
