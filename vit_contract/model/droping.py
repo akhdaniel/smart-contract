@@ -26,6 +26,8 @@ class droping(models.Model):
     allow_confirm = fields.Boolean(related="stage_id.allow_confirm", store=True,  string=_("Allow Confirm"))
     allow_cancel = fields.Boolean(related="stage_id.allow_cancel", store=True,  string=_("Allow Cancel"))
     stage_name = fields.Char(related="stage_id.name", store=True,  string=_("Stage Name"))
+    stage_is_confirmed = fields.Boolean(related="stage_id.confirmed", store=True,  string=_("Stage Is Confirmed"))
+    stage_is_on_progress = fields.Boolean(related="stage_id.on_progress", store=True,  string=_("Stage Is On Progress"))
 
 
     @api.model_create_multi

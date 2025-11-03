@@ -54,6 +54,14 @@
                             <p class="m-0" t-field="doc.stage_name" />
                         </div>
                         <div class="col-auto mw-100 mb-2">
+                            <strong>Stage Is Confirmed</strong>
+                            <p class="m-0" t-field="doc.stage_is_confirmed" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Stage Is On Progress</strong>
+                            <p class="m-0" t-field="doc.stage_is_on_progress" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
                             <strong>Kanwil</strong>
                             <p class="m-0" t-field="doc.kanwil_id"/>
                         </div>

@@ -13,7 +13,6 @@
                     <field name="email" /> <!-- 102-->
                     <field name="street" /> <!-- 103-->
                     <field name="phone" /> <!-- 104-->
-                    <field name="password" /> <!-- 105-->
                 </tree>
             </field>
         </record>

@@ -93,6 +93,8 @@
                             <td>Allow Confirm</td>
                             <td>Allow Cancel</td>
                             <td>Stage Name</td>
+                            <td>Stage Is Confirmed</td>
+                            <td>Stage Is On Progress</td>
                             <td>Kanwil</td>
                             <td>Master Budget</td>
                             <td>Stage</td>
@@ -109,6 +111,8 @@
                             <td><span t-field="line.allow_confirm" /></td>
                             <td><span t-field="line.allow_cancel" /></td>
                             <td><span t-field="line.stage_name" /></td>
+                            <td><span t-field="line.stage_is_confirmed" /></td>
+                            <td><span t-field="line.stage_is_on_progress" /></td>
                             <td><span t-field="line.kanwil_id" /></td>
                             <td><span t-field="line.master_budget_id" /></td>
                             <td><span t-field="line.stage_id" /></td>
