@@ -39,11 +39,11 @@
                 </xpath>
 
                 <xpath expr="//header/button[@name='action_confirm']" position="attributes">
-                    <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager</attribute>
+                    <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager,vit_contract_inherit.group_vit_contract_kanwil_keuangan,vit_contract_inherit.group_vit_contract_pusat_keuangan</attribute>
                 </xpath>
 
                 <xpath expr="//header/button[@name='action_cancel']" position="attributes">
-                    <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager</attribute>
+                    <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager,vit_contract_inherit.group_vit_contract_kanwil_keuangan,vit_contract_inherit.group_vit_contract_pusat_keuangan</attribute>
                 </xpath>
 
                 <xpath expr="//field[@name='amount_budget_rkap']" position="replace"/>
