@@ -45,6 +45,7 @@
                         <button string="Cancel" type="object" name="action_cancel" invisible="allow_cancel==False" icon="fa-times-circle"/>
                         <field name="stage_id" widget="statusbar" options="{'fold_field':'fold'}" />
                         <button string="Kirim" type="object" name="action_kirim" />
+                        <button string="Terima" type="object" name="action_terima" />
                         <button string="Reload" type="object" name="action_reload_view" icon="fa-refresh"/>
                     </header>
                     <sheet>

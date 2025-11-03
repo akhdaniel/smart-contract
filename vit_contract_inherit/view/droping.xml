@@ -5,23 +5,115 @@
       <field name="model">vit.droping</field>
       <field name="inherit_id" ref="vit_contract.view_vit_droping_form"/>
       <field name="arch" type="xml">
-      
-        <xpath expr="//header/button[@name='action_confirm']" position="attributes">
-          <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager,vit_contract_inherit.group_vit_contract_kanwil,vit_contract_inherit.group_vit_contract_kanca,vit_contract_inherit.group_vit_contract_pusat_keuangan</attribute>
-          <!-- <attribute name="invisible">stage_is_draft==False</attribute> -->
+
+        <xpath expr="//header/button[@name='action_confirm']" position="replace">
+          <!-- Untuk Kanwil & Kanca -->
+          <button name="action_confirm"
+                  string="Confirm"
+                  type="object"
+                  class="oe_highlight"
+                  icon="fa-check-circle"
+                  groups="vit_contract_inherit.group_vit_contract_kanwil,
+                          vit_contract_inherit.group_vit_contract_kanca,
+                          vit_contract.group_vit_contract_user,
+                          vit_contract.group_vit_contract_manager"
+                  invisible="stage_is_draft==False or stage_is_confirmed==True or stage_is_on_progress==True"/>
+
+          <!-- Untuk Kanwil Keuangan -->
+          <button name="action_confirm"
+                  string="Confirm"
+                  type="object"
+                  class="oe_highlight"
+                  icon="fa-check-circle"
+                  groups="vit_contract.group_vit_contract_user,
+                          vit_contract.group_vit_contract_manager,
+                          vit_contract_inherit.group_vit_contract_kanwil_keuangan"
+                  invisible="stage_is_draft==True or stage_is_confirmed==False or stage_is_on_progress==True"/>
+
+          <!-- Untuk Pusat Keuangan -->
+          <button name="action_confirm"
+                  string="Confirm"
+                  type="object"
+                  class="oe_highlight"
+                  icon="fa-check-circle"
+                  groups="vit_contract.group_vit_contract_user,
+                          vit_contract.group_vit_contract_manager,
+                          vit_contract_inherit.group_vit_contract_pusat_keuangan"
+                  invisible="stage_is_draft==True or stage_is_confirmed==True or stage_is_on_progress==False"/>
         </xpath>
 
-        <!-- Tombol untuk Kanwil Umum -->
-        <!-- <xpath expr="//header/button[@name='action_confirm']" position="attributes">
-            <attribute name="groups">vit_contract_inherit.group_vit_contract_kanwil_umum</attribute>
-            <attribute name="invisible">stage_is_draft==False or stage_is_done==True</attribute>
-        </xpath> -->
 
-        <!-- Tombol untuk Kanwil Keuangan -->
-        <!-- <xpath expr="//header/button[@name='action_confirm']" position="attributes">
-            <attribute name="groups">vit_contract_inherit.group_vit_contract_kanwil_keuangan</attribute>
-            <attribute name="invisible">stage_is_draft == True</attribute>
-        </xpath> -->
+
+        <xpath expr="//header/button[@name='action_cancel']" position="replace">
+          <!-- Untuk Kanwil & Kanca -->
+          <button name="action_cancel"
+                  string="Cancel"
+                  type="object"
+                  class="oe_highlight"
+                  groups="vit_contract_inherit.group_vit_contract_kanwil,
+                          vit_contract_inherit.group_vit_contract_kanca,
+                          vit_contract.group_vit_contract_user,
+                          vit_contract.group_vit_contract_manager"
+                  invisible="stage_is_draft==True or stage_is_confirmed==True or stage_is_on_progress==True"/>
+
+          <!-- Untuk Kanwil Keuangan -->
+          <button name="action_cancel"
+                  string="Cancel"
+                  type="object"
+                  class="oe_highlight"
+                  groups="vit_contract.group_vit_contract_user,
+                          vit_contract.group_vit_contract_manager,
+                          vit_contract_inherit.group_vit_contract_kanwil_keuangan"
+                  invisible="stage_is_draft==True or stage_is_confirmed==False or stage_is_on_progress==True"/>
+
+          <!-- Untuk Pusat Keuangan -->
+          <button name="action_cancel"
+                  string="Cancel"
+                  type="object"
+                  class="oe_highlight"
+                  groups="vit_contract.group_vit_contract_user,
+                          vit_contract.group_vit_contract_manager,
+                          vit_contract_inherit.group_vit_contract_pusat_keuangan"
+                  invisible="stage_is_draft==True or stage_is_confirmed==True or stage_is_on_progress==False"/>
+
+          <button name="action_cancel"
+                  string="Cancel"
+                  type="object"
+                  class="oe_highlight"
+                  groups="vit_contract.group_vit_contract_user,
+                          vit_contract.group_vit_contract_manager,
+                          vit_contract_inherit.group_vit_contract_pusat_keuangan"
+                  invisible="stage_is_draft==True or stage_is_confirmed==True or stage_is_on_progress==True or stage_is_done==False"/>
+        </xpath>
+
+
+
+
+
+
+        <xpath expr="//header/button[@name='action_kirim']" position="attributes">
+          <attribute name="groups">
+              vit_contract.group_vit_contract_user,
+              vit_contract.group_vit_contract_manager,
+              vit_contract_inherit.group_vit_contract_kanwil_keuangan
+          </attribute>
+          <attribute name="invisible">stage_is_confirmed==False</attribute>
+        </xpath>
+
+
+        <xpath expr="//header/button[@name='action_terima']" position="attributes">
+          <attribute name="groups">
+              vit_contract.group_vit_contract_user,
+              vit_contract.group_vit_contract_manager,
+              vit_contract_inherit.group_vit_contract_pusat_keuangan
+          </attribute>
+          <attribute name="invisible">stage_is_on_progress==False</attribute>
+        </xpath>
+
+
+
+
+
 
 
 

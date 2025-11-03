@@ -14,6 +14,10 @@ class droping(models.Model):
         pass
 
 
+    def action_terima(self, ):
+        pass
+
+
     def action_reload_view(self):
         pass
 
