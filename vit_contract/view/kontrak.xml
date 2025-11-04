@@ -76,6 +76,7 @@
                                 <field name="allow_confirm" invisible="True" readonly="stage_is_draft==False"/>
                                 <field name="allow_cancel" invisible="True" readonly="stage_is_draft==False"/>
                                 <field name="stage_name" invisible="True" readonly="stage_is_draft==False"/>
+                                <field name="stage_is_on_progress" invisible="True" readonly="stage_is_draft==False"/>
                                 <field name="start_date"  readonly="stage_is_draft==False"/>
                                 <field name="end_date"  readonly="stage_is_draft==False"/>
                                 <field name="amount_izin_prinsip"  readonly="stage_is_draft==False"/>
@@ -163,6 +164,7 @@
                     <filter string="Amount Denda" name="filter_by_amount_denda" domain="[('amount_denda','=','')]" />
                     <filter string="Persentasi Denda" name="filter_by_persentasi_denda" domain="[('persentasi_denda','=','')]" />
                     <filter string="Overdue Days" name="filter_by_overdue_days" domain="[('overdue_days','=','')]" />
+                    <filter string="Stage Is On Progress" name="filter_by_stage_is_on_progress" domain="[('stage_is_on_progress','=','')]" />
                     <field name="name" select="True"/>
                     <field name="start_date" select="True"/>
                     <field name="end_date" select="True"/>
@@ -176,6 +178,7 @@
                     <field name="amount_denda" select="True"/>
                     <field name="persentasi_denda" select="True"/>
                     <field name="overdue_days" select="True"/>
+                    <field name="stage_is_on_progress" select="True"/>
                     <field name="izin_prinsip_id" select="True"/>
                     <field name="budget_rkap_id" select="True"/>
                     <field name="stage_id" select="True"/>
