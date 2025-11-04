@@ -85,7 +85,7 @@
             <field name="model_id" ref="vit_contract.model_vit_izin_prinsip"/>
             <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_kanca'))]"/>
             <field name="domain_force">
-                ['|',
+                [
                     ('kanca_id', 'in', user.multi_kanca.ids),
                     ('kanwil_id', 'in', user.multi_kanwil.ids)
                 ]
@@ -97,7 +97,7 @@
             <field name="model_id" ref="vit_contract.model_vit_kontrak"/>
             <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_kanca'))]"/>
             <field name="domain_force">
-                ['|',
+                [
                     ('kanca_id', 'in', user.multi_kanca.ids),
                     ('kanwil_id', 'in', user.multi_kanwil.ids)
                 ]
@@ -109,7 +109,7 @@
             <field name="model_id" ref="vit_contract.model_vit_termin"/>
             <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_kanca'))]"/>
             <field name="domain_force">
-                ['|',
+                [
                     ('kontrak_id.kanca_id', 'in', user.multi_kanca.ids),
                     ('kontrak_id.kanwil_id', 'in', user.multi_kanwil.ids)
                 ]
@@ -121,7 +121,7 @@
             <field name="model_id" ref="vit_contract.model_vit_droping"/>
             <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_kanca'))]"/>
             <field name="domain_force">
-                ['|',
+                [
                     ('termin_kontrak_ids.kontrak_id.kanca_id', 'in', user.multi_kanca.ids),
                     ('termin_kontrak_ids.kontrak_id.kanwil_id', 'in', user.multi_kanwil.ids)
                 ]
