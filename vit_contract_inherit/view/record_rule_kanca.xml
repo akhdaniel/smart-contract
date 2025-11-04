@@ -2,57 +2,35 @@
     <data noupdate="0">
 
         <record id="vit_izin_prinsip_kanca_rule" model="ir.rule">
-            <field name="name">Izin Prinsip - Multi Kanca Only (Fix)</field>
+            <field name="name">Izin Prinsip - Multi Kanca Only</field>
             <field name="model_id" ref="vit_contract.model_vit_izin_prinsip"/>
             <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_kanca'))]"/>
-            <field name="domain_force">
-                ['|',
-                    ('kanca_id', '=', False),
-                    ('kanca_id', 'in', user.multi_kanca.ids)
-                ]
-            </field>
+            <field name="domain_force">[('kanca_id', 'in', user.multi_kanca.ids)]</field>
         </record>
 
         <record id="vit_kontrak_kanca_rule" model="ir.rule">
-            <field name="name">Kontrak - Multi Kanca Only (Fix)</field>
+            <field name="name">Kontrak - Multi Kanca Only</field>
             <field name="model_id" ref="vit_contract.model_vit_kontrak"/>
             <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_kanca'))]"/>
-            <field name="domain_force">
-                ['|',
-                    ('kanca_id', '=', False),
-                    ('kanca_id', 'in', user.multi_kanca.ids)
-                ]
-            </field>
+            <field name="domain_force">[('kanca_id', 'in', user.multi_kanca.ids)]</field>
         </record>
 
         <record id="vit_termin_kanca_rule" model="ir.rule">
-            <field name="name">Termin - Multi Kanca Only (Fix)</field>
+            <field name="name">Termin - Multi Kanca Only</field>
             <field name="model_id" ref="vit_contract.model_vit_termin"/>
             <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_kanca'))]"/>
-            <field name="domain_force">
-                ['|',
-                    ('kontrak_id.kanca_id', '=', False),
-                    ('kontrak_id.kanca_id', 'in', user.multi_kanca.ids)
-                ]
-            </field>
+            <field name="domain_force">[('kontrak_id.kanca_id', 'in', user.multi_kanca.ids)]</field>
         </record>
 
         <record id="vit_droping_kanca_rule" model="ir.rule">
-            <field name="name">Droping - Multi Kanca Only (Fix)</field>
+            <field name="name">Droping - Multi Kanca Only</field>
             <field name="model_id" ref="vit_contract.model_vit_droping"/>
             <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_kanca'))]"/>
-            <field name="domain_force">
-                ['|',
-                    ('termin_kontrak_ids.kontrak_id.kanca_id', '=', False),
-                    ('termin_kontrak_ids.kontrak_id.kanca_id', 'in', user.multi_kanca.ids)
-                ]
-            </field>
+            <field name="domain_force">[('termin_kontrak_ids.kontrak_id.kanca_id', 'in', user.multi_kanca.ids)]</field>
         </record>
 
     </data>
 </odoo>
-
-
 
 
 
