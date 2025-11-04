@@ -6,7 +6,11 @@ class master_users(models.Model):
     _inherit = "vit.master_users"
     _order = "users_name asc"
 
-    name = fields.Char(required=False, copy=False, string=_("Nama Vendor"))
+    # Name tidak terpakai
+    name = fields.Char(required=False, copy=False, string=_("Useless"))
+
+
+    # Penggantinya memakai users_name
     users_name = fields.Char(required=True, string=_("Username"))
     email = fields.Char(required=True, string=_("Email"))
     street = fields.Char(required=True, string=_("Alamat"))
