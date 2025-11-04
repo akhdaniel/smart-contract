@@ -78,7 +78,7 @@
 
 
 <odoo>
-    <data noupdate="0">
+    <data>
 
         <record id="vit_izin_prinsip_kanca_rule" model="ir.rule">
             <field name="name">Izin Prinsip - Multi Kanca &amp; Kanwil</field>
