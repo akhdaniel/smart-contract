@@ -55,14 +55,14 @@
                   parent="vit_contract.vit_contract_sub_menu"
                   action="vit_contract.action_payment"
                   sequence="50"
-                  groups="vit_contract.group_vit_contract_manager,vit_contract.group_vit_contract_user,group_vit_contract_vendor,group_vit_contract_pusat_keuangan,group_vit_contract_kanwil_keuangan"/>
+                  groups="vit_contract.group_vit_contract_manager,vit_contract.group_vit_contract_user,group_vit_contract_pusat_keuangan,group_vit_contract_kanwil_keuangan"/>
 
         <menuitem id="vit_contract.menu_droping"
                   name="Droping"
                   parent="vit_contract.vit_contract_sub_menu"
                   action="vit_contract.action_droping"
                   sequence="60"
-                  groups="vit_contract.group_vit_contract_manager,vit_contract.group_vit_contract_user,group_vit_contract_kanwil,group_vit_contract_kanca,group_vit_contract_kanca,group_vit_contract_vendor,group_vit_contract_pusat_keuangan,group_vit_contract_kanwil_keuangan"/>
+                  groups="vit_contract.group_vit_contract_manager,vit_contract.group_vit_contract_user,group_vit_contract_kanwil,group_vit_contract_kanca,group_vit_contract_kanca,group_vit_contract_pusat_keuangan,group_vit_contract_kanwil_keuangan"/>
 
 
     </data>

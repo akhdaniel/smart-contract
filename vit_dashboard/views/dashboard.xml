@@ -30,7 +30,7 @@
         <menuitem id="vit_contract_dashboard_menu"
                   name="Dashboard"
                   parent="vit_contract.vit_contract_top_menu"
-                  groups="vit_contract.group_vit_contract_manager,vit_contract_inherit.group_vit_contract_kanwil,vit_contract_inherit.group_vit_contract_kanca,vit_contract_inherit.group_vit_contract_vendor,vit_contract_inherit.group_vit_contract_pusat_keuangan,vit_contract_inherit.group_vit_contract_kanwil_keuangan,vit_contract_inherit.group_vit_contract_pusat_umum"
+                  groups="vit_contract.group_vit_contract_manager,vit_contract_inherit.group_vit_contract_kanwil,vit_contract_inherit.group_vit_contract_kanca,vit_contract_inherit.group_vit_contract_pusat_keuangan,vit_contract_inherit.group_vit_contract_kanwil_keuangan,vit_contract_inherit.group_vit_contract_pusat_umum"
                   sequence="30"/>
 
         <!-- Actions -->
