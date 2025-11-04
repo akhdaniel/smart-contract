@@ -5,7 +5,6 @@
             <field name="name">Izin Prinsip - Multi Kanca Only</field>
             <field name="model_id" ref="vit_contract.model_vit_izin_prinsip"/>
             <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_kanca'))]"/>
-            <field name="perm_create" eval="False"/>
             <field name="domain_force">[('kanca_id', 'in', user.multi_kanca.ids)]</field>
         </record>
 
@@ -13,7 +12,6 @@
             <field name="name">Kontrak - Multi Kanca Only</field>
             <field name="model_id" ref="vit_contract.model_vit_kontrak"/>
             <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_kanca'))]"/>
-            <field name="perm_create" eval="False"/>
             <field name="domain_force">[('kanca_id', 'in', user.multi_kanca.ids)]</field>
         </record>
 
@@ -21,7 +19,6 @@
             <field name="name">Termin - Multi Kanca Only</field>
             <field name="model_id" ref="vit_contract.model_vit_termin"/>
             <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_kanca'))]"/>
-            <field name="perm_create" eval="False"/>
             <field name="domain_force">[('kontrak_id.kanca_id', 'in', user.multi_kanca.ids)]</field>
         </record>
 
@@ -29,13 +26,11 @@
             <field name="name">Droping - Multi Kanca Only</field>
             <field name="model_id" ref="vit_contract.model_vit_droping"/>
             <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_kanca'))]"/>
-            <field name="perm_create" eval="False"/>
             <field name="domain_force">[('termin_kontrak_ids.kontrak_id.kanca_id', 'in', user.multi_kanca.ids)]</field>
         </record>
 
     </data>
 </odoo>
-
 
 
 
