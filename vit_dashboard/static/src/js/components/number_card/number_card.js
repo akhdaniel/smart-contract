@@ -240,14 +240,26 @@ export class NumberCard extends Component {
             });
             return;
         }
-
+        
+        const sanitizedDomain = (domain || []).map(d => {
+            try {
+                if (d && d.length >= 1 && d[0] === 'kanwil_id') {
+                    const left = (this.props.model === 'vit.budget_rkap')
+                        ? 'izin_prinsip_ids.kanwil_id'
+                        : 'kontrak_id.kanwil_id';
+                    return [left, d[1], d[2]];
+                }
+            } catch (e) {
+            }
+            return d;
+        });
 
 
         this.env.services.action.doAction({
             type: 'ir.actions.act_window',
             name: this.props.title,
             res_model: this.props.model,
-            domain: domain,
+            domain: sanitizedDomain,
             context: context,
             views: [[false, 'list'], [false, 'form']],
             target: 'current',
