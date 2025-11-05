@@ -82,10 +82,9 @@
                 </xpath> -->
 
                 <!-- <xpath expr="//field[@name='syarat_termin_ids']" position="attributes">
-                    <attribute name="readonly">stage_is_draft==True or stage_is_done==True</attribute>
+                    <attribute name="readonly">stage_is_draft==False and stage_is_on_progress==False</attribute>
                     <attribute name="force_save">1</attribute>
                 </xpath> -->
-
 
                 <xpath expr="//page[@name='syarat_termin_ids']//tree//field[@name='verified']" position="replace"/>
 

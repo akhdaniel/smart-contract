@@ -30,6 +30,7 @@ class termin(models.Model):
     syarat_output = fields.Text( string=_("Syarat Output"))
     actual_output = fields.Text( string=_("Actual Output"))
     verifikasi_syarat = fields.Boolean( string=_("Verifikasi Syarat"))
+    stage_is_on_progress = fields.Boolean(related="stage_id.on_progress", store=True,  string=_("Stage Is On Progress"))
 
 
     @api.model_create_multi

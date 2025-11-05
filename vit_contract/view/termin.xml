@@ -73,6 +73,7 @@
                                 <field name="allow_confirm" invisible="True" readonly="stage_is_draft==False"/>
                                 <field name="allow_cancel" invisible="True" readonly="stage_is_draft==False"/>
                                 <field name="stage_name" invisible="True" readonly="stage_is_draft==False"/>
+                                <field name="stage_is_on_progress" invisible="True" readonly="stage_is_draft==False"/>
                                 <field name="nilai"  readonly="stage_is_draft==False"/>
                                 <field name="persentase"  readonly="stage_is_draft==False"/>
                                 <field name="deskripsi"  readonly="stage_is_draft==False"/>
@@ -142,6 +143,7 @@
                     <filter string="Syarat Output" name="filter_by_syarat_output" domain="[('syarat_output','=','')]" />
                     <filter string="Actual Output" name="filter_by_actual_output" domain="[('actual_output','=','')]" />
                     <filter string="Verifikasi Syarat" name="filter_by_verifikasi_syarat" domain="[('verifikasi_syarat','=','')]" />
+                    <filter string="Stage Is On Progress" name="filter_by_stage_is_on_progress" domain="[('stage_is_on_progress','=','')]" />
                     <field name="name" select="True"/>
                     <field name="nilai" select="True"/>
                     <field name="persentase" select="True"/>
@@ -159,6 +161,7 @@
                     <field name="syarat_output" select="True"/>
                     <field name="actual_output" select="True"/>
                     <field name="verifikasi_syarat" select="True"/>
+                    <field name="stage_is_on_progress" select="True"/>
                     <field name="master_nama_termin_id" select="True"/>
                     <field name="stage_id" select="True"/>
                     <field name="droping_id" select="True"/>

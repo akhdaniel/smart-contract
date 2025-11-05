@@ -204,7 +204,7 @@
 
 
                 <!-- <xpath expr="//field[@name='termin_ids']" position="attributes">
-                    <attribute name="readonly">stage_is_on_progress==True</attribute>
+                    <attribute name="readonly">stage_is_draft==False</attribute>
                     <attribute name="force_save">1</attribute>
                 </xpath> -->
 
