@@ -7,6 +7,16 @@
             <field name="model">vit.budget_rkap</field>
             <field name="inherit_id" ref="vit_contract.view_vit_budget_rkap_form"/>
             <field name="arch" type="xml">
+
+                <xpath expr="//header/button[@name='action_confirm']" position="attributes">
+                    <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager,vit_contract_inherit.group_vit_contract_kanwil_keuangan,vit_contract_inherit.group_vit_contract_pusat_keuangan</attribute>
+                </xpath>
+
+                <xpath expr="//header/button[@name='action_cancel']" position="attributes">
+                    <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager,vit_contract_inherit.group_vit_contract_kanwil_keuangan,vit_contract_inherit.group_vit_contract_pusat_keuangan</attribute>
+                </xpath>
+
+
                 <xpath expr="//field[@name='name']" position="attributes">
                     <attribute name="readonly">stage_is_draft==False</attribute>
                     <attribute name="force_save">1</attribute>
