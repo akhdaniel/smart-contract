@@ -69,7 +69,7 @@
                             groups="vit_contract.group_vit_contract_user,
                                     vit_contract.group_vit_contract_manager,
                                     vit_contract_inherit.group_vit_contract_kanwil_keuangan"
-                            invisible="stage_is_draft==True or stage_is_on_progress==True"/>
+                            invisible="stage_is_draft==True or stage_is_on_progress==True or stage_is_done==True"/>
 
                     <button name="action_cancel"
                             string="Cancel"
