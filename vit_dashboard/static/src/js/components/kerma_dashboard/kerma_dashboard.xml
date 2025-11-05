@@ -72,7 +72,7 @@
                 <div class="row">
                 <!-- 🟦 Kolom kiri: Kanwil + Persentase -->
                 <div class="col-3 d-flex flex-column align-items-stretch"
-                    style="margin-top:70px; gap:130px; padding-right:10px;">
+                    style="margin-top:70px; gap:124px; padding-right:10px;">
                     
                     <!-- Kartu Kanwil -->
                     <div class="w-100">

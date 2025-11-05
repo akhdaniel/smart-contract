@@ -161,7 +161,7 @@ class BudgetRkap(models.Model):
             # Ambil semua kontrak terkait budget tersebut
             kontrak_ids = budgets.mapped('kontrak_ids').ids
 
-            # 🔹 Domain payment: ambil yang masih draft
+            # Domain payment: ambil yang masih draft
             payment_domain = [
                 ('kontrak_id', 'in', kontrak_ids),
                 ('stage_is_draft', '=', True),
