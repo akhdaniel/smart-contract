@@ -16,6 +16,12 @@ class syarat_termin(models.Model):
         string="Verified",
     )
 
+    termin_id = fields.Many2one(
+        comodel_name="vit.termin",  
+        string=_("Termin"), 
+        ondelete='cascade'
+    )
+
     master_syarat_termin_id = fields.Many2one(
         comodel_name="vit.master_syarat_termin",
         required=True,

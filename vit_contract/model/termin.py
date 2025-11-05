@@ -78,11 +78,19 @@ class termin(models.Model):
     def _group_expand_states(self, stages, domain, order):
         return self.env['vit.state_termin'].search([])
 
+    # def unlink(self):
+    #     for me_id in self :
+    #         if not me_id.stage_id.draft:
+    #             raise UserError("Cannot delete non draft record!  Make sure that the Stage draft flag is checked.")
+    #     return super(termin, self).unlink()
+
     def unlink(self):
-        for me_id in self :
-            if not me_id.stage_id.draft:
-                raise UserError("Cannot delete non draft record!  Make sure that the Stage draft flag is checked.")
-        return super(termin, self).unlink()
+        for rec in self:
+            if not rec.stage_id.draft:
+                raise UserError("Cannot delete non draft record! Make sure that the Stage draft flag is checked.")
+            rec.syarat_termin_ids.unlink()
+        return super().unlink()
+
 
     def copy(self, default=None):
         default = dict(default or {})
