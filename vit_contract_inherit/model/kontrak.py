@@ -7,6 +7,34 @@ import logging
 from odoo.exceptions import ValidationError
 _logger = logging.getLogger(__name__)
 
+class KontrakBypassUnlink(models.Model):
+    _inherit = "vit.kontrak"
+
+    def unlink(self):
+        """
+        Override unlink() untuk bypass validasi bawaan module utama
+        'Cannot delete non draft record!' saat context bypass aktif.
+        """
+        if self.env.context.get("bypass_delete_stage_check"):
+            return super(models.Model, self).unlink()
+
+        return super(KontrakBypassUnlink, self).unlink()
+    
+class PaymentBypassUnlink(models.Model):
+    _inherit = "vit.payment"
+
+    def unlink(self):
+        """
+        Sama seperti KontrakBypassUnlink, tapi untuk model vit.payment.
+        """
+        if self.env.context.get("bypass_delete_stage_check"):
+            return super(models.Model, self).unlink()
+        return super(PaymentBypassUnlink, self).unlink()
+    
+
+
+
+
 class kontrak(models.Model):
     _name = "vit.kontrak"
     _inherit = ["vit.kontrak", "mail.thread", "mail.activity.mixin"]
@@ -139,12 +167,10 @@ class kontrak(models.Model):
             max_overdue = 0
             late_termins = []
 
-            # filter termin yang bukan Retensi
             non_retensi_termins = rec.termin_ids.filtered(
                 lambda t: t.master_nama_termin_id.type != 'is_retensi'
             )
 
-            # ambil termin terakhir berdasarkan sequence
             last_termin = False
             if non_retensi_termins:
                 last_termin = max(
@@ -213,6 +239,17 @@ class kontrak(models.Model):
         self.jenis_kontrak_many = [(5, 0, 0)]
 
 
+    @api.onchange('amount_kontrak')
+    def _onchange_amount_kontrak(self):
+        for rec in self:
+            for termin in rec.termin_ids:
+                if termin.stage_id and termin.stage_id.done:
+                    continue
+
+                if termin.persentase:
+                    termin.nilai = (rec.amount_kontrak * termin.persentase) / 100
+
+
 
 
     @api.onchange('job_izin_prinsip_id')
@@ -222,7 +259,6 @@ class kontrak(models.Model):
                 ('job_izin_prinsip_id', '=', self.job_izin_prinsip_id.id)
             ]).mapped('jenis_kontrak_id').ids
 
-            # isi field Many2many
             self.jenis_kontrak_many = [(6, 0, jenis_ids)]
 
             return {'domain': {'jenis_kontrak_id': [('id', 'in', jenis_ids)]}}
@@ -512,6 +548,80 @@ class kontrak(models.Model):
             'domain': [('id', '=', self.addendum_origin_id.id)],
             'context': dict(self.env.context, active_test=False, default_addendum_origin_id=self.addendum_origin_id.id),
         }
+    
+    # def unlink(self):
+    #     if self.env.context.get("bypass_delete_stage_check"):
+    #         return super(kontrak, self).unlink()
+
+    #     visited = set()
+
+    #     for rec in self:
+    #         if rec.id in visited:
+    #             continue
+
+    #         to_delete = set()
+
+    #         def collect_chain(k):
+    #             if k.id in to_delete:
+    #                 return
+    #             to_delete.add(k.id)
+    #             for child in k.addendum_ids:
+    #                 collect_chain(child)
+    #             if k.addendum_origin_id:
+    #                 collect_chain(k.addendum_origin_id)
+
+    #         collect_chain(rec)
+    #         visited.update(to_delete)
+
+    #         all_records = self.env["vit.kontrak"].browse(list(to_delete))
+    #         _logger.info("Deleting kontrak chain (bypass mode): %s", ", ".join(all_records.mapped("name")))
+
+    #         self.env["vit.kontrak"].with_context(bypass_delete_stage_check=True).browse(all_records.ids).unlink()
+
+    #     return True
+    
+    def unlink(self):
+        if self.env.context.get("bypass_delete_stage_check"):
+            return super(kontrak, self).unlink()
+
+        visited = set()
+
+        for rec in self:
+            if rec.id in visited:
+                continue
+
+            to_delete = set()
+
+            def collect_chain(k):
+                if k.id in to_delete:
+                    return
+                to_delete.add(k.id)
+                for child in k.addendum_ids:
+                    collect_chain(child)
+                if k.addendum_origin_id:
+                    collect_chain(k.addendum_origin_id)
+
+            collect_chain(rec)
+            visited.update(to_delete)
+
+            all_records = self.env["vit.kontrak"].browse(list(to_delete))
+            _logger.info("Deleting kontrak chain (bypass mode): %s", ", ".join(all_records.mapped("name")))
+
+            termin_ids = all_records.mapped("termin_ids").ids
+            if termin_ids:
+                payments = self.env["vit.payment"].search([("termin_id", "in", termin_ids)])
+                if payments:
+                    _logger.info("Deleting related payments: %s", ", ".join(payments.mapped("name")))
+                    payments.with_context(bypass_delete_stage_check=True).unlink()
+
+            # hapus semua kontrak dalam chain dengan bypass
+            all_records.with_context(bypass_delete_stage_check=True).unlink()
+
+        return True
+
+
+
+
 
         
 
@@ -529,6 +639,3 @@ class KontrakInherit(models.Model):
         # Kalau manual duplicate, kasih custom -DUP
         default["name"] = f"{self.name}-DUP"
         return models.BaseModel.copy(self, default)
-
-
-
