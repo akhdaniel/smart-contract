@@ -20994,7 +20994,7 @@
 								"$ref": "AAAAAAGZVsgRSeGXNnE="
 							},
 							"name": "document_filename",
-							"documentation": "{\n\"xml:invisible\":\"1\"\n}",
+							"documentation": "{\n\"xml:invisible\":\"1\",\n\"tree:invisible\":true\n}",
 							"type": "Char"
 						},
 						{

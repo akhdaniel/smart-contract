@@ -15,7 +15,6 @@
                     <field name="master_syarat_termin_id" /> <!-- 101-->
                     <field name="due_date" /> <!-- 102-->
                     <field name="kontrak_id" /> <!-- 102-->
-                    <field name="document_filename" invisible="1"/> <!-- 104-->
                     <field name="upload_date" /> <!-- 105-->
                 </tree>
             </field>
