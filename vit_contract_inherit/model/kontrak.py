@@ -2,9 +2,8 @@
 #-*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 import logging
-from odoo.exceptions import ValidationError
 _logger = logging.getLogger(__name__)
 
 class KontrakBypassUnlink(models.Model):
