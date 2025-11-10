@@ -211,7 +211,7 @@
 
 
 
-                <xpath expr="//page[@name='termin_ids']/field[@name='termin_ids']/tree" position="attributes">
+                <!-- <xpath expr="//page[@name='termin_ids']/field[@name='termin_ids']/tree" position="attributes">
                     <attribute name="delete">false</attribute>
                 </xpath>
                 <xpath expr="//field[@name='termin_ids']/tree/field[@name='actual_output']" position="after">
@@ -222,7 +222,25 @@
                             icon="fa-trash"
                             class="oe_link"
                             invisible="not stage_is_draft"/>
+                </xpath> -->
+
+
+                <xpath expr="//page[@name='termin_ids']//tree/field[@name='syarat_progress']" position="replace"/>
+                <xpath expr="//page[@name='termin_ids']//tree/field[@name='actual_progress']" position="replace"/>
+                <xpath expr="//page[@name='termin_ids']//tree/field[@name='syarat_output']" position="replace"/>
+                <xpath expr="//page[@name='termin_ids']//tree/field[@name='actual_output']" position="replace"/>
+                <xpath expr="//page[@name='termin_ids']//tree/field[@name='due_date']" position="after">
+                    <field name="syarat_progress"
+                        column_invisible="parent.type != 'fisik'"/>
+                    <field name="actual_progress"
+                        column_invisible="parent.type != 'fisik'"/>
+
+                    <field name="syarat_output"
+                        column_invisible="parent.type != 'non_fisik'"/>
+                    <field name="actual_output"
+                        column_invisible="parent.type != 'non_fisik'"/>
                 </xpath>
+
 
 
 

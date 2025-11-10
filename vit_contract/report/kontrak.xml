@@ -74,6 +74,10 @@
                             <p class="m-0" t-field="doc.stage_is_on_progress" />
                         </div>
                         <div class="col-auto mw-100 mb-2">
+                            <strong>Type</strong>
+                            <p class="m-0" t-field="doc.type" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
                             <strong>Izin Prinsip</strong>
                             <p class="m-0" t-field="doc.izin_prinsip_id"/>
                         </div>

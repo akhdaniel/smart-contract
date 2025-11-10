@@ -31,6 +31,7 @@ class kontrak(models.Model):
     persentasi_denda = fields.Float(string="Denda per Mil")
     overdue_days = fields.Integer( string=_("Overdue Days"))
     stage_is_on_progress = fields.Boolean(related="stage_id.on_progress", store=True,  string=_("Stage Is On Progress"))
+    type = fields.Selection(selection=[('fisik', 'Fisik'),('non_fisik', 'Non Fisik')],  string=_("Type"))
 
 
     @api.model_create_multi

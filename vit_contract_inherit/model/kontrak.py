@@ -43,6 +43,13 @@ class kontrak(models.Model):
 
     name = fields.Char(required=True, copy=False, string="Name", default=False)
 
+    type = fields.Selection(
+        selection=[('fisik', 'Fisik'), ('non_fisik', 'Non Fisik')],
+        related='jenis_kontrak_id.type',
+        store=True,
+        string='Type'
+    )
+
     attachments = fields.Many2many(
         'ir.attachment',
         string='Upload'

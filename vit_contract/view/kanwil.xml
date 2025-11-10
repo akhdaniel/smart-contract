@@ -52,6 +52,7 @@
                                         <field name="end_date" /> <!-- 80-->
                                         <field name="jenis_kontrak_id" /> <!-- 100-->
                                         <field name="partner_id" /> <!-- 102-->
+                                        <field name="type" invisible="1"/> <!-- 104-->
                                         <field name="amount_kontrak" /> <!-- 200-->
                                         <field name="stage_id" /> <!-- 1000-->
                                     </tree>

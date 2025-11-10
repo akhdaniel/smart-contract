@@ -19,6 +19,7 @@
                     <field name="end_date" /> <!-- 80-->
                     <field name="jenis_kontrak_id" /> <!-- 100-->
                     <field name="partner_id" /> <!-- 102-->
+                    <field name="type" invisible="1"/> <!-- 104-->
                     <field name="amount_kontrak" /> <!-- 200-->
                     <field name="stage_id" /> <!-- 1000-->
                 </tree>
@@ -83,6 +84,7 @@
                                 <field name="amount_denda"  readonly="stage_is_draft==False"/>
                                 <field name="persentasi_denda"  readonly="stage_is_draft==False"/>
                                 <field name="overdue_days"  readonly="stage_is_draft==False"/>
+                                <field name="type" invisible="1" readonly="stage_is_draft==False"/>
                                 <field name="amount_kontrak"  readonly="stage_is_draft==False"/>
                             </group>
                             <group> <!-- right -->
@@ -165,6 +167,7 @@
                     <filter string="Persentasi Denda" name="filter_by_persentasi_denda" domain="[('persentasi_denda','=','')]" />
                     <filter string="Overdue Days" name="filter_by_overdue_days" domain="[('overdue_days','=','')]" />
                     <filter string="Stage Is On Progress" name="filter_by_stage_is_on_progress" domain="[('stage_is_on_progress','=','')]" />
+                    <filter string="Type" name="filter_by_type" domain="[('type','=','')]" />
                     <field name="name" select="True"/>
                     <field name="start_date" select="True"/>
                     <field name="end_date" select="True"/>
@@ -179,6 +182,7 @@
                     <field name="persentasi_denda" select="True"/>
                     <field name="overdue_days" select="True"/>
                     <field name="stage_is_on_progress" select="True"/>
+                    <field name="type" select="True"/>
                     <field name="izin_prinsip_id" select="True"/>
                     <field name="budget_rkap_id" select="True"/>
                     <field name="stage_id" select="True"/>
@@ -198,6 +202,7 @@
                         <filter string="Kanwil" domain="[]" name="group_by_kanwil_id" context="{'group_by':'kanwil_id'}"/>
                         <filter string="Partner" domain="[]" name="group_by_partner_id" context="{'group_by':'partner_id'}"/>
                         <filter string="Job Izin Prinsip" domain="[]" name="group_by_job_izin_prinsip_id" context="{'group_by':'job_izin_prinsip_id'}"/>
+                        <filter string="Type" domain="[]" name="group_by_type" context="{'group_by':'type'}"/>
                     </group>
                 </search>
             </field>
