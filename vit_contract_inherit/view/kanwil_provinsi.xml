@@ -38,8 +38,8 @@
         <record id="kanwil_sulteng" model="vit.kanwil"><field name="name">Sulawesi Tengah</field></record>
         <record id="kanwil_sulsel" model="vit.kanwil"><field name="name">Sulawesi Selatan</field></record>
         <record id="kanwil_sultra" model="vit.kanwil"><field name="name">Sulawesi Tenggara</field></record>
-        <record id="kanwil_gorontalo" model="vit.kanwil"><field name="name">Gorontalo</field></record>
         <record id="kanwil_sulbar" model="vit.kanwil"><field name="name">Sulawesi Barat</field></record>
+        <record id="kanwil_gorontalo" model="vit.kanwil"><field name="name">Gorontalo</field></record>
 
         <!-- Maluku & Papua -->
         <record id="kanwil_maluku" model="vit.kanwil"><field name="name">Maluku</field></record>
