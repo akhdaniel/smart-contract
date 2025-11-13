@@ -8,6 +8,19 @@
             <field name="inherit_id" ref="vit_contract.view_vit_izin_prinsip_form"/>
             <field name="arch" type="xml">
 
+                <xpath expr="//field[@name='total_payment']" position="after">
+                    <field name="created_by" readonly="1"/>
+                    <field
+                        name="allowed_kanca_id"
+                        readonly="1"
+                        invisible="not allowed_kanca_id"
+                    />
+                </xpath>
+                        <!-- groups="vit_contract_inherit.group_vit_contract_kanca" -->
+
+
+
+
                 <xpath expr="//field[@name='total_pagu']" position="attributes">
                     <attribute name="readonly">1</attribute>
                 </xpath>

@@ -2,12 +2,27 @@
 #-*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, AccessError
 import logging
 _logger = logging.getLogger(__name__)
 
 class izin_prinsip(models.Model):
     _inherit = "vit.izin_prinsip"
+
+    created_by = fields.Many2one(
+        'res.users',
+        string='Dibuat Oleh',
+        readonly=True,
+        default=lambda self: self.env.user
+    )
+
+    allowed_kanca_id = fields.Many2one(
+        'vit.kanca',
+        string='Allowed Kanca',
+        compute='_compute_allowed_kanca',
+        store=True,
+        readonly=False
+    )
 
     attachments = fields.Many2many(
         'ir.attachment',
@@ -63,6 +78,27 @@ class izin_prinsip(models.Model):
     #             return [] 
 
     #     return []
+
+
+    @api.depends('created_by')
+    def _compute_allowed_kanca(self):
+        for rec in self:
+            user = rec.created_by or self.env.user
+            if user.multi_kanca:
+                rec.allowed_kanca_id = user.multi_kanca[0].id
+            else:
+                rec.allowed_kanca_id = False
+
+    @api.model
+    def check_access_rule(self, operation):
+        res = super(izin_prinsip, self).check_access_rule(operation)
+
+        if self.env.user.has_group('vit_contract_inherit.group_vit_contract_kanca'):
+            for rec in self:
+                if operation in ['write', 'unlink']:
+                    if rec.created_by and rec.created_by.has_group('vit_contract_inherit.group_vit_contract_kanwil'):
+                        raise AccessError(_("Record ini dibuat oleh User Kanwil. Anda adalah User Kanca tidak diperbolehkan mengubahnya."))
+        return res
 
     @api.model
     def _domain_user(self, field_name):
