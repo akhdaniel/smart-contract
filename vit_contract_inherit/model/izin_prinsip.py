@@ -113,7 +113,6 @@ class izin_prinsip(models.Model):
             if user.multi_kanwil:
                 return [("kanwil_id", "in", user.multi_kanwil.ids)]
 
-            # ⬇️ Kalau dua-duanya kosong → ikut kanwil_id di form izin_prinsip
             return [("kanwil_id", "=", self.kanwil_id.id)] if self.kanwil_id else []
 
         return []

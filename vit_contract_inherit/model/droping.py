@@ -44,16 +44,15 @@ class Droping(models.Model):
         user = self.env.user
 
         if field_name == "kanwil_id":
-            if user.multi_kanwil:
-                return [("id", "in", user.multi_kanwil.ids)]
-            else:
-                return []
+            return [("id", "in", user.multi_kanwil.ids)] if user.multi_kanwil else []
 
         elif field_name == "kanca_id":
             if user.multi_kanca:
                 return [("id", "in", user.multi_kanca.ids)]
-            else:
-                return [] 
+            if user.multi_kanwil:
+                return [("kanwil_id", "in", user.multi_kanwil.ids)]
+
+            return [("kanwil_id", "=", self.kanwil_id.id)] if self.kanwil_id else []
 
         return []
 
