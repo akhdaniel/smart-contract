@@ -2191,8 +2191,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 1704,
-									"top": 1613,
+									"left": 1792,
+									"top": 1589,
 									"width": 163.83251953125,
 									"height": 10
 								},
@@ -2207,8 +2207,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 1720.16357421875,
-									"top": 1520,
+									"left": 1808.16357421875,
+									"top": 1496,
 									"width": 130.6689453125,
 									"height": 10
 								}
@@ -22854,7 +22854,6 @@
 								"$ref": "AAAAAAGaOQo4ACtZeCc="
 							},
 							"name": "name",
-							"documentation": "{\n\"tree:invisible\":true\n}",
 							"type": "Char"
 						},
 						{
@@ -22864,6 +22863,7 @@
 								"$ref": "AAAAAAGaOQo4ACtZeCc="
 							},
 							"name": "users_name",
+							"documentation": "{\n\"tree:invisible\":true\n}",
 							"type": "Char"
 						},
 						{

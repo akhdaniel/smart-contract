@@ -9,7 +9,7 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <tree string="Master Users">
-                    <field name="users_name" /> <!-- 101-->
+                    <field name="name" /> <!-- 100-->
                     <field name="email" /> <!-- 102-->
                     <field name="street" /> <!-- 103-->
                     <field name="phone" /> <!-- 104-->

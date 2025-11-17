@@ -4,14 +4,9 @@ from odoo.exceptions import UserError
 
 class master_users(models.Model):
     _inherit = "vit.master_users"
-    _order = "users_name asc"
+    _order = "name asc"
 
-    # Name tidak terpakai
-    name = fields.Char(required=False, copy=False, string=_("Useless"))
-
-
-    # Penggantinya memakai users_name
-    users_name = fields.Char(required=True, string=_("Username"))
+    name = fields.Char(required=True, string=_("Username"))
     email = fields.Char(required=True, string=_("Email"))
     street = fields.Char(required=True, string=_("Alamat"))
     phone = fields.Char(required=True, string=_("Nomor Telepon"))
@@ -38,7 +33,7 @@ class master_users(models.Model):
                 raise UserError(_("Group Vendor tidak ditemukan!"))
 
             user_vals = {
-                "name": record.name or record.users_name,
+                "name": record.name,
                 "login": record.email.lower().strip(),
                 "email": record.email.lower().strip(),
                 "street": record.street,
