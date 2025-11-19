@@ -42,6 +42,96 @@ class ResUsers(models.Model):
             rec.multi_kanca_domain_ids = self.env['vit.kanca'].search(domain)
 
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        users = super().create(vals_list)
+
+        for user, vals in zip(users, vals_list):
+
+            name = vals.get('name')
+            if not name:
+                continue
+
+            lower_name = name.lower().strip()
+
+            # =====================================================
+            # 1. SPECIAL CASE: Kanwil Umum atau Kanwil Keuangan
+            # =====================================================
+            if "kanwil umum" in lower_name or "kanwil keuangan" in lower_name:
+                kanwil = self.env['vit.kanwil'].search([
+                    ('name', 'ilike', name)
+                ], limit=1)
+
+                if kanwil:
+                    user.write({'multi_kanwil': [(4, kanwil.id)]})
+
+                continue
+
+
+            # =====================================================
+            # 2. Selain itu → dianggap KANCA
+            # =====================================================
+            # if lower_name.startswith("kanwil") or lower_name.startswith("kanca"):
+
+            #     cleaned = (
+            #         name.replace("Kanwil", "")
+            #             .replace("Kanca", "")
+            #             .replace("Umum", "")
+            #             .replace("Keuangan", "")
+            #             .strip()
+            #     )
+
+            #     kanca = self.env['vit.kanca'].search([
+            #         ('name', 'ilike', cleaned)
+            #     ], limit=1)
+
+            #     if kanca:
+            #         user.write({'multi_kanca': [(4, kanca.id)]})
+
+            #         if kanca.kanwil_id:
+            #             user.write({'multi_kanwil': [(4, kanca.kanwil_id.id)]})
+
+            if lower_name.startswith("kanwil") or lower_name.startswith("kanca"):
+
+                cleaned = (
+                    name.replace("Kanwil", "")
+                        .replace("Kanca", "")
+                        .replace("Umum", "")
+                        .replace("Keuangan", "")
+                        .strip()
+                )
+
+                # 1. CARI EXACT MATCH DULU (full name = "Kanca <cleaned>")
+                exact_kanca_name = f"Kanca {cleaned}".strip()
+                kanca = self.env['vit.kanca'].search([
+                    ('name', '=', exact_kanca_name)
+                ], limit=1)
+
+                # 2. KALAU GA ADA EXACT, BARU fallback ke ILIKE (tapi sort yg paling pendek)
+                if not kanca:
+                    kanca_list = self.env['vit.kanca'].search([
+                        ('name', 'ilike', cleaned),
+                    ])
+                    if kanca_list:
+                        # pilih nama TERPENDEK = YANG PALING EXACT
+                        kanca = sorted(kanca_list, key=lambda k: len(k.name))[0]
+
+                # 3. SET ke user
+                if kanca:
+                    user.write({'multi_kanca': [(4, kanca.id)]})
+                    if kanca.kanwil_id:
+                        user.write({'multi_kanwil': [(4, kanca.kanwil_id.id)]})
+
+
+
+
+        return users
+
+
+
+
+
+
     # kanca_id = fields.Many2one(
     #     'vit.kanca',
     #     string='Lokasi Kanca',
