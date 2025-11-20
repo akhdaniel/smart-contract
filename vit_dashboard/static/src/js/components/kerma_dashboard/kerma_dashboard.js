@@ -107,6 +107,9 @@ export class KermaDashboard extends Component {
                 location: this.state.location,
                 keyword: this.state.keyword,
                 selectedYear: this.state.selectedYear,
+                // Persist selected Kanwil and its domain so it can be restored after reload
+                selectedKanwil: this.state.selectedKanwil,
+                kanwilDomain: this.state.kanwilDomain,
                 yearDomain: this.state.yearDomain,
                 // Save domain states
                 unitDomain: this.state.unitDomain,

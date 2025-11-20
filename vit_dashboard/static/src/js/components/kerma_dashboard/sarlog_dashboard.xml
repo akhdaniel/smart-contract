@@ -60,7 +60,7 @@
                                 title="mb.name"
                                 bgColor="'bg-white'"
                                 model="'vit.budget_rkap'"
-                                selectedYear="state.selectedYear"
+                                selectedYear="state.selectedYear ? state.selectedYear.toString() : undefined"
                                 field="'master_budget_summary'"
                                 domain="[]"
                             />
@@ -131,7 +131,7 @@
                         <t t-foreach="[currentYear - 5, currentYear - 4, currentYear - 3, currentYear - 2, currentYear - 1, currentYear]" t-as="th" t-key="th">
                             <option 
                                 t-att-value="th"
-                                t-att-selected="state.selectedYear == th ? true : undefined"
+                                t-att-selected="state.selectedYear &amp;&amp; state.selectedYear == th ? true : undefined"
                                 t-esc="th"
                             />
                         </t>

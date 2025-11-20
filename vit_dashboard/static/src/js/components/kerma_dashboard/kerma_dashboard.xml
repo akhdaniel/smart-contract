@@ -33,9 +33,12 @@
                             class="form-select border-0"
                         >
 
-                            <option value="">-- Pilih Kanwil --</option>
+                            <option value="" t-att-selected="!state.selectedKanwil ? true : undefined">-- Pilih Kanwil --</option>
                             <t t-foreach="state.kanwils" t-as="kw" t-key="kw.id">
-                                <option t-att-value="kw.id" t-esc="kw.name"/>
+                                <option 
+                                    t-att-value="kw.id" 
+                                    t-att-selected="state.selectedKanwil &amp;&amp; state.selectedKanwil.id == kw.id ? true : undefined"
+                                    t-esc="kw.name"/>
                             </t>
 
 

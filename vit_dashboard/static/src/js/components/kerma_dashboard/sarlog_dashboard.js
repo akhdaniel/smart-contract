@@ -11,11 +11,15 @@ export class SarlogDashboard extends Component {
         this.orm = useService("orm");
         this.CanvasRef = useRef("canvas");
 
+        // Load saved state (selectedYear) so selection persists across refresh
+        const saved = this.loadState();
+
         this.state = useState({
             masterBudgets: [],
             totalSummary: {},
             kanwilDroping: [],
             kanwilRealisasi: [],
+            selectedYear: saved.selectedYear || null,
         });
 
         // onWillStart(async () => {
@@ -66,7 +70,7 @@ export class SarlogDashboard extends Component {
         onWillStart(async () => {
             await loadJS("/web/static/lib/Chart/Chart.js");
 
-            const currentYear = new Date().getFullYear();
+            const currentYear = this.state.selectedYear || new Date().getFullYear();
 
             const result = await this.orm.call(
                 "vit.budget_rkap",
@@ -93,6 +97,30 @@ export class SarlogDashboard extends Component {
 
             setTimeout(() => this.renderChart(), 400);
         });
+
+    }
+
+    saveState() {
+        try {
+            const toSave = {
+                // ensure we persist the year as a string to match component prop type
+                selectedYear: this.state.selectedYear ? String(this.state.selectedYear) : null,
+            };
+            localStorage.setItem('sarlogDashboardState', JSON.stringify(toSave));
+        } catch (e) {
+            console.error('Error saving sarlog state', e);
+        }
+    }
+
+    loadState() {
+        try {
+            const raw = localStorage.getItem('sarlogDashboardState');
+            if (!raw) return {};
+            return JSON.parse(raw) || {};
+        } catch (e) {
+            console.error('Error loading sarlog state', e);
+            return {};
+        }
 
     }
 
@@ -253,6 +281,7 @@ export class SarlogDashboard extends Component {
             this.state.kanwilRealisasi = [];
         } finally {
             this.state.isLoading = false;
+            this.saveState();
             this.render(true);
         }
     }
