@@ -48,18 +48,45 @@ class ResUsers(models.Model):
 
         for user, vals in zip(users, vals_list):
 
-            name = vals.get('name')
+            name = vals.get('name', '').strip()
             if not name:
                 continue
 
-            lower_name = name.lower().strip()
+            lower_name = name.lower()
 
             # =====================================================
-            # 1. SPECIAL CASE: Kanwil Umum atau Kanwil Keuangan
+            # 1. SPECIAL CASE: Kanwil Umum
             # =====================================================
-            if "kanwil umum" in lower_name or "kanwil keuangan" in lower_name:
+            if lower_name.startswith("kanwil umum"):
+
+                cleaned = (
+                    name.replace("Kanwil", "")
+                        .replace("Umum", "")
+                        .strip()
+                )
+
                 kanwil = self.env['vit.kanwil'].search([
-                    ('name', 'ilike', name)
+                    ('name', 'ilike', cleaned)
+                ], limit=1)
+
+                if kanwil:
+                    user.write({'multi_kanwil': [(4, kanwil.id)]})
+
+                continue
+
+            # =====================================================
+            # 2. SPECIAL CASE: Kanwil Keuangan
+            # =====================================================
+            if lower_name.startswith("kanwil keuangan"):
+
+                cleaned = (
+                    name.replace("Kanwil", "")
+                        .replace("Keuangan", "")
+                        .strip()
+                )
+
+                kanwil = self.env['vit.kanwil'].search([
+                    ('name', 'ilike', cleaned)
                 ], limit=1)
 
                 if kanwil:
@@ -68,8 +95,9 @@ class ResUsers(models.Model):
                 continue
 
 
+
             # =====================================================
-            # 2. Selain itu → dianggap KANCA
+            # 3. Selain itu → dianggap KANCA
             # =====================================================
             # if lower_name.startswith("kanwil") or lower_name.startswith("kanca"):
 
@@ -101,22 +129,18 @@ class ResUsers(models.Model):
                         .strip()
                 )
 
-                # 1. CARI EXACT MATCH DULU (full name = "Kanca <cleaned>")
                 exact_kanca_name = f"Kanca {cleaned}".strip()
                 kanca = self.env['vit.kanca'].search([
                     ('name', '=', exact_kanca_name)
                 ], limit=1)
 
-                # 2. KALAU GA ADA EXACT, BARU fallback ke ILIKE (tapi sort yg paling pendek)
                 if not kanca:
                     kanca_list = self.env['vit.kanca'].search([
                         ('name', 'ilike', cleaned),
                     ])
                     if kanca_list:
-                        # pilih nama TERPENDEK = YANG PALING EXACT
                         kanca = sorted(kanca_list, key=lambda k: len(k.name))[0]
 
-                # 3. SET ke user
                 if kanca:
                     user.write({'multi_kanca': [(4, kanca.id)]})
                     if kanca.kanwil_id:

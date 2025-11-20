@@ -252,7 +252,6 @@ export class SarlogDashboard extends Component {
             this.state.kanwilDroping = [];
             this.state.kanwilRealisasi = [];
         } finally {
-            // ✅ Baru render setelah semuanya ready
             this.state.isLoading = false;
             this.render(true);
         }
