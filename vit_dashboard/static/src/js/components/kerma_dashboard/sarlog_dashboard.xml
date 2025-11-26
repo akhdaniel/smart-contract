@@ -41,14 +41,79 @@
                     </div>
                 </div>
 
+
+
+
                 <!-- Persentase Realisasi Total -->
-                <div class="text-white shadow bg-itb-light-blue d-flex flex-column align-items-center justify-content-center text-center w-100"
+                <!-- <div class="text-white shadow bg-itb-light-blue d-flex flex-column align-items-center justify-content-center text-center w-100"
                     style="border-radius:10px; min-height:150px; padding:20px;">
                     <div class="fw-semibold fs-4" style="opacity:0.95;">Persentase Realisasi</div>
                     <div class="fw-bold fs-2 mt-1">
                         <t t-out="(state.totalSummary.persen || 0).toFixed(2) + '%'"/>
                     </div>
+                </div> -->
+
+                <div class="text-white shadow bg-itb-light-blue d-flex flex-column align-items-center justify-content-center text-center w-100"
+                    style="border-radius:10px; min-height:150px; padding:20px;">
+
+                    <!-- <div class="fw-semibold fs-4" style="opacity:0.95;">REALISASI RKAP</div> -->
+                    <div class="fw-semibold fs-4" style="opacity:0.95;">
+                        REALISASI RKAP
+                        <t t-if="state.selectedYear">
+                            <t t-esc="state.selectedYear"/>
+                        </t>
+                    </div>
+
+                    <div class="d-flex justify-content-center mt-3">
+                        <div style="position: relative; width: 180px; height: 180px;">
+                            <svg width="180" height="180">
+
+                                <!-- Background circle -->
+                                <circle 
+                                    cx="90" cy="90" r="75"
+                                    stroke="white"
+                                    stroke-width="10"
+                                    fill="none"
+                                />
+
+                                <!-- Progress circle -->
+                                <circle
+                                    cx="90"
+                                    cy="90"
+                                    r="75"
+                                    stroke="#ff8800"
+                                    stroke-width="10"
+                                    fill="none"
+                                    stroke-dasharray="471"
+                                    t-att-stroke-dashoffset="471 - (state.totalSummary.persen * 471 / 100)"
+                                    stroke-linecap="round"
+                                    transform="rotate(-90 90 90)"
+                                />
+                            </svg>
+
+                            <!-- Number in the center -->
+                            <div style="
+                                position:absolute;
+                                top:50%; left:50%;
+                                transform:translate(-50%,-50%);
+                                font-size:24px;
+                                font-weight:bold;
+                                color:white;
+                            ">
+                                <t t-esc="state.totalSummary.persen.toFixed(2)"/>%
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="text-white mt-2" style="font-size:16px; font-weight:600;">
+                        SARLOG
+                    </div>
+
                 </div>
+
+
+
             </div>
 
             <!-- TENGAH: Master Budget Cards -->
