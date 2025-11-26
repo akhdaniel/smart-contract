@@ -208,7 +208,7 @@ export class NumberCard extends Component {
             const budgetDateFilter = domain.find(d => d[0] === 'budget_date');
 
             const paymentDomain = [
-                ['stage_is_draft', '=', true], // hanya yang draft
+                ['stage_is_draft', '=', true],
             ];
 
             // 🔹 Filter berdasarkan Kanwil dari kontrak
@@ -234,36 +234,36 @@ export class NumberCard extends Component {
                 views: [[false, 'list'], [false, 'form']],
                 target: 'current',
 
-                // 🔹 Tambahan biar langsung group by kontrak
                 domain: paymentDomain,
                 context: { group_by: ['kontrak_id'] },
             });
             return;
         }
+
+        return;  
         
-        const sanitizedDomain = (domain || []).map(d => {
-            try {
-                if (d && d.length >= 1 && d[0] === 'kanwil_id') {
-                    const left = (this.props.model === 'vit.budget_rkap')
-                        ? 'izin_prinsip_ids.kanwil_id'
-                        : 'kontrak_id.kanwil_id';
-                    return [left, d[1], d[2]];
-                }
-            } catch (e) {
-            }
-            return d;
-        });
+        // const sanitizedDomain = (domain || []).map(d => {
+        //     try {
+        //         if (d && d.length >= 1 && d[0] === 'kanwil_id') {
+        //             const left = (this.props.model === 'vit.budget_rkap')
+        //                 ? 'izin_prinsip_ids.kanwil_id'
+        //                 : 'kontrak_id.kanwil_id';
+        //             return [left, d[1], d[2]];
+        //         }
+        //     } catch (e) {
+        //     }
+        //     return d;
+        // });
 
-
-        this.env.services.action.doAction({
-            type: 'ir.actions.act_window',
-            name: this.props.title,
-            res_model: this.props.model,
-            domain: sanitizedDomain,
-            context: context,
-            views: [[false, 'list'], [false, 'form']],
-            target: 'current',
-        });
+        // this.env.services.action.doAction({
+        //     type: 'ir.actions.act_window',
+        //     name: this.props.title,
+        //     res_model: this.props.model,
+        //     domain: sanitizedDomain,
+        //     context: context,
+        //     views: [[false, 'list'], [false, 'form']],
+        //     target: 'current',
+        // });
     }
 
 
