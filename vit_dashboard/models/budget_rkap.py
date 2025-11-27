@@ -662,11 +662,16 @@ class BudgetRkap(models.Model):
                 "name": mb.name,
                 "pagu_izin_prinsip": pagu,
                 "realisasi": realisasi,
-                "persen_realisasi": round(persen_realisasi, 2),
+                "persen_realisasi": f"{persen_realisasi:.2f}",
             })
 
-            total_all_pagu += pagu
-            total_all_realisasi += realisasi
+            # total_all_pagu += pagu
+            # total_all_realisasi += realisasi
+            
+            if realisasi > 0:
+                total_all_pagu += pagu
+                total_all_realisasi += realisasi
+
 
         total_persen = (total_all_realisasi / total_all_pagu * 100) if total_all_pagu > 0 else 0
 
