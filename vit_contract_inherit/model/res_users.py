@@ -48,6 +48,9 @@ class ResUsers(models.Model):
 
         for user, vals in zip(users, vals_list):
 
+            if user.partner_id and vals.get('login'):
+                user.partner_id.email = vals['login']
+
             name = vals.get('name', '').strip()
             if not name:
                 continue
@@ -152,15 +155,15 @@ class ResUsers(models.Model):
         return users
 
 
-    @api.model
-    def create(self, vals):
-        user = super().create(vals)
-        if user.partner_id and vals.get('login'):
-            user.partner_id.email = vals['login']
-        return user
+    # @api.model
+    # def create(self, vals):
+    #     user = super().create(vals)
+    #     if user.partner_id and vals.get('login'):
+    #         user.partner_id.email = vals['login']
+    #     return user
 
 
-
+# 
     # kanca_id = fields.Many2one(
     #     'vit.kanca',
     #     string='Lokasi Kanca',
