@@ -31,7 +31,7 @@
                   parent="vit_contract.vit_contract_sub_menu"
                   action="vit_contract.action_izin_prinsip"
                   sequence="20"
-                  groups="vit_contract.group_vit_contract_manager,vit_contract.group_vit_contract_user,group_vit_contract_kanwil,group_vit_contract_kanca"/>
+                  groups="vit_contract.group_vit_contract_manager,vit_contract.group_vit_contract_user,group_vit_contract_pusat_umum"/>
 
 
         <menuitem id="vit_contract.menu_kontrak"
@@ -62,7 +62,7 @@
                   parent="vit_contract.vit_contract_sub_menu"
                   action="vit_contract.action_droping"
                   sequence="60"
-                  groups="vit_contract.group_vit_contract_manager,vit_contract.group_vit_contract_user,group_vit_contract_kanwil,group_vit_contract_kanca,group_vit_contract_kanca,group_vit_contract_pusat_keuangan,group_vit_contract_kanwil_keuangan"/>
+                  groups="vit_contract.group_vit_contract_manager,vit_contract.group_vit_contract_user,group_vit_contract_kanca,group_vit_contract_pusat_keuangan,group_vit_contract_kanwil_keuangan"/>
 
 
     </data>
