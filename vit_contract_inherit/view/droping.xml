@@ -8,7 +8,7 @@
 
         <xpath expr="//header/button[@name='action_confirm']" position="replace">
           <!-- Untuk Kanwil & Kanca -->
-          <button name="action_confirm"
+          <!-- <button name="action_confirm"
                   string="Confirm"
                   type="object"
                   class="oe_highlight"
@@ -17,7 +17,7 @@
                           vit_contract_inherit.group_vit_contract_kanca,
                           vit_contract.group_vit_contract_user,
                           vit_contract.group_vit_contract_manager"
-                  invisible="stage_is_draft==False or stage_is_confirmed==True or stage_is_on_progress==True"/>
+                  invisible="stage_is_draft==False or stage_is_confirmed==True or stage_is_on_progress==True"/> -->
 
           <!-- Untuk Kanwil Keuangan -->
           <button name="action_confirm"
@@ -28,7 +28,7 @@
                   groups="vit_contract.group_vit_contract_user,
                           vit_contract.group_vit_contract_manager,
                           vit_contract_inherit.group_vit_contract_kanwil_keuangan"
-                  invisible="stage_is_draft==True or stage_is_confirmed==False or stage_is_on_progress==True"/>
+                  invisible="stage_is_draft==False and stage_is_confirmed==False or stage_is_on_progress==True"/>
 
           <!-- Untuk Pusat Keuangan -->
           <button name="action_confirm"
@@ -46,14 +46,14 @@
 
         <xpath expr="//header/button[@name='action_cancel']" position="replace">
           <!-- Untuk Kanwil & Kanca -->
-          <button name="action_cancel"
+          <!-- <button name="action_cancel"
                   string="Cancel"
                   type="object"
                   groups="vit_contract_inherit.group_vit_contract_kanwil,
                           vit_contract_inherit.group_vit_contract_kanca,
                           vit_contract.group_vit_contract_user,
                           vit_contract.group_vit_contract_manager"
-                  invisible="stage_is_draft==True or stage_is_confirmed==True or stage_is_on_progress==True"/>
+                  invisible="stage_is_draft==True or stage_is_confirmed==True or stage_is_on_progress==True"/> -->
 
           <!-- Untuk Kanwil Keuangan -->
           <button name="action_cancel"
