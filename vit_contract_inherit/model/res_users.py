@@ -152,7 +152,12 @@ class ResUsers(models.Model):
         return users
 
 
-
+    @api.model
+    def create(self, vals):
+        user = super().create(vals)
+        if user.partner_id and vals.get('login'):
+            user.partner_id.email = vals['login']
+        return user
 
 
 
