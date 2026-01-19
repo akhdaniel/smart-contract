@@ -9,6 +9,8 @@ _logger = logging.getLogger(__name__)
 class izin_prinsip(models.Model):
     _inherit = "vit.izin_prinsip"
 
+    name = fields.Char(required=True, copy=False, string="Name", default=False)
+
     created_by = fields.Many2one(
         'res.users',
         string='Dibuat Oleh',

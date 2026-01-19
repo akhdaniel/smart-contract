@@ -9,7 +9,7 @@
             <field name="arch" type="xml">
 
                 <xpath expr="//field[@name='total_payment']" position="after">
-                    <field name="created_by" readonly="1"/>
+                    <field name="created_by" readonly="1" invisible="1"/>
                     <field
                         name="allowed_kanca_id"
                         readonly="1"
@@ -18,7 +18,12 @@
                 </xpath>
                         <!-- groups="vit_contract_inherit.group_vit_contract_kanca" -->
 
-
+                
+                <xpath expr="//field[@name='name']" position="attributes">
+                    <attribute name="force_save">1</attribute>
+                    <attribute name="required">1</attribute>
+                    <attribute name="readonly">stage_is_draft==False</attribute>
+                </xpath>
 
 
                 <xpath expr="//field[@name='total_pagu']" position="attributes">
