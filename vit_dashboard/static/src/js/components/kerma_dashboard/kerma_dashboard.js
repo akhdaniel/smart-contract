@@ -35,6 +35,7 @@ export class KermaDashboard extends Component {
 
             selectedKanwil: savedState.selectedKanwil || null,
             kanwilDomain: savedState.selectedKanwil ? [['kanwil_id', '=', savedState.selectedKanwil.id]] : [],
+            allowedKanwilIds: [],
             selectedYear: savedState.selectedYear || null,
             yearDomain: savedState.yearDomain || [],
             availableYears: Array.from({ length: 6 }, (_, i) => new Date().getFullYear() - 5 + i),
@@ -70,28 +71,59 @@ export class KermaDashboard extends Component {
 
         this.googleMapReload = null; // Placeholder for the reload method
         this.mitraListCardReload = null; // Placeholder for the reload method
+        this.user = useService("user");
+
 
 
         onWillStart(async () => {
-            console.log("onWillStart...KermaDashboard", this.state.domain);
+            console.log("onWillStart...KermaDashboard");
 
-            // 🟢 ambil semua data Kanwil
+            // 0️⃣ AMBIL USER LOGIN (BENAR DI OWL)
+            const uid = this.user.userId;
+
+            const userData = await this.orm.read(
+                "res.users",
+                [uid],
+                ["multi_kanwil"]
+            );
+
+            this.state.allowedKanwilIds = userData[0].multi_kanwil || [];
+
+            console.log("allowedKanwilIds:", this.state.allowedKanwilIds);
+
+            // 1️⃣ ambil semua kanwil
             this.state.kanwils = await this.orm.searchRead(
                 "vit.kanwil",
                 [],
                 ["id", "name"]
             );
 
+            // 2️⃣ AUTO-SET JIKA HANYA SATU KANWIL
+            if (this.state.allowedKanwilIds.length === 1) {
+                const kwId = this.state.allowedKanwilIds[0];
+                const kw = this.state.kanwils.find(k => k.id === kwId);
+
+                if (kw) {
+                    this.state.selectedKanwil = kw;
+                    this.state.kanwilDomain = [['kanwil_id', '=', kw.id]];
+                }
+            }
+
+            // 3️⃣ data dashboard lain
             const result = await this.orm.call(
                 "vit.budget_rkap",
                 "get_statistics",
                 [],
                 { field: "master_budget_list" }
             );
+
             this.state.masterBudgets = result.master_list || [];
 
             this.reloadNumberCard();
         });
+
+
+
 
     }
     saveState() {

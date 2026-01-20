@@ -26,25 +26,35 @@
 
 
 
-                <div class="col-12 col-md-3">
-                    <div class="form-control px-1 m-0">
-                        <select
-                            t-on-change="onKanwilChange"
-                            class="form-select border-0"
-                        >
+                <t t-if="!state.allowedKanwilIds || state.allowedKanwilIds.length !== 1">
+                    <div class="col-12 col-md-3">
+                        <div class="form-control px-1 m-0">
+                            <select
+                                t-on-change="onKanwilChange"
+                                class="form-select border-0"
+                            >
+                                <option value=""
+                                    t-att-selected="!state.selectedKanwil ? true : undefined">
+                                    -- Pilih Kanwil --
+                                </option>
 
-                            <option value="" t-att-selected="!state.selectedKanwil ? true : undefined">-- Pilih Kanwil --</option>
-                            <t t-foreach="state.kanwils" t-as="kw" t-key="kw.id">
-                                <option 
-                                    t-att-value="kw.id" 
-                                    t-att-selected="state.selectedKanwil &amp;&amp; state.selectedKanwil.id == kw.id ? true : undefined"
-                                    t-esc="kw.name"/>
-                            </t>
-
-
-                        </select>
+                                <t t-foreach="state.kanwils" t-as="kw" t-key="kw.id">
+                                    <t t-if="
+                                        !state.allowedKanwilIds.length
+                                        or state.allowedKanwilIds.includes(kw.id)
+                                    ">
+                                        <option
+                                            t-att-value="kw.id"
+                                            t-esc="kw.name"/>
+                                    </t>
+                                </t>
+                            </select>
+                        </div>
                     </div>
-                </div>
+                </t>
+
+
+
 
 
                 <div class="col-12 col-md-2">
