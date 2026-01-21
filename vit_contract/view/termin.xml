@@ -16,13 +16,13 @@
                     <field name="stage_id" /> <!-- 102-->
                     <field name="deskripsi" /> <!-- 103-->
                     <field name="droping_id" /> <!-- 103-->
-                    <field name="due_date" /> <!-- 104-->
                     <field name="partner_id" /> <!-- 104-->
                     <field name="kontrak_id" /> <!-- 105-->
                     <field name="syarat_progress" /> <!-- 107-->
                     <field name="actual_progress" /> <!-- 108-->
                     <field name="syarat_output" /> <!-- 109-->
                     <field name="actual_output" /> <!-- 110-->
+                    <field name="nomor_kontrak" /> <!-- 112-->
                 </tree>
             </field>
         </record>
@@ -85,6 +85,7 @@
                                 <field name="syarat_output"  readonly="stage_is_draft==False"/>
                                 <field name="actual_output"  readonly="stage_is_draft==False"/>
                                 <field name="verifikasi_syarat"  readonly="stage_is_draft==False"/>
+                                <field name="nomor_kontrak"  readonly="stage_is_draft==False"/>
                             </group>
                             <group> <!-- right -->
                                 <field name="master_nama_termin_id"  readonly="stage_is_draft==False"/>
@@ -100,9 +101,11 @@
                                         <field name="name" /> <!-- 100-->
                                         <field name="verified" /> <!-- 101-->
                                         <field name="master_syarat_termin_id" /> <!-- 101-->
-                                        <field name="due_date" /> <!-- 102-->
+                                        <field name="confirm" /> <!-- 102-->
                                         <field name="kontrak_id" /> <!-- 102-->
-                                        <field name="upload_date" /> <!-- 105-->
+                                        <field name="due_date" /> <!-- 103-->
+                                        <field name="upload_date" /> <!-- 103-->
+                                        <field name="nomor_kontrak" /> <!-- 105-->
                                     </tree>
                                 </field>
                             </page>
@@ -143,6 +146,7 @@
                     <filter string="Actual Output" name="filter_by_actual_output" domain="[('actual_output','=','')]" />
                     <filter string="Verifikasi Syarat" name="filter_by_verifikasi_syarat" domain="[('verifikasi_syarat','=','')]" />
                     <filter string="Stage Is On Progress" name="filter_by_stage_is_on_progress" domain="[('stage_is_on_progress','=','')]" />
+                    <filter string="Nomor Kontrak" name="filter_by_nomor_kontrak" domain="[('nomor_kontrak','=','')]" />
                     <field name="name" select="True"/>
                     <field name="nilai" select="True"/>
                     <field name="persentase" select="True"/>
@@ -161,6 +165,7 @@
                     <field name="actual_output" select="True"/>
                     <field name="verifikasi_syarat" select="True"/>
                     <field name="stage_is_on_progress" select="True"/>
+                    <field name="nomor_kontrak" select="True"/>
                     <field name="master_nama_termin_id" select="True"/>
                     <field name="stage_id" select="True"/>
                     <field name="droping_id" select="True"/>

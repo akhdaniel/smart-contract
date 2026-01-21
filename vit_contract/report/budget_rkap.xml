@@ -86,6 +86,10 @@
                             <p class="m-0" t-field="doc.stage_name" />
                         </div>
                         <div class="col-auto mw-100 mb-2">
+                            <strong>Jenis Penugasan</strong>
+                            <p class="m-0" t-field="doc.jenis_penugasan" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
                             <strong>Master Budget</strong>
                             <p class="m-0" t-field="doc.master_budget_id"/>
                         </div>
@@ -108,6 +112,8 @@
                             <td>Allow Cancel</td>
                             <td>Stage Name</td>
                             <td>Total Payment</td>
+                            <td>Amount Budget</td>
+                            <td>Amount Budget Remaining</td>
                             <td>Budget</td>
                             <td>Stage</td>
                             <td>Master Budget</td>
@@ -124,6 +130,8 @@
                             <td><span t-field="line.allow_cancel" /></td>
                             <td><span t-field="line.stage_name" /></td>
                             <td><span t-field="line.total_payment" /></td>
+                            <td><span t-field="line.amount_budget" /></td>
+                            <td><span t-field="line.amount_budget_remaining" /></td>
                             <td><span t-field="line.budget_id" /></td>
                             <td><span t-field="line.stage_id" /></td>
                             <td><span t-field="line.master_budget_id" /></td>
@@ -151,6 +159,8 @@
                             <td>Overdue Days</td>
                             <td>Stage Is On Progress</td>
                             <td>Type</td>
+                            <td>Nomor Kontrak</td>
+                            <td>Duration Days</td>
                             <td>Izin Prinsip</td>
                             <td>Budget Rkap</td>
                             <td>Stage</td>
@@ -179,6 +189,8 @@
                             <td><span t-field="line.overdue_days" /></td>
                             <td><span t-field="line.stage_is_on_progress" /></td>
                             <td><span t-field="line.type" /></td>
+                            <td><span t-field="line.nomor_kontrak" /></td>
+                            <td><span t-field="line.duration_days" /></td>
                             <td><span t-field="line.izin_prinsip_id" /></td>
                             <td><span t-field="line.budget_rkap_id" /></td>
                             <td><span t-field="line.stage_id" /></td>

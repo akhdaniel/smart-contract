@@ -101,6 +101,7 @@
                 </xpath>
 
                 <xpath expr="//field[@name='end_date']" position="attributes">
+                    <attribute name="readonly">1</attribute>
                     <attribute name="force_save">1</attribute>
                     <attribute name="required">1</attribute>
                 </xpath>
@@ -194,6 +195,7 @@
                 </xpath>
 
                 <xpath expr="//page[@name='termin_ids']//tree/field[@name='partner_id']" position="replace"/>
+                <xpath expr="//page[@name='termin_ids']//tree/field[@name='nomor_kontrak']" position="replace"/>
 
                 <xpath expr="//page[@name='termin_ids']//tree/field[@name='persentase']" position="replace"/>
                 <xpath expr="//page[@name='termin_ids']//tree/field[@name='nilai']" position="replace"/>
@@ -229,7 +231,7 @@
                 <xpath expr="//page[@name='termin_ids']//tree/field[@name='actual_progress']" position="replace"/>
                 <xpath expr="//page[@name='termin_ids']//tree/field[@name='syarat_output']" position="replace"/>
                 <xpath expr="//page[@name='termin_ids']//tree/field[@name='actual_output']" position="replace"/>
-                <xpath expr="//page[@name='termin_ids']//tree/field[@name='due_date']" position="after">
+                <xpath expr="//page[@name='termin_ids']//tree/field[@name='droping_id']" position="after">
                     <field name="syarat_progress"
                         column_invisible="parent.type != 'fisik'"/>
                     <field name="actual_progress"

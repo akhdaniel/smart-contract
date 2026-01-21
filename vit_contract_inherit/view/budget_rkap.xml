@@ -28,6 +28,11 @@
                     <field name="previous_remaining" readonly="1"/>
                 </xpath>
 
+                <xpath expr="//field[@name='jenis_penugasan']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                    <attribute name="force_save">1</attribute>
+                </xpath>
+
                 <xpath expr="//field[@name='remaining']" position="attributes">
                     <attribute name="readonly">1</attribute>
                     <attribute name="force_save">1</attribute>

@@ -19,6 +19,8 @@ class syarat_termin(models.Model):
     document = fields.Binary(filename="document_filename",  string=_("Document"))
     document_filename = fields.Char( string=_("Document Filename"))
     upload_date = fields.Date( string=_("Upload Date"))
+    nomor_kontrak = fields.Char( string=_("Nomor Kontrak"))
+    confirm = fields.Boolean( string=_("Confirm"))
 
 
     def copy(self, default=None):

@@ -38,6 +38,18 @@ class izin_prinsip(models.Model):
         readonly=True,
     )
 
+    amount_budget = fields.Float(
+        string="Amount Budget",
+        related="budget_id.amount",
+        readonly=True,
+    )
+
+    amount_budget_remaining = fields.Float(
+        string="Amount Budget Remaining",
+        related="budget_id.remaining",
+        readonly=True,
+    )
+
     total_pagu = fields.Float(
         string="Total Pagu",
         compute="_compute_total_pagu",
@@ -165,7 +177,8 @@ class izin_prinsip(models.Model):
     @api.constrains("total_pagu", "budget_id")
     def _check_total_pagu_vs_budget(self):
         for rec in self:
-            if rec.budget_id and rec.total_pagu > rec.budget_id.amount:
+            if rec.budget_id and rec.total_pagu > rec.budget_id.remaining:
                 raise ValidationError(_(
-                    "Total Pagu (%.2f) tidak boleh melebihi Amount Budget RKAP (%.2f)!"
-                ) % (rec.total_pagu, rec.budget_id.amount))
+                    "Total Pagu (%.2f) tidak boleh melebihi Remaining Budget RKAP (%.2f)!"
+                ) % (rec.total_pagu, rec.budget_id.remaining))
+

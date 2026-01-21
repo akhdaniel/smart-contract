@@ -11,6 +11,7 @@
                 <tree string="Budget Rkap">
                     <field name="name" /> <!-- 10-->
                     <field name="amount" /> <!-- 20-->
+                    <field name="jenis_penugasan" /> <!-- 30-->
                     <field name="remaining" /> <!-- 40-->
                     <field name="total_pagu_izin_prinsip" /> <!-- 50-->
                     <field name="total_qty_izin_prinsip" /> <!-- 60-->
@@ -68,6 +69,7 @@
                                 <field name="allow_cancel" invisible="True" readonly="stage_is_draft==False"/>
                                 <field name="stage_name" invisible="True" readonly="stage_is_draft==False"/>
                                 <field name="amount"  readonly="stage_is_draft==False"/>
+                                <field name="jenis_penugasan"  readonly="stage_is_draft==False"/>
                                 <field name="remaining"  readonly="stage_is_draft==False"/>
                                 <field name="total_pagu_izin_prinsip"  readonly="stage_is_draft==False"/>
                                 <field name="total_qty_izin_prinsip"  readonly="stage_is_draft==False"/>
@@ -89,6 +91,8 @@
                                     <tree >
                                         <field name="name" /> <!-- 10-->
                                         <field name="kanwil_id" /> <!-- 30-->
+                                        <field name="amount_budget" /> <!-- 490-->
+                                        <field name="amount_budget_remaining" /> <!-- 495-->
                                         <field name="total_pagu" /> <!-- 500-->
                                         <field name="total_payment" /> <!-- 510-->
                                         <field name="stage_id" /> <!-- 2000-->
@@ -99,9 +103,11 @@
                                 <field name="kontrak_ids" readonly="stage_is_draft==False">
                                     <tree >
                                         <field name="name" /> <!-- 10-->
+                                        <field name="nomor_kontrak" /> <!-- 20-->
                                         <field name="job_izin_prinsip_id" /> <!-- 40-->
                                         <field name="kanca_id" /> <!-- 60-->
                                         <field name="start_date" /> <!-- 70-->
+                                        <field name="duration_days" /> <!-- 75-->
                                         <field name="end_date" /> <!-- 80-->
                                         <field name="jenis_kontrak_id" /> <!-- 100-->
                                         <field name="partner_id" /> <!-- 102-->
@@ -163,6 +169,7 @@
                     <filter string="Allow Confirm" name="filter_by_allow_confirm" domain="[('allow_confirm','=','')]" />
                     <filter string="Allow Cancel" name="filter_by_allow_cancel" domain="[('allow_cancel','=','')]" />
                     <filter string="Stage Name" name="filter_by_stage_name" domain="[('stage_name','=','')]" />
+                    <filter string="Jenis Penugasan" name="filter_by_jenis_penugasan" domain="[('jenis_penugasan','=','')]" />
                     <field name="name" select="True"/>
                     <field name="amount" select="True"/>
                     <field name="remaining" select="True"/>
@@ -180,11 +187,13 @@
                     <field name="allow_confirm" select="True"/>
                     <field name="allow_cancel" select="True"/>
                     <field name="stage_name" select="True"/>
+                    <field name="jenis_penugasan" select="True"/>
                     <field name="master_budget_id" select="True"/>
                     <field name="stage_id" select="True"/>
                     <group string="Group By..">
                         <filter string="Master Budget" domain="[]" name="group_by_master_budget_id" context="{'group_by':'master_budget_id'}"/>
                         <filter string="Stage" domain="[]" name="group_by_stage_id" context="{'group_by':'stage_id'}"/>
+                        <filter string="Jenis Penugasan" domain="[]" name="group_by_jenis_penugasan" context="{'group_by':'jenis_penugasan'}"/>
                     </group>
                 </search>
             </field>

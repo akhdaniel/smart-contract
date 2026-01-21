@@ -41,6 +41,14 @@
                             <p class="m-0" t-field="doc.upload_date" />
                         </div>
                         <div class="col-auto mw-100 mb-2">
+                            <strong>Nomor Kontrak</strong>
+                            <p class="m-0" t-field="doc.nomor_kontrak" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Confirm</strong>
+                            <p class="m-0" t-field="doc.confirm" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
                             <strong>Termin</strong>
                             <p class="m-0" t-field="doc.termin_id"/>
                         </div>

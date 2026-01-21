@@ -10,12 +10,14 @@
             <field name="arch" type="xml">
                 <tree string="Kontrak">
                     <field name="name" /> <!-- 10-->
+                    <field name="nomor_kontrak" /> <!-- 20-->
                     <field name="izin_prinsip_id" /> <!-- 20-->
                     <field name="budget_rkap_id" /> <!-- 30-->
                     <field name="job_izin_prinsip_id" /> <!-- 40-->
                     <field name="kanwil_id" /> <!-- 50-->
                     <field name="kanca_id" /> <!-- 60-->
                     <field name="start_date" /> <!-- 70-->
+                    <field name="duration_days" /> <!-- 75-->
                     <field name="end_date" /> <!-- 80-->
                     <field name="jenis_kontrak_id" /> <!-- 100-->
                     <field name="partner_id" /> <!-- 102-->
@@ -78,7 +80,9 @@
                                 <field name="allow_cancel" invisible="True" readonly="stage_is_draft==False"/>
                                 <field name="stage_name" invisible="True" readonly="stage_is_draft==False"/>
                                 <field name="stage_is_on_progress" invisible="True" readonly="stage_is_draft==False"/>
+                                <field name="nomor_kontrak"  readonly="stage_is_draft==False"/>
                                 <field name="start_date"  readonly="stage_is_draft==False"/>
+                                <field name="duration_days"  readonly="stage_is_draft==False"/>
                                 <field name="end_date"  readonly="stage_is_draft==False"/>
                                 <field name="amount_izin_prinsip"  readonly="stage_is_draft==False"/>
                                 <field name="amount_denda"  readonly="stage_is_draft==False"/>
@@ -125,12 +129,12 @@
                                         <field name="stage_id" /> <!-- 102-->
                                         <field name="deskripsi" /> <!-- 103-->
                                         <field name="droping_id" /> <!-- 103-->
-                                        <field name="due_date" /> <!-- 104-->
                                         <field name="partner_id" /> <!-- 104-->
                                         <field name="syarat_progress" /> <!-- 107-->
                                         <field name="actual_progress" /> <!-- 108-->
                                         <field name="syarat_output" /> <!-- 109-->
                                         <field name="actual_output" /> <!-- 110-->
+                                        <field name="nomor_kontrak" /> <!-- 112-->
                                     </tree>
                                 </field>
                             </page>
@@ -168,6 +172,8 @@
                     <filter string="Overdue Days" name="filter_by_overdue_days" domain="[('overdue_days','=','')]" />
                     <filter string="Stage Is On Progress" name="filter_by_stage_is_on_progress" domain="[('stage_is_on_progress','=','')]" />
                     <filter string="Type" name="filter_by_type" domain="[('type','=','')]" />
+                    <filter string="Nomor Kontrak" name="filter_by_nomor_kontrak" domain="[('nomor_kontrak','=','')]" />
+                    <filter string="Duration Days" name="filter_by_duration_days" domain="[('duration_days','=','')]" />
                     <field name="name" select="True"/>
                     <field name="start_date" select="True"/>
                     <field name="end_date" select="True"/>
@@ -183,6 +189,8 @@
                     <field name="overdue_days" select="True"/>
                     <field name="stage_is_on_progress" select="True"/>
                     <field name="type" select="True"/>
+                    <field name="nomor_kontrak" select="True"/>
+                    <field name="duration_days" select="True"/>
                     <field name="izin_prinsip_id" select="True"/>
                     <field name="budget_rkap_id" select="True"/>
                     <field name="stage_id" select="True"/>

@@ -3,6 +3,7 @@
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
+from datetime import timedelta
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -41,6 +42,12 @@ class kontrak(models.Model):
     active = fields.Boolean(default=True)
 
     name = fields.Char(required=True, copy=False, string="Name", default=False)
+
+
+    duration_days = fields.Integer(
+        string=_("Duration (Days)"),
+        help=_("Number of days from the Start Date")
+    )
 
     type = fields.Selection(
         selection=[('fisik', 'Fisik'), ('non_fisik', 'Non Fisik')],
@@ -120,7 +127,8 @@ class kontrak(models.Model):
     )
     
     persentasi_denda = fields.Float( 
-        string=_("Per mil Denda")
+        string=_("Per mil Denda"),
+        default=1.0,
     )
 
     overdue_days = fields.Integer(
@@ -158,6 +166,15 @@ class kontrak(models.Model):
         store=True,
     )
 
+
+    @api.onchange("start_date", "duration_days")
+    def _onchange_duration_days(self):
+        for rec in self:
+            if rec.start_date and rec.duration_days:
+                rec.end_date = rec.start_date + timedelta(days=rec.duration_days)
+            else:
+                rec.end_date = False
+
     @api.depends('addendum_ids')
     def _compute_addendum_count(self):
         for rec in self:
@@ -166,7 +183,7 @@ class kontrak(models.Model):
 
 
     @api.depends("termin_ids.syarat_termin_ids.upload_date",
-                "termin_ids.due_date",
+                "end_date",
                 "amount_kontrak", "persentasi_denda")
     def _compute_overdue_and_late(self):
         for rec in self:
@@ -186,10 +203,10 @@ class kontrak(models.Model):
 
             if last_termin:
                 overdue = 0
-                if last_termin.due_date:
+                if rec.end_date:
                     for syarat in last_termin.syarat_termin_ids:
                         if syarat.upload_date:
-                            delta = (syarat.upload_date - last_termin.due_date).days
+                            delta = (syarat.upload_date - rec.end_date).days
                             if delta > 0:
                                 overdue = max(overdue, delta)
 

@@ -51,6 +51,14 @@ class budget_rkap(models.Model):
         readonly=True,
     )
 
+    jenis_penugasan = fields.Selection(
+        selection=[('pso', 'Pso'), ('kom', 'Kom')],
+        string='Jenis Penugasan',
+        related='master_budget_id.jenis_penugasan',
+        store=True,
+        readonly=True
+    )
+
 
     remaining = fields.Float(
         string="Remaining",

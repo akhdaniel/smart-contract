@@ -44,17 +44,19 @@
             <field name="tag">vit_dashboard.SarlogDashboard</field>
         </record>
 
-        <!-- Child Menus di bawah Dashboard -->
+
         <menuitem id="menu_kerma_dashboard"
                   name="Dashboard Kanwil"
                   action="action_kerma_dashboard"
                   parent="vit_contract_dashboard_menu"
                   sequence="1"/>
 
+
         <menuitem id="menu_sarlog_dashboard"
                   name="Dashboard Sarlog"
                   action="action_sarlog_dashboard"
                   parent="vit_contract_dashboard_menu"
+                  groups="vit_contract.group_vit_contract_manager,vit_contract_inherit.group_vit_contract_pusat_keuangan,vit_contract_inherit.group_vit_contract_pusat_umum"
                   sequence="2"/>
 
     </data>

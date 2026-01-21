@@ -98,6 +98,7 @@
                             <td>Actual Output</td>
                             <td>Verifikasi Syarat</td>
                             <td>Stage Is On Progress</td>
+                            <td>Nomor Kontrak</td>
                             <td>Master Nama Termin</td>
                             <td>Stage</td>
                             <td>Droping</td>
@@ -125,6 +126,7 @@
                             <td><span t-field="line.actual_output" /></td>
                             <td><span t-field="line.verifikasi_syarat" /></td>
                             <td><span t-field="line.stage_is_on_progress" /></td>
+                            <td><span t-field="line.nomor_kontrak" /></td>
                             <td><span t-field="line.master_nama_termin_id" /></td>
                             <td><span t-field="line.stage_id" /></td>
                             <td><span t-field="line.droping_id" /></td>

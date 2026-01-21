@@ -13,9 +13,11 @@
                     <field name="termin_id" /> <!-- 100-->
                     <field name="verified" /> <!-- 101-->
                     <field name="master_syarat_termin_id" /> <!-- 101-->
-                    <field name="due_date" /> <!-- 102-->
+                    <field name="confirm" /> <!-- 102-->
                     <field name="kontrak_id" /> <!-- 102-->
-                    <field name="upload_date" /> <!-- 105-->
+                    <field name="due_date" /> <!-- 103-->
+                    <field name="upload_date" /> <!-- 103-->
+                    <field name="nomor_kontrak" /> <!-- 105-->
                 </tree>
             </field>
         </record>
@@ -57,10 +59,12 @@
                         <group>
                             <group> <!-- left -->
                                 <field name="verified"  />
-                                <field name="due_date"  />
                                 <field name="document" filename="document_filename" />
-                                <field name="document_filename" invisible="1" />
+                                <field name="confirm"  />
+                                <field name="due_date"  />
                                 <field name="upload_date"  />
+                                <field name="document_filename" invisible="1" />
+                                <field name="nomor_kontrak"  />
                             </group>
                             <group> <!-- right -->
                                 <field name="termin_id"  />
@@ -94,12 +98,16 @@
                     <filter string="Document" name="filter_by_document" domain="[('document','=','')]" />
                     <filter string="Document Filename" name="filter_by_document_filename" domain="[('document_filename','=','')]" />
                     <filter string="Upload Date" name="filter_by_upload_date" domain="[('upload_date','=','')]" />
+                    <filter string="Nomor Kontrak" name="filter_by_nomor_kontrak" domain="[('nomor_kontrak','=','')]" />
+                    <filter string="Confirm" name="filter_by_confirm" domain="[('confirm','=','')]" />
                     <field name="name" select="True"/>
                     <field name="verified" select="True"/>
                     <field name="due_date" select="True"/>
                     <field name="document" select="True"/>
                     <field name="document_filename" select="True"/>
                     <field name="upload_date" select="True"/>
+                    <field name="nomor_kontrak" select="True"/>
+                    <field name="confirm" select="True"/>
                     <field name="termin_id" select="True"/>
                     <field name="master_syarat_termin_id" select="True"/>
                     <field name="kontrak_id" select="True"/>

@@ -37,9 +37,12 @@ class termin(models.Model):
         ondelete="cascade"
     )
 
-    due_date = fields.Date(
-        string=_("Due Date"),
+    nomor_kontrak = fields.Char(
+        string='Nomor Kontrak',
+        related='kontrak_id.nomor_kontrak',
+        store=True,
     )
+
 
     verification_date = fields.Date(
         string=_("Verification Date"),
@@ -50,11 +53,11 @@ class termin(models.Model):
             rec.unlink()
         return True
     
-    @api.depends("syarat_termin_ids.verified")
+    @api.depends("syarat_termin_ids.verified", "syarat_termin_ids.confirm")
     def _compute_verifikasi_syarat(self):
         for rec in self:
             if rec.syarat_termin_ids:
-                rec.verifikasi_syarat = all(line.verified for line in rec.syarat_termin_ids)
+                rec.verifikasi_syarat = all(line.verified and line.confirm for line in rec.syarat_termin_ids)
             else:
                 rec.verifikasi_syarat = False
 
@@ -198,9 +201,9 @@ class termin(models.Model):
             stage = rec._get_next_stage()
 
             if stage and stage.done:
-                not_verified = rec.syarat_termin_ids.filtered(lambda l: not l.verified)
+                not_verified = rec.syarat_termin_ids.filtered(lambda l: not (l.verified and l.confirm))
                 if not_verified:
-                    raise UserError(_("Tidak bisa di konfirmasi! Masih ada syarat termin yang belum diverifikasi:\n- %s") %
+                    raise UserError(_("Tidak bisa di konfirmasi! Masih ada syarat termin yang belum diverifikasi dan dikonfirmasi:\n- %s") %
                                     "\n- ".join(not_verified.mapped("name")))
 
 

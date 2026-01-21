@@ -17,10 +17,16 @@
                 </xpath>
 
                 <xpath expr="//field[@name='document']" position="replace"/>
-
                 <xpath expr="//form/sheet/group" position="inside">
-                    <field name="document" widget="pdf_viewer" />
+                    <field name="document" widget="pdf_viewer" invisible="not document"/>
                 </xpath>
+                
+
+                <xpath expr="//field[@name='nomor_kontrak']" position="replace"/>
+                <xpath expr="//field[@name='termin_id']" position="before">
+                    <field name="nomor_kontrak" readonly="1"/>
+                </xpath>
+
 
                 <xpath expr="//field[@name='termin_id']" position="attributes">
                     <attribute name="readonly">1</attribute>

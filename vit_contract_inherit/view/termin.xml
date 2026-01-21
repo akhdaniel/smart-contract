@@ -55,9 +55,12 @@
                 </xpath> -->
 
                 <!-- <xpath expr="//field[@name='verifikasi_syarat']" position="replace"/> -->
+                <xpath expr="//field[@name='nomor_kontrak']" position="replace"/>
                 <xpath expr="//field[@name='deskripsi']" position="replace"/>
+                <xpath expr="//field[@name='due_date']" position="replace"/>
                 <xpath expr="//field[@name='kontrak_id']" position="after">
                     <!-- <field name="verifikasi_syarat" invisible="1"/> -->
+                    <field name="nomor_kontrak" readonly="1"/>
                     <field name="deskripsi"/>
                 </xpath>
 
@@ -87,9 +90,14 @@
                 </xpath> -->
 
                 <xpath expr="//page[@name='syarat_termin_ids']//tree//field[@name='verified']" position="replace"/>
-
+                <xpath expr="//page[@name='syarat_termin_ids']//tree//field[@name='confirm']" position="replace"/>
+                <xpath expr="//page[@name='syarat_termin_ids']//tree//field[@name='nomor_kontrak']" position="replace"/>
                 <xpath expr="//page[@name='syarat_termin_ids']//tree//field[@name='due_date']" position="after">
                     <field name="verified"/>
+                    <field name="confirm"/>
+                </xpath>
+                <xpath expr="//page[@name='syarat_termin_ids']//tree//field[@name='kontrak_id']" position="after">
+                    <field name="nomor_kontrak"/>
                 </xpath>
 
                 <xpath expr="//page[@name='syarat_termin_ids']//tree//field[@name='upload_date']" position="after">

@@ -50,6 +50,14 @@
                             <p class="m-0" t-field="doc.total_payment" />
                         </div>
                         <div class="col-auto mw-100 mb-2">
+                            <strong>Amount Budget</strong>
+                            <p class="m-0" t-field="doc.amount_budget" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Amount Budget Remaining</strong>
+                            <p class="m-0" t-field="doc.amount_budget_remaining" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
                             <strong>Budget</strong>
                             <p class="m-0" t-field="doc.budget_id"/>
                         </div>
@@ -87,6 +95,8 @@
                             <td>Overdue Days</td>
                             <td>Stage Is On Progress</td>
                             <td>Type</td>
+                            <td>Nomor Kontrak</td>
+                            <td>Duration Days</td>
                             <td>Izin Prinsip</td>
                             <td>Budget Rkap</td>
                             <td>Stage</td>
@@ -115,6 +125,8 @@
                             <td><span t-field="line.overdue_days" /></td>
                             <td><span t-field="line.stage_is_on_progress" /></td>
                             <td><span t-field="line.type" /></td>
+                            <td><span t-field="line.nomor_kontrak" /></td>
+                            <td><span t-field="line.duration_days" /></td>
                             <td><span t-field="line.izin_prinsip_id" /></td>
                             <td><span t-field="line.budget_rkap_id" /></td>
                             <td><span t-field="line.stage_id" /></td>

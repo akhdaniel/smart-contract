@@ -32,6 +32,8 @@ class kontrak(models.Model):
     overdue_days = fields.Integer( string=_("Overdue Days"))
     stage_is_on_progress = fields.Boolean(related="stage_id.on_progress", store=True,  string=_("Stage Is On Progress"))
     type = fields.Selection(selection=[('fisik', 'Fisik'),('non_fisik', 'Non Fisik')],  string=_("Type"))
+    nomor_kontrak = fields.Char( string=_("Nomor Kontrak"))
+    duration_days = fields.Integer( string=_("Duration Days"))
 
 
     @api.model_create_multi

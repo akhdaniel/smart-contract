@@ -31,6 +31,7 @@ class termin(models.Model):
     actual_output = fields.Text( string=_("Actual Output"))
     verifikasi_syarat = fields.Boolean( string=_("Verifikasi Syarat"))
     stage_is_on_progress = fields.Boolean(related="stage_id.on_progress", store=True,  string=_("Stage Is On Progress"))
+    nomor_kontrak = fields.Char( string=_("Nomor Kontrak"))
 
 
     @api.model_create_multi

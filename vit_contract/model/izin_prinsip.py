@@ -21,6 +21,8 @@ class izin_prinsip(models.Model):
     allow_cancel = fields.Boolean(related="stage_id.allow_cancel", store=True,  string=_("Allow Cancel"))
     stage_name = fields.Char(related="stage_id.name", store=True,  string=_("Stage Name"))
     total_payment = fields.Float( string=_("Total Payment"))
+    amount_budget = fields.Float( string=_("Amount Budget"))
+    amount_budget_remaining = fields.Float( string=_("Amount Budget Remaining"))
 
 
     @api.model_create_multi

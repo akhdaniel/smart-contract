@@ -87,13 +87,13 @@
                                         <field name="persentase" /> <!-- 102-->
                                         <field name="stage_id" /> <!-- 102-->
                                         <field name="deskripsi" /> <!-- 103-->
-                                        <field name="due_date" /> <!-- 104-->
                                         <field name="partner_id" /> <!-- 104-->
                                         <field name="kontrak_id" /> <!-- 105-->
                                         <field name="syarat_progress" /> <!-- 107-->
                                         <field name="actual_progress" /> <!-- 108-->
                                         <field name="syarat_output" /> <!-- 109-->
                                         <field name="actual_output" /> <!-- 110-->
+                                        <field name="nomor_kontrak" /> <!-- 112-->
                                     </tree>
                                 </field>
                             </page>

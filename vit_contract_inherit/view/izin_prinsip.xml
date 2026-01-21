@@ -25,7 +25,15 @@
                     <attribute name="readonly">stage_is_draft==False</attribute>
                 </xpath>
 
+                <xpath expr="//field[@name='amount_budget']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
 
+                <xpath expr="//field[@name='amount_budget_remaining']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+
+                
                 <xpath expr="//field[@name='total_pagu']" position="attributes">
                     <attribute name="readonly">1</attribute>
                 </xpath>

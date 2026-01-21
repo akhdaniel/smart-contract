@@ -27,6 +27,13 @@ class syarat_termin(models.Model):
         string="Master Syarat Termin"
     )
 
+    nomor_kontrak = fields.Char(
+        string='Nomor Kontrak',
+        related='termin_id.kontrak_id.nomor_kontrak',
+        store=True,
+    )
+
+
     due_date = fields.Date( 
         string=_("Due Date"),
     )
@@ -39,7 +46,7 @@ class syarat_termin(models.Model):
 
     def write(self, vals):
         res = super(syarat_termin, self).write(vals)
-        if "verified" in vals:
+        if "verified" in vals or "confirm" in vals:
             for rec in self:
                 if rec.termin_id:
                     rec.termin_id._compute_verifikasi_syarat()
@@ -82,6 +89,12 @@ class syarat_termin(models.Model):
         for rec in self:
             if rec.verified and not rec.document:
                 raise ValidationError(_("Tidak bisa memverifikasi tanpa upload Document."))
+    
+    @api.constrains('confirm', 'document')
+    def _check_confirm_requires_document(self):
+        for rec in self:
+            if rec.confirm and not rec.document:
+                raise ValidationError(_("Tidak bisa mengkonfirmasi tanpa upload Document."))
             
     @api.onchange('verified')
     def _onchange_verified(self):
@@ -91,6 +104,17 @@ class syarat_termin(models.Model):
                 'warning': {
                     'title': _("Gagal Verifikasi"),
                     'message': _("Upload Document dulu sebelum centang Verified."),
+                }
+            }
+    
+    @api.onchange('confirm')
+    def _onchange_confirm(self):
+        if self.confirm and not self.document:
+            self.confirm = False
+            return {
+                'warning': {
+                    'title': _("Gagal Konfirmasi"),
+                    'message': _("Upload Document dulu sebelum centang Confirm."),
                 }
             }
         
