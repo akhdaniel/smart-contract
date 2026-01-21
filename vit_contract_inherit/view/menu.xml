@@ -39,7 +39,7 @@
                   parent="vit_contract.vit_contract_sub_menu"
                   action="vit_contract.action_kontrak"
                   sequence="30"
-                  groups="vit_contract.group_vit_contract_manager,vit_contract.group_vit_contract_user,group_vit_contract_vendor,group_vit_contract_kanwil,group_vit_contract_kanca"/>
+                  groups="vit_contract.group_vit_contract_manager,vit_contract.group_vit_contract_user,group_vit_contract_vendor,group_vit_contract_kanwil,group_vit_contract_kanca,vit_contract.group_vit_contract_user,group_vit_contract_pusat_umum"/>
 
 
         <menuitem id="vit_contract.menu_termin"

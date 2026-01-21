@@ -49,9 +49,16 @@
 
 
                 <xpath expr="//field[@name='verified']" position="replace">
-                    <field name="verified" groups="base.group_user,!vit_contract_inherit.group_vit_contract_vendor"/>
+                    <field name="verified" groups="base.group_user,!vit_contract_inherit.group_vit_contract_vendor, !vit_contract_inherit.group_vit_contract_pusat_umum"/>
 
-                    <field name="verified" readonly="1" groups="vit_contract_inherit.group_vit_contract_vendor"/>
+                    <field name="verified" readonly="1" groups="vit_contract_inherit.group_vit_contract_vendor,vit_contract_inherit.group_vit_contract_pusat_umum"/>
+                </xpath>
+
+
+                <xpath expr="//field[@name='confirm']" position="replace">
+                    <field name="confirm" groups="base.group_user,!vit_contract_inherit.group_vit_contract_kanwil, !vit_contract_inherit.group_vit_contract_kanca, !vit_contract_inherit.group_vit_contract_kanwil_keuangan"/> 
+
+                    <field name="confirm" readonly="1" groups="vit_contract_inherit.group_vit_contract_kanwil,vit_contract_inherit.group_vit_contract_kanca,vit_contract_inherit.group_vit_contract_kanwil_keuangan"/>
                 </xpath>
 
             </field>
