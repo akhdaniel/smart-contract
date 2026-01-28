@@ -24,3 +24,4 @@ from . import state_budget
 from . import state_droping
 from . import master_users
 from . import users
+from . import kompleks_pergudangan

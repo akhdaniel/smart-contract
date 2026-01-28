@@ -90,6 +90,10 @@
                             <p class="m-0" t-field="doc.jenis_penugasan" />
                         </div>
                         <div class="col-auto mw-100 mb-2">
+                            <strong>Tipe Kegiatan</strong>
+                            <p class="m-0" t-field="doc.tipe_kegiatan" />
+                        </div>
+                        <div class="col-auto mw-100 mb-2">
                             <strong>Master Budget</strong>
                             <p class="m-0" t-field="doc.master_budget_id"/>
                         </div>
@@ -170,6 +174,7 @@
                             <td>Kanwil</td>
                             <td>Partner</td>
                             <td>Job Izin Prinsip</td>
+                            <td>Kompleks</td>
                         </tr>
                     </thead>
                     <tbody class="kontrak_ids_tbody">
@@ -200,6 +205,7 @@
                             <td><span t-field="line.kanwil_id" /></td>
                             <td><span t-field="line.partner_id" /></td>
                             <td><span t-field="line.job_izin_prinsip_id" /></td>
+                            <td><span t-field="line.kompleks_id" /></td>
                         </tr> <!-- foreach-->
                     </tbody>
                 </table>

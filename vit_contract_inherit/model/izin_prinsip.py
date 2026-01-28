@@ -74,6 +74,31 @@ class izin_prinsip(models.Model):
         domain=lambda self: self._domain_user("kanca_id"),
     )
 
+    active = fields.Boolean(default=True)
+
+    is_addendum = fields.Boolean(
+        string="Is Addendum",
+        default=False
+    )
+
+    addendum_origin_id = fields.Many2one(
+        'vit.izin_prinsip',
+        string="Izin Prinsip Induk",
+        index=True,
+        ondelete="cascade"
+    )
+
+    addendum_ids = fields.One2many(
+        'vit.izin_prinsip',
+        'addendum_origin_id',
+        string="Addendums"
+    )
+
+    addendum_count = fields.Integer(
+        string="Jumlah Addendum",
+        compute="_compute_addendum_count",
+        store=False,
+    )
 
     # @api.model
     # def _domain_user(self, field_name):
@@ -93,6 +118,17 @@ class izin_prinsip(models.Model):
 
     #     return []
 
+    def copy(self, default=None):
+        default = dict(default or {})
+        
+        # Jika nama sudah di-set di default dict (saat addendum creation), gunakan itu
+        # dan jangan tambahin "(Copy)"
+        if 'name' in default:
+            # Gunakan nama yang sudah di-set, jangan modify
+            return models.BaseModel.copy(self, default)
+        
+        # Default behavior dari parent (dengan "(Copy)")
+        return super(izin_prinsip, self).copy(default)
 
     @api.depends('created_by')
     def _compute_allowed_kanca(self):
@@ -102,6 +138,23 @@ class izin_prinsip(models.Model):
                 rec.allowed_kanca_id = user.multi_kanca[0].id
             else:
                 rec.allowed_kanca_id = False
+
+    def _get_root_origin(self):
+        self.ensure_one()
+        root = self
+        while root.addendum_origin_id:
+            root = root.addendum_origin_id
+        return root
+
+    @api.depends('addendum_ids', 'addendum_origin_id')
+    def _compute_addendum_count(self):
+        for rec in self:
+            root = rec._get_root_origin()
+
+            count = self.env['vit.izin_prinsip'].with_context(active_test=False).search_count(
+                [('addendum_origin_id', '=', root.id)]
+            )
+            rec.addendum_count = count
 
     @api.model
     def check_access_rule(self, operation):
@@ -181,4 +234,145 @@ class izin_prinsip(models.Model):
                 raise ValidationError(_(
                     "Total Pagu (%.2f) tidak boleh melebihi Remaining Budget RKAP (%.2f)!"
                 ) % (rec.total_pagu, rec.budget_id.remaining))
+
+    def action_create_addendum(self):
+        from odoo.exceptions import UserError
+        self.ensure_one()
+
+        if self.addendum_ids:
+            raise UserError(_("Izin Prinsip ini sudah punya Addendum, tidak bisa bikin lebih dari 1."))
+
+        if not self.stage_id or self.stage_id.name.lower() != "draft":
+            raise UserError(_("Addendum hanya bisa dibuat kalau Izin Prinsip di stage 'Draft'."))
+
+        # Clean base name from (Copy) pattern
+        base_name = self.name
+        base_name = base_name.split(' (Copy)')[0] if ' (Copy)' in base_name else base_name
+        
+        if "-" in base_name:
+            parts = base_name.split("-")
+            try:
+                last_num = int(parts[-1])
+                new_name = f"{base_name}-{last_num+1}"
+            except ValueError:
+                new_name = f"{base_name}-1"
+        else:
+            new_name = f"{base_name}-1"
+
+        draft_stage = self.env['vit.state_izin_prinsip'].search([('draft', '=', True)], limit=1)
+        if not draft_stage:
+            raise UserError(_("Stage DRAFT tidak ditemukan!"))
+
+        # Determine root origin for addendum chain
+        root_origin_id = self.addendum_origin_id.id if self.addendum_origin_id else self.id
+
+        # Move current to done stage and set inactive
+        done_stage = self.env['vit.state_izin_prinsip'].search([('name', '=ilike', 'done')], limit=1)
+        if done_stage:
+            self.stage_id = done_stage.id
+        self.active = False
+
+        # Create copy with addendum settings
+        izin_copy = self.with_context(bypass_duplicate_check=True, skip_copy_name=True).copy({
+            'name': new_name,
+            'stage_id': draft_stage.id,
+            'is_addendum': True,
+            'addendum_origin_id': root_origin_id,
+            'active': True,
+        })
+
+        # Copy job_izin_prinsip_ids
+        new_jobs = []
+        for job in self.job_izin_prinsip_ids:
+            # Get base job name without (Copy) pattern
+            base_job_name = job.name
+            base_job_name = base_job_name.split(' (Copy)')[0] if ' (Copy)' in base_job_name else base_job_name
+            
+            # Generate new job name with numeric suffix like izin_prinsip
+            if "-" in base_job_name:
+                parts = base_job_name.split("-")
+                try:
+                    last_num = int(parts[-1])
+                    new_job_name = f"{base_job_name}-{last_num+1}"
+                except ValueError:
+                    new_job_name = f"{base_job_name}-1"
+            else:
+                new_job_name = f"{base_job_name}-1"
+            
+            # Copy job with new name and all izin_prinsip_line_ids
+            # Use context to prevent default (Copy) naming in copy method
+            job_copy = job.with_context(skip_name_copy=True).copy({
+                'izin_prinsip_id': izin_copy.id,
+                'name': new_job_name,
+            })
+            
+            # Manually copy izin_prinsip_line_ids dengan data lengkap
+            new_lines = []
+            for line in job.izin_prinsip_line_ids:
+                line_copy = line.copy({
+                    'job_izin_prinsip_id': job_copy.id,
+                    'jenis_kontrak_id': line.jenis_kontrak_id.id if line.jenis_kontrak_id else False,
+                    'kanwil_id': line.kanwil_id.id if line.kanwil_id else False,
+                    'kanca_id': line.kanca_id.id if line.kanca_id else False,
+                    'pagu': line.pagu,
+                    'name': line.name,
+                })
+                new_lines.append(line_copy.id)
+            
+            # Update job dengan line yang baru
+            if new_lines:
+                job_copy.izin_prinsip_line_ids = [(6, 0, new_lines)]
+            
+            new_jobs.append(job_copy.id)
+
+        izin_copy.job_izin_prinsip_ids = [(6, 0, new_jobs)]
+
+        # Copy attachments
+        attachments = self.env['ir.attachment'].search([
+            ('res_model', '=', 'vit.izin_prinsip'),
+            ('res_id', '=', self.id)
+        ])
+        for att in attachments:
+            att.copy({'res_id': izin_copy.id})
+
+        return {
+            'name': _('Izin Prinsip Addendum'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'vit.izin_prinsip',
+            'view_mode': 'form',
+            'res_id': izin_copy.id,
+            'target': 'current',
+        }
+
+    def action_view_addendums(self):
+        self.ensure_one()
+        # Find root origin if this is an addendum
+        root_id = self.id
+        if self.addendum_origin_id:
+            root_id = self.addendum_origin_id.id
+        
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Addendums'),
+            'res_model': 'vit.izin_prinsip',
+            'view_mode': 'tree,form',
+            'domain': ['|', ('addendum_origin_id', '=', root_id), ('id', '=', root_id)],
+            'context': dict(self.env.context, active_test=False, default_addendum_origin_id=root_id),
+        }
+
+    def action_view_origin_izin_prinsip(self):
+        self.ensure_one()
+        if not self.addendum_origin_id:
+            return False
+        
+        root_id = self.addendum_origin_id.id
+        
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Izin Prinsip Asal'),
+            'res_model': 'vit.izin_prinsip',
+            'view_mode': 'tree,form',
+            'domain': ['|', ('addendum_origin_id', '=', root_id), ('id', '=', root_id)],
+            'context': dict(self.env.context, active_test=False, default_addendum_origin_id=root_id),
+        }
 

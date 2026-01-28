@@ -81,7 +81,9 @@
 		"data/vit.state_droping.csv",
 		"view/master_users.xml",
 		"report/master_users.xml",
-		"view/users.xml"
+		"view/users.xml",
+		"view/kompleks_pergudangan.xml",
+		"report/kompleks_pergudangan.xml"
 	],
 	"installable": True,
 	"auto_install": False,

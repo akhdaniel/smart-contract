@@ -121,6 +121,10 @@
                             <strong>Job Izin Prinsip</strong>
                             <p class="m-0" t-field="doc.job_izin_prinsip_id"/>
                         </div>
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Kompleks</strong>
+                            <p class="m-0" t-field="doc.kompleks_id"/>
+                        </div>
                     </div>
                 </div>
                 <div class="oe_structure"/>

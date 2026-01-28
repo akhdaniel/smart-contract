@@ -106,6 +106,7 @@
                             <td>Kanwil</td>
                             <td>Partner</td>
                             <td>Job Izin Prinsip</td>
+                            <td>Kompleks</td>
                         </tr>
                     </thead>
                     <tbody class="kontrak_ids_tbody">
@@ -136,6 +137,7 @@
                             <td><span t-field="line.kanwil_id" /></td>
                             <td><span t-field="line.partner_id" /></td>
                             <td><span t-field="line.job_izin_prinsip_id" /></td>
+                            <td><span t-field="line.kompleks_id" /></td>
                         </tr> <!-- foreach-->
                     </tbody>
                 </table>

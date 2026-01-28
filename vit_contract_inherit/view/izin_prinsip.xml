@@ -10,6 +10,7 @@
 
                 <xpath expr="//field[@name='total_payment']" position="after">
                     <field name="created_by" readonly="1" invisible="1"/>
+                    <field name="is_addendum" invisible="1"/>
                     <field
                         name="allowed_kanca_id"
                         readonly="1"
@@ -17,6 +18,27 @@
                     />
                 </xpath>
                         <!-- groups="vit_contract_inherit.group_vit_contract_kanca" -->
+
+
+                <xpath expr="//button[@name='action_reload_view']" position="before">
+                    <button string="Revisi" type="object" name="action_create_addendum" 
+                            invisible="stage_is_done==True" icon="fa-plus"/>
+                </xpath>
+
+
+                <xpath expr="//div[@class='oe_button_box']" position="after">
+                    <div class="oe_stat_icon float-end"
+                        invisible="not addendum_count and not is_addendum"
+                        style="border:1px solid purple; border-radius:6px; padding:2px 8px; display:inline-flex; align-items:center; gap:6px; margin-left:8px;">
+                        <button name="action_view_addendums" type="object"
+                                style="background:none; border:none; padding:0; margin:0; display:inline-flex; align-items:center; gap:4px;">
+                            <i class="fa fa-edit" style="font-size:18px;"/>
+                            <span style="font-size:14px;">
+                                <field name="addendum_count"/> Addendum
+                            </span>
+                        </button>
+                    </div>
+                </xpath>
 
                 
                 <xpath expr="//field[@name='name']" position="attributes">
@@ -106,12 +128,14 @@
             <field name="arch" type="xml">
             </field>
         </record-->
-        <!-- action window -->
-        <!--record id="vit_contract.action_izin_prinsip" model="ir.actions.act_window">
+        
+        <!-- action window - override untuk hanya menampilkan active records -->
+        <record id="vit_contract.action_izin_prinsip" model="ir.actions.act_window">
             <field name="name">Izin Prinsip</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">vit.izin_prinsip</field>
-            <field name="view_mode">tree,form,kanban,pivot,calendar,graph</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('active', '=', True)]</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                 Click to add a new Izin Prinsip
@@ -119,7 +143,7 @@
 
                 </p>
             </field>
-        </record-->
+        </record>
 
         <!-- <menuitem id="menu_izin_prinsip" name="Izin Prinsip" parent="vit_contract_config_menu" action="action_izin_prinsip" sequence="20"/> -->
     </data>

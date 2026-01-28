@@ -11,6 +11,7 @@
                 <tree string="Budget Rkap">
                     <field name="name" /> <!-- 10-->
                     <field name="amount" /> <!-- 20-->
+                    <field name="tipe_kegiatan" /> <!-- 25-->
                     <field name="jenis_penugasan" /> <!-- 30-->
                     <field name="remaining" /> <!-- 40-->
                     <field name="total_pagu_izin_prinsip" /> <!-- 50-->
@@ -69,6 +70,7 @@
                                 <field name="allow_cancel" invisible="True" readonly="stage_is_draft==False"/>
                                 <field name="stage_name" invisible="True" readonly="stage_is_draft==False"/>
                                 <field name="amount"  readonly="stage_is_draft==False"/>
+                                <field name="tipe_kegiatan"  readonly="stage_is_draft==False"/>
                                 <field name="jenis_penugasan"  readonly="stage_is_draft==False"/>
                                 <field name="remaining"  readonly="stage_is_draft==False"/>
                                 <field name="total_pagu_izin_prinsip"  readonly="stage_is_draft==False"/>
@@ -112,6 +114,7 @@
                                         <field name="jenis_kontrak_id" /> <!-- 100-->
                                         <field name="partner_id" /> <!-- 102-->
                                         <field name="type" invisible="1"/> <!-- 104-->
+                                        <field name="kompleks_id" /> <!-- 105-->
                                         <field name="amount_kontrak" /> <!-- 200-->
                                         <field name="stage_id" /> <!-- 1000-->
                                     </tree>
@@ -170,6 +173,7 @@
                     <filter string="Allow Cancel" name="filter_by_allow_cancel" domain="[('allow_cancel','=','')]" />
                     <filter string="Stage Name" name="filter_by_stage_name" domain="[('stage_name','=','')]" />
                     <filter string="Jenis Penugasan" name="filter_by_jenis_penugasan" domain="[('jenis_penugasan','=','')]" />
+                    <filter string="Tipe Kegiatan" name="filter_by_tipe_kegiatan" domain="[('tipe_kegiatan','=','')]" />
                     <field name="name" select="True"/>
                     <field name="amount" select="True"/>
                     <field name="remaining" select="True"/>
@@ -188,12 +192,14 @@
                     <field name="allow_cancel" select="True"/>
                     <field name="stage_name" select="True"/>
                     <field name="jenis_penugasan" select="True"/>
+                    <field name="tipe_kegiatan" select="True"/>
                     <field name="master_budget_id" select="True"/>
                     <field name="stage_id" select="True"/>
                     <group string="Group By..">
                         <filter string="Master Budget" domain="[]" name="group_by_master_budget_id" context="{'group_by':'master_budget_id'}"/>
                         <filter string="Stage" domain="[]" name="group_by_stage_id" context="{'group_by':'stage_id'}"/>
                         <filter string="Jenis Penugasan" domain="[]" name="group_by_jenis_penugasan" context="{'group_by':'jenis_penugasan'}"/>
+                        <filter string="Tipe Kegiatan" domain="[]" name="group_by_tipe_kegiatan" context="{'group_by':'tipe_kegiatan'}"/>
                     </group>
                 </search>
             </field>

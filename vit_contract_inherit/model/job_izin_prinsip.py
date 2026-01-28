@@ -41,9 +41,18 @@ class job_izin_prinsip(models.Model):
 
         return []
 
-
-
-
+    def copy(self, default=None):
+        default = dict(default or {})
+        
+        # Jika nama sudah di-set di default dict (saat addendum creation), gunakan itu
+        # dan jangan tambahin "(Copy)"
+        if 'name' in default:
+            # Gunakan nama yang sudah di-set, jangan modify
+            from odoo import models
+            return models.BaseModel.copy(self, default)
+        
+        # Default behavior dari parent (dengan "(Copy)")
+        return super(job_izin_prinsip, self).copy(default)
 
     total_pagu_job = fields.Float(
         string="Total Pagu Job",

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- tree view -->
+        <record id="view_vit_kompleks_pergudangan_tree" model="ir.ui.view">
+            <field name="name">vit_kompleks_pergudangan_tree</field>
+            <field name="model">vit.kompleks_pergudangan</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="Kompleks Pergudangan">
+                    <field name="name" /> <!-- 100-->
+                </tree>
+            </field>
+        </record>
+        <!-- form view -->
+        <record id="view_vit_kompleks_pergudangan_form" model="ir.ui.view">
+            <field name="name">vit_kompleks_pergudangan_form</field>
+            <field name="model">vit.kompleks_pergudangan</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Kompleks Pergudangan">
+                    <header>
+                        <button string="Reload" type="object" name="action_reload_view" icon="fa-refresh"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <!--button type="object" name="action_view_detail" class="oe_stat_button" icon="fa-pencil-square-o"-->
+                                <!--field name="detail_count" widget="statinfo" string="Detail(s)"/-->
+                                <!--field name="detail_ids" invisible="1"/-->
+                            <!--/button-->
+                        </div>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" string="Kompleks Pergudangan Name"/>
+                            <h1><field name="name" /></h1>
+                        </div>
+                        <group>
+                            <group> <!-- left -->
+                            </group>
+                            <group> <!-- right -->
+                            </group>
+                        </group>
+                        <notebook>
+                        </notebook>
+                        <group name="note_group" col="6" class="mt-2 mt-md-0">
+                            <group colspan="4">
+                            </group>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                            </group>
+                            <div class="clearfix"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- search -->
+        <record id="view_vit_kompleks_pergudangan_search" model="ir.ui.view">
+            <field name="name">vit_kompleks_pergudangan</field>
+            <field name="model">vit.kompleks_pergudangan</field>
+            <field name="arch" type="xml">
+                <search string="Kompleks Pergudangan">
+
+                    <filter string="Name" name="filter_by_name" domain="[('name','=','')]" />
+                    <field name="name" select="True"/>
+                    <group string="Group By..">
+                    </group>
+                </search>
+            </field>
+        </record>
+        <!-- kanban , to show image, please add image, image_512, image_1920, or image_small in the model -->
+        <record id="view_vit_kompleks_pergudangan_kanban" model="ir.ui.view" >
+            <field name="name">vit_kompleks_pergudangan</field>
+            <field name="model">vit.kompleks_pergudangan</field>
+            <field name="arch" type="xml">
+                <kanban version="7.0">
+                    <field name="id" />
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_details">
+                                <h4>
+                                    <a type="open"><field name="name"/></a>
+                                </h4>
+                            </div> <!--oe_kanban_details-->
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <!-- action window -->
+        <record id="action_kompleks_pergudangan" model="ir.actions.act_window">
+            <field name="name">Kompleks Pergudangan</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vit.kompleks_pergudangan</field>
+            <field name="view_mode">tree,form,kanban,pivot</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to add a new Kompleks Pergudangan
+                </p><p>
+
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_kompleks_pergudangan" name="Kompleks Pergudangan" parent="vit_contract_config_menu" action="action_kompleks_pergudangan" sequence="270"/>
+    </data>
+</odoo>

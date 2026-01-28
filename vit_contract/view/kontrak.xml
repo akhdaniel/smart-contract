@@ -22,6 +22,7 @@
                     <field name="jenis_kontrak_id" /> <!-- 100-->
                     <field name="partner_id" /> <!-- 102-->
                     <field name="type" invisible="1"/> <!-- 104-->
+                    <field name="kompleks_id" /> <!-- 105-->
                     <field name="amount_kontrak" /> <!-- 200-->
                     <field name="stage_id" /> <!-- 1000-->
                 </tree>
@@ -43,6 +44,7 @@
                     <field name="kanwil_id" type="row"/>
                     <field name="partner_id" type="row"/>
                     <field name="job_izin_prinsip_id" type="row"/>
+                    <field name="kompleks_id" type="row"/>
                 </pivot>
             </field>
         </record>
@@ -100,6 +102,7 @@
                                 <field name="jenis_kontrak_id"  readonly="stage_is_draft==False"/>
                                 <field name="master_budget_id"  readonly="stage_is_draft==False"/>
                                 <field name="partner_id"  readonly="stage_is_draft==False"/>
+                                <field name="kompleks_id"  readonly="stage_is_draft==False"/>
                             </group>
                         </group>
                         <notebook>
@@ -200,6 +203,7 @@
                     <field name="kanwil_id" select="True"/>
                     <field name="partner_id" select="True"/>
                     <field name="job_izin_prinsip_id" select="True"/>
+                    <field name="kompleks_id" select="True"/>
                     <group string="Group By..">
                         <filter string="Izin Prinsip" domain="[]" name="group_by_izin_prinsip_id" context="{'group_by':'izin_prinsip_id'}"/>
                         <filter string="Budget Rkap" domain="[]" name="group_by_budget_rkap_id" context="{'group_by':'budget_rkap_id'}"/>
@@ -210,6 +214,7 @@
                         <filter string="Kanwil" domain="[]" name="group_by_kanwil_id" context="{'group_by':'kanwil_id'}"/>
                         <filter string="Partner" domain="[]" name="group_by_partner_id" context="{'group_by':'partner_id'}"/>
                         <filter string="Job Izin Prinsip" domain="[]" name="group_by_job_izin_prinsip_id" context="{'group_by':'job_izin_prinsip_id'}"/>
+                        <filter string="Kompleks" domain="[]" name="group_by_kompleks_id" context="{'group_by':'kompleks_id'}"/>
                         <filter string="Type" domain="[]" name="group_by_type" context="{'group_by':'type'}"/>
                     </group>
                 </search>

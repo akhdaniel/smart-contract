@@ -35,6 +35,7 @@ class budget_rkap(models.Model):
     allow_cancel = fields.Boolean(related="stage_id.allow_cancel", store=True,  string=_("Allow Cancel"))
     stage_name = fields.Char(related="stage_id.name", store=True,  string=_("Stage Name"))
     jenis_penugasan = fields.Selection(selection=[('pso', 'Pso'),('kom', 'Kom')],  string=_("Jenis Penugasan"))
+    tipe_kegiatan = fields.Selection(selection=[('biaya', 'Biaya'),('investasi', 'Investasi')],  string=_("Tipe Kegiatan"))
 
 
     @api.model_create_multi
