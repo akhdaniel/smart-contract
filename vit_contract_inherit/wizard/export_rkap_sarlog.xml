@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Wizard Form View -->
+        <record id="view_wizard_export_rkap_sarlog_form" model="ir.ui.view">
+            <field name="name">wizard.export.rkap.sarlog.form</field>
+            <field name="model">wizard.export.rkap.sarlog</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Export Realisasi RKAP Sarlog">
+                    <group>
+                        <field name="year" />
+                    </group>
+                    <footer>
+                        <button name="action_export_excel" type="object" string="Export Excel" class="oe_highlight"/>
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action untuk membuka wizard -->
+        <record id="action_wizard_export_rkap_sarlog" model="ir.actions.act_window">
+            <field name="name">Export Realisasi RKAP Sarlog</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.export.rkap.sarlog</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <!-- Menu Reporting -->
+        <menuitem id="vit_contract_reporting_menu"
+                  name="Reporting"
+                  parent="vit_contract.vit_contract_top_menu"
+                  sequence="55"/>
+
+        <!-- Submenu Realisasi RKAP Sarlog -->
+        <menuitem id="vit_contract_menu_realisasi_rkap_sarlog"
+                  name="Realisasi RKAP Sarlog"
+                  parent="vit_contract_reporting_menu"
+                  action="action_wizard_export_rkap_sarlog"
+                  sequence="10"/>
+    </data>
+</odoo>

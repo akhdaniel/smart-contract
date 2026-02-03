@@ -35,8 +35,7 @@
                   name="Data Vendor"
                   parent="vit_contract.vit_contract_top_menu"
                   sequence="50"
-                  groups="vit_contract.group_vit_contract_manager,vit_contract.group_vit_contract_user,group_vit_contract_kanwil,group_vit_contract_kanca"
-                  action="vit_contract.action_master_users"/>
+                  groups="vit_contract.group_vit_contract_manager,vit_contract.group_vit_contract_user,group_vit_contract_kanwil,group_vit_contract_kanca"/>
 
         <menuitem id="vit_contract.menu_master_users"
                   name="List Nama Vendor"

@@ -150,6 +150,7 @@
                             <td>Total Pagu Job</td>
                             <td>Izin Prinsip</td>
                             <td>Kanca</td>
+                            <td>Kompleks</td>
                         </tr>
                     </thead>
                     <tbody class="job_izin_prinsip_ids_tbody">
@@ -158,6 +159,7 @@
                             <td><span t-field="line.total_pagu_job" /></td>
                             <td><span t-field="line.izin_prinsip_id" /></td>
                             <td><span t-field="line.kanca_id" /></td>
+                            <td><span t-field="line.kompleks_id" /></td>
                         </tr> <!-- foreach-->
                     </tbody>
                 </table>

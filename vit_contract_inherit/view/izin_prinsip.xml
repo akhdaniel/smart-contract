@@ -14,7 +14,7 @@
                     <field
                         name="allowed_kanca_id"
                         readonly="1"
-                        invisible="not allowed_kanca_id"
+                        invisible="1"
                     />
                 </xpath>
                         <!-- groups="vit_contract_inherit.group_vit_contract_kanca" -->
@@ -128,6 +128,22 @@
             <field name="arch" type="xml">
             </field>
         </record-->
+
+        <record id="view_vit_izin_prinsip_tree_inherit" model="ir.ui.view">
+            <field name="name">vit.izin_prinsip.tree.inherit</field>
+            <field name="model">vit.izin_prinsip</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_izin_prinsip_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="inside">
+                    <button
+                        name="%(vit_contract_inherit.action_import_izin_prinsip_wizard)d"
+                        type="action"
+                        string="📥 Import dari Excel"
+                        invisible="1"
+                        class="oe_highlight"/>
+                </xpath>
+            </field>
+        </record>
         
         <!-- action window - override untuk hanya menampilkan active records -->
         <record id="vit_contract.action_izin_prinsip" model="ir.actions.act_window">
@@ -144,6 +160,7 @@
                 </p>
             </field>
         </record>
+
 
         <!-- <menuitem id="menu_izin_prinsip" name="Izin Prinsip" parent="vit_contract_config_menu" action="action_izin_prinsip" sequence="20"/> -->
     </data>

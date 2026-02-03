@@ -13,7 +13,7 @@
                 <t t-foreach="state.val.master_list" t-as="item" t-key="item.id">
                     <t t-if="item.name == props.title">
                         <div class="d-flex justify-content-between">
-                            <span>Total Pagu Izin Prinsip</span>
+                            <span>RKAP</span>
                             <span><t t-out="(item.pagu_izin_prinsip || 0).toLocaleString()"/></span>
                         </div>
                         <div class="d-flex justify-content-between">

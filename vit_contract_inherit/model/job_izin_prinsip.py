@@ -18,6 +18,18 @@ class job_izin_prinsip(models.Model):
         domain=lambda self: self._domain_user("kanca_id"),
     )
 
+    kompleks_id = fields.Many2one(
+        'vit.kompleks_pergudangan',
+        string='Kompleks Pergudangan',
+        domain="[('kanca_id', '=', kanca_id)]"
+    )
+
+
+    @api.onchange('kanca_id')
+    def _onchange_kanca_id(self):
+        self.kompleks_id = False
+
+
 
     @api.model
     def _domain_user(self, field_name):

@@ -11,6 +11,11 @@ class izin_prinsip(models.Model):
 
     name = fields.Char(required=True, copy=False, string="Name", default=False)
 
+    nomor_tracker = fields.Char(
+        string='Nomor Tracker',
+        help='Nomor Tracker dari file import',
+    )
+
     created_by = fields.Many2one(
         'res.users',
         string='Dibuat Oleh',

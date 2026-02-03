@@ -63,7 +63,5 @@
                   action="vit_contract.action_droping"
                   sequence="60"
                   groups="vit_contract.group_vit_contract_manager,vit_contract.group_vit_contract_user,group_vit_contract_kanca,group_vit_contract_pusat_keuangan,group_vit_contract_kanwil_keuangan"/>
-
-
     </data>
 </odoo>

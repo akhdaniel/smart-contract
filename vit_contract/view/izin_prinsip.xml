@@ -90,8 +90,8 @@
                                         <field name="end_date" /> <!-- 80-->
                                         <field name="jenis_kontrak_id" /> <!-- 100-->
                                         <field name="partner_id" /> <!-- 102-->
+                                        <field name="kompleks_id" /> <!-- 103-->
                                         <field name="type" invisible="1"/> <!-- 104-->
-                                        <field name="kompleks_id" /> <!-- 105-->
                                         <field name="amount_kontrak" /> <!-- 200-->
                                         <field name="stage_id" /> <!-- 1000-->
                                     </tree>
@@ -103,6 +103,7 @@
                                         <field name="name" /> <!-- 100-->
                                         <field name="total_pagu_job" /> <!-- 101-->
                                         <field name="kanca_id" /> <!-- 102-->
+                                        <field name="kompleks_id" /> <!-- 103-->
                                     </tree>
                                 </field>
                             </page>

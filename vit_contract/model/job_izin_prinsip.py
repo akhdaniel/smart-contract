@@ -27,3 +27,4 @@ class job_izin_prinsip(models.Model):
     izin_prinsip_line_ids = fields.One2many(comodel_name="vit.izin_prinsip_line",  inverse_name="job_izin_prinsip_id",  string=_("Izin Prinsip Line"))
     izin_prinsip_id = fields.Many2one(comodel_name="vit.izin_prinsip",  string=_("Izin Prinsip"))
     kanca_id = fields.Many2one(comodel_name="vit.kanca",  string=_("Kanca"))
+    kompleks_id = fields.Many2one(comodel_name="vit.kompleks_pergudangan",  string=_("Kompleks"))

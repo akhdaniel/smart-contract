@@ -31,6 +31,8 @@
         # 'view/record_rule_allowed_kanca.xml',
         'view/record_rule_kanwil_keuangan.xml',
         "view/menu.xml",
+		'wizard/export_rkap_sarlog.xml',
+        'wizard/import_izin_prinsip.xml',
         # "view/menu_operation.xml",
 		"view/izin_prinsip.xml",
         "view/job_izin_prinsip.xml",

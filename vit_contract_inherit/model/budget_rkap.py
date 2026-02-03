@@ -9,9 +9,10 @@ _logger = logging.getLogger(__name__)
 class budget_rkap(models.Model):
     _inherit = "vit.budget_rkap"
 
-    name = fields.Char( 
+    name = fields.Char(
         required=True, 
-        copy=False, 
+        readonly=False,
+        copy=False,
         string=_("Name")
     )
 
@@ -32,7 +33,7 @@ class budget_rkap(models.Model):
 
     budget_year = fields.Char(
         string="Budget Year",
-        compute="_compute_budget_year",
+        compute="_compute_budget_year"
     )
 
 
