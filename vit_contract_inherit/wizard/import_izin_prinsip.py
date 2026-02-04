@@ -286,6 +286,23 @@ class WizardImportIzinPrinsip(models.TransientModel):
                                             if kanca_search:
                                                 job_kanca_id = kanca_search.id
                                             break
+                            
+                            # If kanwil is mentioned but kanca is not found (job_kanca_id is still the default kanca_id and kanca_id is empty),
+                            # create a virtual kanca with name "Kanwil [kanwil_name]"
+                            if not job_kanca_id and kanwil_rec:
+                                # kanca_id is empty (not found in group), but kanwil_rec exists
+                                # Create virtual kanca name: "Kanwil [Kanwil Name]"
+                                virtual_kanca_name = f"Kanwil {kanwil_rec.name}"
+                                
+                                # Try to find existing kanca with this name
+                                virtual_kanca = self.env['vit.kanca'].search([('name', '=', virtual_kanca_name)], limit=1)
+                                if not virtual_kanca:
+                                    # Create new kanca if it doesn't exist
+                                    virtual_kanca = self.env['vit.kanca'].sudo().create({
+                                        'name': virtual_kanca_name,
+                                        'parent_kanwil_id': kanwil_id,
+                                    })
+                                job_kanca_id = virtual_kanca.id
 
                             job_vals = {
                                 'name': job_name,
