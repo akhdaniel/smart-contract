@@ -232,13 +232,13 @@ class izin_prinsip(models.Model):
         for rec in self:
             rec.total_pagu = sum(job.total_pagu_job for job in rec.job_izin_prinsip_ids)
 
-    @api.constrains("total_pagu", "budget_id")
-    def _check_total_pagu_vs_budget(self):
-        for rec in self:
-            if rec.budget_id and rec.total_pagu > rec.budget_id.remaining:
-                raise ValidationError(_(
-                    "Total Pagu (%.2f) tidak boleh melebihi Remaining Budget RKAP (%.2f)!"
-                ) % (rec.total_pagu, rec.budget_id.remaining))
+    # @api.constrains("total_pagu", "budget_id")
+    # def _check_total_pagu_vs_budget(self):
+    #     for rec in self:
+    #         if rec.budget_id and rec.total_pagu > rec.budget_id.remaining:
+    #             raise ValidationError(_(
+    #                 "Total Pagu (%.2f) tidak boleh melebihi Remaining Budget RKAP (%.2f)!"
+    #             ) % (rec.total_pagu, rec.budget_id.remaining))
 
     def action_create_addendum(self):
         from odoo.exceptions import UserError
