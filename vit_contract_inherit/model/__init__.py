@@ -23,3 +23,4 @@ from . import droping
 from . import state_droping
 from . import master_users
 from . import res_users
+from . import kompleks_pergudangan_inherit

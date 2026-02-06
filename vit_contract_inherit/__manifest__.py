@@ -33,6 +33,7 @@
         "view/menu.xml",
 		'wizard/export_rkap_sarlog.xml',
         'wizard/import_izin_prinsip.xml',
+        'wizard/import_kompleks_pergudangan.xml',
         # "view/menu_operation.xml",
 		"view/izin_prinsip.xml",
         "view/job_izin_prinsip.xml",

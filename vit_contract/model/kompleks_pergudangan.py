@@ -24,3 +24,4 @@ class kompleks_pergudangan(models.Model):
         return super(kompleks_pergudangan, self).copy(default)
 
     kanca_id = fields.Many2one(comodel_name="vit.kanca",  string=_("Kanca"))
+    kanwil_id = fields.Many2one(comodel_name="vit.kanwil", string=_("Kanwil"))

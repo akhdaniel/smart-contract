@@ -11,6 +11,7 @@
                 <tree string="Kompleks Pergudangan">
                     <field name="name" /> <!-- 100-->
                     <field name="kanca_id" /> <!-- 100-->
+                    <field name="kanwil_id" /> <!-- 101-->
                 </tree>
             </field>
         </record>
@@ -22,6 +23,7 @@
             <field name="arch" type="xml">
                 <pivot string="Kompleks Pergudangan">
                     <field name="kanca_id" type="row"/>
+                    <field name="kanwil_id" type="row"/>
                 </pivot>
             </field>
         </record>
@@ -52,6 +54,7 @@
                             </group>
                             <group> <!-- right -->
                                 <field name="kanca_id"  />
+                                <field name="kanwil_id"  />
                             </group>
                         </group>
                         <notebook>
@@ -77,8 +80,10 @@
                     <filter string="Name" name="filter_by_name" domain="[('name','=','')]" />
                     <field name="name" select="True"/>
                     <field name="kanca_id" select="True"/>
+                    <field name="kanwil_id" select="True"/>
                     <group string="Group By..">
                         <filter string="Kanca" domain="[]" name="group_by_kanca_id" context="{'group_by':'kanca_id'}"/>
+                        <filter string="Kanwil" domain="[]" name="group_by_kanwil_id" context="{'group_by':'kanwil_id'}"/>
                     </group>
                 </search>
             </field>

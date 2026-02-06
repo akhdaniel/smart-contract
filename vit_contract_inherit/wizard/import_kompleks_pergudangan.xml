@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Wizard Form View untuk Import Kompleks Pergudangan -->
+        <record id="view_wizard_import_kompleks_pergudangan_form" model="ir.ui.view">
+            <field name="name">wizard.import.kompleks.pergudangan.form</field>
+            <field name="model">wizard.import.kompleks.pergudangan</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Import Kompleks Pergudangan dari Excel">
+                    <group>
+                        <field name="file_data" widget="binary" filename="file_name" string="Pilih File Excel"/>
+                        <field name="file_name" invisible="1"/>
+                    </group>
+                    <footer>
+                        <button name="action_import_excel" type="object" string="Import" class="oe_highlight"/>
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action untuk membuka wizard -->
+        <record id="action_import_kompleks_pergudangan_wizard" model="ir.actions.act_window">
+            <field name="name">Import Kompleks Pergudangan</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.import.kompleks.pergudangan</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <!-- Menu untuk import kompleks pergudangan, ditempatkan setelah import izin prinsip -->
+        <menuitem id="import_kompleks_pergudangan_wizard" name="Import Kompleks Pergudangan" parent="vit_contract.vit_contract_config_menu" action="action_import_kompleks_pergudangan_wizard" sequence="2"/>
+    </data>
+</odoo>
