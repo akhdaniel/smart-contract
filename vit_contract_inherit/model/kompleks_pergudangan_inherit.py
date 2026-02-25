@@ -8,7 +8,7 @@ class VitKompleksPergudangan(models.Model):
     _inherit = 'vit.kompleks_pergudangan'
 
 
-    name = fields.Char( required=True, copy=False, string=_("Name"))
+    name = fields.Char( required=False, copy=False, string=_("Name"))
 
     kanwil_id = fields.Many2many(
         string=_('Kanwil'),
