@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_vit_kompleks_pergudangan_form_tags" model="ir.ui.view">
+            <field name="name">vit.kompleks_pergudangan.form.tags</field>
+            <field name="model">vit.kompleks_pergudangan</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_kompleks_pergudangan_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='kanwil_id']" position="replace">
+                    <field name="kanwil_id" widget="many2many_tags"/>
+                </xpath>
+                <xpath expr="//field[@name='kanca_id']" position="replace">
+                    <field name="kanca_id" widget="many2many_tags"/>
+                </xpath>
+            </field>
+        </record>
+
+
+
+
+        <record id="view_vit_kompleks_pergudangan_tree_tags" model="ir.ui.view">
+            <field name="name">vit.kompleks_pergudangan.tree.tags</field>
+            <field name="model">vit.kompleks_pergudangan</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_kompleks_pergudangan_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="kanwil_id" widget="many2many_tags"/>
+                    <field name="kanca_id" widget="many2many_tags"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

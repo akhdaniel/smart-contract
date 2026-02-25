@@ -10,21 +10,7 @@
             <field name="arch" type="xml">
                 <tree string="Kompleks Pergudangan">
                     <field name="name" /> <!-- 100-->
-                    <field name="kanca_id" /> <!-- 100-->
-                    <field name="kanwil_id" /> <!-- 101-->
                 </tree>
-            </field>
-        </record>
-        <!-- pivot view -->
-        <record id="view_vit_kompleks_pergudangan_pivot" model="ir.ui.view">
-            <field name="name">vit_kompleks_pergudangan_tree</field>
-            <field name="model">vit.kompleks_pergudangan</field>
-            <field name="type">pivot</field>
-            <field name="arch" type="xml">
-                <pivot string="Kompleks Pergudangan">
-                    <field name="kanca_id" type="row"/>
-                    <field name="kanwil_id" type="row"/>
-                </pivot>
             </field>
         </record>
         <!-- form view -->
@@ -53,8 +39,8 @@
                             <group> <!-- left -->
                             </group>
                             <group> <!-- right -->
-                                <field name="kanca_id"  />
                                 <field name="kanwil_id"  />
+                                <field name="kanca_id"  />
                             </group>
                         </group>
                         <notebook>
@@ -79,11 +65,7 @@
 
                     <filter string="Name" name="filter_by_name" domain="[('name','=','')]" />
                     <field name="name" select="True"/>
-                    <field name="kanca_id" select="True"/>
-                    <field name="kanwil_id" select="True"/>
                     <group string="Group By..">
-                        <filter string="Kanca" domain="[]" name="group_by_kanca_id" context="{'group_by':'kanca_id'}"/>
-                        <filter string="Kanwil" domain="[]" name="group_by_kanwil_id" context="{'group_by':'kanwil_id'}"/>
                     </group>
                 </search>
             </field>
@@ -107,22 +89,12 @@
                 </kanban>
             </field>
         </record>
-        <!-- graph -->
-        <record id="view_vit_kompleks_pergudangan_graph" model="ir.ui.view">
-            <field name="name">vit_kompleks_pergudangan</field>
-            <field name="model">vit.kompleks_pergudangan</field>
-            <field name="arch" type="xml">
-                <graph string="Kompleks Pergudangan" type="bar">
-                    <field name="kanca_id"/>
-                </graph>
-            </field>
-        </record>
         <!-- action window -->
         <record id="action_kompleks_pergudangan" model="ir.actions.act_window">
             <field name="name">Kompleks Pergudangan</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">vit.kompleks_pergudangan</field>
-            <field name="view_mode">tree,form,kanban,pivot,graph</field>
+            <field name="view_mode">tree,form,kanban,pivot</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                 Click to add a new Kompleks Pergudangan

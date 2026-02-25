@@ -37,63 +37,63 @@ class ExportRkapSarlog(models.TransientModel):
         except ImportError:
             raise Exception("openpyxl library not found. Please install it.")
 
-        # Query budget RKAP berdasarkan tahun yang dipilih
+        # Use dashboard statistics (per-master budget) so export follows the same
+        # logic that the Sarlog dashboard uses.  get_statistics_sarlog already
+        # applies the "only count pagu when there is a realisasi" rule for totals
+        # and returns a list of master budgets with aggregated values.
         year_filter = int(self.year)
-        budget_records = self.env['vit.budget_rkap'].search([
-            ('budget_date', '>=', f'{year_filter}-01-01'),
-            ('budget_date', '<=', f'{year_filter}-12-31'),
-        ], order='tipe_kegiatan, name')
-        
-        # Get overall percentage from dashboard statistics (same as Dashboard Sarlog)
         dashboard_stats = self.env['vit.budget_rkap'].get_statistics_sarlog(year_filter)
         overall_percentage = dashboard_stats.get('total_summary', {}).get('persen', 0)
 
-        # Group by tipe_kegiatan and include jenis_penugasan and total pagu izin prinsip
+        # Build row data from the master_list returned by the dashboard helper.
+        # Group again by tipe_kegiatan so we can keep the same A/B sections.
         grouped_data = {}
-        for rec in budget_records:
-            tipe = rec.tipe_kegiatan if rec.tipe_kegiatan else 'Lainnya'
+        for item in dashboard_stats.get('master_list', []):
+            # look up the master record and at least one budget record to know the
+            # tipe_kegiatan and to borrow the budget_rkap name.  If no budget
+            # exists for the year, fall back to the master name.
+            mb = self.env['vit.master_budget'].browse(item.get('id'))
+            budgets = self.env['vit.budget_rkap'].search([
+                ('master_budget_id', '=', mb.id),
+                ('budget_date', '>=', f'{year_filter}-01-01'),
+                ('budget_date', '<=', f'{year_filter}-12-31')
+            ], limit=1)
+            tipe = budgets.tipe_kegiatan if budgets and budgets.tipe_kegiatan else 'Lainnya'
             if tipe not in grouped_data:
                 grouped_data[tipe] = []
-            # compute total pagu izin prinsip: prefer stored field, otherwise sum related izin_prinsip
-            if rec.total_pagu_izin_prinsip:
-                pagu = rec.total_pagu_izin_prinsip
-            else:
-                pagu = sum(rec.izin_prinsip_ids.mapped('total_pagu')) if rec.izin_prinsip_ids else 0
-            
-            # Get realisasi data from payments (completed stage)
-            payments = self.env['vit.payment'].search([
-                ('budget_rkap_id', '=', rec.id),
-                ('stage_is_done', '=', True),
-            ])
-            
-            realisasi_pso = 0
-            realisasi_kom = 0
-            total_realisasi = 0
-            item_progress = 0
-            
-            if payments:
-                # Sum realisasi payments based on budget's jenis_penugasan
-                total_payment_amount = sum(payments.mapped('amount'))
-                
-                if rec.jenis_penugasan == 'pso':
-                    realisasi_pso = total_payment_amount
-                elif rec.jenis_penugasan == 'kom':
-                    realisasi_kom = total_payment_amount
-                
-                total_realisasi = total_payment_amount
-                
-                # Calculate percentage based on pagu (same as dashboard)
-                item_progress = (total_realisasi / pagu * 100) if pagu > 0 else 0
-            
+
+            # use the budget_rkap's name if available, otherwise fall back
+            # to the master budget name stored in the dashboard data.
+            row_name = budgets.name if budgets and budgets.name else item.get('name')
+
+            # item['pagu_izin_prinsip'] comes directly from get_statistics_sarlog
+            # which already sums total_pagu_izin_prinsip for all budgets of that
+            # master.  The dashboard intentionally zeroes this value when there is
+            # no realisasi, so mirror that behaviour here too.
+            pagu = item.get('pagu_izin_prinsip', 0)
+            if item.get('realisasi', 0) <= 0:
+                pagu = 0
+
+            # split into PSO/KOM based on the master budget's jenis_penugasan
+            realisasi = item.get('realisasi', 0)
+            real_pso = realisasi if mb.jenis_penugasan == 'pso' else 0
+            real_kom = realisasi if mb.jenis_penugasan == 'kom' else 0
+            pso_val = pagu if mb.jenis_penugasan == 'pso' else 0
+            kom_val = pagu if mb.jenis_penugasan == 'kom' else 0
+
+            # progress was already computed by dashboard helper, but recalc just
+            # to have a numeric value (not string) for formatting later.
+            progress = float(item.get('persen_realisasi') or 0)
+
             grouped_data[tipe].append({
-                'name': rec.name,
-                'amount': rec.amount or 0,
-                'jenis_penugasan': rec.jenis_penugasan,
+                'name': row_name,
+                'amount': pagu,
+                'jenis_penugasan': mb.jenis_penugasan,
                 'total_pagu_izin_prinsip': pagu,
-                'realisasi_pso': realisasi_pso,
-                'realisasi_kom': realisasi_kom,
-                'total_realisasi': total_realisasi,
-                'avg_progress': item_progress,
+                'realisasi_pso': real_pso,
+                'realisasi_kom': real_kom,
+                'total_realisasi': realisasi,
+                'avg_progress': progress,
             })
 
         # Create workbook

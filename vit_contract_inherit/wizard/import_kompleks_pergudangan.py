@@ -44,6 +44,7 @@ class WizardImportKompleksPergudangan(models.TransientModel):
             imported_count = 0
             created_ids = []
             errors = []
+            counts_by_sheet = {}
 
             def _get_headers_from_row(sheet_obj, row_idx):
                 headers_local = []
@@ -67,7 +68,9 @@ class WizardImportKompleksPergudangan(models.TransientModel):
                         return r
                 return None
 
+            # process every worksheet in the workbook
             for sheet in workbook.worksheets:
+                sheet_count = 0
                 try:
                     header_row_idx = _find_header_row(sheet, max_search=40)
                     if header_row_idx is None:
@@ -75,10 +78,12 @@ class WizardImportKompleksPergudangan(models.TransientModel):
                         header_row_idx = 1
 
                     headers = _get_headers_from_row(sheet, header_row_idx)
+                    # if the primary columns cannot be found later we will record an error
 
                     # Find columns
                     tempat_col = None
                     kompleks_col = None
+                    kanwil_col = None
                     col_c = None
                     col_d = None
                     for idx, h in enumerate(headers):
@@ -89,6 +94,9 @@ class WizardImportKompleksPergudangan(models.TransientModel):
                         if 'kompleks' in key or 'pergudangan' in key or 'kompleks pergudangan' in key:
                             if kompleks_col is None:
                                 kompleks_col = idx
+                        if 'kanwil' in key:
+                            if kanwil_col is None:
+                                kanwil_col = idx
                     
                     # Also get columns C (index 2) and D (index 3) for additional kanca info
                     if len(headers) > 2:
@@ -98,6 +106,7 @@ class WizardImportKompleksPergudangan(models.TransientModel):
 
                     if tempat_col is None or kompleks_col is None:
                         # skip sheet if required columns not found
+                        errors.append(f"Sheet '{sheet.title}' header tidak mengandung kolom 'tempat'/'kompleks'; baris header={header_row_idx}, headers={headers}")
                         continue
 
                     # detect if kompleks_col points to numbering column; shift if needed
@@ -155,8 +164,30 @@ class WizardImportKompleksPergudangan(models.TransientModel):
                                 val = row_list[kompleks_col]
                                 if val not in (None, ''):
                                     kompleks_val = str(val).strip()
+                            # if the value looks like a numbering and the next column exists with text, shift
+                            import re
+                            if kompleks_val and re.match(r'^\d+([a-z])?\.?$', kompleks_val, re.I):
+                                # check next column
+                                shift_idx = kompleks_col + 1
+                                if shift_idx < len(row_list):
+                                    next_val = row_list[shift_idx]
+                                    if next_val not in (None, ''):
+                                        next_str = str(next_val).strip()
+                                        # if next column is non-numeric text, use it as kompleks
+                                        if not re.match(r'^\d+([a-z])?\.?$', next_str, re.I):
+                                            kompleks_val = next_str
+                                            # update header column for future rows
+                                            kompleks_col = shift_idx
 
                             if not kompleks_val:
+                                continue
+
+                            # skip rows where kompleks value is just a number (total rows or stray counts)
+                            if re.match(r'^\d+(?:\.\d+)?$', kompleks_val.strip()):
+                                # e.g. the bottom "18" or "11" total count – not a real name
+                                continue
+                            # also skip any row that contains the word "total" anywhere
+                            if any(isinstance(c, str) and 'total' in c.lower() for c in row_list):
                                 continue
 
                             # heuristic to skip address/detail rows
@@ -189,52 +220,115 @@ class WizardImportKompleksPergudangan(models.TransientModel):
                                         if re.match(r'^\d+([a-z])?\.?$', sc, re.I):
                                             is_numbering = True
                             if not is_numbering:
-                                continue
+                                # we only relied on numbering to distinguish data rows from address lines;
+                                # if there's no numbering we should still consider importing the row unless
+                                # it looks like a pure address/detail line (e.g. contains street/kel/kab labels)
+                                address_tokens = ['jl', 'jalan', 'ds.', 'ds', 'kec', 'kab', 'kel', 'kota']
+                                found_addr = False
+                                for c in row_list:
+                                    if isinstance(c, str):
+                                        low = c.lower().strip()
+                                        for tok in address_tokens:
+                                            if low.startswith(tok):
+                                                found_addr = True
+                                                break
+                                    if found_addr:
+                                        break
+                                if found_addr:
+                                    continue
+                                # otherwise treat as valid data row
 
                             kompleks_vals = {
                                 'name': kompleks_val,
                             }
+                            # prepare lists for many2many relationships
+                            kanca_ids = []
+                            kanwil_ids = []
+
                             # Assign kanca based on 'tempat' (tempat_val or current_tempat)
                             try:
                                 kanca_name = tempat_val or current_tempat
                                 if kanca_name:
                                     kanca_try = str(kanca_name).strip()
-                                    kanca = self.env['vit.kanca'].sudo().search([('name', 'ilike', kanca_try)], limit=1)
-                                    if not kanca:
-                                        simple = kanca_try.split(',')[0].split('-')[0].strip()
-                                        if simple and simple != kanca_try:
-                                            kanca = self.env['vit.kanca'].sudo().search([('name', 'ilike', simple)], limit=1)
-                                    # if still not found, auto-create kanca
-                                    if not kanca:
-                                        base = simple or kanca_try
-                                        base = base.strip()
-                                        if base:
-                                            if base.lower().startswith('kanca'):
-                                                new_name = base
-                                            else:
-                                                new_name = 'Kanca ' + ' '.join([w.capitalize() for w in base.split()])
-                                            kanca_exist = self.env['vit.kanca'].sudo().search([('name', '=', new_name)], limit=1)
-                                            if not kanca_exist:
-                                                try:
-                                                    kanca = self.env['vit.kanca'].sudo().create({'name': new_name})
-                                                except Exception:
-                                                    kanca = None
-                                            else:
-                                                kanca = kanca_exist
-                                    if kanca:
-                                        kompleks_vals['kanca_id'] = kanca.id
-                                        # also set kanwil from kanca if available
-                                        # kanwil is now a related field on kompleks (from kanca), no direct assignment needed
+                                    # split if multiple names present (comma, semicolon, slash)
+                                    import re
+                                    parts = re.split(r'[;,/]\s*', kanca_try)
+                                    for part in parts:
+                                        part = part.strip()
+                                        if not part:
+                                            continue
+                                        kanca = self.env['vit.kanca'].sudo().search([('name', 'ilike', part)], limit=1)
+                                        if not kanca:
+                                            simple = part.split(',')[0].split('-')[0].strip()
+                                            if simple and simple != part:
+                                                kanca = self.env['vit.kanca'].sudo().search([('name', 'ilike', simple)], limit=1)
+                                        # if still not found, auto-create kanca
+                                        if not kanca:
+                                            base = simple or part
+                                            base = base.strip()
+                                            if base:
+                                                if base.lower().startswith('kanca'):
+                                                    new_name = base
+                                                else:
+                                                    new_name = 'Kanca ' + ' '.join([w.capitalize() for w in base.split()])
+                                                kanca_exist = self.env['vit.kanca'].sudo().search([('name', '=', new_name)], limit=1)
+                                                if not kanca_exist:
+                                                    try:
+                                                        kanca = self.env['vit.kanca'].sudo().create({'name': new_name})
+                                                    except Exception:
+                                                        kanca = None
+                                                else:
+                                                    kanca = kanca_exist
+                                        if kanca:
+                                            kanca_ids.append(kanca.id)
+                                            # collect kanwil(s) from kanca if defined
+                                            if hasattr(kanca, 'kanwil_id') and kanca.kanwil_id:
+                                                if hasattr(kanca.kanwil_id, 'ids'):
+                                                    kanwil_ids += kanca.kanwil_id.ids
+                                                else:
+                                                    kanwil_ids.append(kanca.kanwil_id.id)
                             except Exception:
                                 pass
+
+                            # read explicit kanwil column if available
+                            if kanwil_col is not None and kanwil_col < len(row_list):
+                                val = row_list[kanwil_col]
+                                if val not in (None, ''):
+                                    kanwil_text = str(val).strip()
+                                    parts = re.split(r'[;,/]\s*', kanwil_text)
+                                    for part in parts:
+                                        part = part.strip()
+                                        if not part:
+                                            continue
+                                        kw = self.env['vit.kanwil'].sudo().search([('name', 'ilike', part)], limit=1)
+                                        if not kw:
+                                            try:
+                                                kw = self.env['vit.kanwil'].sudo().create({'name': part})
+                                            except Exception:
+                                                kw = None
+                                        if kw:
+                                            kanwil_ids.append(kw.id)
+
+                            if kanca_ids:
+                                kompleks_vals['kanca_id'] = [(6, 0, list(set(kanca_ids)))]
+                            if kanwil_ids:
+                                kompleks_vals['kanwil_id'] = [(6, 0, list(set(kanwil_ids)))]
                             kompleks_pergudangan = self.env['vit.kompleks_pergudangan'].sudo().create(kompleks_vals)
                             created_ids.append(kompleks_pergudangan.id)
                             imported_count += 1
+                            sheet_count += 1
                         except Exception as e:
                             errors.append(f"Sheet '{sheet.title}' Baris {row_idx}: {str(e)}")
                 except Exception:
                     # ignore sheet-level errors and continue with others
                     continue
+                finally:
+                    # record how many rows imported from this sheet
+                    if sheet_count:
+                        counts_by_sheet[sheet.title] = sheet_count
+                    else:
+                        # no rows imported, warn the user
+                        errors.append(f"Sheet '{sheet.title}' tidak ada baris data yang valid.")
             
             # If we created records, open a list view showing them
             if imported_count > 0:
@@ -249,7 +343,15 @@ class WizardImportKompleksPergudangan(models.TransientModel):
                 return action
 
             # Show result
-            message = f"Berhasil import {imported_count} Kompleks Pergudangan"
+            if imported_count > 0:
+                message = f"Berhasil import {imported_count} Kompleks Pergudangan"
+                if counts_by_sheet:
+                    details = []
+                    for name, cnt in counts_by_sheet.items():
+                        details.append(f"{name}: {cnt}")
+                    message += " (" + ", ".join(details) + ")"
+            else:
+                message = "Tidak ada data yang diimport."
             if errors:
                 message += f"\n\nError:\n" + "\n".join(errors[:10])
                 if len(errors) > 10:

@@ -21,6 +21,10 @@
             <field name="inherit_id" ref="vit_contract.view_vit_job_izin_prinsip_form"/>
             <field name="arch" type="xml">
 
+                <xpath expr="//field[@name='kanca_id']" position="after">
+                    <field name="kanwil_id" invisible="0"/>
+                </xpath>
+
                 <xpath expr="//label[@for='name']" position="attributes">
                     <attribute name="string">Uraian Pekerjaan</attribute>
                 </xpath>
@@ -48,6 +52,7 @@
                     <attribute name="column_invisible">1</attribute>
                 </xpath>
 
+                
                 <xpath expr="//page[@name='izin_prinsip_line_ids']//field[@name='kanca_id']" position="attributes">
                     <attribute name="column_invisible">1</attribute>
                 </xpath>

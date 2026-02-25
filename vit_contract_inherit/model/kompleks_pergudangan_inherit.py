@@ -1,16 +1,22 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, _
+from odoo import models, fields, api, _
 
 
 class VitKompleksPergudangan(models.Model):
     _inherit = 'vit.kompleks_pergudangan'
 
-    # derive kanwil from related kanca record; stored for searching/grouping
-    kanwil_id = fields.Many2one(
-        comodel_name='vit.kanwil',
+
+    name = fields.Char( required=True, copy=False, string=_("Name"))
+
+    kanwil_id = fields.Many2many(
         string=_('Kanwil'),
-        related='kanca_id.kanwil_id',
+        store=True,
+    )
+
+    kanca_id = fields.Many2many(
+        comodel_name='vit.kanca',
+        string=_('Kanca'),
         store=True,
     )
