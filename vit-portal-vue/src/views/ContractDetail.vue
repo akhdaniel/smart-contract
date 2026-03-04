@@ -67,7 +67,7 @@
                       <input type="text" class="form-control" id="syarat_progress" v-model="termin.syarat_progress" disabled>
                     </div>
                     <div class="col-md-4 col-sm-12" v-if="contract.jenis_kontrak_id.type === 'fisik'">
-                      <label for="actual_progress" class="form-label">Actuallllll Progress (%)</label>
+                      <label for="actual_progress" class="form-label">Actual Progress (%)</label>
                       <input type="text" class="form-control" id="actual_progress" v-model="termin.actual_progress" required="required" :disabled="termin.stage_id.display_name !== 'On Progress'">
                     </div>
 
