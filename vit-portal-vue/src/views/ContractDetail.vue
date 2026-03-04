@@ -126,6 +126,27 @@
         </div>
       </div>
 
+      <h4 class="mt-4">Informasi Rekening Pembayaran</h4>
+      <div class="card mt-4 mb-4">
+        <div class="card-header">Data Rekening Vendor</div>
+        <div class="card-body">
+          <div class="row" v-if="termins.length > 0">
+            <div class="col-md-5">
+              <label for="nama_bank" class="form-label">Nama Bank</label>
+              <input type="text" class="form-control" id="nama_bank" v-model="termins[0].nama_bank" :disabled="contract.stage_id.display_name !== 'Draft'">
+            </div>
+            <div class="col-md-5">
+              <label for="nomor_rekening" class="form-label">Nomor Rekening</label>
+              <input type="text" class="form-control" id="nomor_rekening" v-model="termins[0].nomor_rekening" :disabled="contract.stage_id.display_name !== 'Draft'">
+            </div>
+            <div class="col-md-2">
+              <div class="form-label">&nbsp;</div>
+              <button class="form-control btn btn-primary" @click="updateBankInfo()" :disabled="contract.stage_id.display_name !== 'Draft'">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <h4 class="mt-4">Status Pembayaran</h4>
       <div class="card mt-4 mb-4">
         <div class="card-header">Daftar Pembayaran dan history status pembayaran</div>
@@ -228,6 +249,8 @@ const fetchData = async () => {
           actual_progress:{},
           syarat_output:{},
           actual_output:{},
+          nama_bank:{},
+          nomor_rekening:{},
           master_nama_termin_id:{
             fields:{
               display_name:{}
@@ -416,6 +439,36 @@ const updateProgress = async (terminId) =>{
 const getDownloadUrl = (syaratId, syaratName) => {
     // Odoo's default URL for downloading binary field content
     return `${ODOO_URL}/web/content/vit.syarat_termin/${syaratId}/document?field=document&filename=${encodeURIComponent(syaratName)}`;
+}
+
+const updateBankInfo = async () =>{
+  if (termins.value.length === 0) return;
+  
+  const targetTermin = termins.value[0];
+  try {
+    const filtered = {
+      nama_bank: targetTermin.nama_bank,
+      nomor_rekening: targetTermin.nomor_rekening
+    };
+    
+    const specification = {
+      name:{},
+      nama_bank:{},
+      nomor_rekening:{}
+    }
+    const response = await odooService.write('vit.termin', targetTermin.id, filtered, specification);
+    if (response.error){
+      uploadError.value = `Gagal menyimpan. ${response.message}`;
+      console.error(response);
+    }
+    else{
+      uploadError.value = null;
+      alert('Data rekening berhasil disimpan!');
+    }
+  } catch (err) {
+      uploadError.value = `Terjadi error saat menyimpan. ${err}`;
+      console.error(err);
+  }    
 }
 
 const openPdfViewer = (syaratId, syaratName) => {

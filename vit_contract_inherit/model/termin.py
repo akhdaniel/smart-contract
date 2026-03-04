@@ -43,6 +43,9 @@ class termin(models.Model):
         store=True,
     )
 
+    nama_bank = fields.Char(string=_("Nama Bank"))
+    nomor_rekening = fields.Char(string=_("Nomor Rekening"))
+
 
     verification_date = fields.Date(
         string=_("Verification Date"),

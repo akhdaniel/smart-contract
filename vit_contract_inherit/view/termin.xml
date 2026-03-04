@@ -62,6 +62,8 @@
                     <!-- <field name="verifikasi_syarat" invisible="1"/> -->
                     <field name="nomor_kontrak" readonly="1"/>
                     <field name="deskripsi"/>
+                    <field name="nama_bank" readonly="1"/>
+                    <field name="nomor_rekening" readonly="1"/>
                 </xpath>
 
 

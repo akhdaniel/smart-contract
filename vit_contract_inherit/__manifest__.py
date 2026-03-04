@@ -32,6 +32,7 @@
         'view/record_rule_kanwil_keuangan.xml',
         "view/menu.xml",
 		'wizard/export_rkap_sarlog.xml',
+        'wizard/rekap_ketersediaan_sarlog.xml',
         'wizard/import_izin_prinsip.xml',
         'wizard/import_kompleks_pergudangan.xml',
         # "view/menu_operation.xml",
