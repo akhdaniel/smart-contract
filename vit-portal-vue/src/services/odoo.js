@@ -35,7 +35,7 @@ const jsonrpc = async (endpoint, params) => {
 
 const odooService = {
   async login(username, password) {
-    const result = await jsonrpc('/web/session/authenticate', {
+    const result = await jsonrpc('/session/authenticate', {
       db: ODOO_DB,
       login: username,
       password: password,
@@ -49,7 +49,7 @@ const odooService = {
   },
 
   async getSessionInfo() {
-    const sessionInfo = await jsonrpc('/web/session/get_session_info', {});
+    const sessionInfo = await jsonrpc('/session/get_session_info', {});
     return sessionInfo;
   },
 
@@ -115,7 +115,7 @@ const odooService = {
         limit: limit
       }
     }
-    return await jsonrpc(`/web/dataset/call_kw/${model}/web_search_read`, params);
+    return await jsonrpc(`/dataset/call_kw/${model}/web_search_read`, params);
 
   },
 
@@ -130,7 +130,7 @@ const odooService = {
         specification: specification
       }
     }
-    return await jsonrpc(`/web/dataset/call_kw/${model}/web_read`, params);
+    return await jsonrpc(`/dataset/call_kw/${model}/web_read`, params);
   },
 
   async write(model, id, data={},specification={}) {
@@ -143,7 +143,7 @@ const odooService = {
           context:{uid: this.getUid()},
         }
     }
-    return await jsonrpc(`/web/dataset/call_kw/${model}/web_write`, params);
+    return await jsonrpc(`/dataset/call_kw/${model}/web_save`, params);
   },
 
   getUid() {

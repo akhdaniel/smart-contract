@@ -207,12 +207,16 @@ const currentPdfUrl = ref(null);
 const showPdfModal = ref(false);
 
 const ODOO_URL = import.meta.env.VITE_ODOO_URL;
+const ODOO_DB = import.meta.env.VITE_ODOO_DB;
+const IS_PRODUCTION = import.meta.env.PROD;
 
 const contractId = parseInt(route.params.id)
 
 const fetchData = async () => {
   try {
     loading.value = true;
+    console.log('Fetching contract data for ID:', contractId);
+    console.log('Environment - URL:', ODOO_URL, 'DB:', ODOO_DB, 'Production:', IS_PRODUCTION);
     // Fetch main contract details
     // const fieldsString = 'name,start_date,end_date,izin_prinsip_id,termin_ids[name,master_nama_termin_id,persentase,syarat_termin_ids[name,document]],payment_ids[name,budget_rkap_id]';
     const specification = {
@@ -311,9 +315,16 @@ const fetchData = async () => {
         payments.value = contract.value.payment_ids
     }
 
+    console.log('Data loaded successfully. Termins:', termins.value.map(t => ({
+      id: t.id,
+      name: t.name,
+      actual_progress: t.actual_progress,
+      syarat_progress: t.syarat_progress
+    })));
+
   } catch (err) {
     error.value = 'Failed to load contract details.';
-    console.error(err);
+    console.error('Error loading contract data:', err);
   } finally {
     loading.value = false;
   }
@@ -389,14 +400,18 @@ const deleteDocument = async (syaratId) => {
 }
 
 const updateProgress = async (terminId) =>{
-  console.log('terminId',terminId)
+  console.log('Updating progress for terminId:', terminId);
   const targetTermin = termins.value.find(s => s.id === terminId);
-  console.log(contract.value.jenis_kontrak_id.type)
+  console.log('Target termin:', targetTermin);
+  console.log('Contract type:', contract.value.jenis_kontrak_id.type);
+  console.log('Actual progress value:', targetTermin.actual_progress);
+  
   if (contract.value.jenis_kontrak_id.type=='fisik'){
     if (targetTermin.syarat_progress<100){ // termin 1,2...
       if (targetTermin.actual_progress <= targetTermin.syarat_progress) 
       {
         alert('Untuk jenis kontrak Fisik, actual progres harus lebih besar dari syarat progress penagihan.')
+        return;
       }
     }
     else // termin terakhir
@@ -404,9 +419,9 @@ const updateProgress = async (terminId) =>{
       if (targetTermin.actual_progress != 100) 
       {
         alert('Untuk jenis kontrak Fisik, actual progres termin terakhir harus 100%.')
+        return;
       }      
     }
-
   }
 
   try {
@@ -414,7 +429,7 @@ const updateProgress = async (terminId) =>{
     const filtered = Object.keys(targetTermin)
       .filter(key => keysToKeep.includes(key))
       .reduce((acc, key) => ({ ...acc, [key]: targetTermin[key] }), {});
-    console.log(filtered); 
+    console.log('Sending filtered data:', filtered); 
 
     const specification = {
       name:{},
@@ -422,17 +437,33 @@ const updateProgress = async (terminId) =>{
       actual_output:{}
     }  
     const response = await odooService.write('vit.termin', terminId, filtered, specification);
-    console.log(response)
-    if (response.error){
-      uploadError.value = `An error occurred during update. ${response.message}`;
-      console.error(response);
+    console.log('Odoo write response:', response);
+    
+    if (response === null) {
+      uploadError.value = 'Failed to connect to server. Please check your connection.';
+      console.error('Write failed: null response');
+      return;
     }
-    else{
-      uploadError.value = null
+    
+    if (response && response.error){
+      uploadError.value = `An error occurred during update. ${response.message || response.error}`;
+      console.error('Write error:', response);
+    }
+    else if (response && !response.error){
+      uploadError.value = null;
+      console.log('Progress updated successfully, refreshing data...');
+      
+      // Force refresh data after successful update
+      await fetchData();
+      alert('Progress berhasil diupdate!');
+    }
+    else {
+      uploadError.value = 'Unknown response from server';
+      console.error('Unknown response:', response);
     }
   } catch (err) {
       uploadError.value = `An error occurred during update. ${err}`;
-      console.error(err);
+      console.error('Update error:', err);
   }    
 }
 
