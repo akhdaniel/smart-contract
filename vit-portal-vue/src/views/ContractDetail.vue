@@ -269,9 +269,6 @@ const fetchData = async () => {
           },
         }
       },
-      budget_rkap_id:{
-        fields:{display_name:{}}
-      },
       payment_ids:{
         fields:{
           name:{},
