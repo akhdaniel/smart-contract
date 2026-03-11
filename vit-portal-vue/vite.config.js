@@ -11,14 +11,6 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
-  build: {
-    minify: 'esbuild',
-    rollupOptions: {
-      output: {
-        entryFileNames: 'assets/index-e324a293.js'
-      }
-    }
-  },
   server: {
     proxy: {
       '/web': {
