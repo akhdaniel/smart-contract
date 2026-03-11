@@ -10,5 +10,12 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        entryFileNames: 'assets/index-e324a293.js'
+      }
+    }
   }
 })
