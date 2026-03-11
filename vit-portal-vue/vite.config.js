@@ -12,12 +12,20 @@ export default defineConfig({
     }
   },
   build: {
-    minify: 'terser',
-    sourcemap: false,
+    minify: 'esbuild',
     rollupOptions: {
       output: {
         entryFileNames: 'assets/index-e324a293.js'
       }
     }
-  }
+  },
+  server: {
+    proxy: {
+      '/web': {
+        target: 'http://localhost:8217',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
 })
