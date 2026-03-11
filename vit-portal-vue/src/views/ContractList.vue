@@ -55,7 +55,6 @@ onMounted(async () => {
       }
     }
     const result = await odooService.searchRead('vit.kontrak', domain, specification);
-    console.log('result===',result)
     if (result) {
       contracts.value = result;
     } else {

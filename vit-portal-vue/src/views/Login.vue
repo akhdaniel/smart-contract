@@ -45,7 +45,6 @@ const handleLogin = async () => {
   error.value = ''
   try {
     const success = await authStore.login(username.value, password.value)
-    console.log('success>>>>',success)
     if (success) {
       router.push('/contracts')
     } else {
