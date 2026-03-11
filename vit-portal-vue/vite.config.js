@@ -12,6 +12,8 @@ export default defineConfig({
     }
   },
   build: {
+    minify: 'terser',
+    sourcemap: false,
     rollupOptions: {
       output: {
         entryFileNames: 'assets/index-e324a293.js'
