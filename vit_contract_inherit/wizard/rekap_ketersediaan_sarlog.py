@@ -43,6 +43,8 @@ class RekapKetersediaanSarlog(models.TransientModel):
         header_fill = PatternFill(start_color='1F3864', end_color='1F3864', fill_type='solid')
         category_font = Font(name='Calibri', size=11, bold=True)
         category_fill = PatternFill(start_color='C5E0B4', end_color='C5E0B4', fill_type='solid')
+        subtotal_fill = PatternFill(start_color='FFF2CC', end_color='FFF2CC', fill_type='solid')
+        total_fill = PatternFill(start_color='B4C7E7', end_color='B4C7E7', fill_type='solid')
         center_align = Alignment(horizontal='center', vertical='center', wrap_text=True)
         left_align = Alignment(horizontal='left', vertical='center', wrap_text=True)
         right_align = Alignment(horizontal='right', vertical='center')
@@ -104,19 +106,21 @@ class RekapKetersediaanSarlog(models.TransientModel):
         grp_cell.alignment = center_align
         grp_cell.border = thin_border
 
-        # SISA PEMBAYARAN 2024 group label
+        # year-dependent column labels
+        prev_year = int(self.year) - 1
+        curr_year = int(self.year)
         ws.merge_cells('D3:D3')
         cell = ws['D3']
-        cell.value = 'SISA PEMBAYARAN 2024'
+        cell.value = f'SISA PEMBAYARAN {prev_year}'
         cell.font = header_font
         cell.fill = header_fill
         cell.alignment = center_align
         cell.border = thin_border
 
-        # IZIN PRINSIP TERBIT 2025 group label
+        # IZIN PRINSIP TERBIT for current year
         ws.merge_cells('E3:E3')
         cell = ws['E3']
-        cell.value = 'IZIN PRINSIP TERBIT 2025'
+        cell.value = f'IZIN PRINSIP TERBIT {curr_year}'
         cell.font = header_font
         cell.fill = header_fill
         cell.alignment = center_align
@@ -162,7 +166,16 @@ class RekapKetersediaanSarlog(models.TransientModel):
         # fetch statistics just like export version; user can adapt later
         year_filter = int(self.year)
         dashboard_stats = self.env['vit.budget_rkap'].get_statistics_sarlog(year_filter)
-        grouped_data = {}
+        # pastikan memang ada record budget untuk tahun itu (cek berdasarkan budget_date)
+        existing = self.env['vit.budget_rkap'].search([
+            ('budget_date', '>=', f'{year_filter}-01-01'),
+            ('budget_date', '<=', f'{year_filter}-12-31')
+        ], limit=1)
+        if not existing:
+            from odoo.exceptions import UserError
+            raise UserError(f"Tidak ada data Budget RKAP untuk tahun {self.year}")
+        # initialize both categories to ensure headers even with missing data
+        grouped_data = {'biaya': [], 'investasi': []}
         for item in dashboard_stats.get('master_list', []):
             mb = self.env['vit.master_budget'].browse(item.get('id'))
             budgets = self.env['vit.budget_rkap'].search([
@@ -170,9 +183,11 @@ class RekapKetersediaanSarlog(models.TransientModel):
                 ('budget_date', '>=', f'{year_filter}-01-01'),
                 ('budget_date', '<=', f'{year_filter}-12-31')
             ], limit=1)
-            tipe = budgets.tipe_kegiatan if budgets and budgets.tipe_kegiatan else 'Lainnya'
-            if tipe not in grouped_data:
-                grouped_data[tipe] = []
+            # determine category; default to biaya instead of Lainnya when no record
+            if budgets and budgets.tipe_kegiatan:
+                tipe = budgets.tipe_kegiatan
+            else:
+                tipe = 'biaya'
             row_name = budgets.name if budgets and budgets.name else item.get('name')
             rkap_val = item.get('pagu_izin_prinsip', 0) if item.get('realisasi', 0) > 0 else 0
             # placeholders for the other two columns
@@ -249,17 +264,16 @@ class RekapKetersediaanSarlog(models.TransientModel):
             # subtotal row
             ws[f'B{row}'].value = f'JUMLAH {display_name}'
             ws[f'B{row}'].font = Font(name='Calibri', size=10, bold=True)
-            ws[f'B{row}'].fill = subtotal_fill
+            # use same background as category header for consistency
+            ws[f'B{row}'].fill = right_fill
             ws[f'C{row}'].value = cat_sum_rkap
             ws[f'D{row}'].value = cat_sum_sisa
             ws[f'E{row}'].value = cat_sum_izin
             ws[f'F{row}'].value = cat_sum_rkap - (cat_sum_sisa + cat_sum_izin)
             for col in ['A','B','C','D','E','F']:
                 ws[f'{col}{row}'].border = thin_border
-                if col in ['A','B']:
-                    ws[f'{col}{row}'].fill = right_fill
-                else:
-                    ws[f'{col}{row}'].fill = subtotal_fill
+                ws[f'{col}{row}'].fill = right_fill
+                if col in ['C','D','E','F']:
                     ws[f'{col}{row}'].number_format = '#,##0'
             ws.row_dimensions[row].height = 16
             subtotal_rows[category] = row
