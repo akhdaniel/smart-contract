@@ -3,7 +3,7 @@ import { useAuthStore } from '@/stores/auth';
 import { useLoadingStore } from '@/stores/loading';
 
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_ODOO_URL,
+  baseURL: import.meta.env.VITE_ODOO_URL || '',
   headers: {
     'Content-Type': 'application/json',
   }
