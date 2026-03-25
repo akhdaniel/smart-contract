@@ -3,9 +3,10 @@ import { useAuthStore } from '@/stores/auth';
 import { useLoadingStore } from '@/stores/loading';
 
 const apiClient = axios.create({
-  // Untuk development dengan Vite proxy: cocokkan URL ke proxy prefix (path relatif)
-  // di .env.local (misal VITE_ODOO_URL=/web) atau default fallback '/web'.
-  baseURL: import.meta.env.VITE_ODOO_URL || '/web',
+  // Untuk development dengan Vite proxy:
+  // endpoint dijalankan di '/web/*' di code (%s di odooService),
+  // sehingga baseURL harus kosong ('') agar tidak menjadi /web/web/...
+  baseURL: import.meta.env.VITE_ODOO_URL || '',
   headers: {
     'Content-Type': 'application/json',
   },
