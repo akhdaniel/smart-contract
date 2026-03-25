@@ -3,10 +3,13 @@ import { useAuthStore } from '@/stores/auth';
 import { useLoadingStore } from '@/stores/loading';
 
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_ODOO_URL,
+  // Untuk development dengan Vite proxy: cocokkan URL ke proxy prefix (path relatif)
+  // di .env.local (misal VITE_ODOO_URL=/web) atau default fallback '/web'.
+  baseURL: import.meta.env.VITE_ODOO_URL || '/web',
   headers: {
     'Content-Type': 'application/json',
-  }
+  },
+  withCredentials: true,
 });
 
 let loadingTimer = null;
