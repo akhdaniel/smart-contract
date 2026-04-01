@@ -28,3 +28,5 @@ class master_users(models.Model):
         })
         return super(master_users, self).copy(default)
 
+    kanwil_vendor = fields.Many2many(comodel_name="vit.kanwil",  string=_("Kanwil Vendor"))
+    kanca_vendor = fields.Many2many(comodel_name="vit.kanca",  string=_("Kanca Vendor"))

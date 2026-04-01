@@ -22,7 +22,7 @@
             <field name="arch" type="xml">
 
                 <xpath expr="//field[@name='kanca_id']" position="after">
-                    <field name="kanwil_id" invisible="0"/>
+                    <field name="kanwil_id" invisible="1"/>
                 </xpath>
 
                 <xpath expr="//label[@for='name']" position="attributes">

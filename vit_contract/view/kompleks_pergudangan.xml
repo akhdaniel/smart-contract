@@ -39,8 +39,8 @@
                             <group> <!-- left -->
                             </group>
                             <group> <!-- right -->
-                                <field name="kanwil_id"  />
                                 <field name="kanca_id"  />
+                                <field name="kanwil_id"  />
                             </group>
                         </group>
                         <notebook>

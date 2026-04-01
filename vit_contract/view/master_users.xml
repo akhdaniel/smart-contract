@@ -47,6 +47,8 @@
                                 <field name="password"  />
                             </group>
                             <group> <!-- right -->
+                                <field name="kanwil_vendor" widget="many2many_tags" />
+                                <field name="kanca_vendor" widget="many2many_tags" />
                             </group>
                         </group>
                         <notebook>

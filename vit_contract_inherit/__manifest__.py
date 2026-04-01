@@ -51,6 +51,11 @@
         "view/kanwil_provinsi.xml",
         
 	],
+	"assets": {
+		"web.assets_backend": [
+			"vit_contract_inherit/static/src/scss/backend.scss",
+		],
+	},
 	"installable": True,
 	"auto_install": False,
 	"application": True,

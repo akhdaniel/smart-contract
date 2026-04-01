@@ -98,6 +98,9 @@
                     </page>
                 </xpath>
 
+                <xpath expr="//label[@for='name' and @class='oe_edit_only']" position="attributes">
+                    <attribute name="string">Nomor Izin Prinsip</attribute>
+                </xpath>
 
             </field>
         </record>

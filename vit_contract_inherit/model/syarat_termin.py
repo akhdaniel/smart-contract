@@ -187,6 +187,20 @@ class syarat_termin(models.Model):
                         message_type='comment'
                     )
 
+            if 'confirm' in vals and vals.get('confirm'):
+                if kontrak:
+                    kontrak.message_post(
+                        body=_("✔️ Dokumen '%s' telah dikonfirmasi oleh %s.") % (
+                            rec.name or "Tanpa Nama", user_name),
+                        message_type='comment'
+                    )
+                if termin:
+                    termin.message_post(
+                        body=_("✔️ Dokumen '%s' telah dikonfirmasi oleh %s.") % (
+                            rec.name or "Tanpa Nama", user_name),
+                        message_type='comment'
+                    )
+
         return res
 
 

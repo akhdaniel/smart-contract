@@ -1,0 +1,12 @@
+.o_form_view .o_form_status_indicator_buttons .o_form_button_save,
+.o_form_view .o_form_status_indicator_buttons .o_form_button_cancel {
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+    padding: 0.45rem 0.65rem;
+    font-size: 1.15rem;
+}
+
+.o_form_view .o_form_status_indicator_buttons .o_form_button_save i,
+.o_form_view .o_form_status_indicator_buttons .o_form_button_cancel i {
+    font-size: 1.2rem;
+}

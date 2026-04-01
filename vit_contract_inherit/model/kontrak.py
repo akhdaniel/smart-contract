@@ -170,10 +170,100 @@ class kontrak(models.Model):
     @api.onchange("start_date", "duration_days")
     def _onchange_duration_days(self):
         for rec in self:
-            if rec.start_date and rec.duration_days:
-                rec.end_date = rec.start_date + timedelta(days=rec.duration_days)
+            if rec.start_date and rec.duration_days is not False and rec.duration_days is not None:
+                if rec.duration_days > 0:
+                    # hitung inklusif: tanggal mulai + (durasi - 1)
+                    rec.end_date = rec.start_date + timedelta(days=(rec.duration_days - 1))
+                else:
+                    # durasi 0 dianggap berakhir di tanggal mulai
+                    rec.end_date = rec.start_date
             else:
                 rec.end_date = False
+
+    @api.onchange('partner_id')
+    def _onchange_partner_id(self):
+        """Handle saat partner diganti: clear kanwil/kanca lama, update baru"""
+        # Clear kanwil/kanca di master_users lama saat partner diganti
+        if self._origin and self._origin.partner_id:
+            old_partner = self._origin.partner_id
+            old_master_users = self.env['vit.master_users'].search([
+                '|',
+                ('email', '=', old_partner.email),
+                ('name', '=', old_partner.name)
+            ], limit=1)
+            
+            if old_master_users:
+                old_master_users.write({
+                    'kanwil_vendor': [(5,)],  # Clear all
+                    'kanca_vendor': [(5,)]    # Clear all
+                })
+        
+        # Jika partner baru diisi, update kanwil/kanca di master_users baru
+        if self.partner_id and self.kanwil_id:
+            new_master_users = self.env['vit.master_users'].search([
+                '|',
+                ('email', '=', self.partner_id.email),
+                ('name', '=', self.partner_id.name)
+            ], limit=1)
+            
+            if new_master_users:
+                # Auto-update kanwil_vendor
+                if self.kanwil_id.id not in new_master_users.kanwil_vendor.ids:
+                    new_master_users.write({
+                        'kanwil_vendor': [(4, self.kanwil_id.id)]
+                    })
+                
+                # Auto-update kanca_vendor jika ada
+                if self.kanca_id and self.kanca_id.id not in new_master_users.kanca_vendor.ids:
+                    new_master_users.write({
+                        'kanca_vendor': [(4, self.kanca_id.id)]
+                    })
+
+    @api.onchange('kanwil_id', 'kanca_id')
+    def _onchange_kanwil_kanca(self):
+        """Auto-fill master_users kanwil_vendor dan kanca_vendor saat kanwil/kanca diubah"""
+        if self.partner_id and self.kanwil_id:
+            master_users = self.env['vit.master_users'].search([
+                '|',
+                ('email', '=', self.partner_id.email),
+                ('name', '=', self.partner_id.name)
+            ], limit=1)
+            
+            if master_users:
+                # Auto-update kanwil_vendor
+                if self.kanwil_id.id not in master_users.kanwil_vendor.ids:
+                    master_users.write({
+                        'kanwil_vendor': [(4, self.kanwil_id.id)]
+                    })
+                
+                # Auto-update kanca_vendor jika ada
+                if self.kanca_id and self.kanca_id.id not in master_users.kanca_vendor.ids:
+                    master_users.write({
+                        'kanca_vendor': [(4, self.kanca_id.id)]
+                    })
+
+    def write(self, vals):
+        """Override write untuk handle perubahan partner_id"""
+        for rec in self:
+            # Track partner lama sebelum update
+            old_partner_id = rec.partner_id.id if rec.partner_id else None
+            new_partner_id = vals.get('partner_id', old_partner_id)
+            
+            # Jika partner berubah, clear kanwil/kanca dari master_users lama
+            if old_partner_id and new_partner_id and old_partner_id != new_partner_id:
+                old_master_users = self.env['vit.master_users'].search([
+                    '|',
+                    ('email', '=', rec.partner_id.email),
+                    ('name', '=', rec.partner_id.name)
+                ], limit=1)
+                
+                if old_master_users:
+                    old_master_users.write({
+                        'kanwil_vendor': [(5,)],  # Clear all
+                        'kanca_vendor': [(5,)]    # Clear all
+                    })
+        
+        return super().write(vals)
 
     @api.depends('addendum_ids')
     def _compute_addendum_count(self):
