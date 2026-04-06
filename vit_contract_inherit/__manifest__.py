@@ -5,7 +5,6 @@
 	"version": "1.0",
 	"depends": [
 		"base",
-        "web",
         'mail',
 		"vit_contract",
         "ps_m2m_field_attachment_preview",
