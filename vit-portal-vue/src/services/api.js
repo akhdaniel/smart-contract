@@ -2,8 +2,10 @@ import axios from 'axios';
 import { useAuthStore } from '@/stores/auth';
 import { useLoadingStore } from '@/stores/loading';
 
+const baseURL = import.meta.env.VITE_ODOO_URL || '';
+
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_ODOO_URL,
+  baseURL,
   headers: {
     'Content-Type': 'application/json',
   },

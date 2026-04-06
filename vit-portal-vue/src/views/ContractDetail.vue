@@ -206,7 +206,7 @@ const uploadError = ref('')
 const currentPdfUrl = ref(null);
 const showPdfModal = ref(false);
 
-const ODOO_URL = import.meta.env.VITE_ODOO_URL;
+const ODOO_URL = import.meta.env.VITE_ODOO_URL || '';
 
 const contractId = parseInt(route.params.id)
 
