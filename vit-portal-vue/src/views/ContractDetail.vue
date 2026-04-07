@@ -114,7 +114,7 @@
 
                   <div v-if="syarat.upload_date && !syarat.verified" class="syarat-ribbon bg-warning">Uploaded</div>
                   <div v-if="syarat.upload_date && syarat.verified" class="syarat-ribbon bg-success">Verified</div>
-                  <div class="px-1 fs-6">Due date: {{ syarat.due_date }}</div>
+                  <div class="px-1 fs-6">Due date: {{ displayValue(syarat.due_date) }}</div>
                   <form v-if="!syarat.upload_date" @submit.prevent="uploadDocument(syarat.id, $event)" class="d-flex mt-2">
                     <input type="file" class="form-control form-control-sm me-2" required :disabled="termin.stage_id.display_name !== 'On Progress'">
                     <button type="submit" class="btn btn-sm btn-secondary" :disabled="termin.stage_id.display_name !== 'On Progress'">Upload</button>
@@ -133,11 +133,13 @@
           <div class="row" v-if="termins.length > 0">
             <div class="col-md-5">
               <label for="nama_bank" class="form-label">Nama Bank</label>
-              <input type="text" class="form-control" id="nama_bank" v-model="termins[0].nama_bank" :disabled="contract.stage_id.display_name !== 'Draft'">
+              <input v-if="contract.stage_id.display_name === 'Draft'" type="text" class="form-control" id="nama_bank" v-model="termins[0].nama_bank">
+              <input v-else type="text" class="form-control" id="nama_bank" :value="displayValue(termins[0].nama_bank)" disabled>
             </div>
             <div class="col-md-5">
               <label for="nomor_rekening" class="form-label">Nomor Rekening</label>
-              <input type="text" class="form-control" id="nomor_rekening" v-model="termins[0].nomor_rekening" :disabled="contract.stage_id.display_name !== 'Draft'">
+              <input v-if="contract.stage_id.display_name === 'Draft'" type="text" class="form-control" id="nomor_rekening" v-model="termins[0].nomor_rekening">
+              <input v-else type="text" class="form-control" id="nomor_rekening" :value="displayValue(termins[0].nomor_rekening)" disabled>
             </div>
             <div class="col-md-2">
               <div class="form-label">&nbsp;</div>
@@ -302,7 +304,11 @@ const fetchData = async () => {
 
     // Fetch termins and their syarat_termins
     if (contract.value.termin_ids.length > 0) {
-        const terminData = contract.value.termin_ids
+        const terminData = contract.value.termin_ids.map(termin => ({
+          ...termin,
+          nama_bank: inputValue(termin.nama_bank),
+          nomor_rekening: inputValue(termin.nomor_rekening),
+        }))
         termins.value = terminData;
     }
 
@@ -447,8 +453,8 @@ const updateBankInfo = async () =>{
   const targetTermin = termins.value[0];
   try {
     const filtered = {
-      nama_bank: targetTermin.nama_bank,
-      nomor_rekening: targetTermin.nomor_rekening
+      nama_bank: payloadValue(targetTermin.nama_bank),
+      nomor_rekening: payloadValue(targetTermin.nomor_rekening)
     };
     
     const specification = {
@@ -477,6 +483,22 @@ const openPdfViewer = (syaratId, syaratName) => {
 };
 
 onMounted(fetchData);
+
+const isEmptyValue = (value) => {
+  return value === false || value === null || value === undefined || value === ''
+};
+
+const displayValue = (value) => {
+  return isEmptyValue(value) ? '-' : value;
+};
+
+const inputValue = (value) => {
+  return isEmptyValue(value) ? '' : value;
+};
+
+const payloadValue = (value) => {
+  return isEmptyValue(value) ? false : value;
+};
 
 // Format currency function
 const formatCurrency = (amount) => {
