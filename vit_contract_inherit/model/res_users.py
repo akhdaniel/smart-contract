@@ -1,8 +1,35 @@
+import base64
+import io
+
+from PIL import Image, ImageDraw, ImageFont
+
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError, UserError
 
 class ResUsers(models.Model):
     _inherit = 'res.users'
+
+    entity_initials = fields.Char(
+        string='Entity Initials',
+        compute='_compute_entity_initials',
+        store=True,
+        readonly=True,
+        help='Singkatan entitas untuk tampilan profil, mis. Sumatera Utara -> SU.',
+    )
+    entity_avatar_html = fields.Html(
+        string='Entity Avatar',
+        compute='_compute_entity_avatar_html',
+        sanitize=False,
+    )
+    entity_avatar_generated = fields.Boolean(
+        string='Entity Avatar Generated',
+        default=False,
+    )
+    entity_avatar_manual = fields.Boolean(
+        string='Entity Avatar Manual',
+        default=False,
+        help='Menandai bahwa avatar diunggah manual sehingga tidak ditimpa avatar entitas.',
+    )
 
     multi_kanwil = fields.Many2many(
         'vit.kanwil',
@@ -29,6 +56,114 @@ class ResUsers(models.Model):
         compute='_compute_multi_kanca_domain',
         string='Multi Kanca Domain',
     )
+
+    @api.depends('name', 'multi_kanwil.name', 'multi_kanca.name')
+    def _compute_entity_initials(self):
+        ignored_words = {'kanwil', 'kanca', 'keuangan', 'umum'}
+
+        def _build_initials(source_name):
+            words = [word for word in (source_name or '').replace('-', ' ').split() if word]
+            filtered_words = [word for word in words if word.lower() not in ignored_words]
+            target_words = filtered_words or words
+
+            if not target_words:
+                return False
+
+            if len(target_words) == 1:
+                return target_words[0][:2].upper()
+
+            return ''.join(word[0].upper() for word in target_words[:3])
+
+        for rec in self:
+            source_name = False
+            if rec.multi_kanca:
+                source_name = rec.multi_kanca[0].name
+            elif rec.multi_kanwil:
+                source_name = rec.multi_kanwil[0].name
+            else:
+                source_name = rec.name
+
+            rec.entity_initials = _build_initials(source_name)
+
+    @api.depends('entity_initials')
+    def _compute_entity_avatar_html(self):
+        for rec in self:
+            initials = (rec.entity_initials or '?').upper()
+            bg_color = rec._get_entity_avatar_color(initials)
+            rec.entity_avatar_html = """
+                <div style="
+                    width: 84px;
+                    height: 84px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: %s;
+                    color: #FFFFFF;
+                    font-size: 32px;
+                    font-weight: 600;
+                    border-radius: 0;
+                    margin-left: auto;
+                    text-transform: uppercase;
+                ">%s</div>
+            """ % (bg_color, initials)
+
+    def _get_entity_avatar_color(self, initials):
+        colors = [
+            '#875A7B',
+            '#C78516',
+            '#2C8397',
+            '#3B7E3E',
+            '#7A4F01',
+            '#5E5E5E',
+        ]
+        color_index = sum(ord(char) for char in (initials or '')) % len(colors)
+        return colors[color_index]
+
+    def _generate_entity_avatar_image(self, initials):
+        initials = (initials or '?').upper()
+        bg_color = self._get_entity_avatar_color(initials)
+
+        image = Image.new('RGB', (256, 256), bg_color)
+        draw = ImageDraw.Draw(image)
+
+        font = None
+        for font_name in ['DejaVuSans-Bold.ttf', 'arialbd.ttf', 'Arial Bold.ttf']:
+            try:
+                font = ImageFont.truetype(font_name, 110)
+                break
+            except Exception:
+                continue
+        if not font:
+            font = ImageFont.load_default()
+
+        bbox = draw.textbbox((0, 0), initials, font=font)
+        text_width = bbox[2] - bbox[0]
+        text_height = bbox[3] - bbox[1]
+        position = (
+            (256 - text_width) / 2,
+            (256 - text_height) / 2 - 8,
+        )
+        draw.text(position, initials, fill='white', font=font)
+
+        output = io.BytesIO()
+        image.save(output, format='PNG')
+        return base64.b64encode(output.getvalue())
+
+    def _sync_entity_avatar(self, force=False):
+        for rec in self:
+            if not rec.partner_id or not rec.entity_initials:
+                continue
+            if rec.entity_avatar_manual and not force:
+                continue
+
+            avatar_image = rec._generate_entity_avatar_image(rec.entity_initials)
+            vals = {
+                'image_1920': avatar_image,
+                'entity_avatar_generated': True,
+                'entity_avatar_manual': False,
+            }
+            super(ResUsers, rec).write(vals)
+            rec.partner_id.sudo().write({'image_1920': avatar_image})
 
     @api.depends('multi_kanwil')
     def _compute_multi_kanca_domain(self):
@@ -149,10 +284,28 @@ class ResUsers(models.Model):
                     if kanca.kanwil_id:
                         user.write({'multi_kanwil': [(4, kanca.kanwil_id.id)]})
 
-
-
+        users._sync_entity_avatar(force=True)
 
         return users
+
+    def write(self, vals):
+        image_updated = 'image_1920' in vals
+        manual_image = bool(vals.get('image_1920')) if image_updated else False
+
+        if manual_image:
+            vals['entity_avatar_generated'] = False
+            vals['entity_avatar_manual'] = True
+        elif image_updated:
+            vals['entity_avatar_manual'] = False
+
+        result = super().write(vals)
+
+        tracked_fields = {'name', 'multi_kanwil', 'multi_kanca', 'image_1920'}
+        if tracked_fields.intersection(vals.keys()) and not manual_image:
+            force = image_updated and not vals.get('image_1920')
+            self._sync_entity_avatar(force=force)
+
+        return result
 
 
     # @api.model

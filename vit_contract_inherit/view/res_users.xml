@@ -10,6 +10,8 @@
                 <xpath expr="//div[@class='oe_title']//group/field[@name='partner_id']" position="after">
 
                     <field name="multi_kanca_domain_ids" invisible="1"/>
+                    <field name="entity_avatar_generated" invisible="1"/>
+                    <field name="entity_initials" readonly="1"/>
                     <field name="multi_kanwil" widget="many2many_tags"/>
                     <field name="multi_kanca" widget="many2many_tags"/>
 
@@ -30,6 +32,12 @@
                     <field name="allowed_kanca_domain_ids" invisible="1"/>
                     <field name="is_allowed_kanca_group" invisible="1"/>
                     <field name="allowed_kanca_id" invisible="not is_allowed_kanca_group" domain="[('id', 'in', allowed_kanca_domain_ids)]"/> -->
+                </xpath>
+
+                <xpath expr="//div[@class='oe_title']" position="after">
+                    <div class="d-flex justify-content-end mb-3" invisible="1">
+                        <field name="entity_avatar_html" widget="html" readonly="1" nolabel="1"/>
+                    </div>
                 </xpath>
 
 
