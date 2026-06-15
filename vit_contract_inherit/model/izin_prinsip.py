@@ -16,6 +16,11 @@ class izin_prinsip(models.Model):
         help='Nomor Tracker dari file import',
     )
 
+    server_deploy_test = fields.Char(
+        string='Tes Deploy Server',
+        default='FIELD TEST BERHASIL MUNCUL',
+    )
+
     created_by = fields.Many2one(
         'res.users',
         string='Dibuat Oleh',
@@ -380,4 +385,3 @@ class izin_prinsip(models.Model):
             'domain': ['|', ('addendum_origin_id', '=', root_id), ('id', '=', root_id)],
             'context': dict(self.env.context, active_test=False, default_addendum_origin_id=root_id),
         }
-

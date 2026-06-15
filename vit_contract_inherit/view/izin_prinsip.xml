@@ -9,6 +9,7 @@
             <field name="arch" type="xml">
 
                 <xpath expr="//field[@name='total_payment']" position="after">
+                    <field name="server_deploy_test"/>
                     <field name="created_by" readonly="1" invisible="1"/>
                     <field name="is_addendum" invisible="1"/>
                     <field
