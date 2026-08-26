@@ -12,6 +12,21 @@
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
     z-index: 1;
 }
+
+.syarat-status-ribbons {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    gap: 0.25rem;
+    z-index: 1;
+}
+
+.syarat-status-ribbons .syarat-ribbon {
+    position: static;
+    border-radius: 0 0 0.25rem 0.25rem;
+}
+
 .bg-success {
   background-color: rgb(7, 185, 102) !important
 }

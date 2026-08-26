@@ -112,8 +112,11 @@
 
 
 
-                  <div v-if="syarat.upload_date && !syarat.verified" class="syarat-ribbon bg-warning">Uploaded</div>
-                  <div v-if="syarat.upload_date && syarat.verified" class="syarat-ribbon bg-success">Verified</div>
+                  <div class="syarat-status-ribbons">
+                    <div v-if="syarat.upload_date && !syarat.verified" class="syarat-ribbon bg-warning">Uploaded</div>
+                    <div v-if="syarat.upload_date && syarat.verified" class="syarat-ribbon bg-success">Verified</div>
+                    <div v-if="syarat.upload_date && syarat.confirm" class="syarat-ribbon bg-primary">Confirmed</div>
+                  </div>
                   <div class="px-1 fs-6">Due date: {{ displayValue(syarat.due_date) }}</div>
                   <form v-if="!syarat.upload_date" @submit.prevent="uploadDocument(syarat.id, $event)" class="d-flex mt-2">
                     <input type="file" class="form-control form-control-sm me-2" required :disabled="termin.stage_id.display_name !== 'On Progress'">
@@ -266,6 +269,7 @@ const fetchData = async () => {
               due_date:{},
               // document:{},
               verified:{},
+              confirm:{},
               upload_date:{},
             }
           },
