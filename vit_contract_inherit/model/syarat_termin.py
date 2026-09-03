@@ -15,6 +15,10 @@ class syarat_termin(models.Model):
         string="Verified",
     )
 
+    confirm = fields.Boolean(
+        string="Confirm",
+    )
+
     termin_id = fields.Many2one(
         comodel_name="vit.termin",  
         string=_("Termin"), 
@@ -43,14 +47,10 @@ class syarat_termin(models.Model):
         readonly=True,
     )
 
-
-    def write(self, vals):
-        res = super(syarat_termin, self).write(vals)
-        if "verified" in vals or "confirm" in vals:
-            for rec in self:
-                if rec.termin_id:
-                    rec.termin_id._compute_verifikasi_syarat()
-        return res
+    correction_note = fields.Text(
+        string="Keterangan Koreksi",
+        tracking=True,
+    )
 
     @api.constrains('due_date', 'termin_id')
     def _check_due_date_not_exceed_termin(self):
@@ -146,6 +146,14 @@ class syarat_termin(models.Model):
 
     def write(self, vals):
         user_name = self.env.user.name or "Unknown User"
+        previous_values = {
+            rec.id: {
+                "document": bool(rec.document),
+                "verified": rec.verified,
+                "confirm": rec.confirm,
+            }
+            for rec in self
+        }
 
         if "document" in vals and "upload_date" not in vals:
             if vals.get("document"):
@@ -158,8 +166,29 @@ class syarat_termin(models.Model):
         for rec in self:
             kontrak = rec.termin_id.kontrak_id 
             termin = rec.termin_id
+            previous = previous_values.get(rec.id, {})
+            document_uploaded = (
+                "document" in vals
+                and bool(vals.get("document"))
+                and not previous.get("document")
+            )
+            verified_enabled = (
+                "verified" in vals
+                and rec.verified
+                and not previous.get("verified")
+            )
+            confirm_enabled = (
+                "confirm" in vals
+                and rec.confirm
+                and not previous.get("confirm")
+            )
 
-            if 'document' in vals and vals.get('document'):
+            if document_uploaded:
+                rec.message_post(
+                    body=_("Dokumen '%s' telah diupload oleh %s.") % (
+                        rec.name or "Tanpa Nama", user_name),
+                    message_type='comment'
+                )
                 if kontrak:
                     kontrak.message_post(
                         body=_("📎 Dokumen '%s' telah diupload oleh %s.") % (
@@ -173,7 +202,12 @@ class syarat_termin(models.Model):
                         message_type='comment'
                     )
 
-            if 'verified' in vals and vals.get('verified'):
+            if verified_enabled:
+                rec.message_post(
+                    body=_("Dokumen '%s' telah diverifikasi oleh %s.") % (
+                        rec.name or "Tanpa Nama", user_name),
+                    message_type='comment'
+                )
                 if kontrak:
                     kontrak.message_post(
                         body=_("✅ Dokumen '%s' telah diverifikasi oleh %s.") % (
@@ -187,7 +221,12 @@ class syarat_termin(models.Model):
                         message_type='comment'
                     )
 
-            if 'confirm' in vals and vals.get('confirm'):
+            if confirm_enabled:
+                rec.message_post(
+                    body=_("Dokumen '%s' telah dikonfirmasi oleh %s.") % (
+                        rec.name or "Tanpa Nama", user_name),
+                    message_type='comment'
+                )
                 if kontrak:
                     kontrak.message_post(
                         body=_("✔️ Dokumen '%s' telah dikonfirmasi oleh %s.") % (
@@ -200,6 +239,10 @@ class syarat_termin(models.Model):
                             rec.name or "Tanpa Nama", user_name),
                         message_type='comment'
                     )
+
+            if "verified" in vals or "confirm" in vals:
+                if termin:
+                    termin._compute_verifikasi_syarat()
 
         return res
 

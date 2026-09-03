@@ -22,5 +22,12 @@
             <field name="domain_force">[('termin_id.kontrak_id.partner_id', '=', user.partner_id.id)]</field>
         </record>
 
+        <record id="vit_kontrak_attachment_vendor_rule" model="ir.rule">
+            <field name="name">Dokumen Kontrak - Vendor Only</field>
+            <field name="model_id" ref="model_vit_kontrak_attachment"/>
+            <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_vendor'))]"/>
+            <field name="domain_force">[('kontrak_id.partner_id', '=', user.partner_id.id)]</field>
+        </record>
+
     </data>
 </odoo>

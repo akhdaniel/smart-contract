@@ -54,10 +54,15 @@ class budget_rkap(models.Model):
 
     jenis_penugasan = fields.Selection(
         selection=[('pso', 'Pso'), ('kom', 'Kom')],
-        string='Jenis Penugasan',
+        string='Segmentasi',
         related='master_budget_id.jenis_penugasan',
         store=True,
         readonly=True
+    )
+
+    tipe_kegiatan = fields.Selection(
+        selection=[('biaya', 'Biaya'), ('investasi', 'Investasi')],
+        string="KMA",
     )
 
 
@@ -115,7 +120,21 @@ class budget_rkap(models.Model):
     total_amount_droping = fields.Float(
         string="Total Amount Droping",
         compute="_compute_totals",
-        store=False,
+        store=True,
+    )
+
+    percent_realisasi_droping = fields.Float(
+        string="Persentase Realisasi RKAP terhadap Dropping",
+        compute="_compute_totals",
+        readonly=True,
+        store=True,
+    )
+
+    percent_realisasi_payment = fields.Float(
+        string="Persentase Realisasi RKAP terhadap Payment",
+        compute="_compute_totals",
+        readonly=True,
+        store=True,
     )
 
     @api.depends('budget_date')
@@ -194,6 +213,7 @@ class budget_rkap(models.Model):
 
 
     @api.depends(
+        "amount",
         "izin_prinsip_ids.total_pagu",
         "izin_prinsip_ids.stage_is_done",
         "kontrak_ids.amount_kontrak",
@@ -217,6 +237,8 @@ class budget_rkap(models.Model):
             rec.total_amount_kontrak = sum(kontrak_done.mapped("amount_kontrak"))
             rec.total_amount_payment = sum(payment_done.mapped("amount"))
             rec.total_amount_droping = total_droping
+            rec.percent_realisasi_droping = (total_droping / rec.amount * 100.0) if rec.amount else 0.0
+            rec.percent_realisasi_payment = (rec.total_amount_payment / rec.amount * 100.0) if rec.amount else 0.0
 
             rec.total_qty_izin_prinsip = len(izin_done)
             rec.total_qty_kontrak = len(rec.kontrak_ids)

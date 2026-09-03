@@ -58,8 +58,13 @@
                     <attribute name="force_save">1</attribute>
                 </xpath>
 
+                <xpath expr="//field[@name='total_amount_droping']" position="after">
+                    <field name="percent_realisasi_droping" widget="percentage" readonly="1"/>
+                    <field name="percent_realisasi_payment" widget="percentage" readonly="1"/>
+                </xpath>
+
                 <xpath expr="//field[@name='budget_date']" position="attributes">
-                    <attribute name="invisible">1</attribute>
+                    <attribute name="invisible">0</attribute>
                 </xpath>
 
                 <xpath expr="//field[@name='budget_date']" position="after">
@@ -91,6 +96,48 @@
                     <field name="total_pagu"/>
                 </xpath>
 
+            </field>
+        </record>
+
+        <record id="view_vit_budget_rkap_tree_inherit" model="ir.ui.view">
+            <field name="name">view.vit.budget.rkap.tree.inherit</field>
+            <field name="model">vit.budget_rkap</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_budget_rkap_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree/field[@name='total_amount_droping']" position="after">
+                    <field name="percent_realisasi_droping" widget="percentage"/>
+                    <field name="percent_realisasi_payment" widget="percentage"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_vit_budget_rkap_search_inherit" model="ir.ui.view">
+            <field name="name">view.vit.budget.rkap.search.inherit</field>
+            <field name="model">vit.budget_rkap</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_budget_rkap_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='filter_by_tipe_kegiatan']" position="attributes">
+                    <attribute name="string">KMA</attribute>
+                </xpath>
+                <xpath expr="//filter[@name='filter_by_jenis_penugasan']" position="attributes">
+                    <attribute name="string">Segmentasi</attribute>
+                </xpath>
+                <xpath expr="//filter[@name='group_by_tipe_kegiatan']" position="attributes">
+                    <attribute name="string">KMA</attribute>
+                </xpath>
+                <xpath expr="//filter[@name='group_by_jenis_penugasan']" position="attributes">
+                    <attribute name="string">Segmentasi</attribute>
+                </xpath>
+                <xpath expr="//search" position="inside">
+                    <filter string="Persentase Realisasi RKAP terhadap Dropping"
+                            name="filter_by_percent_realisasi_droping"
+                            domain="[('percent_realisasi_droping','=','')]"/>
+                    <filter string="Persentase Realisasi RKAP terhadap Payment"
+                            name="filter_by_percent_realisasi_payment"
+                            domain="[('percent_realisasi_payment','=','')]"/>
+                    <field name="percent_realisasi_droping" select="True"/>
+                    <field name="percent_realisasi_payment" select="True"/>
+                </xpath>
             </field>
         </record>
 

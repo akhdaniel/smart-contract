@@ -10,3 +10,20 @@
 .o_form_view .o_form_status_indicator_buttons .o_form_button_cancel i {
     font-size: 1.2rem;
 }
+
+.contract-attachments-grid .o_attachments {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 10px 12px;
+}
+
+.contract-attachments-grid .o_attachment_many2many {
+    flex: 0 0 92px;
+    margin: 0;
+}
+
+.contract-attachments-grid .oe_add {
+    clear: both;
+    padding-top: 8px;
+}

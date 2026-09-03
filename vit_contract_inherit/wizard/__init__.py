@@ -1,5 +1,6 @@
 #!/usr/bin/python
 from . import export_rkap_sarlog
 from . import rekap_ketersediaan_sarlog
+from . import realisasi_sarlog_dashboard
 from . import import_izin_prinsip
 from . import import_kompleks_pergudangan

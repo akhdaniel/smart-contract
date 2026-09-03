@@ -68,4 +68,3 @@ class payment(models.Model):
 
     def kirim_request_pembayaran(self, ):
         pass
-

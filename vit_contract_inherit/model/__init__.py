@@ -8,6 +8,7 @@ from . import state_budget
 from . import kanwil
 from . import kanca
 from . import kontrak
+from . import kontrak_attachment
 from . import kontrak_state
 from . import partner
 from . import payment

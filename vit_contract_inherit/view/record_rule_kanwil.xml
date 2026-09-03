@@ -26,7 +26,7 @@
             <field name="name">Droping - Multi Kanwil Only</field>
             <field name="model_id" ref="vit_contract.model_vit_droping"/>
             <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_kanwil'))]"/>
-            <field name="domain_force">[('termin_kontrak_ids.kontrak_id.kanwil_id', 'in', user.multi_kanwil.ids)]</field>
+            <field name="domain_force">[('kanwil_id', 'in', user.multi_kanwil.ids)]</field>
         </record>
 
         <record id="vit_master_users_kanwil_rule" model="ir.rule">
@@ -34,6 +34,20 @@
             <field name="model_id" ref="vit_contract.model_vit_master_users"/>
             <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_kanwil'))]"/>
             <field name="domain_force">[('kanwil_vendor', 'in', user.multi_kanwil.ids)]</field>
+        </record>
+
+        <record id="vit_kompleks_pergudangan_kanwil_rule" model="ir.rule">
+            <field name="name">Kompleks Pergudangan - Multi Kanwil Only</field>
+            <field name="model_id" ref="vit_contract.model_vit_kompleks_pergudangan"/>
+            <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_kanwil'))]"/>
+            <field name="domain_force">[('kanwil_id', 'in', user.multi_kanwil.ids)]</field>
+        </record>
+
+        <record id="vit_kontrak_attachment_kanwil_rule" model="ir.rule">
+            <field name="name">Dokumen Kontrak - Multi Kanwil Only</field>
+            <field name="model_id" ref="model_vit_kontrak_attachment"/>
+            <field name="groups" eval="[(4, ref('vit_contract_inherit.group_vit_contract_kanwil'))]"/>
+            <field name="domain_force">[('kontrak_id.kanwil_id', 'in', user.multi_kanwil.ids)]</field>
         </record>
 
     </data>

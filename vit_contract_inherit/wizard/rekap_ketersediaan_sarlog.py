@@ -178,24 +178,41 @@ class RekapKetersediaanSarlog(models.TransientModel):
         grouped_data = {'biaya': [], 'investasi': []}
         for item in dashboard_stats.get('master_list', []):
             mb = self.env['vit.master_budget'].browse(item.get('id'))
-            budgets = self.env['vit.budget_rkap'].search([
+            budget_records = self.env['vit.budget_rkap'].search([
                 ('master_budget_id', '=', mb.id),
                 ('budget_date', '>=', f'{year_filter}-01-01'),
                 ('budget_date', '<=', f'{year_filter}-12-31')
-            ], limit=1)
+            ])
+            budget = budget_records[:1]
             # determine category; default to biaya instead of Lainnya when no record
-            if budgets and budgets.tipe_kegiatan:
-                tipe = budgets.tipe_kegiatan
+            if budget and budget.tipe_kegiatan:
+                tipe = budget.tipe_kegiatan
             else:
                 tipe = 'biaya'
-            row_name = budgets.name if budgets and budgets.name else item.get('name')
-            rkap_val = item.get('pagu_izin_prinsip', 0) if item.get('realisasi', 0) > 0 else 0
-            # placeholders for the other two columns
+            row_name = budget.name if budget and budget.name else item.get('name')
+            rkap_val = sum(budget_records.mapped('amount'))
+            previous_budget_records = budget_records.mapped('previous_year_id')
+            if not previous_budget_records:
+                previous_budget_records = self.env['vit.budget_rkap'].search([
+                    ('master_budget_id', '=', mb.id),
+                    ('budget_date', '>=', f'{prev_year}-01-01'),
+                    ('budget_date', '<=', f'{prev_year}-12-31')
+                ])
+            sisa_pembayaran = max(
+                sum(previous_budget_records.mapped('total_amount_kontrak'))
+                - sum(previous_budget_records.mapped('total_amount_payment')),
+                0
+            )
+            izin_prinsip_done = self.env['vit.izin_prinsip'].search([
+                ('budget_id', 'in', budget_records.ids),
+                ('stage_is_done', '=', True),
+            ])
+            izin_terbit = sum(izin_prinsip_done.mapped('total_pagu'))
             grouped_data[tipe].append({
                 'name': row_name,
                 'rkap': rkap_val,
-                'sisa_pembayaran': 0,
-                'izin_terbit': 0,
+                'sisa_pembayaran': sisa_pembayaran,
+                'izin_terbit': izin_terbit,
             })
 
         # sort categories same order
@@ -233,7 +250,8 @@ class RekapKetersediaanSarlog(models.TransientModel):
                 rkap_val = item.get('rkap', 0)
                 sisa_val = item.get('sisa_pembayaran', 0)
                 izin_val = item.get('izin_terbit', 0)
-                saldo_val = rkap_val - (sisa_val + izin_val)
+                used_val = sisa_val + izin_val
+                saldo_val = rkap_val - used_val
 
                 ws[f'A{row}'].value = no
                 ws[f'B{row}'].value = item['name']
@@ -269,7 +287,8 @@ class RekapKetersediaanSarlog(models.TransientModel):
             ws[f'C{row}'].value = cat_sum_rkap
             ws[f'D{row}'].value = cat_sum_sisa
             ws[f'E{row}'].value = cat_sum_izin
-            ws[f'F{row}'].value = cat_sum_rkap - (cat_sum_sisa + cat_sum_izin)
+            cat_used = cat_sum_sisa + cat_sum_izin
+            ws[f'F{row}'].value = cat_sum_rkap - cat_used
             for col in ['A','B','C','D','E','F']:
                 ws[f'{col}{row}'].border = thin_border
                 ws[f'{col}{row}'].fill = right_fill

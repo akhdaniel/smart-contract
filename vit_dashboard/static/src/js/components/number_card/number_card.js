@@ -170,8 +170,10 @@ export class NumberCard extends Component {
             const budgetDateFilter = domain.find(d => d[0] === 'budget_date');
 
             const terminDomain = [
-                ['verified', '=', false],
                 ['document', '!=', false],
+                '|',
+                ['verified', '=', false],
+                ['confirm', '=', false],
             ];
 
             if (kanwilFilter) {
@@ -192,7 +194,7 @@ export class NumberCard extends Component {
 
             this.env.services.action.doAction({
                 type: 'ir.actions.act_window',
-                name: 'Syarat Termin Belum Diverifikasi',
+                name: 'Syarat Termin Belum Diverifikasi / Confirm',
                 res_model: 'vit.syarat_termin',
                 views: [[false, 'list'], [false, 'form']],
                 target: 'current',
@@ -291,4 +293,3 @@ export class NumberCard extends Component {
         }
     }
 }
-

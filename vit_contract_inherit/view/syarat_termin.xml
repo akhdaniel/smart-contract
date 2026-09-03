@@ -20,6 +20,14 @@
                 <xpath expr="//form/sheet/group" position="inside">
                     <field name="document" widget="pdf_viewer" invisible="not document"/>
                 </xpath>
+
+                <xpath expr="//sheet" position="after">
+                    <div class="oe_chatter"
+                        options="{'display_log_button': False, 'display_log_note_button': False, 'display_activity_button': False}">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </xpath>
                 
 
                 <xpath expr="//field[@name='nomor_kontrak']" position="replace"/>
@@ -46,19 +54,23 @@
                     <field name="due_date" readonly="1" groups="vit_contract_inherit.group_vit_contract_vendor"/>
                 </xpath>
 
+                <xpath expr="//field[@name='upload_date']" position="after">
+                    <field name="correction_note"/>
+                </xpath>
+
 
 
                 <xpath expr="//field[@name='verified']" position="replace">
-                    <field name="verified" groups="base.group_user,!vit_contract_inherit.group_vit_contract_vendor, !vit_contract_inherit.group_vit_contract_pusat_umum"/>
+                    <field name="verified" string="Diverifikasi oleh Kanwil / Kanca" groups="base.group_user,!vit_contract_inherit.group_vit_contract_vendor, !vit_contract_inherit.group_vit_contract_pusat_umum"/>
 
-                    <field name="verified" readonly="1" groups="vit_contract_inherit.group_vit_contract_vendor,vit_contract_inherit.group_vit_contract_pusat_umum"/>
+                    <field name="verified" string="Diverifikasi oleh Kanwil / Kanca" readonly="1" groups="vit_contract_inherit.group_vit_contract_vendor,vit_contract_inherit.group_vit_contract_pusat_umum"/>
                 </xpath>
 
 
                 <xpath expr="//field[@name='confirm']" position="replace">
-                    <field name="confirm" groups="base.group_user,!vit_contract_inherit.group_vit_contract_kanwil, !vit_contract_inherit.group_vit_contract_kanca, !vit_contract_inherit.group_vit_contract_kanwil_keuangan"/> 
+                    <field name="confirm" string="Dikonfirmasi oleh Pusat" groups="base.group_user,!vit_contract_inherit.group_vit_contract_kanwil, !vit_contract_inherit.group_vit_contract_kanca, !vit_contract_inherit.group_vit_contract_kanwil_keuangan"/>
 
-                    <field name="confirm" readonly="1" groups="vit_contract_inherit.group_vit_contract_kanwil,vit_contract_inherit.group_vit_contract_kanca,vit_contract_inherit.group_vit_contract_kanwil_keuangan"/>
+                    <field name="confirm" string="Dikonfirmasi oleh Pusat" readonly="1" groups="vit_contract_inherit.group_vit_contract_kanwil,vit_contract_inherit.group_vit_contract_kanca,vit_contract_inherit.group_vit_contract_kanwil_keuangan"/>
                 </xpath>
 
             </field>
@@ -78,6 +90,10 @@
 
                 <xpath expr="//field[@name='termin_id']" position="before">
                     <field name="master_syarat_termin_id"/>
+                </xpath>
+
+                <xpath expr="//field[@name='upload_date']" position="after">
+                    <field name="correction_note"/>
                 </xpath>
 
             </field>

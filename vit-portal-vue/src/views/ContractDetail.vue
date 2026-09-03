@@ -123,8 +123,35 @@
                     <button type="submit" class="btn btn-sm btn-secondary" :disabled="termin.stage_id.display_name !== 'On Progress'">Upload</button>
                   </form>
                 </li>
+                <li v-if="!termin.syarat_termin_ids.length" class="list-group-item">
+                  <div class="px-1 fs-5">-</div>
+                </li>
               </ul>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <h4 class="mt-4">Dokumen Kontrak</h4>
+      <div class="card mt-4 mb-4">
+        <div class="card-header">Dokumen Kontrak</div>
+        <div class="card-body">
+          <div v-if="contract.attachments.length" class="list-group">
+            <div v-for="attachment in contract.attachments" :key="attachment.id" class="list-group-item position-relative contract-doc-item">
+              <div class="px-1 fs-5">
+                <a href="#" @click.prevent="openContractAttachment(attachment)">
+                  {{ attachment.name }}
+                  <i class="px-2 fa-regular fa-eye"></i>
+                </a>
+              </div>
+              <div class="syarat-status-ribbons">
+                <div class="syarat-ribbon bg-warning">Uploaded</div>
+              </div>
+              <div class="px-1 fs-6">Upload date: {{ displayValue(formatDate(attachment.create_date)) }}</div>
+            </div>
+          </div>
+          <div v-else class="list-group-item">
+            <div class="px-1 fs-5">-</div>
           </div>
         </div>
       </div>
@@ -136,17 +163,17 @@
           <div class="row" v-if="termins.length > 0">
             <div class="col-md-5">
               <label for="nama_bank" class="form-label">Nama Bank</label>
-              <input v-if="contract.stage_id.display_name === 'Draft'" type="text" class="form-control" id="nama_bank" v-model="termins[0].nama_bank">
+              <input v-if="contract.stage_id.display_name === 'On Progress'" type="text" class="form-control" id="nama_bank" v-model="termins[0].nama_bank">
               <input v-else type="text" class="form-control" id="nama_bank" :value="displayValue(termins[0].nama_bank)" disabled>
             </div>
             <div class="col-md-5">
               <label for="nomor_rekening" class="form-label">Nomor Rekening</label>
-              <input v-if="contract.stage_id.display_name === 'Draft'" type="text" class="form-control" id="nomor_rekening" v-model="termins[0].nomor_rekening">
+              <input v-if="contract.stage_id.display_name === 'On Progress'" type="text" class="form-control" id="nomor_rekening" v-model="termins[0].nomor_rekening">
               <input v-else type="text" class="form-control" id="nomor_rekening" :value="displayValue(termins[0].nomor_rekening)" disabled>
             </div>
             <div class="col-md-2">
               <div class="form-label">&nbsp;</div>
-              <button class="form-control btn btn-primary" @click="updateBankInfo()" :disabled="contract.stage_id.display_name !== 'Draft'">Simpan</button>
+              <button class="form-control btn btn-primary" @click="updateBankInfo()" :disabled="contract.stage_id.display_name !== 'On Progress'">Simpan</button>
             </div>
           </div>
         </div>
@@ -246,6 +273,13 @@ const fetchData = async () => {
       kanca_id:{
         fields:{display_name:{}}
       },
+      attachments:{
+        fields:{
+          name:{},
+          create_date:{},
+          mimetype:{},
+        }
+      },
       termin_ids:{
         fields:{
           name:{},
@@ -305,6 +339,7 @@ const fetchData = async () => {
       throw new Error('Contract not found.');
     }
     contract.value = contractData[0];
+    contract.value.attachments = contract.value.attachments || [];
 
     // Fetch termins and their syarat_termins
     if (contract.value.termin_ids.length > 0) {
@@ -312,6 +347,7 @@ const fetchData = async () => {
           ...termin,
           nama_bank: inputValue(termin.nama_bank),
           nomor_rekening: inputValue(termin.nomor_rekening),
+          syarat_termin_ids: termin.syarat_termin_ids || [],
         }))
         termins.value = terminData;
     }
@@ -451,6 +487,10 @@ const getDownloadUrl = (syaratId, syaratName) => {
     return `${ODOO_URL}/web/content/vit.syarat_termin/${syaratId}/document?field=document&filename=${encodeURIComponent(syaratName)}`;
 }
 
+const getAttachmentUrl = (attachmentId, filename) => {
+  return `${ODOO_URL}/web/content/${attachmentId}?download=false&filename=${encodeURIComponent(filename || 'document.pdf')}`;
+}
+
 const updateBankInfo = async () =>{
   if (termins.value.length === 0) return;
   
@@ -486,6 +526,11 @@ const openPdfViewer = (syaratId, syaratName) => {
   showPdfModal.value = true;
 };
 
+const openContractAttachment = (attachment) => {
+  currentPdfUrl.value = getAttachmentUrl(attachment.id, attachment.name);
+  showPdfModal.value = true;
+};
+
 onMounted(fetchData);
 
 const isEmptyValue = (value) => {
@@ -494,6 +539,11 @@ const isEmptyValue = (value) => {
 
 const displayValue = (value) => {
   return isEmptyValue(value) ? '-' : value;
+};
+
+const formatDate = (value) => {
+  if (isEmptyValue(value)) return value;
+  return String(value).split(' ')[0];
 };
 
 const inputValue = (value) => {
@@ -525,3 +575,9 @@ const formatCurrency = (amount) => {
 };
 
 </script>
+
+<style scoped>
+.contract-doc-item {
+  min-height: 84px;
+}
+</style>

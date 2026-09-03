@@ -21,6 +21,7 @@
 	"summary": "",
 	"description": "",
 	"data": [
+        'data/res_lang.xml',
         'security/groups.xml',
         'security/ir.model.access.csv',
         'view/res_users.xml',
@@ -33,6 +34,7 @@
         "view/menu.xml",
 		'wizard/export_rkap_sarlog.xml',
         'wizard/rekap_ketersediaan_sarlog.xml',
+        'wizard/realisasi_sarlog_dashboard.xml',
         'wizard/import_izin_prinsip.xml',
         'wizard/import_kompleks_pergudangan.xml',
         # "view/menu_operation.xml",
@@ -45,10 +47,12 @@
         "view/izin_prinsip.xml",
         "view/izin_prinsip_line.xml",
 		"view/payment.xml",
+        "report/payment_process_reports.xml",
 		"view/syarat_termin.xml",
         "view/termin.xml",
         "view/droping.xml",
         "view/kanwil_provinsi.xml",
+        "view/search_filter_cleanup.xml",
         
 	],
 	"assets": {

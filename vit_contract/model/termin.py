@@ -13,7 +13,7 @@ class termin(models.Model):
     def action_reload_view(self):
         pass
 
-    name = fields.Char( required=True, copy=False, default="New", readonly=True,  string=_("Name"))
+    name = fields.Char(required=True, copy=False, string=_("Name"))
     nilai = fields.Float( string=_("Nilai"))
     persentase = fields.Float( string=_("Persentase"))
     deskripsi = fields.Text( string=_("Deskripsi"))
@@ -37,8 +37,8 @@ class termin(models.Model):
     @api.model_create_multi
     def create(self, vals):
         for val in vals:
-            if not val.get("name", False) or val["name"] == "New":
-                val["name"] = self.env["ir.sequence"].next_by_code("vit.termin") or "Error Number!!!"
+            if not val.get("name") or val["name"] == "New":
+                raise UserError(_("Termin Name wajib diisi manual."))
         return super(termin, self).create(vals)
 
     def _get_first_stage(self):

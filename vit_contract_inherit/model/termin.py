@@ -1,6 +1,7 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
 import logging
+import re
 _logger = logging.getLogger(__name__)
 
 class termin(models.Model):
@@ -51,11 +52,104 @@ class termin(models.Model):
         string=_("Verification Date"),
     )
 
+    work_finish_date = fields.Date(
+        string=_("Tanggal Selesai Pekerjaan"),
+        tracking=True,
+    )
+
+    contract_attachment_ids = fields.One2many(
+        comodel_name="vit.kontrak_attachment",
+        inverse_name="termin_id",
+        string="Dokumen Kontrak",
+    )
+
     def action_delete_line(self):
         for rec in self:
             rec.unlink()
         return True
-    
+
+    def get_payment_sequence_word(self):
+        self.ensure_one()
+        termin_name = self.master_nama_termin_id.name or self.name or ""
+        match = re.search(r"\d+", termin_name)
+        if not match:
+            return ""
+        number = int(match.group(0))
+        sequence_words = {
+            1: "pertama",
+            2: "kedua",
+            3: "ketiga",
+            4: "keempat",
+            5: "kelima",
+            6: "keenam",
+            7: "ketujuh",
+            8: "kedelapan",
+            9: "kesembilan",
+            10: "kesepuluh",
+        }
+        return sequence_words.get(number, "ke-%s" % number)
+
+    def _number_to_indonesian_words(self, number):
+        number = int(number or 0)
+        words = [
+            "",
+            "satu",
+            "dua",
+            "tiga",
+            "empat",
+            "lima",
+            "enam",
+            "tujuh",
+            "delapan",
+            "sembilan",
+            "sepuluh",
+            "sebelas",
+        ]
+
+        if number < 12:
+            return words[number]
+        if number < 20:
+            return "%s belas" % self._number_to_indonesian_words(number - 10)
+        if number < 100:
+            return "%s puluh %s" % (
+                self._number_to_indonesian_words(number // 10),
+                self._number_to_indonesian_words(number % 10),
+            )
+        if number < 200:
+            return "seratus %s" % self._number_to_indonesian_words(number - 100)
+        if number < 1000:
+            return "%s ratus %s" % (
+                self._number_to_indonesian_words(number // 100),
+                self._number_to_indonesian_words(number % 100),
+            )
+        if number < 2000:
+            return "seribu %s" % self._number_to_indonesian_words(number - 1000)
+        if number < 1000000:
+            return "%s ribu %s" % (
+                self._number_to_indonesian_words(number // 1000),
+                self._number_to_indonesian_words(number % 1000),
+            )
+        if number < 1000000000:
+            return "%s juta %s" % (
+                self._number_to_indonesian_words(number // 1000000),
+                self._number_to_indonesian_words(number % 1000000),
+            )
+        if number < 1000000000000:
+            return "%s miliar %s" % (
+                self._number_to_indonesian_words(number // 1000000000),
+                self._number_to_indonesian_words(number % 1000000000),
+            )
+        return "%s triliun %s" % (
+            self._number_to_indonesian_words(number // 1000000000000),
+            self._number_to_indonesian_words(number % 1000000000000),
+        )
+
+    def get_nilai_terbilang(self):
+        self.ensure_one()
+        amount = int(round(self.nilai or 0.0))
+        words = " ".join(self._number_to_indonesian_words(amount).split())
+        return "%s Rupiah" % (words.title() if words else "Nol")
+
     @api.depends("syarat_termin_ids.verified", "syarat_termin_ids.confirm")
     def _compute_verifikasi_syarat(self):
         for rec in self:
@@ -120,6 +214,15 @@ class termin(models.Model):
         if "is_droping_done" in vals and vals["is_droping_done"] is False:
             vals["droping_id"] = False
         return super(termin, self).write(vals)
+
+    def _ensure_done_for_print(self):
+        for rec in self:
+            if not rec.stage_is_done:
+                raise UserError(_("Cetak hanya bisa dilakukan jika termin sudah Done."))
+
+    def action_print_nota_verifikasi(self):
+        self._ensure_done_for_print()
+        return self.env.ref("vit_contract_inherit.action_report_termin_nota_verifikasi").report_action(self)
 
 
     # def action_confirm(self):
@@ -322,4 +425,3 @@ class TerminInherit(models.Model):
         return models.BaseModel.copy(self, default)
     
     
-

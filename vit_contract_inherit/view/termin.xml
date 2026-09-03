@@ -23,6 +23,14 @@
                     <attribute name="groups">vit_contract.group_vit_contract_user,vit_contract.group_vit_contract_manager,vit_contract_inherit.group_vit_contract_kanwil,vit_contract_inherit.group_vit_contract_kanca</attribute>
                 </xpath>
 
+                <xpath expr="//header/field[@name='stage_id']" position="before">
+                    <button name="action_print_nota_verifikasi"
+                            string="Cetak Nota Verifikasi"
+                            type="object"
+                            icon="fa-print"
+                            invisible="stage_is_done==False"/>
+                </xpath>
+
 
                 <!-- <xpath expr="//page[@name='syarat_termin_ids']//field[@name='syarat_termin_ids']//tree//field[@name='master_syarat_termin_id']" position="attributes">
                     <attribute name="column_invisible">1</attribute>
@@ -48,6 +56,7 @@
                 <xpath expr="//field[@name='droping_id']" position="attributes">
                     <attribute name="readonly">1</attribute>
                      <attribute name="force_save">1</attribute>
+                     <attribute name="invisible">1</attribute>
                 </xpath>
 
                 <!-- <xpath expr="//field[@name='document']" position="attributes">
@@ -55,15 +64,19 @@
                 </xpath> -->
 
                 <!-- <xpath expr="//field[@name='verifikasi_syarat']" position="replace"/> -->
+                <xpath expr="(//field[@name='kontrak_id'])[1]" position="replace"/>
+                <xpath expr="//field[@name='partner_id']" position="replace"/>
                 <xpath expr="//field[@name='nomor_kontrak']" position="replace"/>
                 <xpath expr="//field[@name='deskripsi']" position="replace"/>
                 <xpath expr="//field[@name='due_date']" position="replace"/>
-                <xpath expr="//field[@name='kontrak_id']" position="after">
+                <xpath expr="//field[@name='master_nama_termin_id']" position="after">
                     <!-- <field name="verifikasi_syarat" invisible="1"/> -->
-                    <field name="nomor_kontrak" readonly="1"/>
+                    <field name="partner_id" readonly="1" force_save="1"/>
+                    <field name="work_finish_date"/>
+                    <field name="droping_id" readonly="1" force_save="1"/>
                     <field name="deskripsi"/>
-                    <field name="nama_bank" readonly="1"/>
-                    <field name="nomor_rekening" readonly="1"/>
+                    <field name="nama_bank" invisible="1"/>
+                    <field name="nomor_rekening" invisible="1"/>
                 </xpath>
 
 
@@ -103,6 +116,7 @@
                 </xpath>
 
                 <xpath expr="//page[@name='syarat_termin_ids']//tree//field[@name='upload_date']" position="after">
+                    <field name="correction_note"/>
                     <button name="action_open_syarat_termin" string="Open" type="object" class="oe_highlight"/>
                 </xpath>
 
@@ -200,6 +214,8 @@
                     <field name="actual_progress" invisible="type_kontrak != 'fisik'" readonly="1" groups="base.group_user,!vit_contract_inherit.group_vit_contract_vendor"/>
                         
                     <field name="actual_progress" invisible="type_kontrak != 'fisik'" groups="vit_contract_inherit.group_vit_contract_vendor"/>
+                    <field name="kontrak_id" invisible="type_kontrak != 'fisik'" readonly="1" force_save="1"/>
+                    <field name="nomor_kontrak" invisible="type_kontrak != 'fisik'" readonly="1"/>
                 </xpath>
 
                 <xpath expr="//field[@name='syarat_output']" position="replace">
@@ -212,6 +228,8 @@
                     <field name="actual_output" invisible="type_kontrak != 'non_fisik'" readonly="1" groups="base.group_user,!vit_contract_inherit.group_vit_contract_vendor"/>
                         
                     <field name="actual_output" invisible="type_kontrak != 'non_fisik'" groups="vit_contract_inherit.group_vit_contract_vendor"/>
+                    <field name="kontrak_id" invisible="type_kontrak != 'non_fisik'" readonly="1" force_save="1"/>
+                    <field name="nomor_kontrak" invisible="type_kontrak != 'non_fisik'" readonly="1"/>
                 </xpath>
 
                                 
@@ -235,6 +253,7 @@
                 <xpath expr="//tree/field[@name='persentase']" position="replace"/>
                 <xpath expr="//tree/field[@name='nilai']" position="replace"/>
                 <xpath expr="//tree/field[@name='stage_id']" position="after">
+                    <field name="work_finish_date"/>
                     <field name="persentase"/>
                     <field name="nilai"/>
                 </xpath>

@@ -7,79 +7,27 @@
       <field name="arch" type="xml">
 
         <xpath expr="//header/button[@name='action_confirm']" position="replace">
-          <!-- Untuk Kanwil & Kanca -->
-          <!-- <button name="action_confirm"
+          <button name="action_confirm"
                   string="Confirm"
                   type="object"
                   class="oe_highlight"
                   icon="fa-check-circle"
-                  groups="vit_contract_inherit.group_vit_contract_kanwil,
-                          vit_contract_inherit.group_vit_contract_kanca,
-                          vit_contract.group_vit_contract_user,
+                  groups="vit_contract_inherit.group_vit_contract_kanwil_keuangan,
+                          vit_contract_inherit.group_vit_contract_pusat_keuangan,
                           vit_contract.group_vit_contract_manager"
-                  invisible="stage_is_draft==False or stage_is_confirmed==True or stage_is_on_progress==True"/> -->
-
-          <!-- Untuk Kanwil Keuangan -->
-          <button name="action_confirm"
-                  string="Confirm"
-                  type="object"
-                  class="oe_highlight"
-                  icon="fa-check-circle"
-                  groups="vit_contract.group_vit_contract_user,
-                          vit_contract.group_vit_contract_manager,
-                          vit_contract_inherit.group_vit_contract_kanwil_keuangan"
-                  invisible="stage_is_draft==False and stage_is_confirmed==False or stage_is_on_progress==True"/>
-
-          <!-- Untuk Pusat Keuangan -->
-          <button name="action_confirm"
-                  string="Confirm"
-                  type="object"
-                  class="oe_highlight"
-                  icon="fa-check-circle"
-                  groups="vit_contract.group_vit_contract_user,
-                          vit_contract.group_vit_contract_manager,
-                          vit_contract_inherit.group_vit_contract_pusat_keuangan"
-                  invisible="stage_is_draft==True or stage_is_confirmed==True or stage_is_on_progress==False"/>
+                  invisible="allow_confirm==False"/>
         </xpath>
 
 
 
         <xpath expr="//header/button[@name='action_cancel']" position="replace">
-          <!-- Untuk Kanwil & Kanca -->
-          <!-- <button name="action_cancel"
-                  string="Cancel"
-                  type="object"
-                  groups="vit_contract_inherit.group_vit_contract_kanwil,
-                          vit_contract_inherit.group_vit_contract_kanca,
-                          vit_contract.group_vit_contract_user,
-                          vit_contract.group_vit_contract_manager"
-                  invisible="stage_is_draft==True or stage_is_confirmed==True or stage_is_on_progress==True"/> -->
-
-          <!-- Untuk Kanwil Keuangan -->
           <button name="action_cancel"
                   string="Cancel"
                   type="object"
-                  groups="vit_contract.group_vit_contract_user,
-                          vit_contract.group_vit_contract_manager,
-                          vit_contract_inherit.group_vit_contract_kanwil_keuangan"
-                  invisible="stage_is_draft==True or stage_is_confirmed==False or stage_is_on_progress==True"/>
-
-          <!-- Untuk Pusat Keuangan -->
-          <button name="action_cancel"
-                  string="Cancel"
-                  type="object"
-                  groups="vit_contract.group_vit_contract_user,
-                          vit_contract.group_vit_contract_manager,
+                  icon="fa-times-circle"
+                  groups="vit_contract_inherit.group_vit_contract_kanwil_keuangan,
                           vit_contract_inherit.group_vit_contract_pusat_keuangan"
-                  invisible="stage_is_draft==True or stage_is_confirmed==True or stage_is_on_progress==False"/>
-
-          <button name="action_cancel"
-                  string="Cancel"
-                  type="object"
-                  groups="vit_contract.group_vit_contract_user,
-                          vit_contract.group_vit_contract_manager,
-                          vit_contract_inherit.group_vit_contract_pusat_keuangan"
-                  invisible="stage_is_draft==True or stage_is_confirmed==True or stage_is_on_progress==True or stage_is_done==False"/>
+                  invisible="allow_cancel==False"/>
         </xpath>
 
 
@@ -106,6 +54,24 @@
           <attribute name="invisible">stage_is_on_progress==False</attribute>
         </xpath>
 
+        <xpath expr="//header/field[@name='stage_id']" position="before">
+          <button name="action_add_available_termins"
+                  string="Ambil Semua Termin"
+                  type="object"
+                  icon="fa-list"
+                  invisible="stage_is_draft==False"/>
+          <button name="action_print_lembar_realokasi"
+                  string="Cetak Realokasi"
+                  type="object"
+                  icon="fa-print"
+                  invisible="stage_is_done==False"/>
+          <button name="action_print_nota_permintaan_dropping"
+                  string="Cetak Permintaan Dropping"
+                  type="object"
+                  icon="fa-print"
+                  invisible="stage_is_done==False"/>
+        </xpath>
+
 
 
 
@@ -129,6 +95,39 @@
 
         <xpath expr="//field[@name='droping_date']" position="attributes">
           <attribute name="readonly">1</attribute>
+        </xpath>
+
+        <xpath expr="//page[@name='termin_kontrak_ids']/field[@name='termin_kontrak_ids']" position="replace">
+          <field name="droping_line_ids" readonly="stage_is_draft==False">
+            <tree editable="bottom">
+              <field name="filter_kontrak_id"
+                     domain="[('kanwil_id','=',parent.kanwil_id),
+                              ('master_budget_id','=',parent.master_budget_id)]"/>
+              <field name="termin_id"
+                     domain="[('kontrak_id','=',filter_kontrak_id),
+                              ('stage_is_done','=',False),
+                              ('droping_id','=',False),
+                              ('is_in_droping_line','=',False)]"/>
+              <field name="kontrak_id" column_invisible="1"/>
+              <field name="nomor_kontrak"/>
+              <field name="name" column_invisible="1"/>
+              <field name="nilai"/>
+              <field name="master_nama_termin_id"/>
+              <field name="persentase"/>
+              <field name="deskripsi"/>
+              <field name="partner_id"/>
+              <field name="syarat_progress"/>
+              <field name="actual_progress"/>
+              <field name="syarat_output"/>
+              <field name="actual_output"/>
+              <field name="stage_id"/>
+              <button name="action_open_termin"
+                      type="object"
+                      string="Open"
+                      class="btn-primary"
+                      invisible="not termin_id"/>
+            </tree>
+          </field>
         </xpath>
         
 

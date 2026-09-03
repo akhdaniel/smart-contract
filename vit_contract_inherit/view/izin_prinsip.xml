@@ -9,7 +9,7 @@
             <field name="arch" type="xml">
 
                 <xpath expr="//field[@name='total_payment']" position="after">
-                    <field name="server_deploy_test"/>
+                    <field name="server_deploy_test" invisible="1"/>
                     <field name="created_by" readonly="1" invisible="1"/>
                     <field name="is_addendum" invisible="1"/>
                     <field
@@ -52,8 +52,17 @@
                     <attribute name="readonly">1</attribute>
                 </xpath>
 
+                <xpath expr="//field[@name='amount_budget']" position="after">
+                    <field name="tipe_kegiatan" readonly="1" invisible="1"/>
+                    <field name="jenis_penugasan" readonly="1" invisible="1"/>
+                </xpath>
+
                 <xpath expr="//field[@name='amount_budget_remaining']" position="attributes">
                     <attribute name="readonly">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='amount_budget_remaining']" position="after">
+                    <field name="batas_waktu_izin_prinsip" invisible="1"/>
                 </xpath>
 
                 
@@ -61,8 +70,20 @@
                     <attribute name="readonly">1</attribute>
                 </xpath>
 
+                <xpath expr="//field[@name='total_pagu']" position="after">
+                    <field name="total_qty_izin_prinsip" readonly="1" invisible="1"/>
+                    <field name="total_amount_kontrak" readonly="1" invisible="1"/>
+                    <field name="total_qty_kontrak" readonly="1" invisible="1"/>
+                </xpath>
+
                 <xpath expr="//field[@name='total_payment']" position="attributes">
                     <attribute name="readonly">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='total_payment']" position="after">
+                    <field name="total_amount_droping" readonly="1" invisible="1"/>
+                    <field name="previous_remaining" readonly="1" invisible="1"/>
+                    <field name="batas_waktu_izin_prinsip"/>
                 </xpath>
 
                 <!-- <xpath expr="//field[@name='kontrak_ids']/tree/field[@name='amount_izin_prinsip']" position="attributes">
@@ -138,6 +159,27 @@
             <field name="model">vit.izin_prinsip</field>
             <field name="inherit_id" ref="vit_contract.view_vit_izin_prinsip_tree"/>
             <field name="arch" type="xml">
+                <xpath expr="//tree/field[@name='amount_budget']" position="after">
+                    <field name="tipe_kegiatan"/>
+                    <field name="jenis_penugasan"/>
+                </xpath>
+                <xpath expr="//tree/field[@name='amount_budget']" position="attributes">
+                    <attribute name="string">Amount</attribute>
+                </xpath>
+                <xpath expr="//tree/field[@name='amount_budget_remaining']" position="after">
+                    <field name="batas_waktu_izin_prinsip"/>
+                </xpath>
+                <xpath expr="//tree/field[@name='total_pagu']" position="after">
+                    <field name="total_qty_izin_prinsip"/>
+                    <field name="total_amount_kontrak"/>
+                    <field name="total_qty_kontrak"/>
+                </xpath>
+                <xpath expr="//tree/field[@name='total_payment']" position="after">
+                    <field name="total_amount_droping"/>
+                    <field name="percent_realisasi_droping" widget="percentage"/>
+                    <field name="percent_realisasi_payment" widget="percentage"/>
+                    <field name="previous_remaining"/>
+                </xpath>
                 <xpath expr="//tree" position="inside">
                     <button
                         name="%(vit_contract_inherit.action_import_izin_prinsip_wizard)d"
@@ -145,6 +187,41 @@
                         string="📥 Import dari Excel"
                         invisible="1"
                         class="oe_highlight"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_vit_izin_prinsip_search_inherit" model="ir.ui.view">
+            <field name="name">vit.izin.prinsip.search.inherit</field>
+            <field name="model">vit.izin_prinsip</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_izin_prinsip_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//search" position="inside">
+                    <filter string="KMA" name="filter_by_tipe_kegiatan" domain="[('tipe_kegiatan','=','')]"/>
+                    <filter string="Segmentasi" name="filter_by_jenis_penugasan" domain="[('jenis_penugasan','=','')]"/>
+                    <filter string="Batas Waktu Izin Prinsip" name="filter_by_batas_waktu_izin_prinsip" domain="[('batas_waktu_izin_prinsip','=','')]"/>
+                    <filter string="Total Qty Izin Prinsip" name="filter_by_total_qty_izin_prinsip" domain="[('total_qty_izin_prinsip','=','')]"/>
+                    <filter string="Total Amount Kontrak" name="filter_by_total_amount_kontrak" domain="[('total_amount_kontrak','=','')]"/>
+                    <filter string="Total Qty Kontrak" name="filter_by_total_qty_kontrak" domain="[('total_qty_kontrak','=','')]"/>
+                    <filter string="Total Amount Droping" name="filter_by_total_amount_droping" domain="[('total_amount_droping','=','')]"/>
+                    <filter string="Persentase Realisasi RKAP terhadap Dropping" name="filter_by_percent_realisasi_droping" domain="[('percent_realisasi_droping','=','')]"/>
+                    <filter string="Persentase Realisasi RKAP terhadap Payment" name="filter_by_percent_realisasi_payment" domain="[('percent_realisasi_payment','=','')]"/>
+                    <filter string="Previous Remaining" name="filter_by_previous_remaining" domain="[('previous_remaining','=','')]"/>
+                    <field name="tipe_kegiatan" select="True"/>
+                    <field name="jenis_penugasan" select="True"/>
+                    <field name="batas_waktu_izin_prinsip" select="True"/>
+                    <field name="total_qty_izin_prinsip" select="True"/>
+                    <field name="total_amount_kontrak" select="True"/>
+                    <field name="total_qty_kontrak" select="True"/>
+                    <field name="total_amount_droping" select="True"/>
+                    <field name="percent_realisasi_droping" select="True"/>
+                    <field name="percent_realisasi_payment" select="True"/>
+                    <field name="previous_remaining" select="True"/>
+                </xpath>
+                <xpath expr="//filter[@name='group_by_kanwil_id']" position="after">
+                    <filter string="KMA" domain="[]" name="group_by_tipe_kegiatan" context="{'group_by':'tipe_kegiatan'}"/>
+                    <filter string="Segmentasi" domain="[]" name="group_by_jenis_penugasan" context="{'group_by':'jenis_penugasan'}"/>
+                    <filter string="Batas Waktu Izin Prinsip" domain="[]" name="group_by_batas_waktu_izin_prinsip" context="{'group_by':'batas_waktu_izin_prinsip'}"/>
                 </xpath>
             </field>
         </record>

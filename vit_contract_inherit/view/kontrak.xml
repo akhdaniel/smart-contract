@@ -185,6 +185,7 @@
                     <field name="kanwil_id"/>
                     <field name="kanca_id"/>
                     <field name="kompleks_id"
+                        readonly="stage_is_draft==False"
                         domain="[('kanwil_id','in',[kanwil_id]),
                                     ('kanca_id','in',[kanca_id])]"/>
                 </xpath>
@@ -194,9 +195,14 @@
                     <attribute name="required">1</attribute>
                 </xpath>
 
+                <xpath expr="//page[@name='termin_ids']//tree/field[@name='name']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+
                 <xpath expr="//page[@name='termin_ids']//tree/field[@name='deskripsi']" position="replace"/>
                 <xpath expr="//page[@name='termin_ids']//tree/field[@name='master_nama_termin_id']" position="after">
                     <field name="deskripsi"/>
+                    <field name="work_finish_date"/>
                 </xpath>
 
                 <xpath expr="//page[@name='termin_ids']//tree/field[@name='partner_id']" position="replace"/>
@@ -268,7 +274,7 @@
 
 
                     <page name="attachments_tab" string="Attachments">
-                        <field name="attachments" widget="many2many_binary_preview" string="Attachments"/>
+                        <field name="attachments" widget="many2many_binary_preview" string="Dokumen Kontrak" class="contract-attachments-grid"/>
                     </page>
                 </xpath>
 

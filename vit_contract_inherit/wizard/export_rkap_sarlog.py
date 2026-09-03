@@ -37,10 +37,8 @@ class ExportRkapSarlog(models.TransientModel):
         except ImportError:
             raise Exception("openpyxl library not found. Please install it.")
 
-        # Use dashboard statistics (per-master budget) so export follows the same
-        # logic that the Sarlog dashboard uses.  get_statistics_sarlog already
-        # applies the "only count pagu when there is a realisasi" rule for totals
-        # and returns a list of master budgets with aggregated values.
+        # Use dashboard statistics for the REALISASI values. RKAP values below
+        # are taken directly from Budget RKAP amount for the selected year.
         year_filter = int(self.year)
         dashboard_stats = self.env['vit.budget_rkap'].get_statistics_sarlog(year_filter)
         overall_percentage = dashboard_stats.get('total_summary', {}).get('persen', 0)
@@ -49,37 +47,32 @@ class ExportRkapSarlog(models.TransientModel):
         # Group again by tipe_kegiatan so we can keep the same A/B sections.
         grouped_data = {}
         for item in dashboard_stats.get('master_list', []):
-            # look up the master record and at least one budget record to know the
-            # tipe_kegiatan and to borrow the budget_rkap name.  If no budget
-            # exists for the year, fall back to the master name.
             mb = self.env['vit.master_budget'].browse(item.get('id'))
-            budgets = self.env['vit.budget_rkap'].search([
+            budget_records = self.env['vit.budget_rkap'].search([
                 ('master_budget_id', '=', mb.id),
                 ('budget_date', '>=', f'{year_filter}-01-01'),
                 ('budget_date', '<=', f'{year_filter}-12-31')
-            ], limit=1)
-            tipe = budgets.tipe_kegiatan if budgets and budgets.tipe_kegiatan else 'Lainnya'
+            ])
+            budget = budget_records[:1]
+            tipe = budget.tipe_kegiatan if budget and budget.tipe_kegiatan else 'Lainnya'
             if tipe not in grouped_data:
                 grouped_data[tipe] = []
 
             # use the budget_rkap's name if available, otherwise fall back
             # to the master budget name stored in the dashboard data.
-            row_name = budgets.name if budgets and budgets.name else item.get('name')
+            row_name = budget.name if budget and budget.name else item.get('name')
 
-            # item['pagu_izin_prinsip'] comes directly from get_statistics_sarlog
-            # which already sums total_pagu_izin_prinsip for all budgets of that
-            # master.  The dashboard intentionally zeroes this value when there is
-            # no realisasi, so mirror that behaviour here too.
-            pagu = item.get('pagu_izin_prinsip', 0)
-            if item.get('realisasi', 0) <= 0:
-                pagu = 0
+            # RKAP must show Budget RKAP amount even when there is no payment realization yet.
+            # The REALISASI columns below still follow total_amount_payment.
+            rkap_amount = sum(budget_records.mapped('amount'))
+            jenis_penugasan = budget.jenis_penugasan if budget and budget.jenis_penugasan else mb.jenis_penugasan
 
-            # split into PSO/KOM based on the master budget's jenis_penugasan
+            # split into PSO/KOM based on Budget RKAP's segmentasi/jenis_penugasan
             realisasi = item.get('realisasi', 0)
-            real_pso = realisasi if mb.jenis_penugasan == 'pso' else 0
-            real_kom = realisasi if mb.jenis_penugasan == 'kom' else 0
-            pso_val = pagu if mb.jenis_penugasan == 'pso' else 0
-            kom_val = pagu if mb.jenis_penugasan == 'kom' else 0
+            real_pso = realisasi if jenis_penugasan == 'pso' else 0
+            real_kom = realisasi if jenis_penugasan == 'kom' else 0
+            pso_val = rkap_amount if jenis_penugasan == 'pso' else 0
+            kom_val = rkap_amount if jenis_penugasan == 'kom' else 0
 
             # progress was already computed by dashboard helper, but recalc just
             # to have a numeric value (not string) for formatting later.
@@ -87,9 +80,9 @@ class ExportRkapSarlog(models.TransientModel):
 
             grouped_data[tipe].append({
                 'name': row_name,
-                'amount': pagu,
-                'jenis_penugasan': mb.jenis_penugasan,
-                'total_pagu_izin_prinsip': pagu,
+                'amount': rkap_amount,
+                'jenis_penugasan': jenis_penugasan,
+                'total_pagu_izin_prinsip': rkap_amount,
                 'realisasi_pso': real_pso,
                 'realisasi_kom': real_kom,
                 'total_realisasi': realisasi,
@@ -297,8 +290,8 @@ class ExportRkapSarlog(models.TransientModel):
                 ws[f'H{row}'].value = real_total
                 ws[f'I{row}'].value = progress
 
-                # Calculate SALDO = TOTAL RKAP - TOTAL REALISASI
-                saldo = total_val - real_total
+                # SALDO is shown only after there is a realization value.
+                saldo = total_val - real_total if real_total > 0 else 0
                 ws[f'J{row}'].value = saldo
 
                 # choose fill for data area to the right based on category
@@ -356,8 +349,8 @@ class ExportRkapSarlog(models.TransientModel):
             ws[f'I{row}'].value = category_percentage
             ws[f'I{row}'].number_format = '0.00'
             
-            # Calculate SALDO for category
-            category_saldo = category_subtotal - category_real_total
+            # SALDO is shown only after there is a realization value.
+            category_saldo = category_subtotal - category_real_total if category_real_total > 0 else 0
             ws[f'J{row}'].value = category_saldo
             ws[f'J{row}'].number_format = '#,##0'
             

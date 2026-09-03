@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, api
+from odoo.osv import expression
 import logging
 from datetime import date
 _logger = logging.getLogger(__name__)
@@ -8,6 +9,150 @@ from .tools import domain_to_sql, process_domain
 
 class BudgetRkap(models.Model):
     _inherit = 'vit.budget_rkap'
+
+    def _fmt_amount(self, amount):
+        return "{:,.0f}".format(amount or 0.0).replace(",", ".")
+
+    @api.model
+    def get_sarlog_kanwil_dashboard(self, master_budget_id=False, year=False):
+        year = int(year or date.today().year)
+        previous_year = year - 1
+        Budget = self.env["vit.budget_rkap"].sudo()
+        Kanwil = self.env["vit.kanwil"].sudo()
+        IzinPrinsip = self.env["vit.izin_prinsip"].sudo()
+        Kontrak = self.env["vit.kontrak"].sudo()
+        Payment = self.env["vit.payment"].sudo()
+        Droping = self.env["vit.droping"].sudo()
+
+        master_budgets = self.env["vit.master_budget"].sudo().search([], order="sequence, name")
+        if not master_budget_id and master_budgets:
+            master_budget_id = master_budgets[0].id
+        selected_master = self.env["vit.master_budget"].sudo().browse(master_budget_id) if master_budget_id else False
+
+        current_budget_domain = [
+            ("budget_date", ">=", "%s-01-01" % year),
+            ("budget_date", "<=", "%s-12-31" % year),
+        ]
+        previous_budget_domain = [
+            ("budget_date", ">=", "%s-01-01" % previous_year),
+            ("budget_date", "<=", "%s-12-31" % previous_year),
+        ]
+        if master_budget_id:
+            current_budget_domain.append(("master_budget_id", "=", master_budget_id))
+            previous_budget_domain.append(("master_budget_id", "=", master_budget_id))
+
+        current_budgets = Budget.search(current_budget_domain)
+        previous_budgets = Budget.search(previous_budget_domain)
+        kanwils = Kanwil.search([], order="name")
+        rows = []
+
+        totals = {
+            "previous_payment": 0.0,
+            "ip_qty": 0,
+            "ip_pagu": 0.0,
+            "tl_belum": 0,
+            "tl_sudah": 0,
+            "contract": 0.0,
+            "droping": 0.0,
+        }
+
+        for kanwil in kanwils:
+            previous_contracts = Kontrak.search([
+                ("budget_rkap_id", "in", previous_budgets.ids),
+                ("kanwil_id", "=", kanwil.id),
+            ])
+            previous_payments = Payment.search([
+                ("budget_rkap_id", "in", previous_budgets.ids),
+                ("kanwil_id", "=", kanwil.id),
+                ("stage_is_done", "=", True),
+            ])
+            previous_payment = max(
+                sum(previous_contracts.mapped("amount_kontrak")) - sum(previous_payments.mapped("amount")),
+                0.0,
+            )
+
+            izin_prinsip = IzinPrinsip.search([
+                ("budget_id", "in", current_budgets.ids),
+                ("kanwil_id", "=", kanwil.id),
+                ("stage_is_done", "=", True),
+            ])
+            kontraks = Kontrak.search([
+                ("budget_rkap_id", "in", current_budgets.ids),
+                ("kanwil_id", "=", kanwil.id),
+            ])
+            droping_domain = expression.AND([
+                [("master_budget_id", "=", master_budget_id), ("kanwil_id", "=", kanwil.id)],
+                expression.OR([
+                    [("droping_date", ">=", "%s-01-01" % year), ("droping_date", "<=", "%s-12-31" % year)],
+                    [("date", ">=", "%s-01-01" % year), ("date", "<=", "%s-12-31" % year)],
+                ]),
+            ])
+            dropings = Droping.search(droping_domain) if master_budget_id else Droping.browse()
+
+            ip_qty = len(izin_prinsip)
+            contract_qty = len(kontraks)
+            ip_pagu = sum(izin_prinsip.mapped("total_pagu"))
+            tl_belum = max(ip_qty - contract_qty, 0)
+            tl_sudah = min(contract_qty, ip_qty) if ip_qty else contract_qty
+            tl_percent = (tl_sudah / ip_qty * 100.0) if ip_qty else 0.0
+            contract_amount = sum(kontraks.mapped("amount_kontrak"))
+            droping_amount = sum(dropings.mapped("jumlah"))
+            base_droping = previous_payment + ip_pagu
+            droping_percent = (droping_amount / base_droping * 100.0) if base_droping else 0.0
+
+            totals["previous_payment"] += previous_payment
+            totals["ip_qty"] += ip_qty
+            totals["ip_pagu"] += ip_pagu
+            totals["tl_belum"] += tl_belum
+            totals["tl_sudah"] += tl_sudah
+            totals["contract"] += contract_amount
+            totals["droping"] += droping_amount
+
+            rows.append({
+                "kanwil": kanwil.name,
+                "previous_payment": previous_payment,
+                "previous_payment_fmt": self._fmt_amount(previous_payment),
+                "ip_qty": ip_qty,
+                "ip_pagu": ip_pagu,
+                "ip_pagu_fmt": self._fmt_amount(ip_pagu),
+                "tl_belum": tl_belum,
+                "tl_sudah": tl_sudah,
+                "tl_percent": round(tl_percent, 2),
+                "contract": contract_amount,
+                "contract_fmt": self._fmt_amount(contract_amount),
+                "droping": droping_amount,
+                "droping_fmt": self._fmt_amount(droping_amount),
+                "droping_percent": round(droping_percent, 2),
+            })
+
+        total_tl_percent = (
+            totals["tl_sudah"] / totals["ip_qty"] * 100.0
+            if totals["ip_qty"] else 0.0
+        )
+        total_base_droping = totals["previous_payment"] + totals["ip_pagu"]
+        total_droping_percent = (
+            totals["droping"] / total_base_droping * 100.0
+            if total_base_droping else 0.0
+        )
+
+        return {
+            "title": "%s %s" % (selected_master.name if selected_master else "SARLOG", year),
+            "year": year,
+            "master_budgets": [{"id": mb.id, "name": mb.name} for mb in master_budgets],
+            "selected_master_budget_id": master_budget_id,
+            "rows": rows,
+            "totals": {
+                "previous_payment_fmt": self._fmt_amount(totals["previous_payment"]),
+                "ip_qty": totals["ip_qty"],
+                "ip_pagu_fmt": self._fmt_amount(totals["ip_pagu"]),
+                "tl_belum": totals["tl_belum"],
+                "tl_sudah": totals["tl_sudah"],
+                "tl_percent": round(total_tl_percent, 2),
+                "contract_fmt": self._fmt_amount(totals["contract"]),
+                "droping_fmt": self._fmt_amount(totals["droping"]),
+                "droping_percent": round(total_droping_percent, 2),
+            },
+        }
 
     @api.model
     def get_statistics(self, domain=None, field=None, limit=10, offset=0):
@@ -130,11 +275,10 @@ class BudgetRkap(models.Model):
             kontrak_ids_filtered = kontrak_list.ids
 
             # domain termin
-            termin_domain = [
-                ('kontrak_id', 'in', kontrak_ids_filtered),
-                ('verified', '=', False),
-                ('document', '!=', False),
-            ]
+            termin_domain = expression.AND([
+                [('kontrak_id', 'in', kontrak_ids_filtered), ('document', '!=', False)],
+                expression.OR([[('verified', '=', False)], [('confirm', '=', False)]]),
+            ])
 
             total_qty_termin = self.env['vit.syarat_termin'].search_count(termin_domain)
 
@@ -824,16 +968,3 @@ class BudgetRkap(models.Model):
             })
 
         return result
-
-
-
-
-
-
-
-
-
-
-
-
-            

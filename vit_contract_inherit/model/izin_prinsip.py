@@ -54,21 +54,81 @@ class izin_prinsip(models.Model):
         readonly=True,
     )
 
+    tipe_kegiatan = fields.Selection(
+        related="budget_id.tipe_kegiatan",
+        string="KMA",
+        readonly=True,
+    )
+
+    jenis_penugasan = fields.Selection(
+        related="budget_id.jenis_penugasan",
+        string="Segmentasi",
+        readonly=True,
+    )
+
     amount_budget_remaining = fields.Float(
-        string="Amount Budget Remaining",
+        string="Remaining",
         related="budget_id.remaining",
         readonly=True,
     )
 
+    batas_waktu_izin_prinsip = fields.Date(
+        string="Batas Waktu Izin Prinsip",
+    )
+
     total_pagu = fields.Float(
-        string="Total Pagu",
+        string="Total Pagu Izin Prinsip",
         compute="_compute_total_pagu",
         store=True,
     )
 
+    total_qty_izin_prinsip = fields.Integer(
+        string="Total Qty Izin Prinsip",
+        compute="_compute_summary_totals",
+        store=True,
+    )
+
+    total_amount_kontrak = fields.Float(
+        string="Total Amount Kontrak",
+        compute="_compute_summary_totals",
+        store=True,
+    )
+
+    total_qty_kontrak = fields.Integer(
+        string="Total Qty Kontrak",
+        compute="_compute_summary_totals",
+        store=True,
+    )
+
     total_payment = fields.Float(
-        string="Total Payment",
+        string="Total Amount Payment",
         compute="_compute_total_payment",
+        store=True,
+    )
+
+    total_amount_droping = fields.Float(
+        string="Total Amount Droping",
+        compute="_compute_summary_totals",
+        readonly=True,
+        store=True,
+    )
+
+    percent_realisasi_droping = fields.Float(
+        string="Persentase Realisasi RKAP terhadap Dropping",
+        related="budget_id.percent_realisasi_droping",
+        readonly=True,
+    )
+
+    percent_realisasi_payment = fields.Float(
+        string="Persentase Realisasi RKAP terhadap Payment",
+        related="budget_id.percent_realisasi_payment",
+        readonly=True,
+    )
+
+    previous_remaining = fields.Float(
+        string="Previous Remaining",
+        related="budget_id.previous_remaining",
+        readonly=True,
         store=True,
     )
 
@@ -236,6 +296,29 @@ class izin_prinsip(models.Model):
     def _compute_total_pagu(self):
         for rec in self:
             rec.total_pagu = sum(job.total_pagu_job for job in rec.job_izin_prinsip_ids)
+
+    @api.depends(
+        "kontrak_ids.amount_kontrak",
+        "kontrak_ids.stage_is_done",
+        "budget_id",
+        "kanwil_id",
+    )
+    def _compute_summary_totals(self):
+        Droping = self.env["vit.droping"].sudo()
+        for rec in self:
+            kontrak_done = rec.kontrak_ids.filtered(lambda k: k.stage_is_done)
+            rec.total_qty_izin_prinsip = 1 if rec.id else 0
+            rec.total_amount_kontrak = sum(kontrak_done.mapped("amount_kontrak"))
+            rec.total_qty_kontrak = len(rec.kontrak_ids)
+
+            total_droping = 0.0
+            if rec.budget_id and rec.kanwil_id:
+                dropings = Droping.search([
+                    ("master_budget_id", "=", rec.budget_id.master_budget_id.id),
+                    ("kanwil_id", "=", rec.kanwil_id.id),
+                ])
+                total_droping = sum(dropings.mapped("jumlah"))
+            rec.total_amount_droping = total_droping
 
     # @api.constrains("total_pagu", "budget_id")
     # def _check_total_pagu_vs_budget(self):

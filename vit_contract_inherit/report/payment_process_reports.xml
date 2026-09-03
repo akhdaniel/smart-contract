@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_report_droping_lembar_realokasi" model="ir.actions.report">
+            <field name="name">Lembar Realokasi Anggaran</field>
+            <field name="model">vit.droping</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">vit_contract_inherit.report_droping_lembar_realokasi</field>
+            <field name="report_file">vit_contract_inherit.report_droping_lembar_realokasi</field>
+            <field name="print_report_name">'Lembar Realokasi Anggaran - %s' % (object.name)</field>
+        </record>
+
+        <record id="action_report_droping_nota_permintaan" model="ir.actions.report">
+            <field name="name">Nota Permintaan Dropping</field>
+            <field name="model">vit.droping</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">vit_contract_inherit.report_droping_nota_permintaan</field>
+            <field name="report_file">vit_contract_inherit.report_droping_nota_permintaan</field>
+            <field name="print_report_name">'Nota Permintaan Dropping - %s' % (object.name)</field>
+        </record>
+
+        <record id="action_report_termin_nota_verifikasi" model="ir.actions.report">
+            <field name="name">Nota Verifikasi</field>
+            <field name="model">vit.termin</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">vit_contract_inherit.report_termin_nota_verifikasi</field>
+            <field name="report_file">vit_contract_inherit.report_termin_nota_verifikasi</field>
+            <field name="print_report_name">'Nota Verifikasi - %s' % (object.name)</field>
+        </record>
+
+        <template id="process_report_style">
+            <style>
+                .sc-report { font-family: Arial, sans-serif; font-size: 13px; color: #000; }
+                .sc-report .doc-title { font-size: 21px; font-weight: 700; text-align: center; text-decoration: underline; text-transform: uppercase; }
+                .sc-report .doc-number { font-size: 13px; font-weight: 700; text-align: center; margin-bottom: 48px; }
+                .sc-report .center-meta { width: 360px; margin: 28px auto 34px; font-weight: 700; }
+                .sc-report .center-meta td { padding: 3px 6px; }
+                .sc-report .meta-table, .sc-report .boxed-table, .sc-report .paraf-table, .sc-report .signature-table { width: 100%; border-collapse: collapse; }
+                .sc-report .memo-meta { width: 720px; margin: 0 auto 20px; }
+                .sc-report .memo-meta td { padding: 2px 8px; vertical-align: top; }
+                .sc-report .boxed-table { margin: 0 auto; }
+                .sc-report .boxed-table td, .sc-report .boxed-table th { border: 1px solid #000; padding: 7px 8px; vertical-align: top; }
+                .sc-report .boxed-table th { text-align: center; font-weight: 700; }
+                .sc-report .label-cell { width: 210px; font-weight: 700; }
+                .sc-report .colon-cell { width: 26px; text-align: center; }
+                .sc-report .tgl-cell { width: 42px; text-align: center; }
+                .sc-report .date-cell { width: 150px; text-align: center; }
+                .sc-report .amount { text-align: right; white-space: nowrap; }
+                .sc-report .checkbox { display: inline-block; width: 11px; height: 11px; border: 1px solid #000; margin-right: 4px; vertical-align: -1px; }
+                .sc-report .checked::after { content: "✓"; position: relative; top: -4px; left: 1px; font-size: 14px; }
+                .sc-report .work-box { padding: 0 !important; }
+                .sc-report .nested-table { width: 100%; border-collapse: collapse; }
+                .sc-report .nested-table td, .sc-report .nested-table th { border: 1px solid #000; padding: 7px 8px; }
+                .sc-report .nested-table tr:first-child td, .sc-report .nested-table tr:first-child th { border-top: 0; }
+                .sc-report .nested-table tr td:first-child, .sc-report .nested-table tr th:first-child { border-left: 0; }
+                .sc-report .nested-table tr td:last-child, .sc-report .nested-table tr th:last-child { border-right: 0; }
+                .sc-report .paraf-table { width: 210px; margin-top: 56px; }
+                .sc-report .paraf-table td, .sc-report .paraf-table th { border: 1px solid #000; padding: 5px 8px; }
+                .sc-report .signature-block { float: right; width: 300px; text-align: center; margin-top: 30px; }
+                .sc-report .signature-space { height: 82px; }
+                .sc-report .clear { clear: both; }
+                .sc-report .verification-title { font-size: 16px; font-weight: 700; text-align: center; border-top: 2px solid #000; border-bottom: 2px solid #000; padding: 7px 0; margin: 18px 0; }
+            </style>
+        </template>
+
+        <template id="report_droping_lembar_realokasi_document">
+            <t t-call="web.basic_layout">
+                <t t-set="doc" t-value="doc.with_context({'lang': lang})"/>
+                <t t-call="vit_contract_inherit.process_report_style"/>
+                <div class="page sc-report">
+                    <div class="doc-title">Lembar Realokasi Anggaran</div>
+                    <t t-set="first_termin" t-value="doc.droping_line_ids[:1].termin_id or doc.termin_kontrak_ids[:1]"/>
+                    <table class="center-meta">
+                        <tr>
+                            <td>No. List Realokasi</td>
+                            <td>:</td>
+                            <td><span t-field="doc.name"/></td>
+                        </tr>
+                        <tr>
+                            <td>Kanwil</td>
+                            <td>:</td>
+                            <td><span t-field="doc.kanwil_id"/></td>
+                        </tr>
+                    </table>
+
+                    <t t-set="budget_rkap" t-value="first_termin.kontrak_id.budget_rkap_id if first_termin else False"/>
+                    <table class="boxed-table" style="width: 780px;">
+                        <tbody>
+                            <tr>
+                                <td class="label-cell">Segmentasi</td>
+                                <td class="colon-cell">:</td>
+                                <td colspan="4" style="text-align:center;">
+                                    <span t-att-class="'checkbox checked' if budget_rkap and budget_rkap.jenis_penugasan == 'pso' else 'checkbox'"></span> PSO
+                                    <span style="display:inline-block;width:45px;"></span>
+                                    <span t-att-class="'checkbox checked' if budget_rkap and budget_rkap.jenis_penugasan == 'kom' else 'checkbox'"></span> KOM
+                                    <span style="display:inline-block;width:45px;"></span>
+                                    <span t-att-class="'checkbox checked' if budget_rkap and budget_rkap.tipe_kegiatan == 'biaya' else 'checkbox'"></span> BIAYA
+                                    <span style="display:inline-block;width:45px;"></span>
+                                    <span t-att-class="'checkbox checked' if budget_rkap and budget_rkap.tipe_kegiatan == 'investasi' else 'checkbox'"></span> INVESTASI
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">Dokumen Usulan</td>
+                                <td class="colon-cell">:</td>
+                                <td colspan="2">
+                                    <span t-if="first_termin and first_termin.kontrak_id.izin_prinsip_id" t-field="first_termin.kontrak_id.izin_prinsip_id.name"/>
+                                    <span t-if="not first_termin or not first_termin.kontrak_id.izin_prinsip_id">-</span>
+                                </td>
+                                <td class="tgl-cell">Tgl</td>
+                                <td class="date-cell"><span t-esc="first_termin.kontrak_id.izin_prinsip_id.create_date.date() if first_termin and first_termin.kontrak_id.izin_prinsip_id.create_date else ''"/></td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">Dokumen Persetujuan</td>
+                                <td class="colon-cell">:</td>
+                                <td colspan="2">
+                                    <span t-if="first_termin and first_termin.kontrak_id.nomor_kontrak" t-field="first_termin.kontrak_id.nomor_kontrak"/>
+                                    <span t-if="not first_termin or not first_termin.kontrak_id.nomor_kontrak">-</span>
+                                </td>
+                                <td class="tgl-cell">Tgl</td>
+                                <td class="date-cell"><span t-esc="first_termin.kontrak_id.start_date if first_termin and first_termin.kontrak_id.start_date else ''"/></td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">Nama Pekerjaan</td>
+                                <td class="colon-cell">:</td>
+                                <td colspan="4" class="work-box">
+                                    <table class="nested-table">
+                                        <tr>
+                                            <td colspan="2" style="border-left:0;border-right:0;">
+                                                <span t-if="first_termin" t-field="first_termin.kontrak_id"/>
+                                                <span t-if="not first_termin">-</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Lokasi Realokasi</th>
+                                            <th>Nominal</th>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:center;"><span t-field="doc.kanwil_id"/></td>
+                                            <td class="amount">Rp <span t-esc="'{:,.0f}'.format(doc.jumlah or 0.0)"/></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">Total Nilai Realokasi</td>
+                                <td class="colon-cell">:</td>
+                                <td colspan="4" class="amount"><strong>Rp <span t-esc="'{:,.0f}'.format(doc.jumlah or 0.0)"/></strong></td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">Kegiatan</td>
+                                <td class="colon-cell">:</td>
+                                <td colspan="4">
+                                    <span t-if="first_termin" t-field="first_termin.kontrak_id.job_izin_prinsip_id"/>
+                                    <span t-if="not first_termin">-</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">RKAP</td>
+                                <td class="colon-cell">:</td>
+                                <td colspan="4"><span t-esc="doc.date.year if doc.date else ''"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="paraf-table">
+                        <tr><th colspan="2">Kolom Paraf</th></tr>
+                        <tr><td>Manajer</td><td style="width:70px;height:24px;"></td></tr>
+                        <tr><td>Asman</td><td style="height:24px;"></td></tr>
+                    </table>
+
+                    <div class="signature-block">
+                        <div>Jakarta, <span t-esc="doc.droping_date or doc.date or ''"/></div>
+                        <div class="signature-space"></div>
+                        <div><strong><u>JOKO PAMUNGKAS</u></strong></div>
+                        <div>Kepala Divisi Umum</div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </t>
+        </template>
+
+        <template id="report_droping_nota_permintaan_document">
+            <t t-call="web.basic_layout">
+                <t t-set="doc" t-value="doc.with_context({'lang': lang})"/>
+                <t t-call="vit_contract_inherit.process_report_style"/>
+                <div class="page sc-report">
+                    <t t-set="first_termin" t-value="doc.droping_line_ids[:1].termin_id or doc.termin_kontrak_ids[:1]"/>
+                    <div class="doc-title">Nota Permintaan Dropping</div>
+                    <div class="doc-number"><span t-field="doc.name"/></div>
+                    <table class="meta-table">
+                        <tr>
+                            <td width="14%">Kepada Yth.</td>
+                            <td width="2%">:</td>
+                            <td>Kadiv Treasury / Keuangan</td>
+                        </tr>
+                        <tr>
+                            <td>Dari</td>
+                            <td>:</td>
+                            <td>Kadiv Umum</td>
+                        </tr>
+                        <tr>
+                            <td>Perihal</td>
+                            <td>:</td>
+                            <td>
+                                Pembayaran
+                                <span t-if="first_termin" t-field="first_termin.master_nama_termin_id"/>
+                                <span t-if="first_termin"> pekerjaan </span>
+                                <span t-if="first_termin" t-field="first_termin.kontrak_id"/>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <br/>
+                    <table class="boxed-table" style="width: 860px;">
+                        <tbody>
+                            <tr>
+                                <td class="label-cell">RKAP</td>
+                                <td class="colon-cell">:</td>
+                                <td><span t-esc="doc.date.year if doc.date else ''"/></td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">Proposal/Usulan</td>
+                                <td class="colon-cell">:</td>
+                                <td>
+                                    Surat Perintah Kerja No.
+                                    <span t-if="first_termin and first_termin.kontrak_id.nomor_kontrak" t-field="first_termin.kontrak_id.nomor_kontrak"/>
+                                    <span t-if="not first_termin or not first_termin.kontrak_id.nomor_kontrak">-</span>
+                                    <span t-if="first_termin and first_termin.kontrak_id.start_date"> Tgl <span t-field="first_termin.kontrak_id.start_date"/></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">Persetujuan</td>
+                                <td class="colon-cell">:</td>
+                                <td>Direktur SDM dan Umum</td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">Kegiatan</td>
+                                <td class="colon-cell">:</td>
+                                <td>
+                                    Pembayaran
+                                    <span t-if="first_termin" t-field="first_termin.master_nama_termin_id"/>
+                                    <span t-if="first_termin"> pekerjaan </span>
+                                    <span t-if="first_termin" t-field="first_termin.kontrak_id"/>
+                                    <span t-if="not first_termin">-</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell"></td>
+                                <td class="colon-cell"></td>
+                                <td style="padding:0;">
+                                    <table class="nested-table">
+                                        <tr>
+                                            <td><strong><span t-field="doc.kanwil_id"/></strong></td>
+                                            <td width="50">Rp.</td>
+                                            <td class="amount"><strong><span t-esc="'{:,.0f}'.format(doc.jumlah or 0.0)"/></strong></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">Jumlah dana yg ditransfer</td>
+                                <td class="colon-cell">:</td>
+                                <td><strong>Rp. <span t-esc="'{:,.0f}'.format(doc.jumlah or 0.0)"/></strong></td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">Terbilang</td>
+                                <td class="colon-cell">:</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">Kode Mata Anggaran</td>
+                                <td class="colon-cell">:</td>
+                                <td><span t-field="doc.master_budget_id"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p style="margin-top: 18px;">
+                        Demikian disampaikan, atas perhatian dan kerja sama Saudara diucapkan terima kasih.
+                    </p>
+
+                    <table class="paraf-table">
+                        <tr><th colspan="2">Kolom Paraf</th></tr>
+                        <tr><td>Kasubdiv</td><td style="width:70px;height:24px;"></td></tr>
+                        <tr><td>Kasi</td><td style="height:24px;"></td></tr>
+                    </table>
+
+                    <div class="signature-block">
+                        <div>Jakarta Selatan, <span t-esc="doc.droping_date or doc.date or ''"/></div>
+                        <div class="signature-space"></div>
+                        <div><strong><u>JOKO PAMUNGKAS</u></strong></div>
+                        <div>KADIV UMUM</div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </t>
+        </template>
+
+        <template id="report_termin_nota_verifikasi_document">
+            <t t-call="web.basic_layout">
+                <t t-set="doc" t-value="doc.with_context({'lang': lang})"/>
+                <t t-call="vit_contract_inherit.process_report_style"/>
+                <div class="page sc-report" style="font-size:11px;">
+                    <table style="width:100%; border-collapse:collapse; margin-bottom:8px;">
+                        <tr>
+                            <td style="width:34%; vertical-align:top; padding-top:10px;">
+                                <div style="font-size:31px;font-weight:700;line-height:1;">bulog</div>
+                                <div style="font-size:10px; margin-top:1px;">
+                                    <span t-esc="doc.kontrak_id.start_date.year if doc.kontrak_id.start_date else (doc.due_date.year if doc.due_date else '')"/>
+                                </div>
+                                <table style="border-collapse:collapse; margin-top:7px; font-size:10px;">
+                                    <tr>
+                                        <td style="width:52px;">Nomor</td>
+                                        <td style="width:8px;">:</td>
+                                        <td style="min-width:160px; border-bottom:1px solid #000;"><span t-esc="doc.name or ''"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tanggal</td>
+                                        <td>:</td>
+                                        <td style="border-bottom:1px solid #000;"><span t-esc="doc.verification_date or doc.write_date.date() if doc.write_date else ''"/></td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td style="width:34%; text-align:center; vertical-align:top;">
+                                <div style="font-family:'Times New Roman', serif; font-size:30px; font-weight:700; letter-spacing:1px; margin-top:22px;">NOTA VERIFIKASI</div>
+                                <div style="font-size:13px; font-weight:700;">BIAYA LANGSUNG</div>
+                            </td>
+                            <td style="width:32%; vertical-align:top; padding-top:6px;">
+                                <table style="width:100%; border-collapse:collapse; font-size:10px;">
+                                    <tr>
+                                        <td style="width:36%; height:58px; border:1px solid #000; padding:6px; vertical-align:top;">Diterima</td>
+                                        <td style="width:40%; border:1px solid #000; padding:6px; vertical-align:top;">
+                                            <div>Agenda No.</div>
+                                            <div>Tgl/Jam</div>
+                                            <div>Paraf terima</div>
+                                        </td>
+                                        <td style="width:24%; border:1px solid #000; padding:6px; vertical-align:middle; text-align:center; font-weight:700;">
+                                            <span t-esc="doc.due_date.year if doc.due_date else ''"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table style="width:100%; border-collapse:collapse; margin-top:10px; font-size:10px;">
+                        <tr>
+                            <th style="width:50%; border-top:2px solid #000; border-bottom:2px solid #000; border-right:1px solid #000; padding:4px; text-align:center;">
+                                VERIFIKASI TEKNIS DAN KOMTABEL
+                            </th>
+                            <th style="width:50%; border-top:2px solid #000; border-bottom:2px solid #000; padding:4px; text-align:center;">
+                                VERIFIKASI PEMBAYARAN
+                            </th>
+                        </tr>
+                        <tr>
+                            <td style="width:50%; border-right:1px solid #000; border-bottom:1px solid #000; padding:0; vertical-align:top;">
+                                <table style="width:100%; border-collapse:collapse;">
+                                    <tr>
+                                        <td style="width:68%; border-bottom:1px solid #000; padding:4px;">
+                                            <div>Tagihan Dari :</div>
+                                            <div><span t-esc="request.env.user.name"/></div>
+                                        </td>
+                                        <td style="width:32%; border-left:1px solid #000; border-bottom:1px solid #000; padding:4px; text-align:center;">
+                                            <div>Jumlah</div>
+                                            <div>Rp <span t-esc="'{:,.0f}'.format(doc.nilai or 0.0)"/></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="border-bottom:1px solid #000; padding:0;">
+                                            <table style="width:100%; border-collapse:collapse;">
+                                                <tr>
+                                                    <td style="width:24%; border-right:1px solid #000; padding:4px; vertical-align:top;">
+                                                        <div>Kontrak/Order</div>
+                                                        <div style="margin-top:8px;">No. &amp; Tgl</div>
+                                                    </td>
+                                                    <td style="width:76%; padding:4px; vertical-align:top; line-height:1.45;">
+                                                        <t t-set="termin_sequence" t-value="doc.get_payment_sequence_word()"/>
+                                                        <t t-if="doc.master_nama_termin_id.type == 'is_retensi'">
+                                                            Permohonan Pembayaran Retensi
+                                                            <span t-field="doc.name"/>,
+                                                            Permohonan Pembayaran Retensi
+                                                        </t>
+                                                        <t t-else="">
+                                                            Permohonan Pembayaran
+                                                            <span t-field="doc.master_nama_termin_id"/>
+                                                            <span t-field="doc.name"/>,
+                                                            Permohonan Pembayaran
+                                                            <span t-if="termin_sequence" t-esc="termin_sequence"/>
+                                                            <span t-if="not termin_sequence" t-field="doc.master_nama_termin_id"/>
+                                                        </t>
+                                                        sebesar
+                                                        <span t-esc="'{:,.0f}'.format(doc.persentase or 0.0)"/>%,
+                                                        <span t-field="doc.kontrak_id.name"/>
+                                                        dari
+                                                        <span t-field="doc.kontrak_id.kanwil_id"/>
+                                                        dengan
+                                                        <span t-field="doc.partner_id"/>,
+                                                        Kontrak No.
+                                                        <span t-field="doc.nomor_kontrak"/>
+                                                        Tgl
+                                                        <span t-field="doc.kontrak_id.start_date"/>.
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="border-bottom:1px solid #000; padding:4px;">
+                                            Kode Mata Anggaran
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="border-bottom:1px solid #000; padding:4px;">
+                                            Bukti yang dilampiri :
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="padding:4px; font-weight:700; text-align:center;">KEBENARAN MATERI/VISUIL</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:50%; border-top:1px solid #000; padding:3px;">1.Kelengkapan/keabsahan</td>
+                                        <td style="width:50%; border-top:1px solid #000; border-left:1px solid #000; padding:3px;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-top:1px solid #000; padding:3px;">2.Td. Tangan</td>
+                                        <td style="border-top:1px solid #000; border-left:1px solid #000; padding:3px;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-top:1px solid #000; padding:3px;">3.Cap/Stempel</td>
+                                        <td style="border-top:1px solid #000; border-left:1px solid #000; padding:3px;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-top:1px solid #000; padding:3px;">4.Jumlah Disetujui</td>
+                                        <td style="border-top:1px solid #000; border-left:1px solid #000; padding:3px;">Rp. <span t-esc="'{:,.2f}'.format(doc.nilai or 0.0)"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-top:1px solid #000; padding:3px;">5.Peraturan ybs.</td>
+                                        <td style="border-top:1px solid #000; border-left:1px solid #000; padding:3px;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-top:1px solid #000; padding:3px;">6.Tarif</td>
+                                        <td style="border-top:1px solid #000; border-left:1px solid #000; padding:3px;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="border-top:1px solid #000; padding:6px; height:120px; vertical-align:top;">
+                                            <div>Perhitungan Teknis dan Penjelasan lainnya :</div>
+                                            <div style="margin-top:5px;">
+                                                Pembayaran
+                                                <t t-if="doc.master_nama_termin_id.type == 'is_retensi'">Retensi</t>
+                                                <t t-else="">
+                                                    <span t-if="termin_sequence" t-esc="termin_sequence"/>
+                                                    <span t-if="not termin_sequence" t-field="doc.master_nama_termin_id"/>
+                                                </t>
+                                                <span t-field="doc.name"/>
+                                            </div>
+                                            <div style="margin-top:12px;">
+                                                <strong>Terbilang :</strong>
+                                                <span t-esc="doc.get_nilai_terbilang()"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td style="width:50%; border-bottom:1px solid #000; padding:0; vertical-align:top;">
+                                <table style="width:100%; border-collapse:collapse;">
+                                    <tr>
+                                        <td style="height:128px; padding:4px; vertical-align:middle; text-align:center; font-weight:700; font-size:13px;">
+                                            PERSYARATAN DOKUMEN
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-top:1px solid #000; padding:0;">
+                                            <table style="width:100%; border-collapse:collapse;">
+                                                <tr>
+                                                    <td style="width:45%; border-bottom:1px solid #000; padding:3px;">1.Dokumen Pajak &amp; Tarif</td>
+                                                    <td style="width:55%; border-left:1px solid #000; border-bottom:1px solid #000; padding:3px;"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="border-bottom:1px solid #000; padding:3px;">2.Kelengkapan Dokumen untuk Syarat pembayaran</td>
+                                                    <td style="border-left:1px solid #000; border-bottom:1px solid #000; padding:3px;"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="border-bottom:1px solid #000; padding:3px;">3.Tanda Tangan</td>
+                                                    <td style="border-left:1px solid #000; border-bottom:1px solid #000; padding:3px;"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="border-bottom:1px solid #000; padding:3px;">4.Cap/Stempel</td>
+                                                    <td style="border-left:1px solid #000; border-bottom:1px solid #000; padding:3px;"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="border-bottom:1px solid #000; padding:3px;">5.Jumlah disetujui</td>
+                                                    <td style="border-left:1px solid #000; border-bottom:1px solid #000; padding:3px;"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="border-bottom:1px solid #000; padding:3px;">6.Peraturan ybs.</td>
+                                                    <td style="border-left:1px solid #000; border-bottom:1px solid #000; padding:3px;"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="border-bottom:1px solid #000; padding:3px;">7.Tarif</td>
+                                                    <td style="border-left:1px solid #000; border-bottom:1px solid #000; padding:3px;"></td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:0; height:150px; vertical-align:top;">
+                                            <table style="width:100%; border-collapse:collapse;">
+                                                <tr>
+                                                    <td style="width:38%; padding:6px; vertical-align:top;">Penjelasan lainnya</td>
+                                                    <td style="width:62%; padding:6px;">
+                                                        <table style="width:100%; border-collapse:collapse;">
+                                                            <tr>
+                                                                <td>Terlampir biaya sebesar</td>
+                                                                <td style="width:28px;">Rp</td>
+                                                                <td style="text-align:right;"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="text-align:center;">PPN</td>
+                                                                <td>Rp</td>
+                                                                <td style="text-align:right;"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td style="text-align:right;">---------------- +</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td></td>
+                                                                <td>Rp</td>
+                                                                <td style="text-align:right;"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="text-align:center;">PPN Dipungut</td>
+                                                                <td>Rp</td>
+                                                                <td style="text-align:right;"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="text-align:center;">PPh</td>
+                                                                <td>Rp</td>
+                                                                <td style="text-align:right;"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td style="text-align:right;">---------------- -</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="text-align:center;">Dibayarkan</td>
+                                                                <td>Rp</td>
+                                                                <td style="text-align:right;"></td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2" style="padding:8px; text-align:center;"></td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+            </t>
+        </template>
+
+        <template id="report_droping_lembar_realokasi">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-set="lang" t-value="doc.create_uid.lang"/>
+                    <t t-call="vit_contract_inherit.report_droping_lembar_realokasi_document"/>
+                </t>
+            </t>
+        </template>
+
+        <template id="report_droping_nota_permintaan">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-set="lang" t-value="doc.create_uid.lang"/>
+                    <t t-call="vit_contract_inherit.report_droping_nota_permintaan_document"/>
+                </t>
+            </t>
+        </template>
+
+        <template id="report_termin_nota_verifikasi">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-set="lang" t-value="doc.create_uid.lang"/>
+                    <t t-call="vit_contract_inherit.report_termin_nota_verifikasi_document"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

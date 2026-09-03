@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_vit_budget_rkap_search_filter_cleanup" model="ir.ui.view">
+            <field name="name">vit.budget.rkap.search.filter.cleanup</field>
+            <field name="model">vit.budget_rkap</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_budget_rkap_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='filter_by_total_qty_termin']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_budget_date']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_stage_is_draft']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_stage_is_done']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_allow_confirm']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_allow_cancel']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_stage_name']" position="replace"/>
+            </field>
+        </record>
+
+        <record id="view_vit_izin_prinsip_search_filter_cleanup" model="ir.ui.view">
+            <field name="name">vit.izin.prinsip.search.filter.cleanup</field>
+            <field name="model">vit.izin_prinsip</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_izin_prinsip_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='filter_by_total_pagu']" position="attributes">
+                    <attribute name="string">Total Pagu Izin Prinsip</attribute>
+                </xpath>
+                <xpath expr="//filter[@name='filter_by_total_payment']" position="attributes">
+                    <attribute name="string">Total Amount Payment</attribute>
+                </xpath>
+                <xpath expr="//filter[@name='filter_by_amount_budget']" position="attributes">
+                    <attribute name="string">Amount</attribute>
+                </xpath>
+                <xpath expr="//filter[@name='filter_by_amount_budget_remaining']" position="attributes">
+                    <attribute name="string">Remaining</attribute>
+                </xpath>
+                <xpath expr="//filter[@name='filter_by_stage_is_draft']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_stage_is_done']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_allow_confirm']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_allow_cancel']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_stage_name']" position="replace"/>
+            </field>
+        </record>
+
+        <record id="view_vit_droping_search_filter_cleanup" model="ir.ui.view">
+            <field name="name">vit.droping.search.filter.cleanup</field>
+            <field name="model">vit.droping</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_droping_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='filter_by_stage_is_draft']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_stage_is_done']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_allow_confirm']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_allow_cancel']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_stage_name']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_stage_is_confirmed']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_stage_is_on_progress']" position="replace"/>
+            </field>
+        </record>
+
+        <record id="view_vit_kontrak_search_filter_cleanup" model="ir.ui.view">
+            <field name="name">vit.kontrak.search.filter.cleanup</field>
+            <field name="model">vit.kontrak</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_kontrak_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='filter_by_amount_izin_prinsip']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_amount_denda']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_persentasi_denda']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_overdue_days']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_stage_is_draft']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_stage_is_done']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_allow_confirm']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_allow_cancel']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_stage_name']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_stage_is_on_progress']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_duration_days']" position="attributes">
+                    <attribute name="string">Duration (Days)</attribute>
+                </xpath>
+                <xpath expr="//filter[@name='filter_by_amount_kontrak']" position="attributes">
+                    <attribute name="string">Amount Kontrak</attribute>
+                </xpath>
+                <xpath expr="//filter[@name='filter_by_type']" position="after">
+                    <filter string="Izin Prinsip" name="filter_by_izin_prinsip_id" domain="[('izin_prinsip_id','=','')]"/>
+                    <filter string="Budget Rkap" name="filter_by_budget_rkap_id" domain="[('budget_rkap_id','=','')]"/>
+                    <filter string="Job Izin Prinsip" name="filter_by_job_izin_prinsip_id" domain="[('job_izin_prinsip_id','=','')]"/>
+                    <filter string="Kanwil" name="filter_by_kanwil_id" domain="[('kanwil_id','=','')]"/>
+                    <filter string="Kanca" name="filter_by_kanca_id" domain="[('kanca_id','=','')]"/>
+                    <filter string="Jenis Kontrak" name="filter_by_jenis_kontrak_id" domain="[('jenis_kontrak_id','=','')]"/>
+                    <filter string="Partner" name="filter_by_partner_id" domain="[('partner_id','=','')]"/>
+                    <filter string="Kompleks" name="filter_by_kompleks_id" domain="[('kompleks_id','=','')]"/>
+                    <filter string="Stage" name="filter_by_stage_id" domain="[('stage_id','=','')]"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_vit_payment_search_filter_cleanup" model="ir.ui.view">
+            <field name="name">vit.payment.search.filter.cleanup</field>
+            <field name="model">vit.payment</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_payment_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='filter_by_stage_is_draft']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_stage_is_done']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_allow_confirm']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_allow_cancel']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_stage_name']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_stage_is_on_progress']" position="replace"/>
+            </field>
+        </record>
+
+        <record id="view_vit_termin_search_filter_cleanup" model="ir.ui.view">
+            <field name="name">vit.termin.search.filter.cleanup</field>
+            <field name="model">vit.termin</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_termin_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='filter_by_stage_is_draft']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_stage_is_done']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_allow_confirm']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_allow_cancel']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_stage_name']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_is_droping_done']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_verifikasi_syarat']" position="replace"/>
+                <xpath expr="//filter[@name='filter_by_stage_is_on_progress']" position="replace"/>
+            </field>
+        </record>
+
+        <record id="view_vit_syarat_termin_search_filter_cleanup" model="ir.ui.view">
+            <field name="name">vit.syarat.termin.search.filter.cleanup</field>
+            <field name="model">vit.syarat_termin</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_syarat_termin_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='filter_by_document_filename']" position="replace"/>
+            </field>
+        </record>
+
+        <record id="view_vit_master_users_search_filter_cleanup" model="ir.ui.view">
+            <field name="name">vit.master.users.search.filter.cleanup</field>
+            <field name="model">vit.master_users</field>
+            <field name="inherit_id" ref="vit_contract.view_vit_master_users_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='filter_by_password']" position="replace"/>
+            </field>
+        </record>
+
+    </data>
+</odoo>

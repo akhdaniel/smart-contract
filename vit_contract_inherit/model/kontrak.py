@@ -3,6 +3,7 @@
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
+from odoo.tools.float_utils import float_compare
 from datetime import timedelta
 import logging
 _logger = logging.getLogger(__name__)
@@ -59,6 +60,12 @@ class kontrak(models.Model):
     attachments = fields.Many2many(
         'ir.attachment',
         string='Upload'
+    )
+
+    attachment_line_ids = fields.One2many(
+        comodel_name="vit.kontrak_attachment",
+        inverse_name="kontrak_id",
+        string="Dokumen Kontrak",
     )
 
     izin_prinsip_id = fields.Many2one(
@@ -270,38 +277,50 @@ class kontrak(models.Model):
         for rec in self:
             rec.addendum_count = len(rec.addendum_ids)
 
-
-
-    @api.depends("termin_ids.syarat_termin_ids.upload_date",
-                "end_date",
-                "amount_kontrak", "persentasi_denda")
+    @api.depends(
+        "termin_ids.work_finish_date",
+        "termin_ids.syarat_progress",
+        "termin_ids.master_nama_termin_id.type",
+        "termin_ids.master_nama_termin_id.sequence",
+        "end_date",
+        "amount_kontrak",
+        "persentasi_denda",
+    )
     def _compute_overdue_and_late(self):
         for rec in self:
             max_overdue = 0
             late_termins = []
 
-            non_retensi_termins = rec.termin_ids.filtered(
-                lambda t: t.master_nama_termin_id.type != 'is_retensi'
+            progress_100_termins = rec.termin_ids.filtered(
+                lambda t: (
+                    t.master_nama_termin_id.type != "is_retensi"
+                    and float_compare(
+                        t.syarat_progress or 0.0,
+                        100.0,
+                        precision_digits=2,
+                    ) == 0
+                )
             )
 
-            last_termin = False
-            if non_retensi_termins:
-                last_termin = max(
-                    non_retensi_termins,
-                    key=lambda t: t.master_nama_termin_id.sequence or 0
-                )
+            penalty_termin = False
+            if progress_100_termins:
+                penalty_termin = max(
+                    progress_100_termins,
+                    key=lambda t: (t.master_nama_termin_id.sequence or 0, t.id),
+            )
 
-            if last_termin:
+            if penalty_termin:
                 overdue = 0
-                if rec.end_date:
-                    for syarat in last_termin.syarat_termin_ids:
-                        if syarat.upload_date:
-                            delta = (syarat.upload_date - rec.end_date).days
-                            if delta > 0:
-                                overdue = max(overdue, delta)
+                if rec.end_date and penalty_termin.work_finish_date:
+                    delta = (penalty_termin.work_finish_date - rec.end_date).days
+                    if delta > 0:
+                        overdue = delta
 
                 if overdue > 0:
-                    late_termins.append(last_termin.master_nama_termin_id.name or last_termin.name)
+                    late_termins.append(
+                        penalty_termin.master_nama_termin_id.name
+                        or penalty_termin.name
+                    )
                     max_overdue = overdue
 
             rec.overdue_days = max_overdue
@@ -396,22 +415,6 @@ class kontrak(models.Model):
                     break
 
     
-
-    @api.depends('termin_ids.syarat_termin_ids.upload_date',
-                 'termin_ids.syarat_termin_ids.due_date')
-    def _compute_is_late_upload(self):
-        for rec in self:
-            late_termins = []
-            for t in rec.termin_ids:
-                if any(
-                    s.upload_date and s.due_date and s.upload_date > s.due_date
-                    for s in t.syarat_termin_ids
-                ):
-                    late_termins.append(t.master_nama_termin_id.name or t.name)
-            rec.is_late_upload = bool(late_termins)
-            rec.late_termin_names = ", ".join(late_termins) if late_termins else ""
-
-
 
     @api.constrains('amount_izin_prinsip', 'amount_kontrak')
     def _check_amount_kontrak(self):
@@ -621,7 +624,6 @@ class kontrak(models.Model):
             att.copy({'res_id': kontrak_copy.id})
 
         kontrak_copy._compute_overdue_and_late()
-        kontrak_copy._compute_is_late_upload()
 
         return {
             'name': _('Kontrak Addendum'),
