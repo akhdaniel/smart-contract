@@ -72,7 +72,7 @@
                 <xpath expr="//field[@name='master_nama_termin_id']" position="after">
                     <!-- <field name="verifikasi_syarat" invisible="1"/> -->
                     <field name="partner_id" readonly="1" force_save="1"/>
-                    <field name="work_finish_date"/>
+                    <field name="work_finish_date" invisible="1"/>
                     <field name="droping_id" readonly="1" force_save="1"/>
                     <field name="deskripsi"/>
                     <field name="nama_bank" invisible="1"/>
@@ -253,7 +253,7 @@
                 <xpath expr="//tree/field[@name='persentase']" position="replace"/>
                 <xpath expr="//tree/field[@name='nilai']" position="replace"/>
                 <xpath expr="//tree/field[@name='stage_id']" position="after">
-                    <field name="work_finish_date"/>
+                    <field name="work_finish_date" column_invisible="1"/>
                     <field name="persentase"/>
                     <field name="nilai"/>
                 </xpath>
