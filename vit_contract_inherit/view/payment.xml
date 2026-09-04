@@ -99,6 +99,14 @@
                     <field name="payment_bank_acc_holder" invisible="1"/>
                 </xpath>
 
+                <xpath expr="//field[@name='partner_bank_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='payment_bank_acc_holder']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
 
                 <xpath expr="//field[@name='amount']" position="attributes">
                     <attribute name="readonly">1</attribute>
