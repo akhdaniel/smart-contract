@@ -9,9 +9,6 @@
 		"vit_contract",
         "ps_m2m_field_attachment_preview",
 	],
-    "external_dependencies": {
-        "python": ["openpyxl"],
-    },
 	"author": "Akhmad Daniel Sembiring",
 	"category": "Utility",
 	"website": "http://vitraining.com",
