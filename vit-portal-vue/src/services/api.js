@@ -16,10 +16,12 @@ apiClient.interceptors.request.use(config => {
   const authStore = useAuthStore();
   const loadingStore = useLoadingStore();
 
-  // Set a timer to show the loading screen after 3 seconds
-  loadingTimer = setTimeout(() => {
-    loadingStore.setLoading(true);
-  }, 3000);
+  if (!config.skipLoading) {
+    // Set a timer to show the loading screen after 3 seconds
+    loadingTimer = setTimeout(() => {
+      loadingStore.setLoading(true);
+    }, 3000);
+  }
 
   if (authStore.sessionId) {
     // Odoo uses session_id in the request data, not headers
@@ -34,14 +36,18 @@ apiClient.interceptors.request.use(config => {
 });
 
 apiClient.interceptors.response.use(response => {
-  clearTimeout(loadingTimer);
-  const loadingStore = useLoadingStore();
-  loadingStore.setLoading(false);
+  if (!response.config.skipLoading) {
+    clearTimeout(loadingTimer);
+    const loadingStore = useLoadingStore();
+    loadingStore.setLoading(false);
+  }
   return response;
 }, error => {
-  clearTimeout(loadingTimer);
-  const loadingStore = useLoadingStore();
-  loadingStore.setLoading(false);
+  if (!error.config?.skipLoading) {
+    clearTimeout(loadingTimer);
+    const loadingStore = useLoadingStore();
+    loadingStore.setLoading(false);
+  }
   return Promise.reject(error);
 });
 

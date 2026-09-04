@@ -61,29 +61,29 @@
                 </div>
              
                 <div class="card-body">
-                  <div class="row">
+                  <div class="row g-3 align-items-end">
                     <div class="col-md-4 col-sm-12" v-if="contract.jenis_kontrak_id.type === 'fisik'">
                       <label for="syarat_progress" class="form-label">Syarat Progress (%)</label>
-                      <input type="text" class="form-control" id="syarat_progress" v-model="termin.syarat_progress" disabled>
+                      <input type="text" class="form-control" id="syarat_progress" :value="displayValue(termin.syarat_progress)" disabled>
                     </div>
                     <div class="col-md-4 col-sm-12" v-if="contract.jenis_kontrak_id.type === 'fisik'">
                       <label for="actual_progress" class="form-label">Actual Progress (%)</label>
                       <input type="text" class="form-control" id="actual_progress" v-model="termin.actual_progress" required="required" :disabled="termin.stage_id.display_name !== 'On Progress'">
                     </div>
 
-                    <div v-if="contract.jenis_kontrak_id.type === 'non_fisik'">
+                    <div class="col-12" v-if="contract.jenis_kontrak_id.type === 'non_fisik'">
                       <label for="syarat_output" class="form-label">Syarat Output (%)</label>
-                      <input type="text" class="form-control" id="syarat_progress" v-model="termin.syarat_output" disabled>
+                      <input type="text" class="form-control" id="syarat_output" :value="displayValue(termin.syarat_output)" disabled>
                     </div>
 
-                    <div v-if="contract.jenis_kontrak_id.type === 'non_fisik'">
+                    <div class="col-12" v-if="contract.jenis_kontrak_id.type === 'non_fisik'">
                       <label for="actual_output" class="form-label">Actual Output (%)</label>
-                      <input type="text" class="form-control" id="actual_progress" v-model="termin.actual_output" required :disabled="termin.stage_id.display_name !== 'On Progress'">
+                      <input type="text" class="form-control" id="actual_output" v-model="termin.actual_output" required :disabled="termin.stage_id.display_name !== 'On Progress'">
                     </div>
 
-                    <div class="col-md-4 col-sm-12">
+                    <div class="col-12 d-flex justify-content-end">
                       <div class="form-label">&nbsp;</div>
-                      <button class="form-control btn btn-primary" @click="updateProgress(termin.id)" :disabled="termin.stage_id.display_name !== 'On Progress'">Save</button>
+                      <button class="form-control btn btn-primary progress-save-button" @click="updateProgress(termin.id)" :disabled="termin.stage_id.display_name !== 'On Progress'">Save</button>
                     </div>   
 
                   </div>          
@@ -160,19 +160,60 @@
       <div class="card mt-4 mb-4">
         <div class="card-header">Data Rekening Vendor</div>
         <div class="card-body">
-          <div class="row" v-if="termins.length > 0">
+          <div ref="savedBankSelectRef" class="mb-3 saved-bank-select">
+            <label class="form-label mb-2">Rekening Tersimpan</label>
+            <div class="saved-bank-combobox">
+              <input
+                type="text"
+                class="form-control saved-bank-search"
+                :value="bankAccounts.length ? savedBankSearch : 'Belum ada'"
+                :disabled="contract.stage_id.display_name !== 'On Progress' || !bankAccounts.length"
+                placeholder="Pilih Rekening Tersimpan"
+                autocomplete="off"
+                @input="onSavedBankSearchInput"
+                @focus="savedBankDropdownOpen = Boolean(bankAccounts.length)"
+              >
+              <button
+                type="button"
+                class="saved-bank-caret-button"
+                :disabled="contract.stage_id.display_name !== 'On Progress' || !bankAccounts.length"
+                @click="toggleSavedBankDropdown"
+                title="Pilih rekening tersimpan"
+              >
+                v
+              </button>
+            </div>
+            <div v-if="savedBankDropdownOpen" class="saved-bank-menu">
+              <div v-if="!filteredBankAccounts.length" class="saved-bank-empty">Tidak ditemukan</div>
+              <div v-for="bank in filteredBankAccounts" :key="bank.id" class="saved-bank-option">
+                <button
+                  type="button"
+                  class="saved-bank-option-button"
+                  @click="selectSavedBank(bank)"
+                >
+                  {{ displayValue(bank.bank_name) }} - {{ displayValue(bank.acc_number) }}
+                </button>
+                <button
+                  type="button"
+                  class="saved-bank-delete"
+                  @click.stop="deleteSavedBank(bank)"
+                  title="Hapus rekening"
+                >
+                  <i class="fa-regular fa-trash-can"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="row g-3 align-items-end">
             <div class="col-md-5">
               <label for="nama_bank" class="form-label">Nama Bank</label>
-              <input v-if="contract.stage_id.display_name === 'On Progress'" type="text" class="form-control" id="nama_bank" v-model="termins[0].nama_bank">
-              <input v-else type="text" class="form-control" id="nama_bank" :value="displayValue(termins[0].nama_bank)" disabled>
+              <input type="text" class="form-control" id="nama_bank" v-model="bankForm.bank_name" :disabled="contract.stage_id.display_name !== 'On Progress'" autocomplete="off">
             </div>
             <div class="col-md-5">
               <label for="nomor_rekening" class="form-label">Nomor Rekening</label>
-              <input v-if="contract.stage_id.display_name === 'On Progress'" type="text" class="form-control" id="nomor_rekening" v-model="termins[0].nomor_rekening">
-              <input v-else type="text" class="form-control" id="nomor_rekening" :value="displayValue(termins[0].nomor_rekening)" disabled>
+              <input type="text" class="form-control" id="nomor_rekening" v-model="bankForm.acc_number" :disabled="contract.stage_id.display_name !== 'On Progress'" autocomplete="off">
             </div>
             <div class="col-md-2">
-              <div class="form-label">&nbsp;</div>
               <button class="form-control btn btn-primary" @click="updateBankInfo()" :disabled="contract.stage_id.display_name !== 'On Progress'">Simpan</button>
             </div>
           </div>
@@ -191,6 +232,8 @@
                     <th>Request Date</th>
                     <th>Payment Date</th>
                     <th class="text-end">Amount</th>
+                    <th>Nama Bank</th>
+                    <th>Nomor Rekening</th>
                     <th class="text-center">Status</th>
                 </tr>
             </thead>
@@ -201,6 +244,8 @@
                     <td>{{ payment.request_date?payment.request_date:"" }}</td>
                     <td>{{ payment.payment_date }}</td>
                     <td class="text-end">{{ formatCurrency(payment.amount) }}</td>
+                    <td>{{ displayValue(payment.payment_bank_name) }}</td>
+                    <td>{{ displayValue(payment.payment_bank_acc_number) }}</td>
                     <td class="text-center">
                       
                       <span class="badge" :class="{
@@ -223,7 +268,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
 import odooService from '@/services/odoo'
 import PdfViewerModal from '@/components/PdfViewerModal.vue'
@@ -232,6 +277,15 @@ const route = useRoute()
 const contract = ref(null)
 const termins = ref([])
 const payments = ref([])
+const bankAccounts = ref([])
+const savedBankSelectRef = ref(null)
+const savedBankDropdownOpen = ref(false)
+const savedBankShowAll = ref(false)
+const savedBankSearch = ref('')
+const bankForm = ref({
+  bank_name: '',
+  acc_number: '',
+})
 const loading = ref(true)
 const error = ref('')
 const uploadError = ref('')
@@ -267,6 +321,12 @@ const fetchData = async () => {
       partner_id:{
         fields:{display_name:{}}
       },
+      partner_bank_id:{
+        fields:{display_name:{}}
+      },
+      payment_bank_name:{},
+      payment_bank_acc_number:{},
+      payment_bank_acc_holder:{},
       kanwil_id:{
         fields:{display_name:{}}
       },
@@ -331,6 +391,8 @@ const fetchData = async () => {
               display_name:{}, 
             }
           },
+          payment_bank_name:{},
+          payment_bank_acc_number:{},
         }
       }
     }
@@ -345,6 +407,10 @@ const fetchData = async () => {
     if (contract.value.termin_ids.length > 0) {
         const terminData = contract.value.termin_ids.map(termin => ({
           ...termin,
+          syarat_progress: inputValue(termin.syarat_progress),
+          actual_progress: inputValue(termin.actual_progress),
+          syarat_output: inputValue(termin.syarat_output),
+          actual_output: inputValue(termin.actual_output),
           nama_bank: inputValue(termin.nama_bank),
           nomor_rekening: inputValue(termin.nomor_rekening),
           syarat_termin_ids: termin.syarat_termin_ids || [],
@@ -356,6 +422,7 @@ const fetchData = async () => {
     if (contract.value.payment_ids.length > 0) {
         payments.value = contract.value.payment_ids
     }
+    await fetchBankInfo();
 
   } catch (err) {
     error.value = 'Failed to load contract details.';
@@ -491,35 +558,165 @@ const getAttachmentUrl = (attachmentId, filename) => {
   return `${ODOO_URL}/web/content/${attachmentId}?download=false&filename=${encodeURIComponent(filename || 'document.pdf')}`;
 }
 
-const updateBankInfo = async () =>{
-  if (termins.value.length === 0) return;
-  
-  const targetTermin = termins.value[0];
+const updateBankInfo = async () => {
   try {
-    const filtered = {
-      nama_bank: payloadValue(targetTermin.nama_bank),
-      nomor_rekening: payloadValue(targetTermin.nomor_rekening)
+    const existingInput = isExistingBankInput();
+    const changedPaymentBank = isPaymentBankChanged();
+
+    if (!existingInput && !confirm('Anda yakin ingin menyimpan rekening ini?')) {
+      return;
+    }
+
+    const payload = {
+      contract_id: contractId,
+      bank_name: payloadValue(bankForm.value.bank_name),
+      acc_number: payloadValue(bankForm.value.acc_number),
     };
-    
-    const specification = {
-      name:{},
-      nama_bank:{},
-      nomor_rekening:{}
-    }
-    const response = await odooService.write('vit.termin', targetTermin.id, filtered, specification);
-    if (response.error){
-      uploadError.value = `Gagal menyimpan. ${response.message}`;
+
+    const response = await odooService.rpc('/my/contracts/payment-bank/save', payload, { skipLoading: true });
+    if (!response || response.error) {
+      uploadError.value = `Gagal menyimpan. ${response?.error || response?.message || 'Terjadi kesalahan.'}`;
       console.error(response);
-    }
-    else{
+    } else {
+      applyBankInfo(response);
       uploadError.value = null;
-      alert('Data rekening berhasil disimpan!');
+      if (existingInput && changedPaymentBank) {
+        alert('Rekening pembayaran berhasil diperbarui.');
+      }
     }
   } catch (err) {
-      uploadError.value = `Terjadi error saat menyimpan. ${err}`;
-      console.error(err);
-  }    
-}
+    uploadError.value = `Terjadi error saat menyimpan. ${err}`;
+    console.error(err);
+  }
+};
+
+const fetchBankInfo = async () => {
+  const response = await odooService.rpc('/my/contracts/payment-bank/info', {
+    contract_id: contractId,
+  }, { skipLoading: true });
+  if (response && !response.error) {
+    applyBankInfo(response);
+  }
+};
+
+const applyBankInfo = (data) => {
+  bankAccounts.value = uniqueBankAccounts(data.bank_accounts || []);
+  const selected = data.selected_bank || {};
+  bankForm.value = {
+    bank_name: inputValue(selected.bank_name),
+    acc_number: inputValue(selected.acc_number),
+  };
+  savedBankSearch.value = selected.bank_name || selected.acc_number ? savedBankLabel(selected) : '';
+  savedBankShowAll.value = false;
+  if (contract.value) {
+    contract.value.payment_bank_name = selected.bank_name || false;
+    contract.value.payment_bank_acc_number = selected.acc_number || false;
+    contract.value.payment_bank_acc_holder = selected.acc_holder || false;
+  }
+  if (termins.value.length > 0) {
+    termins.value[0].nama_bank = inputValue(selected.bank_name);
+    termins.value[0].nomor_rekening = inputValue(selected.acc_number);
+  }
+  payments.value = payments.value.map(payment => ({
+    ...payment,
+    payment_bank_name: selected.bank_name || false,
+    payment_bank_acc_number: selected.acc_number || false,
+  }));
+};
+
+const selectSavedBank = (bank) => {
+  bankForm.value = {
+    bank_name: inputValue(bank.bank_name),
+    acc_number: inputValue(bank.acc_number),
+  };
+  savedBankSearch.value = savedBankLabel(bank);
+  savedBankShowAll.value = false;
+  savedBankDropdownOpen.value = false;
+};
+
+const onSavedBankSearchInput = (event) => {
+  savedBankSearch.value = event.target.value;
+  savedBankShowAll.value = false;
+  savedBankDropdownOpen.value = true;
+};
+
+const toggleSavedBankDropdown = () => {
+  savedBankShowAll.value = true;
+  savedBankDropdownOpen.value = !savedBankDropdownOpen.value;
+};
+
+const closeSavedBankDropdownOnOutsideClick = (event) => {
+  if (!savedBankSelectRef.value || savedBankSelectRef.value.contains(event.target)) {
+    return;
+  }
+  savedBankDropdownOpen.value = false;
+};
+
+const deleteSavedBank = async (bank) => {
+  const label = `${displayValue(bank.bank_name)} - ${displayValue(bank.acc_number)}`;
+  if (!confirm(`Anda yakin ingin menghapus rekening ${label}?`)) {
+    return;
+  }
+
+  const response = await odooService.rpc('/my/contracts/payment-bank/delete', {
+    contract_id: contractId,
+    partner_bank_id: bank.id,
+  }, { skipLoading: true });
+  if (!response || response.error) {
+    uploadError.value = `Gagal menghapus rekening. ${response?.error || response?.message || 'Terjadi kesalahan.'}`;
+    console.error(response);
+    return;
+  }
+  response.bank_accounts = (response.bank_accounts || []).filter(account => account.id !== bank.id);
+  if (response.selected_bank_id === bank.id) {
+    response.selected_bank_id = false;
+    response.selected_bank = false;
+  }
+  applyBankInfo(response);
+  savedBankShowAll.value = false;
+  savedBankDropdownOpen.value = false;
+  uploadError.value = null;
+};
+
+const normalizeBankText = (value) => {
+  return inputValue(value).trim().toLowerCase();
+};
+
+const normalizeAccountNumber = (value) => {
+  return inputValue(value).trim();
+};
+
+const isExistingBankInput = () => {
+  const bankName = normalizeBankText(bankForm.value.bank_name);
+  const accountNumber = normalizeAccountNumber(bankForm.value.acc_number);
+  if (!bankName || !accountNumber) {
+    return false;
+  }
+  return bankAccounts.value.some((bank) => {
+    return normalizeBankText(bank.bank_name) === bankName
+      && normalizeAccountNumber(bank.acc_number) === accountNumber;
+  });
+};
+
+const isPaymentBankChanged = () => {
+  if (!contract.value) {
+    return false;
+  }
+  return normalizeBankText(contract.value.payment_bank_name) !== normalizeBankText(bankForm.value.bank_name)
+    || normalizeAccountNumber(contract.value.payment_bank_acc_number) !== normalizeAccountNumber(bankForm.value.acc_number);
+};
+
+const uniqueBankAccounts = (accounts) => {
+  const seen = new Set();
+  return accounts.filter((bank) => {
+    const key = `${normalizeBankText(bank.bank_name)}|${normalizeAccountNumber(bank.acc_number)}`;
+    if (seen.has(key)) {
+      return false;
+    }
+    seen.add(key);
+    return true;
+  });
+};
 
 const openPdfViewer = (syaratId, syaratName) => {
   currentPdfUrl.value = getDownloadUrl(syaratId, syaratName);
@@ -531,7 +728,14 @@ const openContractAttachment = (attachment) => {
   showPdfModal.value = true;
 };
 
-onMounted(fetchData);
+onMounted(() => {
+  fetchData();
+  document.addEventListener('click', closeSavedBankDropdownOnOutsideClick);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', closeSavedBankDropdownOnOutsideClick);
+});
 
 const isEmptyValue = (value) => {
   return value === false || value === null || value === undefined || value === ''
@@ -540,6 +744,23 @@ const isEmptyValue = (value) => {
 const displayValue = (value) => {
   return isEmptyValue(value) ? '-' : value;
 };
+
+const savedBankLabel = (bank) => {
+  return `${displayValue(bank.bank_name)} - ${displayValue(bank.acc_number)}`;
+};
+
+const filteredBankAccounts = computed(() => {
+  if (savedBankShowAll.value) {
+    return bankAccounts.value;
+  }
+  const keyword = normalizeBankText(savedBankSearch.value);
+  if (!keyword) {
+    return bankAccounts.value;
+  }
+  return bankAccounts.value.filter((bank) => {
+    return normalizeBankText(savedBankLabel(bank)).includes(keyword);
+  });
+});
 
 const formatDate = (value) => {
   if (isEmptyValue(value)) return value;
@@ -579,5 +800,93 @@ const formatCurrency = (amount) => {
 <style scoped>
 .contract-doc-item {
   min-height: 84px;
+}
+
+.progress-save-button {
+  max-width: 360px;
+}
+
+.saved-bank-select {
+  max-width: 520px;
+  position: relative;
+}
+
+.saved-bank-combobox {
+  position: relative;
+}
+
+.saved-bank-search {
+  padding-right: 40px;
+}
+
+.saved-bank-caret-button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-left: 1px solid #ced4da;
+  color: #34516d;
+  display: flex;
+  justify-content: center;
+  width: 38px;
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  top: 1px;
+}
+
+.saved-bank-caret-button:disabled {
+  color: #6c757d;
+}
+
+.saved-bank-menu {
+  background-color: #fff;
+  border: 1px solid #ced4da;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: calc(100% - 1px);
+  z-index: 20;
+}
+
+.saved-bank-option {
+  align-items: stretch;
+  display: flex;
+  min-height: 36px;
+}
+
+.saved-bank-option + .saved-bank-option {
+  border-top: 1px solid #e5e9ef;
+}
+
+.saved-bank-empty {
+  color: #6c757d;
+  padding: 8px 12px;
+}
+
+.saved-bank-option-button {
+  background: transparent;
+  border: 0;
+  color: #34516d;
+  flex: 1;
+  padding: 7px 12px;
+  text-align: left;
+}
+
+.saved-bank-option-button:hover {
+  background-color: #f4f7fb;
+}
+
+.saved-bank-delete {
+  background: transparent;
+  border: 0;
+  border-left: 1px solid #ced4da;
+  color: #b02a37;
+  width: 38px;
+}
+
+.saved-bank-delete:hover {
+  background-color: #f8d7da;
 }
 </style>

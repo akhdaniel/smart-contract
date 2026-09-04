@@ -2,7 +2,7 @@ import api from './api';
 
 const ODOO_DB = import.meta.env.VITE_ODOO_DB
 
-const jsonrpc = async (endpoint, params) => {
+const jsonrpc = async (endpoint, params, config = {}) => {
   try {
     const response = await api.post(endpoint, {
       jsonrpc: '2.0',
@@ -10,7 +10,8 @@ const jsonrpc = async (endpoint, params) => {
       params: params,
       id: Math.floor(Math.random() * 1000000000)
     }, {
-      withCredentials: true
+      withCredentials: true,
+      ...config,
     });
     if (response.data.error) {
       // The interceptor will handle session expired errors.
@@ -144,6 +145,10 @@ const odooService = {
         }
     }
     return await jsonrpc(`/web/dataset/call_kw/${model}/web_write`, params);
+  },
+
+  async rpc(endpoint, params = {}, config = {}) {
+    return await jsonrpc(endpoint, params, config);
   },
 
   getUid() {
