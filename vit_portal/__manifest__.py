@@ -6,6 +6,7 @@
     'depends': [
         'portal',
         'vit_contract',
+        'vit_contract_inherit',
         'website',
     ],
     'data': [
