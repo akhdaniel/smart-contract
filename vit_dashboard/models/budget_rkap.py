@@ -77,11 +77,10 @@ class BudgetRkap(models.Model):
                 ("stage_is_done", "=", True),
             ])
             kontraks = Kontrak.search([
-                ("budget_rkap_id", "in", current_budgets.ids),
-                ("kanwil_id", "=", kanwil.id),
+                ("izin_prinsip_id", "in", izin_prinsip.ids),
             ])
             droping_domain = expression.AND([
-                [("master_budget_id", "=", master_budget_id), ("kanwil_id", "=", kanwil.id)],
+                [("master_budget_id", "=", master_budget_id), ("kanwil_id", "=", kanwil.id), ("stage_is_done", "=", True)],
                 expression.OR([
                     [("droping_date", ">=", "%s-01-01" % year), ("droping_date", "<=", "%s-12-31" % year)],
                     [("date", ">=", "%s-01-01" % year), ("date", "<=", "%s-12-31" % year)],
@@ -90,10 +89,10 @@ class BudgetRkap(models.Model):
             dropings = Droping.search(droping_domain) if master_budget_id else Droping.browse()
 
             ip_qty = len(izin_prinsip)
-            contract_qty = len(kontraks)
+            ip_with_contract_qty = len(kontraks.mapped("izin_prinsip_id"))
             ip_pagu = sum(izin_prinsip.mapped("total_pagu"))
-            tl_belum = max(ip_qty - contract_qty, 0)
-            tl_sudah = min(contract_qty, ip_qty) if ip_qty else contract_qty
+            tl_belum = max(ip_qty - ip_with_contract_qty, 0)
+            tl_sudah = ip_with_contract_qty
             tl_percent = (tl_sudah / ip_qty * 100.0) if ip_qty else 0.0
             contract_amount = sum(kontraks.mapped("amount_kontrak"))
             droping_amount = sum(dropings.mapped("jumlah"))
@@ -236,7 +235,7 @@ class BudgetRkap(models.Model):
             total_qty_izin_prinsip = sum(budgets.mapped('total_qty_izin_prinsip'))
             total_qty_kontrak = sum(budgets.mapped('total_qty_kontrak'))
 
-            droping_domain = [('master_budget_id', 'in', master_ids)]
+            droping_domain = [('master_budget_id', 'in', master_ids), ('stage_is_done', '=', True)]
             if kanwil_id:
                 droping_domain.append(('kanwil_id', '=', kanwil_id))
             droping_filtered = self.env['vit.droping'].search(droping_domain)
@@ -370,13 +369,26 @@ class BudgetRkap(models.Model):
 
 
 
-                termins = self.env['vit.termin'].search([
-                    ('kontrak_id', 'in', mb_budgets.mapped('kontrak_ids').ids),
-                    ('droping_id', '!=', False),
-                    ('kontrak_id.kanwil_id', '=', kanwil_id),
-                ])
+                droping_domain = [
+                    ('master_budget_id', '=', mb.id),
+                    ('stage_is_done', '=', True),
+                ]
+                if kanwil_id:
+                    droping_domain.append(('kanwil_id', '=', kanwil_id))
+                if budget_date_domain:
+                    droping_date_domain = []
+                    date_domain = []
+                    for cond in budget_date_domain:
+                        if cond[0] == 'budget_date':
+                            droping_date_domain.append(('droping_date', cond[1], cond[2]))
+                            date_domain.append(('date', cond[1], cond[2]))
+                    if droping_date_domain:
+                        droping_domain = expression.AND([
+                            droping_domain,
+                            expression.OR([droping_date_domain, date_domain]),
+                        ])
 
-                droping_filtered = termins.mapped('droping_id')
+                droping_filtered = self.env['vit.droping'].search(droping_domain)
 
 
                     
@@ -899,7 +911,8 @@ class BudgetRkap(models.Model):
 
             droping_domain = [
                 ('master_budget_id', 'in', budgets.mapped('master_budget_id').ids),
-                ('kanwil_id', '=', kw.id)
+                ('kanwil_id', '=', kw.id),
+                ('stage_is_done', '=', True),
             ]
             droping_filtered = self.env['vit.droping'].search(droping_domain)
 

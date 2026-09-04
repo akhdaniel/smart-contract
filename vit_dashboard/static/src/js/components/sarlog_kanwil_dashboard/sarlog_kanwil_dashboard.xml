@@ -13,16 +13,38 @@
                 </h4>
             </div>
             <div class="d-flex gap-2 align-items-end">
-                <div>
+                <div style="position:relative;">
                     <label class="form-label mb-1 fw-semibold d-block text-center" style="font-size:14px; color:#173f73;">Pilih Master Budget</label>
-                    <select class="form-select" style="min-width:260px;" t-on-change="onMasterBudgetChange">
-                        <t t-foreach="state.masterBudgets" t-as="mb" t-key="mb.id">
-                            <option t-att-value="mb.id"
-                                    t-att-selected="state.selectedMasterBudgetId === mb.id ? true : undefined">
-                                <t t-esc="mb.name"/>
-                            </option>
+                    <input class="form-control"
+                           style="min-width:260px; padding-right:34px;"
+                           placeholder="-- Pilih Master Budget --"
+                           t-att-value="state.masterBudgetSearchText"
+                           t-on-input="onMasterBudgetInput"
+                           t-on-focus="onMasterBudgetFocus"
+                           t-on-blur="closeMasterBudgetDropdown"/>
+                    <button type="button"
+                            class="btn btn-link p-0 text-muted"
+                            style="position:absolute; right:0; top:25px; width:40px; height:32px; border:1.5px solid #b8c2cf; border-radius:0 4px 4px 0; background:#f8fafc; text-decoration:none; color:#111827; display:flex; align-items:center; justify-content:center;"
+                            t-on-mousedown.prevent="onMasterBudgetToggleDropdown">
+                        <span style="display:inline-block; width:8px; height:8px; border-right:1.75px solid currentColor; border-bottom:1.75px solid currentColor; transform:rotate(45deg); margin-top:-4px;"/>
+                    </button>
+                    <div t-if="state.masterBudgetDropdownOpen"
+                         class="bg-white border shadow-sm"
+                         style="position:absolute; z-index:30; top:100%; left:0; right:0; max-height:220px; overflow:auto;">
+                        <t t-if="filteredMasterBudgets.length">
+                            <t t-foreach="filteredMasterBudgets" t-as="mb" t-key="mb.id">
+                                <button type="button"
+                                        class="dropdown-item text-start"
+                                        t-att-data-id="mb.id"
+                                        t-on-mousedown.prevent="selectMasterBudgetFromEvent">
+                                    <t t-esc="mb.name"/>
+                                </button>
+                            </t>
                         </t>
-                    </select>
+                        <div t-if="!filteredMasterBudgets.length" class="px-3 py-2 text-muted">
+                            Tidak ada data
+                        </div>
+                    </div>
                 </div>
                 <div>
                     <label class="form-label mb-1 fw-semibold d-block text-center" style="font-size:14px; color:#173f73;">Pilih Tahun</label>
@@ -55,7 +77,7 @@
                         <th class="text-center border">Sudah</th>
                         <th class="text-center border">%</th>
                         <th class="text-center border">Kontrak</th>
-                        <th class="text-center border">Dropping/Paket</th>
+                        <th class="text-center border">Droping/Relok</th>
                         <th class="text-center border">%</th>
                     </tr>
                 </thead>

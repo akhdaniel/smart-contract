@@ -34,6 +34,9 @@ export class KermaDashboard extends Component {
             unitDomain: savedState.selectedUnit ? [['operating_unit_id', '=', savedState.selectedUnit.id]] : [],
 
             selectedKanwil: savedState.selectedKanwil || null,
+            kanwilSearchText: savedState.selectedKanwil ? savedState.selectedKanwil.name : '',
+            kanwilDropdownOpen: false,
+            kanwilDropdownShowAll: false,
             kanwilDomain: savedState.selectedKanwil ? [['kanwil_id', '=', savedState.selectedKanwil.id]] : [],
             allowedKanwilIds: [],
             selectedYear: savedState.selectedYear || null,
@@ -105,6 +108,7 @@ export class KermaDashboard extends Component {
 
                 if (kw) {
                     this.state.selectedKanwil = kw;
+                    this.state.kanwilSearchText = kw.name;
                     this.state.kanwilDomain = [['kanwil_id', '=', kw.id]];
                 }
             }
@@ -300,16 +304,41 @@ export class KermaDashboard extends Component {
         this.reloadNumberCard();
     }
 
-    onKanwilChange(ev) {
-        const selectedId = parseInt(ev.target.value);
-        const selectedName = ev.target.options[ev.target.selectedIndex].text;
+    get filteredKanwils() {
+        if (this.state.kanwilDropdownShowAll) {
+            return this.state.kanwils.filter((kw) => {
+                return !this.state.allowedKanwilIds.length || this.state.allowedKanwilIds.includes(kw.id);
+            });
+        }
+        const query = (this.state.kanwilSearchText || '').toLowerCase();
+        return this.state.kanwils.filter((kw) => {
+            const isAllowed = !this.state.allowedKanwilIds.length || this.state.allowedKanwilIds.includes(kw.id);
+            const isMatch = !query || kw.name.toLowerCase().includes(query);
+            return isAllowed && isMatch;
+        });
+    }
 
-        if (!selectedId) {
+    onKanwilInput(ev) {
+        const value = ev.target.value || '';
+        this.state.kanwilSearchText = value;
+        this.state.kanwilDropdownOpen = true;
+        this.state.kanwilDropdownShowAll = false;
+
+        if (!value) {
             this.state.selectedKanwil = null;
             this.state.kanwilDomain = [];
         } else {
-            this.state.selectedKanwil = { id: selectedId, name: selectedName };
-            this.state.kanwilDomain = [['kanwil_id', '=', selectedId]];
+            const selected = this.state.kanwils.find((kw) => {
+                const isAllowed = !this.state.allowedKanwilIds.length || this.state.allowedKanwilIds.includes(kw.id);
+                return isAllowed && kw.name.toLowerCase() === value.toLowerCase();
+            });
+
+            if (!selected || (this.state.selectedKanwil && this.state.selectedKanwil.id === selected.id)) {
+                return;
+            }
+
+            this.state.selectedKanwil = { id: selected.id, name: selected.name };
+            this.state.kanwilDomain = [['kanwil_id', '=', selected.id]];
         }
 
         console.log("✅ Selected Kanwil:", this.state.selectedKanwil);
@@ -321,6 +350,44 @@ export class KermaDashboard extends Component {
         this.env.bus.trigger('reload_dashboard');
     }
 
+
+    onKanwilFocus() {
+        this.state.kanwilDropdownOpen = true;
+        this.state.kanwilDropdownShowAll = false;
+    }
+
+    onKanwilToggleDropdown() {
+        this.state.kanwilDropdownOpen = !this.state.kanwilDropdownOpen;
+        this.state.kanwilDropdownShowAll = true;
+    }
+
+    closeKanwilDropdown() {
+        setTimeout(() => {
+            this.state.kanwilDropdownOpen = false;
+            this.state.kanwilDropdownShowAll = false;
+        }, 150);
+    }
+
+    selectKanwil(kw) {
+        this.state.selectedKanwil = { id: kw.id, name: kw.name };
+        this.state.kanwilSearchText = kw.name;
+        this.state.kanwilDomain = [['kanwil_id', '=', kw.id]];
+        this.state.kanwilDropdownOpen = false;
+        this.state.kanwilDropdownShowAll = false;
+        console.log("Selected Kanwil:", this.state.selectedKanwil);
+        console.log("Domain:", this.state.kanwilDomain);
+        this.saveState();
+        this.render(true);
+        this.env.bus.trigger('reload_dashboard');
+    }
+
+    selectKanwilFromEvent(ev) {
+        const selectedId = parseInt(ev.currentTarget.dataset.id);
+        const selected = this.state.kanwils.find((kw) => kw.id === selectedId);
+        if (selected) {
+            this.selectKanwil(selected);
+        }
+    }
 
     onYearChange(ev) {
         const selectedYear = parseInt(ev.target.value);

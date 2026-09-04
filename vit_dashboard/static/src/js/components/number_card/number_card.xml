@@ -101,7 +101,7 @@
                                 <div class="fs-1 fw-bold text-white">
                                     <t t-out="state.val.persentasi_droping"/>%
                                 </div>
-                                <div class="fs-6 text-white">% Dropping/Relok</div>
+                                <div class="fs-6 text-white">% Droping/Relok</div>
                             </div>
                         </t> -->
 
@@ -197,7 +197,7 @@
                             </div>
 
                             <div class="text-center text-white mt-1" style="font-size:16px;">
-                                % Dropping/Relok
+                                % Droping/Relok
                             </div>
 
                         </t>
@@ -229,7 +229,7 @@
                                             <div class="fs-4 fw-bold">
                                                 <t t-out="current.persen_droping.toFixed(2)"/>%
                                             </div>
-                                            <small>% Dropping/Relok</small>
+                                            <small>% Droping/Relok</small>
                                         </div>
                                     </div>
                                 </div>

@@ -28,27 +28,37 @@
 
                 <t t-if="!state.allowedKanwilIds || state.allowedKanwilIds.length !== 1">
                     <div class="col-12 col-md-3">
-                        <div class="form-control px-1 m-0">
-                            <select
-                                t-on-change="onKanwilChange"
-                                class="form-select border-0"
-                            >
-                                <option value=""
-                                    t-att-selected="!state.selectedKanwil ? true : undefined">
-                                    -- Pilih Kanwil --
-                                </option>
-
-                                <t t-foreach="state.kanwils" t-as="kw" t-key="kw.id">
-                                    <t t-if="
-                                        !state.allowedKanwilIds.length
-                                        or state.allowedKanwilIds.includes(kw.id)
-                                    ">
-                                        <option
-                                            t-att-value="kw.id"
-                                            t-esc="kw.name"/>
+                        <div class="form-control px-1 m-0" style="position:relative;">
+                            <input class="form-control border-0"
+                                   style="padding-right:34px;"
+                                   placeholder="-- Pilih Kanwil --"
+                                   t-att-value="state.kanwilSearchText"
+                                   t-on-input="onKanwilInput"
+                                   t-on-focus="onKanwilFocus"
+                                   t-on-blur="closeKanwilDropdown"/>
+                            <button type="button"
+                                    class="btn btn-link p-0 text-muted"
+                                    style="position:absolute; right:-1px; top:-1px; bottom:-1px; width:40px; border:1.5px solid #b8c2cf; border-radius:0 4px 4px 0; background:#f8fafc; text-decoration:none; color:#111827; display:flex; align-items:center; justify-content:center;"
+                                    t-on-mousedown.prevent="onKanwilToggleDropdown">
+                                <span style="display:inline-block; width:8px; height:8px; border-right:1.75px solid currentColor; border-bottom:1.75px solid currentColor; transform:rotate(45deg); margin-top:-4px;"/>
+                            </button>
+                            <div t-if="state.kanwilDropdownOpen"
+                                 class="bg-white border shadow-sm"
+                                 style="position:absolute; z-index:30; top:100%; left:0; right:0; max-height:220px; overflow:auto;">
+                                <t t-if="filteredKanwils.length">
+                                    <t t-foreach="filteredKanwils" t-as="kw" t-key="kw.id">
+                                        <button type="button"
+                                                class="dropdown-item text-start"
+                                                t-att-data-id="kw.id"
+                                                t-on-mousedown.prevent="selectKanwilFromEvent">
+                                            <t t-esc="kw.name"/>
+                                        </button>
                                     </t>
                                 </t>
-                            </select>
+                                <div t-if="!filteredKanwils.length" class="px-3 py-2 text-muted">
+                                    Tidak ada data
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </t>
@@ -102,7 +112,7 @@
 
                     <div class="w-100">
                         <NumberCard
-                            title="'Total Syarat Pembayaran untuk di Verifikasi / Confirm'"
+                            title="'Syarat Pembayaran Belum di Verifikasi/Konfirmasi'"
                             bgColor="'bg-itb-light-blue'" 
                             field="'total_qty_termin'"
                             model="'vit.budget_rkap'"
