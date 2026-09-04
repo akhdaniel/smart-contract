@@ -102,7 +102,13 @@ class VendorPortal(CustomerPortal):
             } for bank in banks],
         }
 
-    @http.route('/my/contracts/payment-bank/info', type='json', auth='user', website=True)
+    @http.route(
+        '/my/contracts/payment-bank/info',
+        type='json',
+        auth='user',
+        website=True,
+        cors='https://smc-vendor.xerpium.com',
+    )
     def portal_payment_bank_info(self, contract_id, **kw):
         try:
             contract = self._document_check_access('vit.kontrak', int(contract_id))
@@ -110,7 +116,14 @@ class VendorPortal(CustomerPortal):
             return {'error': 'Kontrak tidak ditemukan atau tidak bisa diakses.'}
         return self._portal_bank_values(contract.sudo())
 
-    @http.route('/my/contracts/payment-bank/save', type='json', auth='user', methods=['POST'], website=True)
+    @http.route(
+        '/my/contracts/payment-bank/save',
+        type='json',
+        auth='user',
+        methods=['POST'],
+        website=True,
+        cors='https://smc-vendor.xerpium.com',
+    )
     def portal_payment_bank_save(self, contract_id, partner_bank_id=False, bank_name=False, acc_number=False, **kw):
         try:
             contract = self._document_check_access('vit.kontrak', int(contract_id))
@@ -155,7 +168,14 @@ class VendorPortal(CustomerPortal):
         })
         return self._portal_bank_values(contract)
 
-    @http.route('/my/contracts/payment-bank/delete', type='json', auth='user', methods=['POST'], website=True)
+    @http.route(
+        '/my/contracts/payment-bank/delete',
+        type='json',
+        auth='user',
+        methods=['POST'],
+        website=True,
+        cors='https://smc-vendor.xerpium.com',
+    )
     def portal_payment_bank_delete(self, contract_id, partner_bank_id=False, **kw):
         try:
             contract = self._document_check_access('vit.kontrak', int(contract_id))
