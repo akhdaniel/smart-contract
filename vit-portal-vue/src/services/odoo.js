@@ -147,6 +147,19 @@ const odooService = {
     return await jsonrpc(`/web/dataset/call_kw/${model}/web_write`, params);
   },
 
+  async callMethod(model, method, args = [], kwargs = {}, config = {}) {
+    const params = {
+      model: model,
+      method: method,
+      args: args,
+      kwargs: {
+        ...kwargs,
+        context: {uid: this.getUid()},
+      },
+    };
+    return await jsonrpc(`/web/dataset/call_kw/${model}/${method}`, params, config);
+  },
+
   async rpc(endpoint, params = {}, config = {}) {
     return await jsonrpc(endpoint, params, config);
   },

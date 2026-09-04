@@ -567,13 +567,7 @@ const updateBankInfo = async () => {
       return;
     }
 
-    const payload = {
-      contract_id: contractId,
-      bank_name: payloadValue(bankForm.value.bank_name),
-      acc_number: payloadValue(bankForm.value.acc_number),
-    };
-
-    const response = await odooService.rpc('/my/contracts/payment-bank/save', payload, { skipLoading: true });
+    const response = await odooService.callMethod('vit.kontrak', 'portal_payment_bank_save', [[contractId], payloadValue(bankForm.value.bank_name), payloadValue(bankForm.value.acc_number)], {}, { skipLoading: true });
     if (!response || response.error) {
       uploadError.value = `Gagal menyimpan. ${response?.error || response?.message || 'Terjadi kesalahan.'}`;
       console.error(response);
@@ -591,9 +585,7 @@ const updateBankInfo = async () => {
 };
 
 const fetchBankInfo = async () => {
-  const response = await odooService.rpc('/my/contracts/payment-bank/info', {
-    contract_id: contractId,
-  }, { skipLoading: true });
+  const response = await odooService.callMethod('vit.kontrak', 'portal_payment_bank_info', [[contractId]], {}, { skipLoading: true });
   if (response && !response.error) {
     applyBankInfo(response);
   }
@@ -658,10 +650,7 @@ const deleteSavedBank = async (bank) => {
     return;
   }
 
-  const response = await odooService.rpc('/my/contracts/payment-bank/delete', {
-    contract_id: contractId,
-    partner_bank_id: bank.id,
-  }, { skipLoading: true });
+  const response = await odooService.callMethod('vit.kontrak', 'portal_payment_bank_delete', [[contractId], bank.id], {}, { skipLoading: true });
   if (!response || response.error) {
     uploadError.value = `Gagal menghapus rekening. ${response?.error || response?.message || 'Terjadi kesalahan.'}`;
     console.error(response);

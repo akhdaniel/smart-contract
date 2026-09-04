@@ -321,6 +321,95 @@ class kontrak(models.Model):
             else:
                 rec.payment_bank_acc_holder = ""
 
+    def _portal_bank_values(self):
+        self.ensure_one()
+        contract = self.sudo()
+        banks = contract.partner_id.sudo().bank_ids
+        return {
+            "selected_bank_id": contract.partner_bank_id.id if contract.partner_bank_id else False,
+            "selected_bank": {
+                "id": contract.partner_bank_id.id,
+                "display_name": contract.partner_bank_id.display_name,
+                "bank_name": contract.payment_bank_name,
+                "acc_number": contract.payment_bank_acc_number,
+                "acc_holder": contract.payment_bank_acc_holder,
+            } if contract.partner_bank_id else False,
+            "bank_accounts": [{
+                "id": bank.id,
+                "display_name": bank.display_name,
+                "bank_name": bank.bank_id.name if bank.bank_id else "",
+                "acc_number": bank.acc_number or "",
+                "acc_holder": getattr(bank, "acc_holder_name", False) or bank.partner_id.display_name,
+            } for bank in banks],
+        }
+
+    def portal_payment_bank_info(self):
+        self.ensure_one()
+        return self._portal_bank_values()
+
+    def portal_payment_bank_save(self, bank_name=False, acc_number=False):
+        self.ensure_one()
+        contract = self.sudo()
+        if contract.stage_id.display_name != "On Progress":
+            return {"error": "Rekening pembayaran hanya bisa diubah saat kontrak On Progress."}
+
+        bank_name = (bank_name or "").strip()
+        acc_number = (acc_number or "").strip()
+        if not bank_name or not acc_number:
+            return {"error": "Nama Bank dan Nomor Rekening wajib diisi."}
+
+        bank = self.env["res.bank"].sudo().search([("name", "=ilike", bank_name)], limit=1)
+        if not bank:
+            bank = self.env["res.bank"].sudo().create({"name": bank_name})
+
+        partner_bank = self.env["res.partner.bank"].sudo().search([
+            ("partner_id", "=", contract.partner_id.id),
+            ("acc_number", "=", acc_number),
+            ("bank_id", "=", bank.id),
+        ], limit=1)
+        if not partner_bank:
+            partner_bank = self.env["res.partner.bank"].sudo().create({
+                "partner_id": contract.partner_id.id,
+                "bank_id": bank.id,
+                "acc_number": acc_number,
+            })
+
+        contract.write({"partner_bank_id": partner_bank.id})
+        contract.termin_ids.sudo().write({
+            "nama_bank": partner_bank.bank_id.name if partner_bank.bank_id else "",
+            "nomor_rekening": partner_bank.acc_number or "",
+        })
+        self.env.invalidate_all()
+        contract = self.env["vit.kontrak"].sudo().browse(contract.id).exists()
+        return contract._portal_bank_values()
+
+    def portal_payment_bank_delete(self, partner_bank_id=False):
+        self.ensure_one()
+        contract = self.sudo()
+        if contract.stage_id.display_name != "On Progress":
+            return {"error": "Rekening pembayaran hanya bisa dihapus saat kontrak On Progress."}
+        if not partner_bank_id:
+            return {"error": "Rekening yang akan dihapus belum dipilih."}
+
+        partner_bank = self.env["res.partner.bank"].sudo().browse(int(partner_bank_id)).exists()
+        if not partner_bank or partner_bank.partner_id != contract.partner_id:
+            return {"error": "Rekening tidak sesuai vendor kontrak."}
+
+        if contract.partner_bank_id == partner_bank:
+            contract.write({"partner_bank_id": False})
+            contract.termin_ids.sudo().write({
+                "nama_bank": False,
+                "nomor_rekening": False,
+            })
+        try:
+            partner_bank.unlink()
+        except Exception as error:
+            return {"error": str(error)}
+
+        self.env.invalidate_all()
+        contract = self.env["vit.kontrak"].sudo().browse(contract.id).exists()
+        return contract._portal_bank_values()
+
     @api.depends(
         "termin_ids.work_finish_date",
         "termin_ids.syarat_progress",
