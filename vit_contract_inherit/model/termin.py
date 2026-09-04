@@ -46,6 +46,31 @@ class termin(models.Model):
 
     nama_bank = fields.Char(string=_("Nama Bank"))
     nomor_rekening = fields.Char(string=_("Nomor Rekening"))
+    partner_bank_id = fields.Many2one(
+        "res.partner.bank",
+        related="kontrak_id.partner_bank_id",
+        string="Rekening Pembayaran",
+        store=True,
+        readonly=True,
+    )
+    payment_bank_name = fields.Char(
+        related="kontrak_id.payment_bank_name",
+        string="Nama Bank Kontrak",
+        store=True,
+        readonly=True,
+    )
+    payment_bank_acc_number = fields.Char(
+        related="kontrak_id.payment_bank_acc_number",
+        string="Nomor Rekening Kontrak",
+        store=True,
+        readonly=True,
+    )
+    payment_bank_acc_holder = fields.Char(
+        related="kontrak_id.payment_bank_acc_holder",
+        string="Atas Nama Rekening",
+        store=True,
+        readonly=True,
+    )
 
 
     verification_date = fields.Date(

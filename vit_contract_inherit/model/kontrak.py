@@ -62,6 +62,31 @@ class kontrak(models.Model):
         string='Upload'
     )
 
+    partner_bank_id = fields.Many2one(
+        "res.partner.bank",
+        string="Rekening Pembayaran",
+        domain="[('partner_id', '=', partner_id)]",
+        tracking=True,
+    )
+    payment_bank_name = fields.Char(
+        string="Nama Bank",
+        compute="_compute_payment_bank_info",
+        store=True,
+        readonly=True,
+    )
+    payment_bank_acc_number = fields.Char(
+        string="Nomor Rekening",
+        compute="_compute_payment_bank_info",
+        store=True,
+        readonly=True,
+    )
+    payment_bank_acc_holder = fields.Char(
+        string="Atas Nama Rekening",
+        compute="_compute_payment_bank_info",
+        store=True,
+        readonly=True,
+    )
+
     attachment_line_ids = fields.One2many(
         comodel_name="vit.kontrak_attachment",
         inverse_name="kontrak_id",
@@ -190,6 +215,11 @@ class kontrak(models.Model):
     @api.onchange('partner_id')
     def _onchange_partner_id(self):
         """Handle saat partner diganti: clear kanwil/kanca lama, update baru"""
+        if self.partner_bank_id and self.partner_bank_id.partner_id != self.partner_id:
+            self.partner_bank_id = False
+        if self.partner_id and not self.partner_bank_id and len(self.partner_id.bank_ids) == 1:
+            self.partner_bank_id = self.partner_id.bank_ids[0]
+
         # Clear kanwil/kanca di master_users lama saat partner diganti
         if self._origin and self._origin.partner_id:
             old_partner = self._origin.partner_id
@@ -276,6 +306,20 @@ class kontrak(models.Model):
     def _compute_addendum_count(self):
         for rec in self:
             rec.addendum_count = len(rec.addendum_ids)
+
+    @api.depends("partner_bank_id", "partner_bank_id.bank_id", "partner_bank_id.acc_number", "partner_bank_id.partner_id")
+    def _compute_payment_bank_info(self):
+        for rec in self:
+            bank = rec.partner_bank_id
+            rec.payment_bank_name = bank.bank_id.name if bank and bank.bank_id else ""
+            rec.payment_bank_acc_number = bank.acc_number if bank else ""
+            if bank:
+                rec.payment_bank_acc_holder = (
+                    getattr(bank, "acc_holder_name", False)
+                    or bank.partner_id.display_name
+                )
+            else:
+                rec.payment_bank_acc_holder = ""
 
     @api.depends(
         "termin_ids.work_finish_date",

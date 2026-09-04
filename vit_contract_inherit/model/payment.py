@@ -15,6 +15,32 @@ class payment(models.Model):
         string='Upload'
     )
 
+    partner_bank_id = fields.Many2one(
+        "res.partner.bank",
+        related="kontrak_id.partner_bank_id",
+        string="Rekening Pembayaran",
+        store=True,
+        readonly=True,
+    )
+    payment_bank_name = fields.Char(
+        related="kontrak_id.payment_bank_name",
+        string="Nama Bank",
+        store=True,
+        readonly=True,
+    )
+    payment_bank_acc_number = fields.Char(
+        related="kontrak_id.payment_bank_acc_number",
+        string="Nomor Rekening",
+        store=True,
+        readonly=True,
+    )
+    payment_bank_acc_holder = fields.Char(
+        related="kontrak_id.payment_bank_acc_holder",
+        string="Atas Nama Rekening",
+        store=True,
+        readonly=True,
+    )
+
     name = fields.Char( required=True, copy=False, default="New", readonly=True,  string=_("Name"))
 
 

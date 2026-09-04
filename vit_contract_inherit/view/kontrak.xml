@@ -307,8 +307,6 @@
                 <xpath expr="//field[@name='partner_id']" position="attributes">
                     <attribute name="readonly">is_addendum==True or stage_is_draft==False</attribute>
                 </xpath>
-
-
                 <xpath expr="//field[@name='amount_denda']" position="attributes">
                     <attribute name="readonly">1</attribute>
                     <attribute name="force_save">1</attribute>

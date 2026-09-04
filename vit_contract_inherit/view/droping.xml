@@ -26,7 +26,8 @@
                   type="object"
                   icon="fa-times-circle"
                   groups="vit_contract_inherit.group_vit_contract_kanwil_keuangan,
-                          vit_contract_inherit.group_vit_contract_pusat_keuangan"
+                          vit_contract_inherit.group_vit_contract_pusat_keuangan,
+                          vit_contract.group_vit_contract_manager"
                   invisible="allow_cancel==False"/>
         </xpath>
 
@@ -116,6 +117,10 @@
               <field name="persentase"/>
               <field name="deskripsi"/>
               <field name="partner_id"/>
+              <field name="partner_bank_id"/>
+              <field name="payment_bank_name"/>
+              <field name="payment_bank_acc_number"/>
+              <field name="payment_bank_acc_holder"/>
               <field name="syarat_progress"/>
               <field name="actual_progress"/>
               <field name="syarat_output"/>

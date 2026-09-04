@@ -298,6 +298,10 @@ class DropingLine(models.Model):
     syarat_output = fields.Text(related="termin_id.syarat_output", string="Syarat Output", readonly=True)
     actual_output = fields.Text(related="termin_id.actual_output", string="Actual Output", readonly=True)
     nomor_kontrak = fields.Char(related="termin_id.nomor_kontrak", string="Nomor Kontrak", readonly=True)
+    partner_bank_id = fields.Many2one(related="termin_id.partner_bank_id", string="Rekening Pembayaran", readonly=True)
+    payment_bank_name = fields.Char(related="termin_id.payment_bank_name", string="Nama Bank", readonly=True)
+    payment_bank_acc_number = fields.Char(related="termin_id.payment_bank_acc_number", string="Nomor Rekening", readonly=True)
+    payment_bank_acc_holder = fields.Char(related="termin_id.payment_bank_acc_holder", string="Atas Nama Rekening", readonly=True)
 
     @api.depends("termin_id", "termin_id.kontrak_id")
     def _compute_filter_kontrak_id(self):

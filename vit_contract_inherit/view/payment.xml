@@ -57,7 +57,8 @@
                             type="object"
                             icon="fa-times-circle"
                             groups="vit_contract_inherit.group_vit_contract_kanwil_keuangan,
-                                    vit_contract_inherit.group_vit_contract_pusat_keuangan"
+                                    vit_contract_inherit.group_vit_contract_pusat_keuangan,
+                                    vit_contract.group_vit_contract_manager"
                             invisible="allow_cancel==False"/>
                 </xpath>
 
@@ -92,6 +93,10 @@
                 <xpath expr="//field[@name='izin_prinsip_id']" position="after">
                     <field name="partner_id" readonly="1"/>
                     <field name="termin_id" readonly="1"/>
+                    <field name="partner_bank_id" invisible="1"/>
+                    <field name="payment_bank_name" readonly="1"/>
+                    <field name="payment_bank_acc_number" readonly="1"/>
+                    <field name="payment_bank_acc_holder" invisible="1"/>
                 </xpath>
 
 
