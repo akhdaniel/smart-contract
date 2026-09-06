@@ -71,17 +71,17 @@
                       <input type="text" class="form-control" id="actual_progress" v-model="termin.actual_progress" required="required" :disabled="termin.stage_id.display_name !== 'On Progress'">
                     </div>
 
-                    <div class="col-12" v-if="contract.jenis_kontrak_id.type === 'non_fisik'">
+                    <div class="col-md-4 col-sm-12" v-if="contract.jenis_kontrak_id.type === 'non_fisik'">
                       <label for="syarat_output" class="form-label">Syarat Output (%)</label>
                       <input type="text" class="form-control" id="syarat_output" :value="displayValue(termin.syarat_output)" disabled>
                     </div>
 
-                    <div class="col-12" v-if="contract.jenis_kontrak_id.type === 'non_fisik'">
+                    <div class="col-md-4 col-sm-12" v-if="contract.jenis_kontrak_id.type === 'non_fisik'">
                       <label for="actual_output" class="form-label">Actual Output (%)</label>
                       <input type="text" class="form-control" id="actual_output" v-model="termin.actual_output" required :disabled="termin.stage_id.display_name !== 'On Progress'">
                     </div>
 
-                    <div class="col-12 d-flex justify-content-end">
+                    <div class="col-md-4 col-sm-12">
                       <div class="form-label">&nbsp;</div>
                       <button class="form-control btn btn-primary progress-save-button" @click="updateProgress(termin.id)" :disabled="termin.stage_id.display_name !== 'On Progress'">Save</button>
                     </div>   
