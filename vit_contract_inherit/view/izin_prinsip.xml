@@ -203,7 +203,7 @@
             <field name="inherit_id" ref="vit_contract.view_vit_izin_prinsip_search"/>
             <field name="arch" type="xml">
                 <xpath expr="//search" position="inside">
-                    <filter string="KMA" name="filter_by_tipe_kegiatan" domain="[('tipe_kegiatan','=','')]"/>
+                    <filter string="Tipe Kegiatan" name="filter_by_tipe_kegiatan" domain="[('tipe_kegiatan','=','')]"/>
                     <filter string="Segmentasi" name="filter_by_jenis_penugasan" domain="[('jenis_penugasan','=','')]"/>
                     <filter string="Batas Waktu Izin Prinsip" name="filter_by_batas_waktu_izin_prinsip" domain="[('batas_waktu_izin_prinsip','=','')]"/>
                     <filter string="Total Qty Izin Prinsip" name="filter_by_total_qty_izin_prinsip" domain="[('total_qty_izin_prinsip','=','')]"/>
@@ -225,7 +225,7 @@
                     <field name="previous_remaining" select="True"/>
                 </xpath>
                 <xpath expr="//filter[@name='group_by_kanwil_id']" position="after">
-                    <filter string="KMA" domain="[]" name="group_by_tipe_kegiatan" context="{'group_by':'tipe_kegiatan'}"/>
+                    <filter string="Tipe Kegiatan" domain="[]" name="group_by_tipe_kegiatan" context="{'group_by':'tipe_kegiatan'}"/>
                     <filter string="Segmentasi" domain="[]" name="group_by_jenis_penugasan" context="{'group_by':'jenis_penugasan'}"/>
                     <filter string="Batas Waktu Izin Prinsip" domain="[]" name="group_by_batas_waktu_izin_prinsip" context="{'group_by':'batas_waktu_izin_prinsip'}"/>
                 </xpath>

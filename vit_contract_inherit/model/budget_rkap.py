@@ -60,9 +60,13 @@ class budget_rkap(models.Model):
         readonly=True
     )
 
+    kma = fields.Char(
+        string="KMA",
+    )
+
     tipe_kegiatan = fields.Selection(
         selection=[('biaya', 'Biaya'), ('investasi', 'Investasi')],
-        string="KMA",
+        string="Tipe Kegiatan",
     )
 
 

@@ -56,7 +56,7 @@ class izin_prinsip(models.Model):
 
     tipe_kegiatan = fields.Selection(
         related="budget_id.tipe_kegiatan",
-        string="KMA",
+        string="Tipe Kegiatan",
         readonly=True,
     )
 
