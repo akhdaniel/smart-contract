@@ -808,7 +808,7 @@ class BudgetRkap(models.Model):
                 ("master_budget_id", "=", mb.id)
             ] + budget_date_domain)
 
-            pagu = sum(budgets.mapped("total_pagu_izin_prinsip")) if "total_pagu_izin_prinsip" in budgets._fields else 0
+            pagu = sum(budgets.mapped("amount")) if "amount" in budgets._fields else 0
             realisasi = sum(budgets.mapped("total_amount_payment")) if "total_amount_payment" in budgets._fields else 0
 
             persen_realisasi = (realisasi / pagu * 100) if pagu > 0 else 0
@@ -821,12 +821,8 @@ class BudgetRkap(models.Model):
                 "persen_realisasi": f"{persen_realisasi:.2f}",
             })
 
-            # total_all_pagu += pagu
-            # total_all_realisasi += realisasi
-            
-            if realisasi > 0:
-                total_all_pagu += pagu
-                total_all_realisasi += realisasi
+            total_all_pagu += pagu
+            total_all_realisasi += realisasi
 
 
         total_persen = (total_all_realisasi / total_all_pagu * 100) if total_all_pagu > 0 else 0

@@ -170,15 +170,21 @@
                     <field name="batas_waktu_izin_prinsip"/>
                 </xpath>
                 <xpath expr="//tree/field[@name='total_pagu']" position="after">
-                    <field name="total_qty_izin_prinsip"/>
-                    <field name="total_amount_kontrak"/>
-                    <field name="total_qty_kontrak"/>
+                    <field name="total_qty_izin_prinsip" column_invisible="1"/>
+                    <field name="total_amount_kontrak" column_invisible="1"/>
+                    <field name="total_qty_kontrak" column_invisible="1"/>
                 </xpath>
                 <xpath expr="//tree/field[@name='total_payment']" position="after">
-                    <field name="total_amount_droping"/>
-                    <field name="percent_realisasi_droping" widget="percentage"/>
-                    <field name="percent_realisasi_payment" widget="percentage"/>
-                    <field name="previous_remaining"/>
+                    <field name="total_amount_droping" column_invisible="1"/>
+                    <field name="percent_realisasi_droping" widget="percentage" column_invisible="1"/>
+                    <field name="percent_realisasi_payment" widget="percentage" column_invisible="1"/>
+                    <field name="previous_remaining" column_invisible="1"/>
+                </xpath>
+                <xpath expr="//tree/field[@name='total_pagu']" position="attributes">
+                    <attribute name="column_invisible">1</attribute>
+                </xpath>
+                <xpath expr="//tree/field[@name='total_payment']" position="attributes">
+                    <attribute name="column_invisible">1</attribute>
                 </xpath>
                 <xpath expr="//tree" position="inside">
                     <button
