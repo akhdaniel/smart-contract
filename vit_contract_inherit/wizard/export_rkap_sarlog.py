@@ -27,6 +27,112 @@ class ExportRkapSarlog(models.TransientModel):
         res['year'] = str(datetime.now().year)
         return res
 
+    @api.model
+    def get_dashboard_data(self, year=None):
+        """Return the same dataset used by the Realisasi RKAP Excel export."""
+        year_filter = int(year or datetime.now().year)
+        dashboard_stats = self.env['vit.budget_rkap'].get_statistics_sarlog(year_filter)
+        grouped_data = {}
+
+        for item in dashboard_stats.get('master_list', []):
+            master_budget = self.env['vit.master_budget'].browse(item.get('id'))
+            budget_records = self.env['vit.budget_rkap'].search([
+                ('master_budget_id', '=', master_budget.id),
+                ('budget_date', '>=', f'{year_filter}-01-01'),
+                ('budget_date', '<=', f'{year_filter}-12-31'),
+            ])
+            if not budget_records:
+                continue
+            budget = budget_records[:1]
+            category = budget.tipe_kegiatan or 'lainnya'
+            row_name = budget.name if budget and budget.name else item.get('name')
+            rkap_amount = sum(budget_records.mapped('amount'))
+            assignment_type = (
+                budget.jenis_penugasan
+                if budget and budget.jenis_penugasan
+                else master_budget.jenis_penugasan
+            )
+            realization = item.get('realisasi', 0)
+            rkap_pso = rkap_amount if assignment_type == 'pso' else 0
+            rkap_kom = rkap_amount if assignment_type == 'kom' else 0
+            realization_pso = realization if assignment_type == 'pso' else 0
+            realization_kom = realization if assignment_type == 'kom' else 0
+            progress = float(item.get('persen_realisasi') or 0)
+
+            grouped_data.setdefault(category, []).append({
+                'name': row_name,
+                'amount': rkap_amount,
+                'jenis_penugasan': assignment_type,
+                'total_pagu_izin_prinsip': rkap_amount,
+                'rkap_pso': rkap_pso,
+                'rkap_kom': rkap_kom,
+                'realisasi_pso': realization_pso,
+                'realisasi_kom': realization_kom,
+                'total_realisasi': realization,
+                'avg_progress': progress,
+                'saldo': rkap_amount - realization if realization > 0 else 0,
+            })
+
+        display_names = {
+            'biaya': 'BIAYA',
+            'investasi': 'INVESTASI',
+        }
+        sorted_categories = sorted(
+            grouped_data,
+            key=lambda category: (0 if category == 'biaya' else 1 if category == 'investasi' else 2, category),
+        )
+        categories = []
+        row_number = 1
+        grand_totals = {
+            'rkap_pso': 0,
+            'rkap_kom': 0,
+            'rkap_total': 0,
+            'realisasi_pso': 0,
+            'realisasi_kom': 0,
+            'realisasi_total': 0,
+            'saldo': 0,
+        }
+
+        for index, category in enumerate(sorted_categories):
+            items = grouped_data[category]
+            for item in items:
+                item['number'] = row_number
+                row_number += 1
+            totals = {
+                'rkap_pso': sum(row['rkap_pso'] for row in items),
+                'rkap_kom': sum(row['rkap_kom'] for row in items),
+                'rkap_total': sum(row['amount'] for row in items),
+                'realisasi_pso': sum(row['realisasi_pso'] for row in items),
+                'realisasi_kom': sum(row['realisasi_kom'] for row in items),
+                'realisasi_total': sum(row['total_realisasi'] for row in items),
+                'saldo': sum(row['saldo'] for row in items),
+            }
+            totals['progress'] = (
+                totals['realisasi_total'] / totals['rkap_total'] * 100
+                if totals['rkap_total'] else 0
+            )
+            for key in grand_totals:
+                grand_totals[key] += totals[key]
+            categories.append({
+                'key': category,
+                'letter': chr(65 + index),
+                'name': display_names.get(category, category.upper()),
+                'items': items,
+                'totals': totals,
+            })
+
+        grand_totals['progress'] = (
+            grand_totals['realisasi_total'] / grand_totals['rkap_total'] * 100
+            if grand_totals['rkap_total'] else 0
+        )
+        return {
+            'year': year_filter,
+            'title': f'REKAP REALISASI RKAP SARLOG {year_filter}',
+            'categories': categories,
+            'totals': grand_totals,
+            'grouped_data': grouped_data,
+        }
+
     def action_export_excel(self):
         """Generate Excel file dengan struktur RKAP Realisasi Sarlog"""
         self.ensure_one()
@@ -37,57 +143,10 @@ class ExportRkapSarlog(models.TransientModel):
         except ImportError:
             raise Exception("openpyxl library not found. Please install it.")
 
-        # Use dashboard statistics for the REALISASI values. RKAP values below
-        # are taken directly from Budget RKAP amount for the selected year.
         year_filter = int(self.year)
-        dashboard_stats = self.env['vit.budget_rkap'].get_statistics_sarlog(year_filter)
-        overall_percentage = dashboard_stats.get('total_summary', {}).get('persen', 0)
-
-        # Build row data from the master_list returned by the dashboard helper.
-        # Group again by tipe_kegiatan so we can keep the same A/B sections.
-        grouped_data = {}
-        for item in dashboard_stats.get('master_list', []):
-            mb = self.env['vit.master_budget'].browse(item.get('id'))
-            budget_records = self.env['vit.budget_rkap'].search([
-                ('master_budget_id', '=', mb.id),
-                ('budget_date', '>=', f'{year_filter}-01-01'),
-                ('budget_date', '<=', f'{year_filter}-12-31')
-            ])
-            budget = budget_records[:1]
-            tipe = budget.tipe_kegiatan if budget and budget.tipe_kegiatan else 'Lainnya'
-            if tipe not in grouped_data:
-                grouped_data[tipe] = []
-
-            # use the budget_rkap's name if available, otherwise fall back
-            # to the master budget name stored in the dashboard data.
-            row_name = budget.name if budget and budget.name else item.get('name')
-
-            # RKAP must show Budget RKAP amount even when there is no payment realization yet.
-            # The REALISASI columns below still follow total_amount_payment.
-            rkap_amount = sum(budget_records.mapped('amount'))
-            jenis_penugasan = budget.jenis_penugasan if budget and budget.jenis_penugasan else mb.jenis_penugasan
-
-            # split into PSO/KOM based on Budget RKAP's segmentasi/jenis_penugasan
-            realisasi = item.get('realisasi', 0)
-            real_pso = realisasi if jenis_penugasan == 'pso' else 0
-            real_kom = realisasi if jenis_penugasan == 'kom' else 0
-            pso_val = rkap_amount if jenis_penugasan == 'pso' else 0
-            kom_val = rkap_amount if jenis_penugasan == 'kom' else 0
-
-            # progress was already computed by dashboard helper, but recalc just
-            # to have a numeric value (not string) for formatting later.
-            progress = float(item.get('persen_realisasi') or 0)
-
-            grouped_data[tipe].append({
-                'name': row_name,
-                'amount': rkap_amount,
-                'jenis_penugasan': jenis_penugasan,
-                'total_pagu_izin_prinsip': rkap_amount,
-                'realisasi_pso': real_pso,
-                'realisasi_kom': real_kom,
-                'total_realisasi': realisasi,
-                'avg_progress': progress,
-            })
+        dashboard_data = self.get_dashboard_data(year_filter)
+        grouped_data = dashboard_data['grouped_data']
+        overall_percentage = dashboard_data['totals']['progress']
 
         # Create workbook
         wb = Workbook()

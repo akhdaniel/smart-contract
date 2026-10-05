@@ -1,5 +1,6 @@
 import base64
 import io
+from datetime import timedelta
 
 from PIL import Image, ImageDraw, ImageFont
 
@@ -8,6 +9,83 @@ from odoo.exceptions import ValidationError, UserError
 
 class ResUsers(models.Model):
     _inherit = 'res.users'
+
+    @api.model
+    def systray_get_activities(self):
+        groups = super().systray_get_activities()
+        user = self.env.user
+        is_operational_reviewer = (
+            user.has_group('vit_contract_inherit.group_vit_contract_kanwil')
+            or user.has_group('vit_contract_inherit.group_vit_contract_kanca')
+        )
+        is_pusat_umum = user.has_group(
+            'vit_contract_inherit.group_vit_contract_pusat_umum'
+        )
+        if not (is_operational_reviewer or is_pusat_umum):
+            return groups
+
+        if is_operational_reviewer:
+            today = fields.Date.today()
+            soon_count = self.env['vit.izin_prinsip'].search_count([
+                ('active', '=', True),
+                ('stage_is_done', '=', True),
+                ('batas_waktu_izin_prinsip', '>=', today),
+                ('batas_waktu_izin_prinsip', '<=', today + timedelta(days=7)),
+                ('kontrak_ids', '=', False),
+            ])
+            izin_group = next(
+                (group for group in groups if group.get('model') == 'vit.izin_prinsip'),
+                None,
+            )
+            if izin_group:
+                izin_group['execution_soon_count'] = soon_count
+                izin_group['total_count'] = soon_count
+            else:
+                model = self.env['ir.model']._get('vit.izin_prinsip')
+                groups.append({
+                    'id': model.id,
+                    'name': model.name,
+                    'model': 'vit.izin_prinsip',
+                    'type': 'activity',
+                    'icon': '/vit_contract/static/description/icon.png',
+                    'total_count': soon_count,
+                    'today_count': 0,
+                    'overdue_count': 0,
+                    'planned_count': 0,
+                    'execution_soon_count': soon_count,
+                    'view_type': 'list',
+                })
+
+        pending_field = 'confirm' if is_pusat_umum else 'verified'
+        pending_count = self.env['vit.syarat_termin'].search_count([
+            ('document', '!=', False),
+            (pending_field, '=', False),
+        ])
+        payment_group = next(
+            (group for group in groups if group.get('model') == 'vit.syarat_termin'),
+            None,
+        )
+        if payment_group:
+            payment_group['verification_pending_count'] = pending_count
+            payment_group['verification_pending_field'] = pending_field
+            payment_group['total_count'] = pending_count
+        else:
+            model = self.env['ir.model']._get('vit.syarat_termin')
+            groups.append({
+                'id': model.id,
+                'name': model.name,
+                'model': 'vit.syarat_termin',
+                'type': 'activity',
+                'icon': '/vit_contract/static/description/icon.png',
+                'total_count': pending_count,
+                'today_count': 0,
+                'overdue_count': 0,
+                'planned_count': 0,
+                'verification_pending_count': pending_count,
+                'verification_pending_field': pending_field,
+                'view_type': 'list',
+            })
+        return groups
 
     entity_initials = fields.Char(
         string='Entity Initials',

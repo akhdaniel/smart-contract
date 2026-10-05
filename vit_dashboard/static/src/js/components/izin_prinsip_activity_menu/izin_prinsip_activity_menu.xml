@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="vit_dashboard.IzinPrinsipActivityMenu"
+       t-inherit="mail.ActivityMenu"
+       t-inherit-mode="extension">
+        <xpath expr="//div[@name='activityGroups']//img" position="replace">
+            <span t-if="group.model === 'vit.izin_prinsip'"
+                  class="o_izin_prinsip_activity_icon"
+                  title="Izin Prinsip">
+                <i class="fa fa-envelope" aria-label="Izin Prinsip"/>
+            </span>
+            <span t-elif="group.model === 'vit.syarat_termin'"
+                  class="o_payment_document_activity_icon"
+                  title="Dokumen Vendor">
+                <i class="fa fa-file-text-o" aria-label="Dokumen Vendor"/>
+            </span>
+            <img t-else="" alt="Activity" t-att-src="group.icon"/>
+        </xpath>
+        <xpath expr="//div[@t-if=&quot;group.type === 'activity'&quot;]" position="replace">
+            <div t-if="group.type === 'activity'" class="d-flex">
+                <t t-if="group.model === 'vit.izin_prinsip'">
+                    <span class="btn btn-link py-0 px-2 text-truncate"
+                          t-on-click.stop="() => this.openIzinPrinsipSoon(group)">
+                        Segera dieksekusi: <t t-out="group.execution_soon_count || 0"/>
+                    </span>
+                </t>
+                <t t-elif="group.model === 'vit.syarat_termin'">
+                    <span class="btn btn-link py-0 px-2 text-truncate"
+                          t-on-click.stop="() => this.openPaymentDocumentsPending(group)">
+                        Perlu diverifikasi: <t t-out="group.verification_pending_count || 0"/>
+                    </span>
+                </t>
+                <t t-else="">
+                    <span t-attf-class="#{group.overdue_count ? 'btn btn-link' : 'text-muted'} py-0 px-2 text-truncate"
+                          t-on-click.stop="() => this.openActivityGroup(group, 'overdue')">
+                        <t t-out="group.overdue_count"/> Late
+                    </span>
+                    <span t-attf-class="#{group.today_count ? 'btn btn-link' : 'text-muted'} py-0 px-2 text-truncate"
+                          t-on-click.stop="() => this.openActivityGroup(group, 'today')">
+                        <t t-out="group.today_count"/> Today
+                    </span>
+                    <span class="flex-grow-1"/>
+                    <span t-attf-class="#{group.planned_count ? 'btn btn-link' : 'text-muted'} py-0 px-2 text-truncate"
+                          t-on-click.stop="() => this.openActivityGroup(group, 'upcoming_all')">
+                        <t t-out="group.planned_count"/> Future
+                    </span>
+                </t>
+            </div>
+        </xpath>
+    </t>
+</templates>

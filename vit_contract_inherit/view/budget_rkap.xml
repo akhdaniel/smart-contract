@@ -29,12 +29,12 @@
                 </xpath>
 
                 <xpath expr="//field[@name='jenis_penugasan']" position="attributes">
-                    <attribute name="readonly">1</attribute>
+                    <attribute name="readonly">stage_is_draft==False</attribute>
                     <attribute name="force_save">1</attribute>
                 </xpath>
 
-                <xpath expr="//field[@name='tipe_kegiatan']" position="before">
-                    <field name="kma" readonly="stage_is_draft==False"/>
+                <xpath expr="//field[@name='tipe_kegiatan']" position="attributes">
+                    <attribute name="string">KMA</attribute>
                 </xpath>
 
                 <xpath expr="//field[@name='remaining']" position="attributes">
@@ -108,8 +108,8 @@
             <field name="model">vit.budget_rkap</field>
             <field name="inherit_id" ref="vit_contract.view_vit_budget_rkap_tree"/>
             <field name="arch" type="xml">
-                <xpath expr="//tree/field[@name='tipe_kegiatan']" position="before">
-                    <field name="kma"/>
+                <xpath expr="//tree/field[@name='tipe_kegiatan']" position="attributes">
+                    <attribute name="string">KMA</attribute>
                 </xpath>
                 <xpath expr="//tree/field[@name='total_amount_droping']" position="after">
                     <field name="percent_realisasi_droping" widget="percentage"/>
@@ -123,26 +123,20 @@
             <field name="model">vit.budget_rkap</field>
             <field name="inherit_id" ref="vit_contract.view_vit_budget_rkap_search"/>
             <field name="arch" type="xml">
-                <xpath expr="//filter[@name='filter_by_tipe_kegiatan']" position="before">
-                    <filter string="KMA" name="filter_by_kma" domain="[('kma','=','')]"/>
-                </xpath>
                 <xpath expr="//filter[@name='filter_by_tipe_kegiatan']" position="attributes">
-                    <attribute name="string">Tipe Kegiatan</attribute>
+                    <attribute name="string">KMA</attribute>
                 </xpath>
                 <xpath expr="//filter[@name='filter_by_jenis_penugasan']" position="attributes">
                     <attribute name="string">Segmentasi</attribute>
                 </xpath>
                 <xpath expr="//filter[@name='group_by_tipe_kegiatan']" position="attributes">
-                    <attribute name="string">Tipe Kegiatan</attribute>
+                    <attribute name="string">KMA</attribute>
                 </xpath>
                 <xpath expr="//filter[@name='group_by_jenis_penugasan']" position="attributes">
                     <attribute name="string">Segmentasi</attribute>
                 </xpath>
-                <xpath expr="//field[@name='tipe_kegiatan']" position="before">
-                    <field name="kma" select="True"/>
-                </xpath>
-                <xpath expr="//filter[@name='group_by_tipe_kegiatan']" position="before">
-                    <filter string="KMA" domain="[]" name="group_by_kma" context="{'group_by':'kma'}"/>
+                <xpath expr="//field[@name='tipe_kegiatan']" position="attributes">
+                    <attribute name="string">KMA</attribute>
                 </xpath>
                 <xpath expr="//search" position="inside">
                     <filter string="Persentase Realisasi RKAP terhadap Dropping"

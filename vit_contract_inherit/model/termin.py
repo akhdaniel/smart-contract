@@ -8,6 +8,34 @@ class termin(models.Model):
     _name = "vit.termin"
     _inherit = ["vit.termin", "mail.thread", "mail.activity.mixin"]
 
+    is_pusat_print_user = fields.Boolean(
+        string="Akun Pusat",
+        compute="_compute_is_pusat_print_user",
+    )
+
+    realokasi_print_date = fields.Date(
+        string="Tanggal Cetak Realokasi",
+        compute="_compute_realokasi_print_date",
+    )
+
+    def _compute_realokasi_print_date(self):
+        today = fields.Date.context_today(self)
+        for rec in self:
+            rec.realokasi_print_date = today
+
+    def _compute_is_pusat_print_user(self):
+        is_pusat = (
+            self.env.user.has_group("vit_contract.group_vit_contract_manager")
+            or self.env.user.has_group(
+                "vit_contract_inherit.group_vit_contract_pusat_umum"
+            )
+            or self.env.user.has_group(
+                "vit_contract_inherit.group_vit_contract_pusat_keuangan"
+            )
+        )
+        for rec in self:
+            rec.is_pusat_print_user = is_pusat
+
 
     name = fields.Char( required=True, copy=False, string=_("Name"))
 
@@ -248,6 +276,12 @@ class termin(models.Model):
     def action_print_nota_verifikasi(self):
         self._ensure_done_for_print()
         return self.env.ref("vit_contract_inherit.action_report_termin_nota_verifikasi").report_action(self)
+
+    def action_print_lembar_realokasi(self):
+        self._ensure_done_for_print()
+        return self.env.ref(
+            "vit_contract_inherit.action_report_termin_lembar_realokasi"
+        ).report_action(self)
 
 
     # def action_confirm(self):

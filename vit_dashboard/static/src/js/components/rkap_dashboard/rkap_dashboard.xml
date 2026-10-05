@@ -1,0 +1,114 @@
+<t t-name="vit_dashboard.RkapDashboard" owl="1">
+    <div class="o_rkap_dashboard">
+        <div class="o_rkap_dashboard__toolbar">
+            <div>
+                <h2>Dashboard RKAP</h2>
+                <p>Rekap realisasi RKAP Sarlog</p>
+            </div>
+            <div class="o_rkap_dashboard__actions">
+                <div class="o_rkap_dashboard__year">
+                    <label for="rkap-dashboard-year">Tahun</label>
+                    <select id="rkap-dashboard-year"
+                            class="form-select"
+                            t-on-change="onYearChange"
+                            t-att-disabled="state.isLoading ? true : undefined">
+                        <t t-foreach="state.availableYears" t-as="year" t-key="year">
+                            <option t-att-value="year"
+                                    t-att-selected="state.selectedYear === year ? true : undefined">
+                                <t t-esc="year"/>
+                            </option>
+                        </t>
+                    </select>
+                </div>
+                <button type="button"
+                        class="btn btn-primary o_rkap_dashboard__download"
+                        t-on-click="downloadDashboard"
+                        t-att-disabled="state.isLoading || state.isDownloading ? true : undefined">
+                    <i t-att-class="state.isDownloading ? 'fa fa-spinner fa-spin' : 'fa fa-download'"/>
+                    <span><t t-esc="state.isDownloading ? 'Menyiapkan...' : 'Download Dashboard'"/></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="o_rkap_dashboard__sheet">
+            <div class="o_rkap_dashboard__title"><t t-esc="state.title"/></div>
+            <div class="o_rkap_dashboard__table_wrap">
+                <table class="o_rkap_dashboard__table">
+                    <thead>
+                        <tr>
+                            <th rowspan="2" class="o_col_no">NO</th>
+                            <th rowspan="2" class="o_col_activity">KEGIATAN</th>
+                            <th colspan="3">RKAP</th>
+                            <th colspan="4">REALISASI</th>
+                            <th rowspan="2">SALDO<br/>(Rp)</th>
+                        </tr>
+                        <tr>
+                            <th>PSO<br/>(Rp)</th>
+                            <th>KOM<br/>(Rp)</th>
+                            <th>TOTAL<br/>(Rp)</th>
+                            <th>PSO<br/>(Rp)</th>
+                            <th>KOM<br/>(Rp)</th>
+                            <th>TOTAL<br/>(Rp)</th>
+                            <th>PROGRES<br/>(%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-if="state.isLoading">
+                            <td colspan="10" class="o_rkap_dashboard__empty">
+                                <i class="fa fa-spinner fa-spin"/> Memuat data...
+                            </td>
+                        </tr>
+                        <tr t-if="!state.isLoading &amp;&amp; !state.categories.length">
+                            <td colspan="10" class="o_rkap_dashboard__empty">Tidak ada data RKAP untuk tahun ini.</td>
+                        </tr>
+                        <t t-foreach="state.categories" t-as="category" t-key="category.key">
+                            <tr t-att-class="'o_rkap_category o_rkap_category--' + category.key">
+                                <td><t t-esc="category.letter"/></td>
+                                <td><t t-esc="category.name"/></td>
+                                <td colspan="8"/>
+                            </tr>
+                            <t t-foreach="category.items" t-as="item" t-key="category.key + '-' + item.number">
+                                <tr t-att-class="'o_rkap_data o_rkap_data--' + category.key">
+                                    <td class="o_text_center"><t t-esc="item.number"/></td>
+                                    <td class="o_text_left"><t t-esc="item.name"/></td>
+                                    <td><t t-esc="formatAmount(item.rkap_pso)"/></td>
+                                    <td><t t-esc="formatAmount(item.rkap_kom)"/></td>
+                                    <td><t t-esc="formatAmount(item.amount)"/></td>
+                                    <td><t t-esc="formatAmount(item.realisasi_pso)"/></td>
+                                    <td><t t-esc="formatAmount(item.realisasi_kom)"/></td>
+                                    <td><t t-esc="formatAmount(item.total_realisasi)"/></td>
+                                    <td><t t-esc="formatProgress(item.avg_progress)"/></td>
+                                    <td><t t-esc="formatAmount(item.saldo)"/></td>
+                                </tr>
+                            </t>
+                            <tr t-att-class="'o_rkap_subtotal o_rkap_subtotal--' + category.key">
+                                <td/>
+                                <td>JUMLAH <t t-esc="category.name"/></td>
+                                <td><t t-esc="formatAmount(category.totals.rkap_pso)"/></td>
+                                <td><t t-esc="formatAmount(category.totals.rkap_kom)"/></td>
+                                <td><t t-esc="formatAmount(category.totals.rkap_total)"/></td>
+                                <td><t t-esc="formatAmount(category.totals.realisasi_pso)"/></td>
+                                <td><t t-esc="formatAmount(category.totals.realisasi_kom)"/></td>
+                                <td><t t-esc="formatAmount(category.totals.realisasi_total)"/></td>
+                                <td><t t-esc="formatProgress(category.totals.progress)"/></td>
+                                <td><t t-esc="formatAmount(category.totals.saldo)"/></td>
+                            </tr>
+                        </t>
+                        <tr t-if="!state.isLoading &amp;&amp; state.categories.length" class="o_rkap_grand_total">
+                            <td/>
+                            <td>TOTAL</td>
+                            <td><t t-esc="formatAmount(state.totals.rkap_pso)"/></td>
+                            <td><t t-esc="formatAmount(state.totals.rkap_kom)"/></td>
+                            <td><t t-esc="formatAmount(state.totals.rkap_total)"/></td>
+                            <td><t t-esc="formatAmount(state.totals.realisasi_pso)"/></td>
+                            <td><t t-esc="formatAmount(state.totals.realisasi_kom)"/></td>
+                            <td><t t-esc="formatAmount(state.totals.realisasi_total)"/></td>
+                            <td><t t-esc="formatProgress(state.totals.progress)"/></td>
+                            <td><t t-esc="formatAmount(state.totals.saldo)"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</t>

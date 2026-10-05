@@ -22,6 +22,7 @@
 	"description": "",
 	"data": [
         'data/res_lang.xml',
+        'data/izin_prinsip_cron.xml',
         'security/groups.xml',
         'security/ir.model.access.csv',
         'view/res_users.xml',

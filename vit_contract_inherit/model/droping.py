@@ -249,10 +249,6 @@ class Droping(models.Model):
             if not rec.stage_is_done:
                 raise UserError(_("Cetak hanya bisa dilakukan jika dropping sudah Done."))
 
-    def action_print_lembar_realokasi(self):
-        self._ensure_done_for_print()
-        return self.env.ref("vit_contract_inherit.action_report_droping_lembar_realokasi").report_action(self)
-
     def action_print_nota_permintaan_dropping(self):
         self._ensure_done_for_print()
         return self.env.ref("vit_contract_inherit.action_report_droping_nota_permintaan").report_action(self)

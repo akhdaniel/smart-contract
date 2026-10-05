@@ -57,16 +57,12 @@ class budget_rkap(models.Model):
         string='Segmentasi',
         related='master_budget_id.jenis_penugasan',
         store=True,
-        readonly=True
-    )
-
-    kma = fields.Char(
-        string="KMA",
+        readonly=False,
     )
 
     tipe_kegiatan = fields.Selection(
         selection=[('biaya', 'Biaya'), ('investasi', 'Investasi')],
-        string="Tipe Kegiatan",
+        string="KMA",
     )
 
 

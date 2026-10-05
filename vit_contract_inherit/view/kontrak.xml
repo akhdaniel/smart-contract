@@ -182,12 +182,9 @@
                 <xpath expr="//field[@name='partner_id']" position="after">
                     <field name="budget_rkap_id"/>
                     <field name="master_budget_id"/>
-                    <field name="kanwil_id"/>
-                    <field name="kanca_id"/>
-                    <field name="kompleks_id"
-                        readonly="stage_is_draft==False"
-                        domain="[('kanwil_id','in',[kanwil_id]),
-                                    ('kanca_id','in',[kanca_id])]"/>
+                    <field name="kanwil_id" options="{'no_open': True, 'no_create': True, 'no_create_edit': True}"/>
+                    <field name="kanca_id" options="{'no_open': True, 'no_create': True, 'no_create_edit': True}"/>
+                    <field name="kompleks_id" readonly="1" force_save="1"/>
                 </xpath>
 
 

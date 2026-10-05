@@ -22,6 +22,81 @@ class RekapKetersediaanSarlog(models.TransientModel):
         res['year'] = str(datetime.now().year)
         return res
 
+    @api.model
+    def get_dashboard_data(self, year=None):
+        """Return Rekap Ketersediaan data using the existing report formulas."""
+        year_filter = int(year or datetime.now().year)
+        prev_year = year_filter - 1
+        dashboard_stats = self.env['vit.budget_rkap'].get_statistics_sarlog(year_filter)
+        grouped_data = {'biaya': [], 'investasi': []}
+
+        for item in dashboard_stats.get('master_list', []):
+            master_budget = self.env['vit.master_budget'].browse(item.get('id'))
+            budget_records = self.env['vit.budget_rkap'].search([
+                ('master_budget_id', '=', master_budget.id),
+                ('budget_date', '>=', f'{year_filter}-01-01'),
+                ('budget_date', '<=', f'{year_filter}-12-31'),
+            ])
+            budget = budget_records[:1]
+            category = budget.tipe_kegiatan if budget and budget.tipe_kegiatan else 'biaya'
+            row_name = budget.name if budget and budget.name else item.get('name')
+            rkap_value = sum(budget_records.mapped('amount'))
+            previous_budgets = budget_records.mapped('previous_year_id')
+            if not previous_budgets:
+                previous_budgets = self.env['vit.budget_rkap'].search([
+                    ('master_budget_id', '=', master_budget.id),
+                    ('budget_date', '>=', f'{prev_year}-01-01'),
+                    ('budget_date', '<=', f'{prev_year}-12-31'),
+                ])
+            remaining_payment = max(
+                sum(previous_budgets.mapped('total_amount_kontrak'))
+                - sum(previous_budgets.mapped('total_amount_payment')),
+                0,
+            )
+            issued_principles = self.env['vit.izin_prinsip'].search([
+                ('budget_id', 'in', budget_records.ids),
+                ('stage_is_done', '=', True),
+            ])
+            issued_value = sum(issued_principles.mapped('total_pagu'))
+            grouped_data.setdefault(category, []).append({
+                'name': row_name,
+                'rkap': rkap_value,
+                'sisa_pembayaran': remaining_payment,
+                'izin_terbit': issued_value,
+                'saldo': rkap_value - remaining_payment - issued_value,
+            })
+
+        categories = []
+        row_number = 1
+        grand_totals = {'rkap': 0, 'sisa_pembayaran': 0, 'izin_terbit': 0, 'saldo': 0}
+        display_names = {'biaya': 'BIAYA', 'investasi': 'INVESTASI'}
+        for index, category in enumerate(('biaya', 'investasi')):
+            items = grouped_data[category]
+            for item in items:
+                item['number'] = row_number
+                row_number += 1
+            totals = {
+                key: sum(item[key] for item in items)
+                for key in grand_totals
+            }
+            for key, value in totals.items():
+                grand_totals[key] += value
+            categories.append({
+                'key': category,
+                'letter': chr(65 + index),
+                'name': display_names[category],
+                'items': items,
+                'totals': totals,
+            })
+
+        return {
+            'year': year_filter,
+            'previous_year': prev_year,
+            'title': f'REKAP KETERSEDIAAN RKAP SARLOG {year_filter}',
+            'categories': categories,
+            'totals': grand_totals,
+        }
+
     def action_export_excel(self):
         """Generate Excel file dengan struktur Rekap Ketersediaan Sarlog"""
         self.ensure_one()

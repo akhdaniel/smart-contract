@@ -1,0 +1,31 @@
+.o_izin_prinsip_activity_icon {
+    display: inline-flex;
+    flex: 0 0 3em;
+    width: 3em;
+    height: 3em;
+    align-items: center;
+    justify-content: center;
+    background: #2474a6;
+    color: #fff;
+    font-size: 1rem;
+
+    .fa {
+        font-size: 1.65rem;
+    }
+}
+
+.o_payment_document_activity_icon {
+    display: inline-flex;
+    flex: 0 0 3em;
+    width: 3em;
+    height: 3em;
+    align-items: center;
+    justify-content: center;
+    background: #2e8b57;
+    color: #fff;
+    font-size: 1rem;
+
+    .fa {
+        font-size: 1.65rem;
+    }
+}

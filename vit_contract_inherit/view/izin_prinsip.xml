@@ -12,6 +12,8 @@
                     <field name="server_deploy_test" invisible="1"/>
                     <field name="created_by" readonly="1" invisible="1"/>
                     <field name="is_addendum" invisible="1"/>
+                    <field name="can_edit_batas_waktu" invisible="1"/>
+                    <field name="is_expired" invisible="1"/>
                     <field
                         name="allowed_kanca_id"
                         readonly="1"
@@ -83,7 +85,7 @@
                 <xpath expr="//field[@name='total_payment']" position="after">
                     <field name="total_amount_droping" readonly="1" invisible="1"/>
                     <field name="previous_remaining" readonly="1" invisible="1"/>
-                    <field name="batas_waktu_izin_prinsip"/>
+                    <field name="batas_waktu_izin_prinsip" required="1" readonly="not can_edit_batas_waktu"/>
                 </xpath>
 
                 <!-- <xpath expr="//field[@name='kontrak_ids']/tree/field[@name='amount_izin_prinsip']" position="attributes">
@@ -97,6 +99,7 @@
 
                 <xpath expr="//field[@name='kanwil_id']" position="attributes">
                     <attribute name="force_save">1</attribute>
+                    <attribute name="options">{'no_open': True, 'no_create': True, 'no_create_edit': True}</attribute>
                 </xpath>
 
 
@@ -105,9 +108,10 @@
                     <page name="job_izin_prinsip_ids" string="Detail Kegiatan">
                         <field name="job_izin_prinsip_ids" readonly="stage_is_draft==False">
                             <tree>
-                                <field name="kanca_id"/>
+                                <field name="kanca_id" options="{'no_open': True, 'no_create': True, 'no_create_edit': True}"/>
                                 <field name="name" string="Uraian Pekerjaan"/>
                                 <field name="total_pagu_job" string="Jumlah Pagu"/>
+                                <field name="kompleks_id" string="Kompleks Pergudangan"/>
                             </tree>
                         </field>
                     </page>
@@ -202,6 +206,17 @@
             <field name="model">vit.izin_prinsip</field>
             <field name="inherit_id" ref="vit_contract.view_vit_izin_prinsip_search"/>
             <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field
+                        name="job_izin_prinsip_ids"
+                        string="Uraian Pekerjaan"
+                        filter_domain="[('job_izin_prinsip_ids.name', 'ilike', self)]"
+                    />
+                </xpath>
+                <xpath expr="//field[@name='stage_name']" position="attributes">
+                    <attribute name="string">Stage</attribute>
+                </xpath>
+                <xpath expr="//field[@name='stage_id']" position="replace"/>
                 <xpath expr="//search" position="inside">
                     <filter string="Tipe Kegiatan" name="filter_by_tipe_kegiatan" domain="[('tipe_kegiatan','=','')]"/>
                     <filter string="Segmentasi" name="filter_by_jenis_penugasan" domain="[('jenis_penugasan','=','')]"/>
@@ -229,6 +244,12 @@
                     <filter string="Segmentasi" domain="[]" name="group_by_jenis_penugasan" context="{'group_by':'jenis_penugasan'}"/>
                     <filter string="Batas Waktu Izin Prinsip" domain="[]" name="group_by_batas_waktu_izin_prinsip" context="{'group_by':'batas_waktu_izin_prinsip'}"/>
                 </xpath>
+                <xpath expr="//filter[@name='group_by_batas_waktu_izin_prinsip']" position="after">
+                    <xpath expr="//filter[@name='group_by_stage_id']" position="move"/>
+                </xpath>
+                <xpath expr="//field[@name='previous_remaining']" position="after">
+                    <xpath expr="//field[@name='stage_name']" position="move"/>
+                </xpath>
             </field>
         </record>
         
@@ -239,6 +260,7 @@
             <field name="res_model">vit.izin_prinsip</field>
             <field name="view_mode">tree,form</field>
             <field name="domain">[('active', '=', True)]</field>
+            <field name="context">{'search_default_group_by_budget_id': 1}</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                 Click to add a new Izin Prinsip

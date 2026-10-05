@@ -61,11 +61,6 @@
                   type="object"
                   icon="fa-list"
                   invisible="stage_is_draft==False"/>
-          <button name="action_print_lembar_realokasi"
-                  string="Cetak Realokasi"
-                  type="object"
-                  icon="fa-print"
-                  invisible="stage_is_done==False"/>
           <button name="action_print_nota_permintaan_dropping"
                   string="Cetak Permintaan Dropping"
                   type="object"

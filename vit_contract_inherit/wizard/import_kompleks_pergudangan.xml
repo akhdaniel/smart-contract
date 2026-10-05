@@ -30,6 +30,11 @@
         </record>
 
         <!-- Menu untuk import kompleks pergudangan, ditempatkan setelah import izin prinsip -->
-        <menuitem id="import_kompleks_pergudangan_wizard" name="Import Kompleks Pergudangan" parent="vit_contract.vit_contract_config_menu" action="action_import_kompleks_pergudangan_wizard" sequence="2"/>
+        <menuitem id="import_kompleks_pergudangan_wizard"
+                  name="Import Kompleks Pergudangan"
+                  parent="vit_contract.vit_contract_config_menu"
+                  action="action_import_kompleks_pergudangan_wizard"
+                  groups="vit_contract.group_vit_contract_manager,vit_contract_inherit.group_vit_contract_pusat_umum"
+                  sequence="2"/>
     </data>
 </odoo>

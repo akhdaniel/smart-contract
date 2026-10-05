@@ -3,11 +3,14 @@
 
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError, AccessError
+from datetime import timedelta
 import logging
 _logger = logging.getLogger(__name__)
 
 class izin_prinsip(models.Model):
-    _inherit = "vit.izin_prinsip"
+    _name = "vit.izin_prinsip"
+    _inherit = ["vit.izin_prinsip", "mail.thread", "mail.activity.mixin"]
+    _description = "Izin Prinsip"
 
     name = fields.Char(required=True, copy=False, string="Name", default=False)
 
@@ -74,6 +77,30 @@ class izin_prinsip(models.Model):
 
     batas_waktu_izin_prinsip = fields.Date(
         string="Batas Waktu Izin Prinsip",
+        tracking=True,
+    )
+
+    batas_waktu_reminder_sent = fields.Boolean(
+        string="Reminder Batas Waktu Terkirim",
+        default=False,
+        copy=False,
+    )
+
+    is_expired = fields.Boolean(
+        string="Tidak Berlaku",
+        default=False,
+        copy=False,
+        readonly=True,
+    )
+
+    expired_date = fields.Date(
+        string="Tanggal Tidak Berlaku",
+        copy=False,
+        readonly=True,
+    )
+
+    can_edit_batas_waktu = fields.Boolean(
+        compute="_compute_can_edit_batas_waktu",
     )
 
     total_pagu = fields.Float(
@@ -169,6 +196,149 @@ class izin_prinsip(models.Model):
         compute="_compute_addendum_count",
         store=False,
     )
+
+    def _compute_can_edit_batas_waktu(self):
+        allowed = (
+            self.env.su
+            or self.env.user.has_group("vit_contract_inherit.group_vit_contract_pusat_umum")
+            or self.env.user.has_group("vit_contract.group_vit_contract_manager")
+        )
+        for rec in self:
+            rec.can_edit_batas_waktu = allowed
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        can_set_deadline = (
+            self.env.context.get("allow_deadline_system_copy")
+            or self.env.su
+            or self.env.user.has_group("vit_contract_inherit.group_vit_contract_pusat_umum")
+            or self.env.user.has_group("vit_contract.group_vit_contract_manager")
+        )
+        if not can_set_deadline:
+            if any(vals.get("batas_waktu_izin_prinsip") for vals in vals_list):
+                raise AccessError(_("Batas Waktu Izin Prinsip hanya dapat diisi oleh Pusat Umum atau Pusat Admin."))
+        return super().create(vals_list)
+
+    def write(self, vals):
+        if "batas_waktu_izin_prinsip" in vals:
+            can_edit_deadline = (
+                self.env.su
+                or self.env.user.has_group("vit_contract_inherit.group_vit_contract_pusat_umum")
+                or self.env.user.has_group("vit_contract.group_vit_contract_manager")
+            )
+            if not can_edit_deadline:
+                raise AccessError(_("Batas Waktu Izin Prinsip hanya dapat diubah oleh Pusat Umum atau Pusat Admin."))
+
+            vals = dict(vals, batas_waktu_reminder_sent=False)
+            new_deadline = fields.Date.to_date(vals.get("batas_waktu_izin_prinsip"))
+            if new_deadline and new_deadline >= fields.Date.today():
+                vals.update({
+                    "active": True,
+                    "is_expired": False,
+                    "expired_date": False,
+                })
+        return super().write(vals)
+
+    def action_confirm(self):
+        missing_deadline = self.filtered(lambda record: not record.batas_waktu_izin_prinsip)
+        if missing_deadline:
+            raise ValidationError(_("Batas Waktu Izin Prinsip wajib diisi sebelum Izin Prinsip dikonfirmasi."))
+        result = super().action_confirm()
+        self._cron_check_izin_prinsip_deadline()
+        self._send_activity_menu_refresh()
+        return result
+
+    def action_cancel(self):
+        result = super().action_cancel()
+        reminder_summary = _("Batas waktu Izin Prinsip akan berakhir")
+        reminder_activities = self.mapped("activity_ids").filtered(
+            lambda activity: activity.summary == reminder_summary
+        )
+        reminder_activities.sudo().unlink()
+        self.sudo().write({"batas_waktu_reminder_sent": False})
+        self._send_activity_menu_refresh()
+        return result
+
+    def _deadline_notification_users(self):
+        self.ensure_one()
+        kanca_ids = (self.kanca_id | self.job_izin_prinsip_ids.mapped("kanca_id")).ids
+        Users = self.env["res.users"].sudo()
+        kanwil_group = self.env.ref("vit_contract_inherit.group_vit_contract_kanwil")
+        kanca_group = self.env.ref("vit_contract_inherit.group_vit_contract_kanca")
+        users = Users.search([
+            ("active", "=", True),
+            ("share", "=", False),
+            ("groups_id", "in", kanwil_group.id),
+            ("multi_kanwil", "in", self.kanwil_id.ids),
+        ])
+        if kanca_ids:
+            users |= Users.search([
+                ("active", "=", True),
+                ("share", "=", False),
+                ("groups_id", "in", kanca_group.id),
+                ("multi_kanca", "in", kanca_ids),
+            ])
+        return users
+
+    def _send_activity_menu_refresh(self):
+        users = self.env["res.users"]
+        for record in self:
+            users |= record._deadline_notification_users()
+        partners = users.sudo().mapped("partner_id")
+        if partners:
+            self.env["bus.bus"]._sendmany([
+                (partner, "vit.activity_menu/updated", {})
+                for partner in partners
+            ])
+
+    @api.model
+    def _cron_check_izin_prinsip_deadline(self):
+        today = fields.Date.today()
+        reminder_limit = today + timedelta(days=7)
+
+        reminders = self.sudo().search([
+            ("active", "=", True),
+            ("stage_is_done", "=", True),
+            ("batas_waktu_izin_prinsip", ">=", today),
+            ("batas_waktu_izin_prinsip", "<=", reminder_limit),
+            ("batas_waktu_reminder_sent", "=", False),
+            ("kontrak_ids", "=", False),
+        ])
+        activity_type = self.env.ref("mail.mail_activity_data_todo")
+        for record in reminders:
+            for user in record._deadline_notification_users():
+                record.activity_schedule(
+                    activity_type_id=activity_type.id,
+                    user_id=user.id,
+                    date_deadline=record.batas_waktu_izin_prinsip,
+                    summary=_("Batas waktu Izin Prinsip akan berakhir"),
+                    note=_(
+                        "Izin Prinsip %s akan berakhir pada %s dan belum memiliki kontrak. "
+                        "Silakan tindak lanjuti kontrak atau koordinasikan pembatalan/perpanjangan "
+                        "dengan Pusat Umum."
+                    ) % (record.name, record.batas_waktu_izin_prinsip),
+                )
+            record.batas_waktu_reminder_sent = True
+
+        expired_records = self.sudo().search([
+            ("active", "=", True),
+            ("stage_is_done", "=", True),
+            ("batas_waktu_izin_prinsip", "<", today),
+            ("kontrak_ids", "=", False),
+            ("is_expired", "=", False),
+        ])
+        for record in expired_records:
+            record.message_post(body=_(
+                "Izin Prinsip otomatis menjadi tidak berlaku karena batas waktu %s telah lewat "
+                "dan belum ada kontrak yang dibuat."
+            ) % record.batas_waktu_izin_prinsip)
+            record.write({
+                "is_expired": True,
+                "expired_date": today,
+                "active": False,
+            })
+
+        return True
 
     # @api.model
     # def _domain_user(self, field_name):
@@ -366,7 +536,11 @@ class izin_prinsip(models.Model):
         self.active = False
 
         # Create copy with addendum settings
-        izin_copy = self.with_context(bypass_duplicate_check=True, skip_copy_name=True).copy({
+        izin_copy = self.with_context(
+            bypass_duplicate_check=True,
+            skip_copy_name=True,
+            allow_deadline_system_copy=True,
+        ).copy({
             'name': new_name,
             'stage_id': draft_stage.id,
             'is_addendum': True,

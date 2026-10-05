@@ -28,6 +28,15 @@
             <field name="print_report_name">'Nota Verifikasi - %s' % (object.name)</field>
         </record>
 
+        <record id="action_report_termin_lembar_realokasi" model="ir.actions.report">
+            <field name="name">Lembar Realokasi Anggaran</field>
+            <field name="model">vit.termin</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">vit_contract_inherit.report_termin_lembar_realokasi</field>
+            <field name="report_file">vit_contract_inherit.report_termin_lembar_realokasi</field>
+            <field name="print_report_name">'Lembar Realokasi Anggaran - %s' % (object.name)</field>
+        </record>
+
         <template id="process_report_style">
             <style>
                 .sc-report { font-family: Arial, sans-serif; font-size: 13px; color: #000; }
@@ -52,12 +61,17 @@
                 .sc-report .nested-table { width: 100%; border-collapse: collapse; }
                 .sc-report .nested-table td, .sc-report .nested-table th { border: 1px solid #000; padding: 7px 8px; }
                 .sc-report .nested-table tr:first-child td, .sc-report .nested-table tr:first-child th { border-top: 0; }
+                .sc-report .nested-table tr:last-child td, .sc-report .nested-table tr:last-child th { border-bottom: 0; }
                 .sc-report .nested-table tr td:first-child, .sc-report .nested-table tr th:first-child { border-left: 0; }
                 .sc-report .nested-table tr td:last-child, .sc-report .nested-table tr th:last-child { border-right: 0; }
                 .sc-report .paraf-table { width: 210px; margin-top: 56px; }
                 .sc-report .paraf-table td, .sc-report .paraf-table th { border: 1px solid #000; padding: 5px 8px; }
                 .sc-report .signature-block { float: right; width: 300px; text-align: center; margin-top: 30px; }
                 .sc-report .signature-space { height: 82px; }
+                .sc-report .realokasi-approval { width: 780px; margin: 14px auto 0; }
+                .sc-report .realokasi-approval .paraf-table { float: left; margin-top: 0; }
+                .sc-report .realokasi-approval .signature-block { margin-top: 0; }
+                .sc-report .realokasi-approval .signature-space { height: 48px; }
                 .sc-report .clear { clear: both; }
                 .sc-report .verification-title { font-size: 16px; font-weight: 700; text-align: center; border-top: 2px solid #000; border-bottom: 2px solid #000; padding: 7px 0; margin: 18px 0; }
             </style>
@@ -103,21 +117,21 @@
                                 <td class="label-cell">Dokumen Usulan</td>
                                 <td class="colon-cell">:</td>
                                 <td colspan="2">
-                                    <span t-if="first_termin and first_termin.kontrak_id.izin_prinsip_id" t-field="first_termin.kontrak_id.izin_prinsip_id.name"/>
-                                    <span t-if="not first_termin or not first_termin.kontrak_id.izin_prinsip_id">-</span>
-                                </td>
-                                <td class="tgl-cell">Tgl</td>
-                                <td class="date-cell"><span t-esc="first_termin.kontrak_id.izin_prinsip_id.create_date.date() if first_termin and first_termin.kontrak_id.izin_prinsip_id.create_date else ''"/></td>
-                            </tr>
-                            <tr>
-                                <td class="label-cell">Dokumen Persetujuan</td>
-                                <td class="colon-cell">:</td>
-                                <td colspan="2">
                                     <span t-if="first_termin and first_termin.kontrak_id.nomor_kontrak" t-field="first_termin.kontrak_id.nomor_kontrak"/>
                                     <span t-if="not first_termin or not first_termin.kontrak_id.nomor_kontrak">-</span>
                                 </td>
                                 <td class="tgl-cell">Tgl</td>
                                 <td class="date-cell"><span t-esc="first_termin.kontrak_id.start_date if first_termin and first_termin.kontrak_id.start_date else ''"/></td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">Dokumen Persetujuan</td>
+                                <td class="colon-cell">:</td>
+                                <td colspan="2">
+                                    <span t-if="first_termin and first_termin.kontrak_id.izin_prinsip_id" t-field="first_termin.kontrak_id.izin_prinsip_id.name"/>
+                                    <span t-if="not first_termin or not first_termin.kontrak_id.izin_prinsip_id">-</span>
+                                </td>
+                                <td class="tgl-cell">Tgl</td>
+                                <td class="date-cell"><span t-esc="first_termin.kontrak_id.izin_prinsip_id.create_date.date() if first_termin and first_termin.kontrak_id.izin_prinsip_id.create_date else ''"/></td>
                             </tr>
                             <tr>
                                 <td class="label-cell">Nama Pekerjaan</td>
@@ -162,19 +176,21 @@
                         </tbody>
                     </table>
 
-                    <table class="paraf-table">
-                        <tr><th colspan="2">Kolom Paraf</th></tr>
-                        <tr><td>Manajer</td><td style="width:70px;height:24px;"></td></tr>
-                        <tr><td>Asman</td><td style="height:24px;"></td></tr>
-                    </table>
+                    <div class="realokasi-approval">
+                        <table class="paraf-table">
+                            <tr><th colspan="2">Kolom Paraf</th></tr>
+                            <tr><td>Manajer</td><td style="width:70px;height:24px;"></td></tr>
+                            <tr><td>Asman</td><td style="height:24px;"></td></tr>
+                        </table>
 
-                    <div class="signature-block">
-                        <div>Jakarta, <span t-esc="doc.droping_date or doc.date or ''"/></div>
-                        <div class="signature-space"></div>
-                        <div><strong><u>JOKO PAMUNGKAS</u></strong></div>
-                        <div>Kepala Divisi Umum</div>
+                        <div class="signature-block">
+                            <div>Jakarta, <span t-esc="doc.droping_date or doc.date or ''"/></div>
+                            <div class="signature-space"></div>
+                            <div><strong><u>JOKO PAMUNGKAS</u></strong></div>
+                            <div>Kadiv Umum</div>
+                        </div>
+                        <div class="clear"></div>
                     </div>
-                    <div class="clear"></div>
                 </div>
             </t>
         </template>
@@ -292,6 +308,130 @@
                         <div>KADIV UMUM</div>
                     </div>
                     <div class="clear"></div>
+                </div>
+            </t>
+        </template>
+
+        <template id="report_termin_lembar_realokasi_document">
+            <t t-call="web.basic_layout">
+                <t t-set="doc" t-value="doc.with_context({'lang': lang})"/>
+                <t t-call="vit_contract_inherit.process_report_style"/>
+                <t t-set="kontrak" t-value="doc.kontrak_id"/>
+                <t t-set="budget_rkap" t-value="kontrak.budget_rkap_id"/>
+                <div class="page sc-report">
+                    <div class="doc-title">Lembar Realokasi Anggaran</div>
+                    <table class="center-meta">
+                        <tr>
+                            <td>No. List Realokasi</td>
+                            <td>:</td>
+                            <td><span t-field="doc.name"/></td>
+                        </tr>
+                        <tr>
+                            <td>No. Pekerjaan</td>
+                            <td>:</td>
+                            <td><span t-field="kontrak.name"/></td>
+                        </tr>
+                        <tr>
+                            <td>Kanwil</td>
+                            <td>:</td>
+                            <td><span t-field="kontrak.kanwil_id"/></td>
+                        </tr>
+                    </table>
+
+                    <table class="boxed-table" style="width:780px;">
+                        <tbody>
+                            <tr>
+                                <td class="label-cell">Segmentasi</td>
+                                <td class="colon-cell">:</td>
+                                <td colspan="4" style="text-align:center;">
+                                    <span t-att-class="'checkbox checked' if budget_rkap and budget_rkap.jenis_penugasan == 'pso' else 'checkbox'"></span> PSO
+                                    <span style="display:inline-block;width:45px;"></span>
+                                    <span t-att-class="'checkbox checked' if budget_rkap and budget_rkap.jenis_penugasan == 'kom' else 'checkbox'"></span> KOM
+                                    <span style="display:inline-block;width:45px;"></span>
+                                    <span t-att-class="'checkbox checked' if budget_rkap and budget_rkap.tipe_kegiatan == 'biaya' else 'checkbox'"></span> BIAYA
+                                    <span style="display:inline-block;width:45px;"></span>
+                                    <span t-att-class="'checkbox checked' if budget_rkap and budget_rkap.tipe_kegiatan == 'investasi' else 'checkbox'"></span> INVESTASI
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">Dokumen Usulan</td>
+                                <td class="colon-cell">:</td>
+                                <td colspan="2"><span t-field="kontrak.nomor_kontrak"/></td>
+                                <td class="tgl-cell">Tgl</td>
+                                <td class="date-cell"><span t-field="kontrak.start_date"/></td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">Dokumen Persetujuan</td>
+                                <td class="colon-cell">:</td>
+                                <td colspan="2">
+                                    <span t-if="kontrak.izin_prinsip_id" t-field="kontrak.izin_prinsip_id.name"/>
+                                    <span t-else="">-</span>
+                                </td>
+                                <td class="tgl-cell">Tgl</td>
+                                <td class="date-cell">
+                                    <span t-if="kontrak.izin_prinsip_id.create_date" t-field="kontrak.izin_prinsip_id.create_date" t-options="{'widget': 'date'}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">Nama Pekerjaan</td>
+                                <td class="colon-cell">:</td>
+                                <td colspan="4" class="work-box">
+                                    <table class="nested-table">
+                                        <tr>
+                                            <td colspan="2" style="border-left:0;border-right:0;">
+                                                <span t-field="kontrak.job_izin_prinsip_id.name"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Lokasi Realokasi</th>
+                                            <th>Nominal</th>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:center;">
+                                                <span t-if="kontrak.kanca_id" t-field="kontrak.kanca_id"/>
+                                                <span t-else="" t-field="kontrak.kanwil_id"/>
+                                            </td>
+                                            <td class="amount">Rp <span t-esc="'{:,.0f}'.format(doc.nilai or 0.0)"/></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">Total Nilai Realokasi</td>
+                                <td class="colon-cell">:</td>
+                                <td colspan="4" class="amount"><strong>Rp <span t-esc="'{:,.0f}'.format(doc.nilai or 0.0)"/></strong></td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">Kegiatan</td>
+                                <td class="colon-cell">:</td>
+                                <td colspan="4"><span t-field="kontrak.master_budget_id"/></td>
+                            </tr>
+                            <tr>
+                                <td class="label-cell">RKAP</td>
+                                <td class="colon-cell">:</td>
+                                <td colspan="4">
+                                    <span t-if="budget_rkap.budget_year" t-field="budget_rkap.budget_year"/>
+                                    <span t-elif="budget_rkap.budget_date" t-esc="budget_rkap.budget_date.year"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="realokasi-approval">
+                        <table class="paraf-table">
+                            <tr><th colspan="2">Kolom Paraf</th></tr>
+                            <tr><td>Manajer</td><td style="width:70px;height:24px;"></td></tr>
+                            <tr><td>Asman</td><td style="height:24px;"></td></tr>
+                        </table>
+
+                        <div class="signature-block">
+                            <div>Jakarta, <span t-field="doc.realokasi_print_date"/></div>
+                            <div class="signature-space"></div>
+                            <div><strong><u>JOKO PAMUNGKAS</u></strong></div>
+                            <div>Kadiv Umum</div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
                 </div>
             </t>
         </template>
@@ -590,6 +730,15 @@
                 <t t-foreach="docs" t-as="doc">
                     <t t-set="lang" t-value="doc.create_uid.lang"/>
                     <t t-call="vit_contract_inherit.report_termin_nota_verifikasi_document"/>
+                </t>
+            </t>
+        </template>
+
+        <template id="report_termin_lembar_realokasi">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-set="lang" t-value="doc.create_uid.lang"/>
+                    <t t-call="vit_contract_inherit.report_termin_lembar_realokasi_document"/>
                 </t>
             </t>
         </template>

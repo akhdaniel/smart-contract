@@ -78,6 +78,8 @@ class VendorPortal(CustomerPortal):
             return request.redirect('/my')
 
         encoded_file = base64.b64encode(upload.read())
-        syarat.write({'document': encoded_file})
+        syarat.with_context(vendor_syarat_upload=True).write({
+            'document': encoded_file,
+        })
 
         return request.redirect('/my/contracts/%s' % contract.id)

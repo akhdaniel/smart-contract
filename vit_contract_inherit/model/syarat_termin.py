@@ -9,6 +9,7 @@ _logger = logging.getLogger(__name__)
 class syarat_termin(models.Model):
     _name = "vit.syarat_termin"
     _inherit = ["vit.syarat_termin", "mail.thread", "mail.activity.mixin"]
+    _description = "Dokumen Vendor"
 
 
     verified = fields.Boolean(
@@ -144,6 +145,95 @@ class syarat_termin(models.Model):
                 vals["upload_date"] = False
         return super().create(vals)
 
+    def _payment_document_notification_users(self):
+        self.ensure_one()
+        kontrak = self.termin_id.kontrak_id
+        if not kontrak:
+            return self.env["res.users"]
+
+        Users = self.env["res.users"].sudo()
+        base_domain = [("active", "=", True), ("share", "=", False)]
+        kanwil_group = self.env.ref(
+            "vit_contract_inherit.group_vit_contract_kanwil"
+        )
+        kanca_group = self.env.ref(
+            "vit_contract_inherit.group_vit_contract_kanca"
+        )
+        pusat_umum_group = self.env.ref(
+            "vit_contract_inherit.group_vit_contract_pusat_umum"
+        )
+
+        users = Users.search(base_domain + [
+            ("groups_id", "in", pusat_umum_group.id),
+        ])
+        if kontrak.kanwil_id:
+            users |= Users.search(base_domain + [
+                ("groups_id", "in", kanwil_group.id),
+                ("multi_kanwil", "in", kontrak.kanwil_id.id),
+            ])
+        if kontrak.kanca_id:
+            users |= Users.search(base_domain + [
+                ("groups_id", "in", kanca_group.id),
+                ("multi_kanca", "in", kontrak.kanca_id.id),
+            ])
+        return users
+
+    def _send_activity_menu_refresh(self, users):
+        partners = users.sudo().mapped("partner_id")
+        if partners:
+            self.env["bus.bus"]._sendmany([
+                (partner, "vit.activity_menu/updated", {})
+                for partner in partners
+            ])
+
+    def _notify_vendor_document_uploaded(self):
+        activity_type = self.env.ref("mail.mail_activity_data_todo")
+        summary = _("Dokumen pembayaran perlu diverifikasi")
+        Activity = self.env["mail.activity"].sudo()
+
+        for rec in self:
+            kontrak = rec.termin_id.kontrak_id
+            notification_users = rec._payment_document_notification_users()
+            note = _(
+                "Vendor telah mengunggah dokumen '%s' untuk termin '%s' "
+                "pada kontrak %s. Silakan verifikasi dokumen tersebut."
+            ) % (
+                rec.name or _("Tanpa Nama"),
+                rec.termin_id.name or _("Tanpa Nama"),
+                kontrak.nomor_kontrak or kontrak.name or _("Tanpa Nomor"),
+            )
+            for user in notification_users:
+                existing = Activity.search([
+                    ("res_model", "=", rec._name),
+                    ("res_id", "=", rec.id),
+                    ("user_id", "=", user.id),
+                    ("activity_type_id", "=", activity_type.id),
+                    ("summary", "=", summary),
+                ], limit=1)
+                if existing:
+                    existing.write({
+                        "date_deadline": fields.Date.context_today(rec),
+                        "note": note,
+                    })
+                    continue
+                rec.sudo().activity_schedule(
+                    activity_type_id=activity_type.id,
+                    user_id=user.id,
+                    date_deadline=fields.Date.context_today(rec),
+                    summary=summary,
+                    note=note,
+                )
+            rec._send_activity_menu_refresh(notification_users)
+
+    def _close_payment_document_activities(self, group_xmlid):
+        group = self.env.ref(group_xmlid)
+        summary = _("Dokumen pembayaran perlu diverifikasi")
+        for rec in self:
+            rec.sudo().activity_ids.filtered(
+                lambda activity: activity.summary == summary
+                and group in activity.user_id.groups_id
+            ).unlink()
+
     def write(self, vals):
         user_name = self.env.user.name or "Unknown User"
         previous_values = {
@@ -202,7 +292,30 @@ class syarat_termin(models.Model):
                         message_type='comment'
                     )
 
+            uploaded_by_vendor = (
+                self.env.context.get("vendor_syarat_upload")
+                or self.env.user.has_group(
+                    "vit_contract_inherit.group_vit_contract_vendor"
+                )
+            )
+            if uploaded_by_vendor and vals.get("document"):
+                rec._notify_vendor_document_uploaded()
+
             if verified_enabled:
+                rec._close_payment_document_activities(
+                    "vit_contract_inherit.group_vit_contract_kanwil"
+                )
+                rec._close_payment_document_activities(
+                    "vit_contract_inherit.group_vit_contract_kanca"
+                )
+                operational_users = rec._payment_document_notification_users().filtered(
+                    lambda user: user.has_group(
+                        "vit_contract_inherit.group_vit_contract_kanwil"
+                    ) or user.has_group(
+                        "vit_contract_inherit.group_vit_contract_kanca"
+                    )
+                )
+                rec._send_activity_menu_refresh(operational_users)
                 rec.message_post(
                     body=_("Dokumen '%s' telah diverifikasi oleh %s.") % (
                         rec.name or "Tanpa Nama", user_name),
@@ -221,7 +334,26 @@ class syarat_termin(models.Model):
                         message_type='comment'
                     )
 
+            if "verified" in vals and not verified_enabled:
+                operational_users = rec._payment_document_notification_users().filtered(
+                    lambda user: user.has_group(
+                        "vit_contract_inherit.group_vit_contract_kanwil"
+                    ) or user.has_group(
+                        "vit_contract_inherit.group_vit_contract_kanca"
+                    )
+                )
+                rec._send_activity_menu_refresh(operational_users)
+
             if confirm_enabled:
+                rec._close_payment_document_activities(
+                    "vit_contract_inherit.group_vit_contract_pusat_umum"
+                )
+                pusat_users = rec._payment_document_notification_users().filtered(
+                    lambda user: user.has_group(
+                        "vit_contract_inherit.group_vit_contract_pusat_umum"
+                    )
+                )
+                rec._send_activity_menu_refresh(pusat_users)
                 rec.message_post(
                     body=_("Dokumen '%s' telah dikonfirmasi oleh %s.") % (
                         rec.name or "Tanpa Nama", user_name),
@@ -239,6 +371,14 @@ class syarat_termin(models.Model):
                             rec.name or "Tanpa Nama", user_name),
                         message_type='comment'
                     )
+
+            if "confirm" in vals and not confirm_enabled:
+                pusat_users = rec._payment_document_notification_users().filtered(
+                    lambda user: user.has_group(
+                        "vit_contract_inherit.group_vit_contract_pusat_umum"
+                    )
+                )
+                rec._send_activity_menu_refresh(pusat_users)
 
             if "verified" in vals or "confirm" in vals:
                 if termin:

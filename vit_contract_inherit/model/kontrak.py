@@ -42,6 +42,12 @@ class kontrak(models.Model):
 
     active = fields.Boolean(default=True)
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+        records.mapped("izin_prinsip_id")._send_activity_menu_refresh()
+        return records
+
     name = fields.Char(required=True, copy=False, string="Name", default=False)
 
 
@@ -103,6 +109,14 @@ class kontrak(models.Model):
         'vit.job_izin_prinsip',
         string="Job Izin Prinsip",
         domain="[('izin_prinsip_id', '=', izin_prinsip_id)]",
+    )
+
+    kompleks_id = fields.Many2one(
+        comodel_name="vit.kompleks_pergudangan",
+        related="job_izin_prinsip_id.kompleks_id",
+        string="Kompleks Pergudangan",
+        store=True,
+        readonly=True,
     )
 
     jenis_kontrak_many = fields.Many2many(

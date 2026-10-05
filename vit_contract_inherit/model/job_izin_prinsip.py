@@ -1,10 +1,72 @@
 from odoo import models, fields, api, _
-from odoo.exceptions import UserError
+from odoo.exceptions import AccessError, UserError
 
 class job_izin_prinsip(models.Model):
 
     _name = "vit.job_izin_prinsip"
     _inherit = "vit.job_izin_prinsip"
+
+    can_edit_kompleks = fields.Boolean(
+        compute="_compute_can_edit_kompleks",
+        string="Can Edit Kompleks Pergudangan",
+    )
+
+    def _compute_can_edit_kompleks(self):
+        allowed = (
+            self.env.su
+            or self.env.user.has_group("vit_contract.group_vit_contract_manager")
+            or self.env.user.has_group("vit_contract_inherit.group_vit_contract_pusat_umum")
+        )
+        for record in self:
+            record.can_edit_kompleks = allowed
+
+    def _check_kompleks_write_access(self, vals):
+        if "kompleks_id" not in vals:
+            return
+        allowed = (
+            self.env.su
+            or self.env.user.has_group("vit_contract.group_vit_contract_manager")
+            or self.env.user.has_group("vit_contract_inherit.group_vit_contract_pusat_umum")
+        )
+        if not allowed:
+            raise AccessError(_(
+                "Kompleks Pergudangan hanya dapat diatur oleh Pusat Umum atau Pusat Admin."
+            ))
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get("kompleks_id"):
+                self._check_kompleks_write_access(vals)
+        return super().create(vals_list)
+
+    def write(self, vals):
+        self._check_kompleks_write_access(vals)
+        return super().write(vals)
+
+    def init(self):
+        """Preserve existing contract warehouse links before contracts become related."""
+        self.env.cr.execute("""
+            UPDATE vit_job_izin_prinsip AS job
+               SET kompleks_id = source.kompleks_id
+              FROM (
+                    SELECT DISTINCT ON (job_izin_prinsip_id)
+                           job_izin_prinsip_id, kompleks_id
+                      FROM vit_kontrak
+                     WHERE job_izin_prinsip_id IS NOT NULL
+                       AND kompleks_id IS NOT NULL
+                     ORDER BY job_izin_prinsip_id, id
+                   ) AS source
+             WHERE job.id = source.job_izin_prinsip_id
+               AND job.kompleks_id IS NULL
+        """)
+        self.env.cr.execute("""
+            UPDATE vit_kontrak AS contract
+               SET kompleks_id = job.kompleks_id
+              FROM vit_job_izin_prinsip AS job
+             WHERE contract.job_izin_prinsip_id = job.id
+               AND contract.kompleks_id IS DISTINCT FROM job.kompleks_id
+        """)
 
     kanwil_id = fields.Many2one(
         'vit.kanwil',

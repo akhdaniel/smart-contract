@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+        <record id="vit_contract.menu_kompleks_pergudangan" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('vit_contract.group_vit_contract_manager'), ref('vit_contract_inherit.group_vit_contract_pusat_umum')])]"/>
+        </record>
+
         <record id="view_vit_kompleks_pergudangan_form_tags" model="ir.ui.view">
             <field name="name">vit.kompleks_pergudangan.form.tags</field>
             <field name="model">vit.kompleks_pergudangan</field>

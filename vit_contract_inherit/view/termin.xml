@@ -24,11 +24,17 @@
                 </xpath>
 
                 <xpath expr="//header/field[@name='stage_id']" position="before">
+                    <field name="is_pusat_print_user" invisible="1"/>
                     <button name="action_print_nota_verifikasi"
                             string="Cetak Nota Verifikasi"
                             type="object"
                             icon="fa-print"
-                            invisible="stage_is_done==False"/>
+                            invisible="stage_is_done==False or is_pusat_print_user"/>
+                    <button name="action_print_lembar_realokasi"
+                            string="Cetak Lembar Realokasi"
+                            type="object"
+                            icon="fa-print"
+                            invisible="stage_is_done==False or not is_pusat_print_user"/>
                 </xpath>
 
 
